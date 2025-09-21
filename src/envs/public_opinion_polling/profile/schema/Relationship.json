@@ -1,0 +1,7 @@
+[
+    {
+        "source_agent": "Pollster",
+        "target_agent": "Voter",
+        "direction": "bidirectional"
+    }
+]

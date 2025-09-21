@@ -1,0 +1,67 @@
+[
+    {
+        "name": "The Johnson Family",
+        "members": [],
+        "location": "Austin, Texas",
+        "size": 7,
+        "quarantine_status": "",
+        "infection_risk": 0.0,
+        "economic_pressure": 0.0,
+        "communication_channels": [],
+        "trust_in_authorities": 0.0,
+        "agent_type": "Household",
+        "id": "5"
+    },
+    {
+        "name": "The Nguyen Residence",
+        "members": [],
+        "location": "San Francisco, California",
+        "size": 7,
+        "quarantine_status": "",
+        "infection_risk": 0.0,
+        "economic_pressure": 0.0,
+        "communication_channels": [],
+        "trust_in_authorities": 0.0,
+        "agent_type": "Household",
+        "id": "6"
+    },
+    {
+        "name": "The Patel Household",
+        "members": [],
+        "location": "Chicago, Illinois",
+        "size": 9,
+        "quarantine_status": "",
+        "infection_risk": 0.0,
+        "economic_pressure": 0.0,
+        "communication_channels": [],
+        "trust_in_authorities": 0.0,
+        "agent_type": "Household",
+        "id": "7"
+    },
+    {
+        "name": "The Smiths",
+        "members": [],
+        "location": "Boston, Massachusetts",
+        "size": 9,
+        "quarantine_status": "",
+        "infection_risk": 0.0,
+        "economic_pressure": 0.0,
+        "communication_channels": [],
+        "trust_in_authorities": 0.0,
+        "agent_type": "Household",
+        "id": "8"
+    },
+    {
+        "name": "The Garcia Home",
+        "members": [],
+        "location": "Miami, Florida",
+        "size": 10,
+        "quarantine_status": "",
+        "infection_risk": 0.0,
+        "economic_pressure": 0.0,
+        "communication_channels": [],
+        "trust_in_authorities": 0.0,
+        "agent_type": "Household",
+        "id": "9"
+    }
+]

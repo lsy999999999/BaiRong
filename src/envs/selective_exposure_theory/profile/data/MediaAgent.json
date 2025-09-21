@@ -1,0 +1,67 @@
+[
+    {
+        "name": "AliceVision",
+        "media_bias_score": 0.5,
+        "content_type": "Video Production",
+        "influence_factor": 1.0,
+        "audience_reach": 544,
+        "content_frequency": 4,
+        "current_status": "active",
+        "agent_type": "MediaAgent",
+        "political_bias": "right",
+        "initial_reputation": 50,
+        "id": "5"
+    },
+    {
+        "name": "SoundWave",
+        "media_bias_score": 0.5,
+        "content_type": "Podcasting",
+        "influence_factor": 1.0,
+        "audience_reach": 3875,
+        "content_frequency": 20,
+        "current_status": "active",
+        "agent_type": "MediaAgent",
+        "political_bias": "authoritarian",
+        "initial_reputation": 50,
+        "id": "6"
+    },
+    {
+        "name": "PixelArt",
+        "media_bias_score": 0.5,
+        "content_type": "Graphic Design",
+        "influence_factor": 1.0,
+        "audience_reach": 4024,
+        "content_frequency": 14,
+        "current_status": "active",
+        "agent_type": "MediaAgent",
+        "political_bias": "right",
+        "initial_reputation": 50,
+        "id": "7"
+    },
+    {
+        "name": "TextMaster",
+        "media_bias_score": 0.5,
+        "content_type": "Blogging",
+        "influence_factor": 1.0,
+        "audience_reach": 2099,
+        "content_frequency": 2,
+        "current_status": "active",
+        "agent_type": "MediaAgent",
+        "political_bias": "right",
+        "initial_reputation": 50,
+        "id": "8"
+    },
+    {
+        "name": "EventCaster",
+        "media_bias_score": 0.5,
+        "content_type": "Live Streaming",
+        "influence_factor": 1.0,
+        "audience_reach": 4669,
+        "content_frequency": 2,
+        "current_status": "active",
+        "agent_type": "MediaAgent",
+        "political_bias": "left",
+        "initial_reputation": 50,
+        "id": "9"
+    }
+]

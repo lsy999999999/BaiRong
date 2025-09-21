@@ -1,0 +1,59 @@
+{
+    "environment": {
+        "variables": []
+    },
+    "agents": {
+        "ParticipantA": {
+            "variables": [
+                {
+                    "name": "behavior_description",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "observation_context",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "attribution_type",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "reasoning",
+                    "type": "string",
+                    "default_value": null
+                }
+            ]
+        },
+        "ParticipantB": {
+            "variables": [
+                {
+                    "name": "behavior_type",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "intended_outcome",
+                    "type": "string",
+                    "default_value": null
+                }
+            ]
+        },
+        "FeedbackerC": {
+            "variables": [
+                {
+                    "name": "bias_detected",
+                    "type": "boolean",
+                    "default_value": null
+                },
+                {
+                    "name": "feedback_message",
+                    "type": "string",
+                    "default_value": null
+                }
+            ]
+        }
+    }
+}

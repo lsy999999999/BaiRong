@@ -1,0 +1,87 @@
+[
+    {
+        "name": "Community Organizer",
+        "social_class": "upper",
+        "cultural_capital": 50,
+        "economic_capital": 1000.0,
+        "social_capital": 30,
+        "education_level": "doctorate",
+        "job_opportunities": [
+            "entry_level",
+            "mid_level"
+        ],
+        "agent_type": "SocialStructureAgent",
+        "influence_on_cultural_capital": "moderate",
+        "networking_efforts": 5,
+        "mobility_barriers": 3,
+        "id": "5"
+    },
+    {
+        "name": "Policy Analyst",
+        "social_class": "upper",
+        "cultural_capital": 50,
+        "economic_capital": 1000.0,
+        "social_capital": 30,
+        "education_level": "bachelor",
+        "job_opportunities": [
+            "entry_level",
+            "mid_level"
+        ],
+        "agent_type": "SocialStructureAgent",
+        "influence_on_cultural_capital": "moderate",
+        "networking_efforts": 5,
+        "mobility_barriers": 3,
+        "id": "6"
+    },
+    {
+        "name": "Social Worker",
+        "social_class": "upper",
+        "cultural_capital": 50,
+        "economic_capital": 1000.0,
+        "social_capital": 30,
+        "education_level": "bachelor",
+        "job_opportunities": [
+            "entry_level",
+            "mid_level"
+        ],
+        "agent_type": "SocialStructureAgent",
+        "influence_on_cultural_capital": "moderate",
+        "networking_efforts": 5,
+        "mobility_barriers": 3,
+        "id": "7"
+    },
+    {
+        "name": "Urban Planner",
+        "social_class": "upper",
+        "cultural_capital": 50,
+        "economic_capital": 1000.0,
+        "social_capital": 30,
+        "education_level": "doctorate",
+        "job_opportunities": [
+            "entry_level",
+            "mid_level"
+        ],
+        "agent_type": "SocialStructureAgent",
+        "influence_on_cultural_capital": "high",
+        "networking_efforts": 5,
+        "mobility_barriers": 3,
+        "id": "8"
+    },
+    {
+        "name": "Public Health Advocate",
+        "social_class": "middle",
+        "cultural_capital": 50,
+        "economic_capital": 1000.0,
+        "social_capital": 30,
+        "education_level": "high_school",
+        "job_opportunities": [
+            "entry_level",
+            "mid_level"
+        ],
+        "agent_type": "SocialStructureAgent",
+        "influence_on_cultural_capital": "low",
+        "networking_efforts": 5,
+        "mobility_barriers": 3,
+        "id": "9"
+    }
+]

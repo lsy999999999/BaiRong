@@ -1,0 +1,74 @@
+{
+    "name": {
+        "type": "str",
+        "default": "CommunicationAgent",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's name in the simulation"
+    },
+    "emotional_state": {
+        "type": "str",
+        "default": "neutral",
+        "private": false,
+        "sampling": "default"
+    },
+    "intensity": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "default"
+    },
+    "frequency_of_contact": {
+        "type": "int",
+        "default": 10,
+        "private": false,
+        "sampling": "default"
+    },
+    "susceptibility": {
+        "type": "float",
+        "default": 0.3,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.1,
+            0.5
+        ]
+    },
+    "communication_methods": {
+        "type": "list",
+        "default": [
+            "face-to-face",
+            "social media"
+        ],
+        "private": false,
+        "sampling": "default"
+    },
+    "interaction_pattern": {
+        "type": "str",
+        "default": "direct",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "direct",
+            "indirect"
+        ]
+    },
+    "emotional_history": {
+        "type": "list",
+        "default": [
+            {
+                "time": "2025-04-01T10:00:00",
+                "emotion": "joy"
+            }
+        ],
+        "private": true,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

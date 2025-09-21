@@ -1,0 +1,122 @@
+{
+  "domain": "Law",
+  "scene_name": "case_law_model",
+  "odd_protocol": {
+    "overview": {
+      "system_goal": "Simulate case law using large language models (LLM) to analyze the evolution of court rulings and their impact on legal interpretation and precedent principles.",
+      "agent_types": "Judge agents, case agents, precedent agents, socio-political environment agents, legal expert agents",
+      "environment_description": "The environment includes various legal fields like criminal law, civil law, contract law, administrative law, influenced by social, political, and economic factors.",
+      "legal_evolution_analysis": "Understand how legal rules evolve with court decisions and adapt to changes in society, politics, and economy.",
+      "precedent_application": "Examine how precedents are applied or rejected in similar cases to maintain legal coherence and consistency."
+    },
+    "design_concepts": {
+      "interaction_patterns": "Agents interact through court rulings, legal interpretations, and socio-political influences affecting judgments.",
+      "communication_protocols": "Legal reasoning and precedent referencing guide communication between judge agents and case agents.",
+      "decision_mechanisms": "Decisions are made based on historical precedents, legal principles, and socio-political contexts.",
+      "precedent_influence": "Past rulings serve as a foundation for future decisions, affecting the trajectory of legal development.",
+      "judge_behavior_adaptation": "Judges may adapt precedents based on social background, legal logic, or personal viewpoints."
+    },
+    "details": {
+      "agent_behaviors": "Judge agents interpret and apply precedents, case agents define legal contexts, precedent agents store legal principles, socio-political agents influence judgments, legal experts analyze outcomes.",
+      "decision_algorithms": "Algorithms simulate judge decision-making using historical precedent data, legal principles, and socio-political contexts.",
+      "specific_constraints": "Constraints include legal field-specific practices and external socio-political influences on case outcomes.",
+      "data_collection_preprocessing": "Collect and preprocess large volumes of historical and modern legal case texts for LLM training.",
+      "feedback_adjustment": "Simulate multiple cases to evaluate decision patterns and adjust algorithms for improved legal rule development."
+    }
+  },
+  "agent_types": {
+    "JudgeAgent": "Responsible for interpreting and applying legal precedents to make court rulings.",
+    "CaseAgent": "Defines and manages the legal context and specifics of individual cases within the system.",
+    "PrecedentAgent": "Stores and provides access to historical legal principles and precedents for case analysis.",
+    "SocioPoliticalAgent": "Influences judgments by representing social, political, and economic factors affecting legal decisions.",
+    "LegalExpertAgent": "Analyzes outcomes and provides expert insights into legal interpretations and case evolution."
+  },
+  "portrait": {
+    "JudgeAgent": 1,
+    "CaseAgent": 5,
+    "PrecedentAgent": 2,
+    "SocioPoliticalAgent": 1,
+    "LegalExpertAgent": 2
+  },
+  "metrics": [
+    {
+      "id": "Average_Precedents_Interpreted_Per_Judge",
+      "name": "Average Precedents Interpreted Per Judge",
+      "description": "Measures the average number of precedents interpreted by JudgeAgents, indicating their workload and engagement with past cases.",
+      "visualization_type": "bar",
+      "update_frequency": 5,
+      "variables": [
+        {
+          "name": "interpreted_precedents",
+          "source_type": "agent",
+          "agent_type": "JudgeAgent",
+          "path": "interpreted_precedents",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Aggregate the number of interpreted precedents for each JudgeAgent. Handle None values or empty lists by treating them as zero. Calculate the average by dividing the total number of interpreted precedents by the number of JudgeAgents.",
+      "function_name": "Average_Precedents_Interpreted_Per_Judge"
+    },
+    {
+      "id": "Legal_Context_Influence_on_Judgment",
+      "name": "Legal Context Influence on Judgment",
+      "description": "Analyzes how different legal contexts influence judgment results, providing insights into systemic biases or trends.",
+      "visualization_type": "pie",
+      "update_frequency": 5,
+      "variables": [
+        {
+          "name": "legal_context",
+          "source_type": "env",
+          "path": "legal_context",
+          "required": true,
+          "is_list": false
+        },
+        {
+          "name": "judgment_result",
+          "source_type": "agent",
+          "agent_type": "JudgeAgent",
+          "path": "judgment_result",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Count the occurrences of each unique judgment result across JudgeAgents. Handle None values or empty lists by ignoring them. Use the legal_context variable to categorize these results and calculate proportions for each category.",
+      "function_name": "Legal_Context_Influence_on_Judgment"
+    },
+    {
+      "id": "Socio_Political_Influence_on_Case_Outcomes",
+      "name": "Socio_Political Influence on Case Outcomes",
+      "description": "Examines the impact of socio-political factors on case outcomes, highlighting potential external influences on legal interpretations.",
+      "visualization_type": "line",
+      "update_frequency": 5,
+      "variables": [
+        {
+          "name": "socio_political_data",
+          "source_type": "env",
+          "path": "socio_political_data",
+          "required": true,
+          "is_list": false
+        },
+        {
+          "name": "socio_political_influences",
+          "source_type": "agent",
+          "agent_type": "SocioPoliticalAgent",
+          "path": "socio_political_influences",
+          "required": true,
+          "is_list": true
+        },
+        {
+          "name": "outcome_analysis",
+          "source_type": "agent",
+          "agent_type": "LegalExpertAgent",
+          "path": "outcome_analysis",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "For each time point, aggregate socio-political influences from SocioPoliticalAgents and correlate them with outcome analyses from LegalExpertAgents. Handle None values or empty lists by skipping them. Plot a line graph showing trends over time, with one series for socio-political influences and another for outcome analysis, to visualize correlation.",
+      "function_name": "Socio_Political_Influence_on_Case_Outcomes"
+    }
+  ]
+}

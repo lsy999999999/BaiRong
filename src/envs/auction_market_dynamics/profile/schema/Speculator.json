@@ -1,0 +1,71 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Default Speculator",
+        "private": false,
+        "sampling": "llm",
+        "description": "A name suitable for a speculator in an auction-based economic simulation."
+    },
+    "capital": {
+        "type": "float",
+        "default": 0.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "influence_strategy": {
+        "type": "str",
+        "default": "",
+        "private": false,
+        "sampling": "default"
+    },
+    "strategy": {
+        "type": "str",
+        "choices": [
+            "aggressive",
+            "conservative",
+            "balanced"
+        ],
+        "default": "balanced",
+        "private": false,
+        "sampling": "random"
+    },
+    "information_level": {
+        "type": "int",
+        "range": [
+            1,
+            10
+        ],
+        "default": 5,
+        "private": false,
+        "sampling": "random"
+    },
+    "risk_tolerance": {
+        "type": "float",
+        "range": [
+            0.0,
+            1.0
+        ],
+        "default": 0.5,
+        "private": false,
+        "sampling": "random"
+    },
+    "market_influence": {
+        "type": "list",
+        "default": [],
+        "private": true,
+        "sampling": "default"
+    },
+    "performance_score": {
+        "type": "float",
+        "default": 0.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "int",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

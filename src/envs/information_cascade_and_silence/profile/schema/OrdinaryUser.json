@@ -1,0 +1,110 @@
+{
+    "name": {
+        "type": "str",
+        "default": "John Doe",
+        "private": false,
+        "sampling": "llm",
+        "description": "A realistic name for an ordinary user in a social network."
+    },
+    "belief": {
+        "type": "str",
+        "default": "",
+        "private": true,
+        "sampling": "default"
+    },
+    "expressed_opinion": {
+        "type": "str",
+        "default": "",
+        "private": true,
+        "sampling": "default"
+    },
+    "certainty": {
+        "type": "float",
+        "default": 0,
+        "private": true,
+        "sampling": "default"
+    },
+    "verification_tendency": {
+        "type": "float",
+        "default": 0,
+        "private": true,
+        "sampling": "default"
+    },
+    "conformity_tendency": {
+        "type": "float",
+        "default": 0,
+        "private": true,
+        "sampling": "default"
+    },
+    "isolation_fear": {
+        "type": "float",
+        "default": 0,
+        "private": true,
+        "sampling": "default"
+    },
+    "information_content": {
+        "type": "str",
+        "default": "",
+        "private": true,
+        "sampling": "default"
+    },
+    "credibility_score": {
+        "type": "float",
+        "default": 0,
+        "private": true,
+        "sampling": "default"
+    },
+    "evaluation_result": {
+        "type": "str",
+        "default": "",
+        "private": true,
+        "sampling": "default"
+    },
+    "expression_willingness": {
+        "type": "float",
+        "default": 0,
+        "private": true,
+        "sampling": "default"
+    },
+    "target_audience": {
+        "type": "list",
+        "default": [],
+        "private": true,
+        "sampling": "default"
+    },
+    "social_pressure_tolerance": {
+        "type": "float",
+        "default": 0,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0,
+            1
+        ]
+    },
+    "opinion_climate_perception": {
+        "type": "str",
+        "default": "",
+        "private": true,
+        "sampling": "default"
+    },
+    "rumor_spread_history": {
+        "type": "list",
+        "default": [],
+        "private": true,
+        "sampling": "default"
+    },
+    "interaction_log": {
+        "type": "list",
+        "default": [],
+        "private": true,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

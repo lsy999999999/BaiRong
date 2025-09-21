@@ -1,0 +1,399 @@
+{
+  "agents": {
+    "TaskExecutor": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "1": {
+          "code": "async def initiate_task(self, event: Event) -> List[Event]:\n        # No condition specified, proceed directly\n\n        # Retrieve required variables from the environment\n        task_id = await self.get_env_data(\"task_id\", \"\")\n        task_details = await self.get_env_data(\"task_details\", \"N/A\")\n\n        # Update agent data for task status\n        self.profile.update_data(\"task_status\", \"in_progress\")\n\n        # Generate reaction to determine target_ids for the outgoing event\n        instruction = \"\"\"The TaskExecutor has initiated a task with the following details:\n        - Task ID: {task_id}\n        - Task Details: {task_details}\n\n        Please identify the target agent IDs for monitoring the task execution.\n        Return the information in the following JSON format:\n\n        {\n        \"target_ids\": [\"<The string ID(s) of the Monitor agent>\"]\n        }\n        \"\"\"\n        observation = f\"Task ID: {task_id}, Task Details: {task_details}\"\n        result = await self.generate_reaction(instruction, observation)\n\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Prepare and send the TaskExecutionEvent to the Monitor\n        events = []\n        for target_id in target_ids:\n            task_execution_event = TaskExecutionEvent(self.profile_id, target_id, task_id=task_id, task_details=task_details)\n            events.append(task_execution_event)\n\n        return events",
+          "metadata": {
+            "id": 1,
+            "name": "initiate_task",
+            "condition": null,
+            "description": "The TaskExecutor begins the execution of a specified task, setting the stage for subsequent cognitive reflection and strategy adjustment.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "task_id",
+                "type": "str",
+                "context": "env",
+                "description": "Unique identifier for the task being executed."
+              },
+              {
+                "name": "task_details",
+                "type": "str",
+                "context": "env",
+                "description": "Description of the task to be executed."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "task_status",
+                "type": "str",
+                "context": "agent",
+                "description": "Current status of the task being executed, initially set to 'in_progress'."
+              }
+            ]
+          }
+        },
+        "2": {
+          "code": "async def reflect_on_process(self, event: Event) -> List[Event]:\n        # No condition specified, proceed directly\n\n        # Access the observation_data from the event\n        observation_data = event.observation_data\n\n        # Generate the instruction for reflection\n        instruction = \"\"\"The TaskExecutor needs to reflect on its cognitive processes during task execution.\n        Analyze the given observation data to identify cognitive strengths and weaknesses.\n        Please return the information in the following JSON format:\n\n        {\n        \"reflection_summary\": \"<Summary of the reflection on cognitive processes>\",\n        \"target_ids\": [\"<The string ID(s) of the Monitor agent>\"]\n        }\n        \"\"\"\n        \n        # Generate the reflection using LLM\n        result = await self.generate_reaction(instruction, observation_data)\n\n        # Extract reflection summary and target_ids\n        reflection_summary = result.get('reflection_summary', None)\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Update reflection_summary in the agent profile\n        self.profile.update_data(\"reflection_summary\", reflection_summary)\n\n        # Prepare and send the ReflectionEvent to the Monitor\n        events = []\n        for target_id in target_ids:\n            reflection_event = ReflectionEvent(self.profile_id, target_id, reflection_summary, feedback_requested=True)\n            events.append(reflection_event)\n\n        return events",
+          "metadata": {
+            "id": 2,
+            "name": "reflect_on_process",
+            "condition": null,
+            "description": "The TaskExecutor reflects on its cognitive processes during task execution, identifying strengths and areas for improvement.",
+            "type": "AND",
+            "required_variables": [
+              {
+                "name": "observation_data",
+                "type": "str",
+                "context": "event",
+                "description": "Data collected during the observation of the task execution."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "reflection_summary",
+                "type": "str",
+                "context": "agent",
+                "description": "Summary of the reflection on cognitive processes."
+              }
+            ]
+          }
+        },
+        "3": {
+          "code": "async def adjust_strategy(self, event: Event) -> List[Event]:\n        # Check if the event has necessary attributes\n        if not hasattr(event, 'feedback_details') or not hasattr(event, 'recommendations'):\n            return []\n\n        # Retrieve feedback details and recommendations from the event\n        feedback_details = event.feedback_details\n        recommendations = event.recommendations\n\n        # Prepare the observation and instruction for the LLM\n        observation = f\"Feedback details: {feedback_details}, Recommendations: {recommendations}\"\n        instruction = \"\"\"Based on the feedback and recommendations provided, adjust the TaskExecutor's strategy.\n        Please return the information in the following JSON format:\n        \n        {\n        \"strategy_changes\": \"<Description of the adjustments made to the strategy>\",\n        \"adjustment_reason\": \"<Reason for the strategy adjustment based on feedback>\",\n        \"target_ids\": [\"<The string ID(s) of the Evaluator agent(s)>\"]\n        }\n        \"\"\"\n\n        # Generate the reaction using the LLM\n        result = await self.generate_reaction(instruction, observation)\n\n        # Extract strategy changes and adjustment reason from the result\n        strategy_changes = result.get('strategy_changes', None)\n        adjustment_reason = result.get('adjustment_reason', None)\n        target_ids = result.get('target_ids', None)\n\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Update the agent's profile with strategy changes and adjustment reason\n        self.profile.update_data(\"strategy_changes\", strategy_changes)\n        self.profile.update_data(\"adjustment_reason\", adjustment_reason)\n\n        # Prepare and send the StrategyAdjustmentEvent to each Evaluator\n        events = []\n        for target_id in target_ids:\n            strategy_adjustment_event = StrategyAdjustmentEvent(self.profile_id, target_id, strategy_changes, adjustment_reason)\n            events.append(strategy_adjustment_event)\n\n        return events",
+          "metadata": {
+            "id": 3,
+            "name": "adjust_strategy",
+            "condition": null,
+            "description": "The TaskExecutor adjusts its task strategy based on feedback received, aiming to enhance performance and efficiency.",
+            "type": "AND",
+            "required_variables": [
+              {
+                "name": "feedback_details",
+                "type": "str",
+                "context": "event",
+                "description": "Details of the feedback provided to the Task Executor."
+              },
+              {
+                "name": "recommendations",
+                "type": "str",
+                "context": "event",
+                "description": "Recommendations for strategy adjustments."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "strategy_changes",
+                "type": "str",
+                "context": "agent",
+                "description": "Description of the adjustments made to the strategy."
+              },
+              {
+                "name": "adjustment_reason",
+                "type": "str",
+                "context": "agent",
+                "description": "Reason for the strategy adjustment based on feedback."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "Monitor": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "4": {
+          "code": "async def observe_task(self, event: Event) -> List[Event]:\n        task_id = event.task_id\n        \n        instruction = \"\"\"\n        You are observing the TaskExecutor's performance on a task. Your goal is to collect observation data that can be used for feedback and reflection.\n        Please return the information in the following JSON format:\n        \n        {\n        \"observation_data\": \"<Data collected during the task observation>\",\n        \"target_ids\": [\"<The string ID(s) of the TaskExecutor(s) to receive the feedback>\"]\n        }\n        \"\"\"\n        \n        observation = f\"Observing task with ID: {task_id}\"\n        result = await self.generate_reaction(instruction, observation)\n        \n        observation_data = result.get('observation_data', \"N/A\")\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n        \n        self.profile.update_data(\"observation_data\", observation_data)\n        \n        events = []\n        for target_id in target_ids:\n            observation_event = ObservationEvent(self.profile_id, target_id, observation_data)\n            events.append(observation_event)\n        \n        return events",
+          "metadata": {
+            "id": 4,
+            "name": "observe_task",
+            "condition": null,
+            "description": "The Monitor observes the TaskExecutor's performance, collecting data to be used for feedback and reflection.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "task_id",
+                "type": "str",
+                "context": "event",
+                "description": "Unique identifier for the task being observed."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "observation_data",
+                "type": "str",
+                "context": "agent",
+                "description": "Data collected during the observation of the task execution."
+              }
+            ]
+          }
+        },
+        "5": {
+          "code": "async def provide_feedback(self, event: Event) -> List[Event]:\n        reflection_summary = event.reflection_summary\n        feedback_requested = event.feedback_requested\n        \n        if not reflection_summary or not feedback_requested:\n            return []\n    \n        observation = f\"Reflection summary: {reflection_summary}, Feedback requested: {feedback_requested}\"\n        instruction = \"\"\"Please generate feedback content based on the reflection summary and indicate recommendations for strategy adjustments.\n        Return the information in the following JSON format:\n    \n        {\n        \"feedback_details\": \"<Details of the feedback>\",\n        \"recommendations\": \"<Recommendations for strategy adjustments>\",\n        \"target_ids\": [\"<The string ID(s) of the TaskExecutor agent>\"]\n        }\n        \"\"\"\n        \n        result = await self.generate_reaction(instruction, observation)\n        \n        feedback_details = result.get('feedback_details', \"N/A\")\n        recommendations = result.get('recommendations', \"N/A\")\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n    \n        self.profile.update_data(\"feedback_details\", feedback_details)\n        self.profile.update_data(\"recommendations\", recommendations)\n    \n        events = []\n        for target_id in target_ids:\n            feedback_event = FeedbackEvent(self.profile_id, target_id, feedback_details, recommendations)\n            events.append(feedback_event)\n    \n        return events",
+          "metadata": {
+            "id": 5,
+            "name": "provide_feedback",
+            "condition": null,
+            "description": "The Monitor provides feedback to the TaskExecutor based on observations, suggesting potential strategy adjustments.",
+            "type": "AND",
+            "required_variables": [
+              {
+                "name": "reflection_summary",
+                "type": "str",
+                "context": "event",
+                "description": "Summary of the reflection on cognitive processes."
+              },
+              {
+                "name": "feedback_requested",
+                "type": "bool",
+                "context": "event",
+                "description": "Indicator if feedback is requested from the Monitor."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "feedback_details",
+                "type": "str",
+                "context": "agent",
+                "description": "Details of the feedback provided to the Task Executor."
+              },
+              {
+                "name": "recommendations",
+                "type": "str",
+                "context": "agent",
+                "description": "Recommendations for strategy adjustments."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "Evaluator": {
+      "imports": "from typing import Any, List,Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "6": {
+          "code": "async def analyze_performance(self, event: Event) -> List[Event]:\n        # No condition to check, proceed directly to handling the event\n    \n        # Access the required variables from the event\n        strategy_changes = event.strategy_changes\n        adjustment_reason = event.adjustment_reason\n    \n        # Prepare the instruction for the LLM\n        instruction = \"\"\"Analyze the strategy changes and adjustment reasons provided. \n        Generate a performance summary and specify the completion status. \n        Return the information in the following JSON format:\n    \n        {\n        \"performance_summary\": \"<Summary of the performance analysis>\",\n        \"completion_status\": \"<Status of the task completion>\",\n        \"target_ids\": [\"<The string ID of the EnvAgent>\"]\n        }\n        \"\"\"\n    \n        observation = f\"Strategy changes: {strategy_changes}, Adjustment reason: {adjustment_reason}\"\n        \n        # Generate the reaction using the LLM\n        result = await self.generate_reaction(instruction, observation)\n        \n        # Parse the LLM's JSON response\n        performance_summary = result.get('performance_summary', 'N/A')\n        completion_status = result.get('completion_status', 'completed')\n        target_ids = result.get('target_ids', 'ENV')\n        \n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n    \n        # Update agent's state with the performance summary and completion status\n        self.profile.update_data(\"performance_summary\", performance_summary)\n        self.profile.update_data(\"completion_status\", completion_status)\n    \n        # Prepare and send the PerformanceAnalysisEvent to the EnvAgent\n        events = []\n        for target_id in target_ids:\n            performance_event = PerformanceAnalysisEvent(self.profile_id, target_id, performance_summary, completion_status)\n            events.append(performance_event)\n        \n        return events",
+          "metadata": {
+            "id": 6,
+            "name": "analyze_performance",
+            "condition": null,
+            "description": "The Evaluator analyzes the overall performance of the TaskExecutor, assessing the effectiveness of the strategies employed.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "strategy_changes",
+                "type": "str",
+                "context": "event",
+                "description": "Description of the adjustments made to the strategy."
+              },
+              {
+                "name": "adjustment_reason",
+                "type": "str",
+                "context": "event",
+                "description": "Reason for the strategy adjustment based on feedback."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "performance_summary",
+                "type": "str",
+                "context": "agent",
+                "description": "Summary of the performance analysis."
+              },
+              {
+                "name": "completion_status",
+                "type": "str",
+                "context": "agent",
+                "description": "Status of the task completion."
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "events": {
+    "imports": "from onesim.events import Event\nfrom typing import Any",
+    "definitions": {
+      "-1": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": -1,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "TaskExecutor",
+          "to_action_name": "initiate_task",
+          "from_action_id": 0,
+          "to_action_id": 1,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for task execution",
+          "fields": []
+        }
+      },
+      "1": {
+        "code": "class TaskExecutionEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        task_id: str = \"\",\n        task_details: str = 'N/A',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.task_id = task_id\n        self.task_details = task_details",
+        "metadata": {
+          "id": 1,
+          "from_agent_type": "TaskExecutor",
+          "from_action_name": "initiate_task",
+          "to_agent_type": "Monitor",
+          "to_action_name": "observe_task",
+          "from_action_id": 1,
+          "to_action_id": 4,
+          "event_name": "TaskExecutionEvent",
+          "event_info": "Task execution initiated, ready for monitoring",
+          "fields": [
+            {
+              "name": "task_id",
+              "type": "str",
+              "default_value": "",
+              "description": "Unique identifier for the task being executed."
+            },
+            {
+              "name": "task_details",
+              "type": "str",
+              "default_value": "N/A",
+              "description": "Description of the task to be executed."
+            }
+          ]
+        }
+      },
+      "2": {
+        "code": "class ReflectionEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        reflection_summary: str = 'N/A',\n        feedback_requested: bool = True,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.reflection_summary = reflection_summary\n        self.feedback_requested = feedback_requested",
+        "metadata": {
+          "id": 2,
+          "from_agent_type": "TaskExecutor",
+          "from_action_name": "reflect_on_process",
+          "to_agent_type": "Monitor",
+          "to_action_name": "provide_feedback",
+          "from_action_id": 2,
+          "to_action_id": 5,
+          "event_name": "ReflectionEvent",
+          "event_info": "Reflection on cognitive process completed, feedback requested",
+          "fields": [
+            {
+              "name": "reflection_summary",
+              "type": "str",
+              "default_value": "N/A",
+              "description": "Summary of the reflection on cognitive processes."
+            },
+            {
+              "name": "feedback_requested",
+              "type": "bool",
+              "default_value": "true",
+              "description": "Indicator if feedback is requested from the Monitor."
+            }
+          ]
+        }
+      },
+      "3": {
+        "code": "class StrategyAdjustmentEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        strategy_changes: str = 'N/A',\n        adjustment_reason: str = 'N/A',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.strategy_changes = strategy_changes\n        self.adjustment_reason = adjustment_reason",
+        "metadata": {
+          "id": 3,
+          "from_agent_type": "TaskExecutor",
+          "from_action_name": "adjust_strategy",
+          "to_agent_type": "Evaluator",
+          "to_action_name": "analyze_performance",
+          "from_action_id": 3,
+          "to_action_id": 6,
+          "event_name": "StrategyAdjustmentEvent",
+          "event_info": "Strategy adjusted based on feedback, ready for evaluation",
+          "fields": [
+            {
+              "name": "strategy_changes",
+              "type": "str",
+              "default_value": "N/A",
+              "description": "Description of the adjustments made to the strategy."
+            },
+            {
+              "name": "adjustment_reason",
+              "type": "str",
+              "default_value": "N/A",
+              "description": "Reason for the strategy adjustment based on feedback."
+            }
+          ]
+        }
+      },
+      "4": {
+        "code": "class ObservationEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        observation_data: str = 'N/A',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.observation_data = observation_data",
+        "metadata": {
+          "id": 4,
+          "from_agent_type": "Monitor",
+          "from_action_name": "observe_task",
+          "to_agent_type": "TaskExecutor",
+          "to_action_name": "reflect_on_process",
+          "from_action_id": 4,
+          "to_action_id": 2,
+          "event_name": "ObservationEvent",
+          "event_info": "Observation data collected, ready for reflection",
+          "fields": [
+            {
+              "name": "observation_data",
+              "type": "str",
+              "default_value": "N/A",
+              "description": "Data collected during the observation of the task execution."
+            }
+          ]
+        }
+      },
+      "5": {
+        "code": "class FeedbackEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        feedback_details: str = 'N/A',\n        recommendations: str = 'N/A',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.feedback_details = feedback_details\n        self.recommendations = recommendations",
+        "metadata": {
+          "id": 5,
+          "from_agent_type": "Monitor",
+          "from_action_name": "provide_feedback",
+          "to_agent_type": "TaskExecutor",
+          "to_action_name": "adjust_strategy",
+          "from_action_id": 5,
+          "to_action_id": 3,
+          "event_name": "FeedbackEvent",
+          "event_info": "Feedback provided, strategy adjustment recommended",
+          "fields": [
+            {
+              "name": "feedback_details",
+              "type": "str",
+              "default_value": "N/A",
+              "description": "Details of the feedback provided to the Task Executor."
+            },
+            {
+              "name": "recommendations",
+              "type": "str",
+              "default_value": "N/A",
+              "description": "Recommendations for strategy adjustments."
+            }
+          ]
+        }
+      },
+      "6": {
+        "code": "class PerformanceAnalysisEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        performance_summary: str = 'N/A',\n        completion_status: str = 'completed',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.performance_summary = performance_summary\n        self.completion_status = completion_status",
+        "metadata": {
+          "id": 6,
+          "from_agent_type": "Evaluator",
+          "from_action_name": "analyze_performance",
+          "to_agent_type": "EnvAgent",
+          "to_action_name": "terminate",
+          "from_action_id": 6,
+          "to_action_id": -1,
+          "event_name": "PerformanceAnalysisEvent",
+          "event_info": "Performance analysis completed, workflow terminated",
+          "fields": [
+            {
+              "name": "performance_summary",
+              "type": "str",
+              "default_value": "N/A",
+              "description": "Summary of the performance analysis."
+            },
+            {
+              "name": "completion_status",
+              "type": "str",
+              "default_value": "completed",
+              "description": "Status of the task completion."
+            }
+          ]
+        }
+      }
+    }
+  }
+}

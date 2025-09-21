@@ -1,0 +1,114 @@
+{
+    "-1": {
+        "id": -1,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "IndividualAgent",
+        "to_action_name": "initialize_emotional_state",
+        "from_action_id": 0,
+        "to_action_id": 1,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for setting up individual emotional states",
+        "fields": []
+    },
+    "1": {
+        "id": 1,
+        "from_agent_type": "IndividualAgent",
+        "from_action_name": "initialize_emotional_state",
+        "to_agent_type": "CommunicationAgent",
+        "to_action_name": "transmit_emotion",
+        "from_action_id": 1,
+        "to_action_id": 2,
+        "event_name": "EmotionalStateInitializedEvent",
+        "event_info": "Emotional state set and ready for transmission",
+        "fields": [
+            {
+                "name": "emotional_state",
+                "type": "string",
+                "default_value": "joy",
+                "description": "Initial emotional state of the IndividualAgent"
+            }
+        ]
+    },
+    "2": {
+        "id": 2,
+        "from_agent_type": "CommunicationAgent",
+        "from_action_name": "transmit_emotion",
+        "to_agent_type": "DecisionAgent",
+        "to_action_name": "evaluate_emotional_influence",
+        "from_action_id": 2,
+        "to_action_id": 3,
+        "event_name": "EmotionTransmittedEvent",
+        "event_info": "Emotion transmitted to another agent for evaluation",
+        "fields": [
+            {
+                "name": "emotion_type",
+                "type": "string",
+                "default_value": "joy",
+                "description": "Type of emotion being transmitted"
+            },
+            {
+                "name": "intensity",
+                "type": "float",
+                "default_value": 1.0,
+                "description": "Intensity level of the transmitted emotion"
+            },
+            {
+                "name": "frequency_of_contact",
+                "type": "int",
+                "default_value": 1,
+                "description": "Frequency of interaction between agents"
+            }
+        ]
+    },
+    "3": {
+        "id": 3,
+        "from_agent_type": "DecisionAgent",
+        "from_action_name": "evaluate_emotional_influence",
+        "to_agent_type": "IndividualAgent",
+        "to_action_name": "adjust_emotional_state",
+        "from_action_id": 3,
+        "to_action_id": 4,
+        "event_name": "EmotionalInfluenceEvaluatedEvent",
+        "event_info": "Evaluation of emotional influence complete, ready to adjust emotional state",
+        "fields": [
+            {
+                "name": "evaluation_result",
+                "type": "string",
+                "default_value": "neutral",
+                "description": "Result of the emotional influence evaluation"
+            },
+            {
+                "name": "adjustment_factor",
+                "type": "float",
+                "default_value": 0.0,
+                "description": "Factor by which emotional state needs adjustment"
+            }
+        ]
+    },
+    "4": {
+        "id": 4,
+        "from_agent_type": "IndividualAgent",
+        "from_action_name": "adjust_emotional_state",
+        "to_agent_type": "EnvAgent",
+        "to_action_name": "terminate",
+        "from_action_id": 4,
+        "to_action_id": -1,
+        "event_name": "EmotionalStateAdjustedEvent",
+        "event_info": "Emotional state adjusted, ending this workflow branch",
+        "fields": [
+            {
+                "name": "completion_status",
+                "type": "string",
+                "default_value": "success",
+                "description": "Status indicating if the emotional state adjustment was completed successfully"
+            },
+            {
+                "name": "final_emotional_state",
+                "type": "string",
+                "default_value": "joy",
+                "description": "Final emotional state after adjustment"
+            }
+        ]
+    }
+}

@@ -1,0 +1,391 @@
+{
+  "agents": {
+    "Innovators": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "1": {
+          "code": "async def initiate_innovation_spread(self, event: Event) -> List[Event]:\n        # Check if the action condition is met\n        if not event.__class__.__name__ == \"StartEvent\":\n            return []\n\n        # Retrieve required environment data\n        innovation_id = await self.get_env_data(\"innovation_id\", \"\")\n        network_connections = await self.get_env_data(\"network_connections\", [])\n        relative_advantage = await self.get_env_data(\"relative_advantage\", 0.0)\n\n        # Check if network_connections is empty\n        if not network_connections:\n            logger.warning(\"No network connections available for innovation spread.\")\n            return []\n\n        # Update agent data to indicate innovation spread initiation\n        self.profile.update_data(\"spread_status\", True)\n\n        # Generate reaction to decide target_ids for spreading innovation\n        instruction = \"\"\"Initiate the spread of innovation by selecting target agents from the social network connections. \n        The innovation has the following attributes: \n        Innovation ID: {innovation_id}, Relative Advantage: {relative_advantage}. \n        Please return the information in the following JSON format:\n\n        {\n        \"target_ids\": [\"<The string ID of the EarlyAdopter agent(s)>\"]\n        }\n        \"\"\"\n        observation = f\"Network Connections: {network_connections}\"\n        result = await self.generate_reaction(instruction.format(innovation_id=innovation_id, relative_advantage=relative_advantage), observation)\n\n        # Extract target_ids from the LLM's response\n        target_ids = result.get('target_ids', [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Prepare and send the InnovationSpreadEvent to EarlyAdopters\n        events = []\n        for target_id in target_ids:\n            innovation_event = InnovationSpreadEvent(self.profile_id, target_id, innovation_id, network_connections, relative_advantage)\n            events.append(innovation_event)\n\n        return events",
+          "metadata": {
+            "id": 1,
+            "name": "initiate_innovation_spread",
+            "condition": null,
+            "description": "Initiate the spread of innovation by introducing it into the social network and influencing early adopters.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "innovation_id",
+                "type": "str",
+                "context": "env",
+                "description": "Unique identifier for the innovation being introduced"
+              },
+              {
+                "name": "network_connections",
+                "type": "list",
+                "context": "env",
+                "description": "List of social network connections for spreading innovation"
+              },
+              {
+                "name": "relative_advantage",
+                "type": "float",
+                "context": "env",
+                "description": "Perceived relative advantage of the innovation"
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "spread_status",
+                "type": "bool",
+                "context": "agent",
+                "description": "Status indicating whether the innovation spread has been initiated"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "EarlyAdopters": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "2": {
+          "code": "async def evaluate_and_adopt_innovation(self, event: Event) -> List[Event]:\n        # Condition check: Innovation has relative advantage and compatibility\n        # Use a dynamic threshold based on context or profile data\n        dynamic_threshold = self.profile.get_data(\"relative_advantage_threshold\", 0.5)\n        if event.relative_advantage <= dynamic_threshold:\n            return []\n\n        # Retrieve necessary data from the event\n        innovation_id = event.innovation_id\n        relative_advantage = event.relative_advantage\n        network_connections = event.network_connections\n\n        # Generate reaction for decision making\n        observation = f\"Innovation ID: {innovation_id}, Relative Advantage: {relative_advantage}, Network Connections: {len(network_connections)}\"\n        instruction = \"\"\"\n        Evaluate the innovation based on its attributes and decide whether to adopt and further disseminate it.\n        The decision should consider the innovation's relative advantage and compatibility.\n        Please return the information in the following JSON format:\n\n        {\n        \"adoption_decision\": <true if adopting, false otherwise>,\n        \"target_ids\": [\"<The string ID(s) of the EarlyMajority agent(s)>\"]\n        }\n        \"\"\"\n\n        result = await self.generate_reaction(instruction, observation)\n\n        # Parse the LLM's JSON response\n        adoption_decision = result.get('adoption_decision', False)\n        target_ids = result.get('target_ids', [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Update agent's state with the adoption decision\n        self.profile.update_data(\"adoption_decision\", adoption_decision)\n\n        # If adopted, prepare and send AdoptionEvent to EarlyMajority\n        events = []\n        if adoption_decision:\n            for target_id in target_ids:\n                adoption_event = AdoptionEvent(\n                    self.profile_id, target_id, innovation_id, adoption_rate=relative_advantage, social_pressure=0.5\n                )\n                events.append(adoption_event)\n\n        return events",
+          "metadata": {
+            "id": 2,
+            "name": "evaluate_and_adopt_innovation",
+            "condition": "Innovation has relative advantage and compatibility",
+            "description": "Evaluate the innovation based on its attributes and decide whether to adopt and further disseminate it to the early majority.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "innovation_id",
+                "type": "str",
+                "context": "event",
+                "description": "Unique identifier for the innovation being evaluated"
+              },
+              {
+                "name": "relative_advantage",
+                "type": "float",
+                "context": "event",
+                "description": "Perceived relative advantage of the innovation"
+              },
+              {
+                "name": "network_connections",
+                "type": "list",
+                "context": "event",
+                "description": "List of social network connections through which the innovation is spread"
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "adoption_decision",
+                "type": "bool",
+                "context": "agent",
+                "description": "Decision status of whether the innovation is adopted"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "EarlyMajority": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "3": {
+          "code": "async def consider_adoption(self, event: Event) -> List[Event]:\n        # Check if the event is an 'AdoptionEvent' and retrieve necessary fields\n        if event.__class__.__name__ == \"AdoptionEvent\":\n            innovation_id = event.innovation_id\n            adoption_rate = event.adoption_rate\n            social_pressure = event.social_pressure\n            \n            # Condition check: Significant acceptance among early adopters\n            acceptance_threshold = self.profile.get_data(\"acceptance_threshold\", 0.5)\n            if adoption_rate < acceptance_threshold:\n                return []\n            \n            # Generate reaction using LLM\n            observation = f\"Innovation ID: {innovation_id}, Adoption Rate: {adoption_rate}, Social Pressure: {social_pressure}\"\n            instruction = \"\"\"Please determine if the early majority should consider adopting the innovation based on the given adoption rate and social pressure.\n            Return the information in the following JSON format:\n            \n            {\n                \"consideration_status\": <true if considering adoption, false otherwise>,\n                \"target_ids\": [\"<The string ID(s) of the LateMajority agent(s)>\"]\n            }\n            \"\"\"\n            \n            result = await self.generate_reaction(instruction, observation)\n            \n            consideration_status = result.get('consideration_status', False)\n            target_ids = result.get('target_ids', None)\n            \n            if not isinstance(target_ids, list):\n                target_ids = [target_ids]\n            \n            # Update the agent's consideration status\n            self.profile.update_data(\"consideration_status\", consideration_status)\n            \n            # Prepare and send the EarlyMajorityAdoptionEvent if consideration_status is true\n            events = []\n            if consideration_status:\n                acceptance_threshold = 0.7  # Example threshold for late majority consideration\n                for target_id in target_ids:\n                    early_majority_adoption_event = EarlyMajorityAdoptionEvent(\n                        self.profile_id, target_id, innovation_id=innovation_id, acceptance_threshold=acceptance_threshold\n                    )\n                    events.append(early_majority_adoption_event)\n            \n            return events\n        return []",
+          "metadata": {
+            "id": 3,
+            "name": "consider_adoption",
+            "condition": "Significant acceptance among early adopters",
+            "description": "Consider adopting the innovation based on the influence from early adopters and the observed social pressure.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "innovation_id",
+                "type": "str",
+                "context": "event",
+                "description": "Unique identifier for the innovation being considered"
+              },
+              {
+                "name": "adoption_rate",
+                "type": "float",
+                "context": "event",
+                "description": "Rate at which early adopters are passing the innovation"
+              },
+              {
+                "name": "social_pressure",
+                "type": "float",
+                "context": "event",
+                "description": "Level of social pressure influencing adoption"
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "consideration_status",
+                "type": "bool",
+                "context": "agent",
+                "description": "Status indicating whether the early majority is considering adoption"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "LateMajority": {
+      "imports": "from typing import Any, List\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "4": {
+          "code": "async def evaluate_broad_acceptance(self, event: Event) -> List[Event]:\n        # Check if the event is of type EarlyMajorityAdoptionEvent\n        if not isinstance(event, EarlyMajorityAdoptionEvent):\n            return []\n    \n        # Retrieve necessary event data\n        innovation_id = event.innovation_id\n        acceptance_threshold = event.acceptance_threshold\n    \n        # Access agent profile data to evaluate broad acceptance\n        current_acceptance = self.profile.get_data(\"current_acceptance\", 0.0)\n        social_pressure = self.profile.get_data(\"social_pressure\", 0.0)\n    \n        # Condition check: Broad acceptance and social pressure\n        if current_acceptance < acceptance_threshold or social_pressure <= 0.0:\n            return []\n    \n        # Instruction for the LLM to evaluate broad acceptance and decide on adoption\n        instruction = \"\"\"\n        Evaluate the broad acceptance of the innovation. \n        Determine if broad acceptance is met and decide on adoption based on acceptance thresholds.\n        Return the evaluation result and target_ids for subsequent actions in the following JSON format:\n    \n        {\n        \"broad_acceptance_evaluation\": \"<True if broad acceptance is met, otherwise False>\",\n        \"target_ids\": [\"<The string ID(s) of the agent(s) to send the LateMajorityAdoptionEvent>\"]\n        }\n        \"\"\"\n        observation = f\"Innovation ID: {innovation_id}, Current Acceptance: {current_acceptance}, Acceptance Threshold: {acceptance_threshold}, Social Pressure: {social_pressure}\"\n    \n        # Generate reaction using the LLM\n        result = await self.generate_reaction(instruction, observation)\n    \n        # Parse the result\n        broad_acceptance_evaluation = result.get('broad_acceptance_evaluation', False)\n        target_ids = result.get('target_ids', [])\n    \n        # Update agent profile with the evaluation result\n        self.profile.update_data(\"broad_acceptance_evaluation\", broad_acceptance_evaluation)\n    \n        # If target_ids is not a list, convert it to a list\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n    \n        # Prepare outgoing events\n        events = []\n        for target_id in target_ids:\n            late_majority_event = LateMajorityAdoptionEvent(self.profile_id, target_id, innovation_id)\n            events.append(late_majority_event)\n    \n        return events",
+          "metadata": {
+            "id": 4,
+            "name": "evaluate_broad_acceptance",
+            "condition": "Broad acceptance and social pressure",
+            "description": "Evaluate the broad acceptance of the innovation by the early majority and decide on adoption based on acceptance thresholds.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "innovation_id",
+                "type": "str",
+                "context": "event",
+                "description": "Unique identifier for the innovation being evaluated"
+              },
+              {
+                "name": "acceptance_threshold",
+                "type": "float",
+                "context": "event",
+                "description": "Threshold of acceptance needed to influence late majority"
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "broad_acceptance_evaluation",
+                "type": "bool",
+                "context": "agent",
+                "description": "Evaluation result indicating whether broad acceptance is met"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "Laggards": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "5": {
+          "code": "async def adopt_under_pressure(self, event: Event) -> List[Event]:\n        # Condition Check\n        if event.influence_factor < self.predefined_threshold:\n            return []\n\n        # Access required variables from event\n        innovation_id = event.innovation_id\n        influence_factor = event.influence_factor\n\n        # Update agent profile\n        self.profile.update_data(\"adoption_status\", True)\n\n        # Prepare instruction for decision making\n        instruction = f\"\"\"\n        You are tasked with determining the completion status and final adoption rate for the diffusion process.\n        The influence factor is {influence_factor}, which indicates the pressure on laggards to adopt the innovation.\n        Please return the information in the following JSON format:\n\n        {{\n            \"completion_status\": \"<Boolean indicating if the diffusion is complete>\",\n            \"final_adoption_rate\": \"<Final rate of adoption after laggards adopt>\",\n            \"target_ids\": [\"<The string ID of the EnvAgent, 'ENV'>\"]\n        }}\n        \"\"\"\n\n        # Generate reaction based on instruction\n        result = await self.generate_reaction(instruction)\n\n        # Extract data from result\n        completion_status = result.get('completion_status', False)\n        final_adoption_rate = result.get('final_adoption_rate', 0.0)\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Update environment data\n        self.env.update_data(\"completion_status\", completion_status)\n\n        # Prepare and send outgoing event\n        events = []\n        for target_id in target_ids:\n            laggard_adoption_event = LaggardAdoptionEvent(\n                self.profile_id,\n                target_id,\n                innovation_id=innovation_id,\n                completion_status=completion_status,\n                final_adoption_rate=final_adoption_rate\n            )\n            events.append(laggard_adoption_event)\n\n        return events",
+          "metadata": {
+            "id": 5,
+            "name": "adopt_under_pressure",
+            "condition": "Social pressure and necessity",
+            "description": "Adopt the innovation under pressure from the late majority and complete the diffusion process.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "innovation_id",
+                "type": "str",
+                "context": "event",
+                "description": "Unique identifier for the innovation being adopted"
+              },
+              {
+                "name": "influence_factor",
+                "type": "float",
+                "context": "event",
+                "description": "Factor indicating the influence on laggards"
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "adoption_status",
+                "type": "bool",
+                "context": "agent",
+                "description": "Status indicating whether the innovation has been adopted by laggards"
+              },
+              {
+                "name": "completion_status",
+                "type": "bool",
+                "context": "env",
+                "description": "Indicates whether the diffusion process is completed"
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "events": {
+    "imports": "from onesim.events import Event\nfrom typing import Any, List",
+    "definitions": {
+      "-1": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": -1,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "Innovators",
+          "to_action_name": "initiate_innovation_spread",
+          "from_action_id": 0,
+          "to_action_id": 1,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for innovation diffusion",
+          "fields": []
+        }
+      },
+      "1": {
+        "code": "class InnovationSpreadEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        innovation_id: str = \"\",\n        network_connections: List[Any] = [],\n        relative_advantage: float = 0.0,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.innovation_id = innovation_id\n        self.network_connections = network_connections\n        self.relative_advantage = relative_advantage",
+        "metadata": {
+          "id": 1,
+          "from_agent_type": "Innovators",
+          "from_action_name": "initiate_innovation_spread",
+          "to_agent_type": "EarlyAdopters",
+          "to_action_name": "evaluate_and_adopt_innovation",
+          "from_action_id": 1,
+          "to_action_id": 2,
+          "event_name": "InnovationSpreadEvent",
+          "event_info": "Spread innovation to early adopters",
+          "fields": [
+            {
+              "name": "innovation_id",
+              "type": "str",
+              "default_value": "",
+              "description": "Unique identifier for the innovation being spread"
+            },
+            {
+              "name": "network_connections",
+              "type": "list",
+              "default_value": "[]",
+              "description": "List of social network connections through which the innovation is spread"
+            },
+            {
+              "name": "relative_advantage",
+              "type": "float",
+              "default_value": "0.0",
+              "description": "Perceived relative advantage of the innovation"
+            }
+          ]
+        }
+      },
+      "2": {
+        "code": "class AdoptionEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        innovation_id: str = \"\",\n        adoption_rate: float = 0.0,\n        social_pressure: float = 0.0,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.innovation_id = innovation_id\n        self.adoption_rate = adoption_rate\n        self.social_pressure = social_pressure",
+        "metadata": {
+          "id": 2,
+          "from_agent_type": "EarlyAdopters",
+          "from_action_name": "evaluate_and_adopt_innovation",
+          "to_agent_type": "EarlyMajority",
+          "to_action_name": "consider_adoption",
+          "from_action_id": 2,
+          "to_action_id": 3,
+          "event_name": "AdoptionEvent",
+          "event_info": "Early adopters pass innovation to early majority",
+          "fields": [
+            {
+              "name": "innovation_id",
+              "type": "str",
+              "default_value": "",
+              "description": "Unique identifier for the innovation being adopted"
+            },
+            {
+              "name": "adoption_rate",
+              "type": "float",
+              "default_value": "0.0",
+              "description": "Rate at which early adopters are passing the innovation to early majority"
+            },
+            {
+              "name": "social_pressure",
+              "type": "float",
+              "default_value": "0.0",
+              "description": "Level of social pressure influencing adoption"
+            }
+          ]
+        }
+      },
+      "3": {
+        "code": "class EarlyMajorityAdoptionEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        innovation_id: str = \"\",\n        acceptance_threshold: float = 0.0,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.innovation_id = innovation_id\n        self.acceptance_threshold = acceptance_threshold",
+        "metadata": {
+          "id": 3,
+          "from_agent_type": "EarlyMajority",
+          "from_action_name": "consider_adoption",
+          "to_agent_type": "LateMajority",
+          "to_action_name": "evaluate_broad_acceptance",
+          "from_action_id": 3,
+          "to_action_id": 4,
+          "event_name": "EarlyMajorityAdoptionEvent",
+          "event_info": "Early majority adoption triggers late majority consideration",
+          "fields": [
+            {
+              "name": "innovation_id",
+              "type": "str",
+              "default_value": "",
+              "description": "Unique identifier for the innovation being adopted by early majority"
+            },
+            {
+              "name": "acceptance_threshold",
+              "type": "float",
+              "default_value": "0.0",
+              "description": "Threshold of acceptance needed to influence late majority"
+            }
+          ]
+        }
+      },
+      "4": {
+        "code": "class LateMajorityAdoptionEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        innovation_id: str = \"\",\n        influence_factor: float = 0.0,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.innovation_id = innovation_id\n        self.influence_factor = influence_factor",
+        "metadata": {
+          "id": 4,
+          "from_agent_type": "LateMajority",
+          "from_action_name": "evaluate_broad_acceptance",
+          "to_agent_type": "Laggards",
+          "to_action_name": "adopt_under_pressure",
+          "from_action_id": 4,
+          "to_action_id": 5,
+          "event_name": "LateMajorityAdoptionEvent",
+          "event_info": "Late majority adoption influences laggards",
+          "fields": [
+            {
+              "name": "innovation_id",
+              "type": "str",
+              "default_value": "",
+              "description": "Unique identifier for the innovation being adopted by late majority"
+            },
+            {
+              "name": "influence_factor",
+              "type": "float",
+              "default_value": "0.0",
+              "description": "Factor indicating the influence on laggards"
+            }
+          ]
+        }
+      },
+      "5": {
+        "code": "class LaggardAdoptionEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        innovation_id: str = \"\",\n        completion_status: bool = False,\n        final_adoption_rate: float = 0.0,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.innovation_id = innovation_id\n        self.completion_status = completion_status\n        self.final_adoption_rate = final_adoption_rate",
+        "metadata": {
+          "id": 5,
+          "from_agent_type": "Laggards",
+          "from_action_name": "adopt_under_pressure",
+          "to_agent_type": "EnvAgent",
+          "to_action_name": "terminate",
+          "from_action_id": 5,
+          "to_action_id": -1,
+          "event_name": "LaggardAdoptionEvent",
+          "event_info": "Final adoption event completing the diffusion process",
+          "fields": [
+            {
+              "name": "innovation_id",
+              "type": "str",
+              "default_value": "",
+              "description": "Unique identifier for the innovation being adopted by laggards"
+            },
+            {
+              "name": "completion_status",
+              "type": "bool",
+              "default_value": "false",
+              "description": "Indicates whether the diffusion process is completed"
+            },
+            {
+              "name": "final_adoption_rate",
+              "type": "float",
+              "default_value": "0.0",
+              "description": "Final rate of adoption after laggards adopt"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

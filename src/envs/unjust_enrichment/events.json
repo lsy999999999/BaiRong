@@ -1,0 +1,187 @@
+{
+    "-1": {
+        "id": -1,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "Plaintiff",
+        "to_action_name": "submit_evidence",
+        "from_action_id": 0,
+        "to_action_id": 1,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for Plaintiff to present evidence of unjust enrichment",
+        "fields": []
+    },
+    "-2": {
+        "id": -2,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "Defendant",
+        "to_action_name": "prepare_defense",
+        "from_action_id": 0,
+        "to_action_id": 2,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for Defendant to prepare arguments against the claim",
+        "fields": []
+    },
+    "1": {
+        "id": 1,
+        "from_agent_type": "Plaintiff",
+        "from_action_name": "submit_evidence",
+        "to_agent_type": "Judge",
+        "to_action_name": "evaluate_evidence",
+        "from_action_id": 1,
+        "to_action_id": 3,
+        "event_name": "EvidenceSubmittedEvent",
+        "event_info": "Plaintiff submits evidence of unjust enrichment for judicial review",
+        "fields": [
+            {
+                "name": "evidence_details",
+                "type": "string",
+                "default_value": "",
+                "description": "Detailed description of the evidence submitted by the Plaintiff."
+            },
+            {
+                "name": "plaintiff_id",
+                "type": "string",
+                "default_value": "",
+                "description": "Unique identifier for the Plaintiff submitting the evidence."
+            },
+            {
+                "name": "case_id",
+                "type": "string",
+                "default_value": "",
+                "description": "Unique identifier for the legal case."
+            }
+        ]
+    },
+    "2": {
+        "id": 2,
+        "from_agent_type": "Defendant",
+        "from_action_name": "prepare_defense",
+        "to_agent_type": "Judge",
+        "to_action_name": "evaluate_defense",
+        "from_action_id": 2,
+        "to_action_id": 4,
+        "event_name": "DefensePreparedEvent",
+        "event_info": "Defendant prepares and submits defense arguments against claims",
+        "fields": [
+            {
+                "name": "defense_arguments",
+                "type": "string",
+                "default_value": "",
+                "description": "Arguments prepared by the Defendant in response to the Plaintiff's claims."
+            },
+            {
+                "name": "defendant_id",
+                "type": "string",
+                "default_value": "",
+                "description": "Unique identifier for the Defendant preparing the defense."
+            },
+            {
+                "name": "case_id",
+                "type": "string",
+                "default_value": "",
+                "description": "Unique identifier for the legal case."
+            }
+        ]
+    },
+    "3": {
+        "id": 3,
+        "from_agent_type": "Judge",
+        "from_action_name": "evaluate_evidence",
+        "to_agent_type": "Judge",
+        "to_action_name": "make_decision",
+        "from_action_id": 3,
+        "to_action_id": 5,
+        "event_name": "EvidenceEvaluationEvent",
+        "event_info": "Judge completes evaluation of plaintiff's evidence",
+        "fields": [
+            {
+                "name": "evaluation_result",
+                "type": "string",
+                "default_value": "pending",
+                "description": "Result of the Judge's evaluation of the Plaintiff's evidence."
+            },
+            {
+                "name": "judge_id",
+                "type": "string",
+                "default_value": "",
+                "description": "Unique identifier for the Judge evaluating the evidence."
+            },
+            {
+                "name": "case_id",
+                "type": "string",
+                "default_value": "",
+                "description": "Unique identifier for the legal case."
+            }
+        ]
+    },
+    "4": {
+        "id": 4,
+        "from_agent_type": "Judge",
+        "from_action_name": "evaluate_defense",
+        "to_agent_type": "Judge",
+        "to_action_name": "make_decision",
+        "from_action_id": 4,
+        "to_action_id": 5,
+        "event_name": "DefenseEvaluationEvent",
+        "event_info": "Judge completes evaluation of defendant's arguments",
+        "fields": [
+            {
+                "name": "evaluation_result",
+                "type": "string",
+                "default_value": "pending",
+                "description": "Result of the Judge's evaluation of the Defendant's defense arguments."
+            },
+            {
+                "name": "judge_id",
+                "type": "string",
+                "default_value": "",
+                "description": "Unique identifier for the Judge evaluating the defense."
+            },
+            {
+                "name": "case_id",
+                "type": "string",
+                "default_value": "",
+                "description": "Unique identifier for the legal case."
+            }
+        ]
+    },
+    "5": {
+        "id": 5,
+        "from_agent_type": "Judge",
+        "from_action_name": "make_decision",
+        "to_agent_type": "EnvAgent",
+        "to_action_name": "terminate",
+        "from_action_id": 5,
+        "to_action_id": -1,
+        "event_name": "JudgmentEvent",
+        "event_info": "Judge issues a decision on the case, concluding the simulation",
+        "fields": [
+            {
+                "name": "judgment_result",
+                "type": "string",
+                "default_value": "undecided",
+                "description": "Final decision made by the Judge on the case."
+            },
+            {
+                "name": "judge_id",
+                "type": "string",
+                "default_value": "",
+                "description": "Unique identifier for the Judge issuing the judgment."
+            },
+            {
+                "name": "case_id",
+                "type": "string",
+                "default_value": "",
+                "description": "Unique identifier for the legal case."
+            },
+            {
+                "name": "completion_status",
+                "type": "string",
+                "default_value": "incomplete",
+                "description": "Status indicating whether the simulation has concluded."
+            }
+        ]
+    }
+}

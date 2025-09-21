@@ -1,0 +1,12 @@
+[
+    {
+        "source_agent": "DecisionMakerAgent",
+        "target_agent": "EnvironmentAgent",
+        "direction": "bidirectional"
+    },
+    {
+        "source_agent": "DecisionMakerAgent",
+        "target_agent": "AlternativeOptionsAgent",
+        "direction": "bidirectional"
+    }
+]

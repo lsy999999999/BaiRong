@@ -1,0 +1,82 @@
+[
+    {
+        "name": "Agent001",
+        "adjustment_factor": 1.0,
+        "emotional_state": "joy",
+        "sensitivity_to_emotional_contagion": 0.11774795399137317,
+        "interaction_frequency": 19,
+        "emotional_intensity": 0.5,
+        "communication_mode": "email",
+        "agent_type": "DecisionAgent",
+        "evaluation_result": "pending_evaluation",
+        "social_network_connections": [
+            "AgentA",
+            "AgentB"
+        ],
+        "id": "10"
+    },
+    {
+        "name": "Agent002",
+        "adjustment_factor": 1.0,
+        "emotional_state": "sadness",
+        "sensitivity_to_emotional_contagion": 0.2376231624981785,
+        "interaction_frequency": 19,
+        "emotional_intensity": 0.5,
+        "communication_mode": "text",
+        "agent_type": "DecisionAgent",
+        "evaluation_result": "pending_evaluation",
+        "social_network_connections": [
+            "AgentA",
+            "AgentB"
+        ],
+        "id": "11"
+    },
+    {
+        "name": "Agent003",
+        "adjustment_factor": 1.0,
+        "emotional_state": "anger",
+        "sensitivity_to_emotional_contagion": 0.031101722023844536,
+        "interaction_frequency": 20,
+        "emotional_intensity": 0.5,
+        "communication_mode": "email",
+        "agent_type": "DecisionAgent",
+        "evaluation_result": "pending_evaluation",
+        "social_network_connections": [
+            "AgentA",
+            "AgentB"
+        ],
+        "id": "12"
+    },
+    {
+        "name": "Agent004",
+        "adjustment_factor": 1.0,
+        "emotional_state": "calm",
+        "sensitivity_to_emotional_contagion": 0.8744054564219091,
+        "interaction_frequency": 7,
+        "emotional_intensity": 0.5,
+        "communication_mode": "face-to-face",
+        "agent_type": "DecisionAgent",
+        "evaluation_result": "pending_evaluation",
+        "social_network_connections": [
+            "AgentA",
+            "AgentB"
+        ],
+        "id": "13"
+    },
+    {
+        "name": "Agent005",
+        "adjustment_factor": 1.0,
+        "emotional_state": "excitement",
+        "sensitivity_to_emotional_contagion": 0.04005224053016854,
+        "interaction_frequency": 5,
+        "emotional_intensity": 0.5,
+        "communication_mode": "social media",
+        "agent_type": "DecisionAgent",
+        "evaluation_result": "pending_evaluation",
+        "social_network_connections": [
+            "AgentA",
+            "AgentB"
+        ],
+        "id": "14"
+    }
+]

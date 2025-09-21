@@ -1,0 +1,290 @@
+{
+  "agents": {
+    "ParticipantA": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "1": {
+          "code": "async def observe_behavior(self, event: Event) -> List[Event]:\n        # Condition Check: Ensure the event is 'BehaviorDisplayedEvent'\n        if event.__class__.__name__ != \"BehaviorDisplayedEvent\":\n            return []\n\n        # Access required variables from the event\n        behavior_type = event.behavior_type\n        intended_outcome = event.intended_outcome\n\n        # Generate reaction and decision-making\n        instruction = \"\"\"\n        Participant A has observed a behavior from Participant B. \n        Please generate a description of the observed behavior and the context in which it was observed. \n        Also, determine the target_ids for the subsequent event. \n        Return the information in the following JSON format:\n\n        {\n        \"behavior_description\": \"<Description of the behavior>\",\n        \"observation_context\": \"<Context of observation>\",\n        \"target_ids\": [\"<Target ID(s) for the next event>\"]\n        }\n        \"\"\"\n        observation = f\"Behavior Type: {behavior_type}, Intended Outcome: {intended_outcome}\"\n\n        result = await self.generate_reaction(instruction, observation)\n\n        # Extract and validate response data\n        behavior_description = result.get('behavior_description', None)\n        observation_context = result.get('observation_context', None)\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Update the agent's state\n        self.profile.update_data(\"behavior_description\", behavior_description)\n        self.profile.update_data(\"observation_context\", observation_context)\n\n        # Prepare and send the BehaviorObservedEvent\n        events = []\n        for target_id in target_ids:\n            observed_event = BehaviorObservedEvent(\n                from_agent_id=self.profile_id,\n                to_agent_id=target_id,\n                behavior_description=behavior_description,\n                observation_context=observation_context\n            )\n            events.append(observed_event)\n\n        return events",
+          "metadata": {
+            "id": 1,
+            "name": "observe_behavior",
+            "condition": "Behavior displayed by Participant B",
+            "description": "Participant A observes the behavior displayed by Participant B in the given interaction scenario.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "behavior_type",
+                "type": "string",
+                "context": "event",
+                "description": "Type of behavior displayed by Participant B"
+              },
+              {
+                "name": "intended_outcome",
+                "type": "string",
+                "context": "event",
+                "description": "Intended outcome of the behavior displayed by Participant B"
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "behavior_description",
+                "type": "string",
+                "context": "agent",
+                "description": "Description of the behavior observed by Participant A"
+              },
+              {
+                "name": "observation_context",
+                "type": "string",
+                "context": "agent",
+                "description": "Context in which the behavior was observed"
+              }
+            ]
+          }
+        },
+        "2": {
+          "code": "async def attribute_behavior(self, event: Event) -> List[Event]:\n        # Condition check: Ensure the event is of type 'BehaviorObservedEvent'\n        if event.__class__.__name__ != \"BehaviorObservedEvent\":\n            return []\n\n        # Retrieve required variables from the event\n        behavior_description = event.behavior_description\n        observation_context = event.observation_context\n\n        # Check if the required fields are populated\n        if not behavior_description or not observation_context:\n            return []\n\n        # Decision Making: Generate reaction for attribution\n        observation = f\"Behavior: {behavior_description}, Context: {observation_context}\"\n        instruction = \"\"\"Based on the observed behavior and context, determine whether it should be attributed to internal or external causes according to attribution theory principles. \n        Please return the information in the following JSON format:\n\n        {\n        \"attribution_type\": \"<internal or external>\",\n        \"reasoning\": \"<Reasoning behind the decision>\",\n        \"target_ids\": [\"<The string ID(s) of the Feedbacker C agent>\"]\n        }\n        \"\"\"\n\n        result = await self.generate_reaction(instruction, observation)\n\n        # Parse the LLM's JSON response\n        attribution_type = result.get('attribution_type', 'external')\n        reasoning = result.get('reasoning', '')\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Prepare and send the AttributionDecisionEvent to each target\n        events = []\n        for target_id in target_ids:\n            attribution_event = AttributionDecisionEvent(\n                from_agent_id=self.profile_id,\n                to_agent_id=target_id,\n                attribution_type=attribution_type,\n                reasoning=reasoning\n            )\n            events.append(attribution_event)\n\n        return events",
+          "metadata": {
+            "id": 2,
+            "name": "attribute_behavior",
+            "condition": "Behavior observed from Participant B",
+            "description": "Participant A attributes the observed behavior to internal or external causes based on attribution theory principles.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "behavior_description",
+                "type": "string",
+                "context": "agent",
+                "description": "Description of the behavior observed by Participant A"
+              },
+              {
+                "name": "observation_context",
+                "type": "string",
+                "context": "agent",
+                "description": "Context in which the behavior was observed"
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "attribution_type",
+                "type": "string",
+                "context": "agent",
+                "description": "Type of attribution decided by Participant A: internal or external"
+              },
+              {
+                "name": "reasoning",
+                "type": "string",
+                "context": "agent",
+                "description": "Reasoning behind Participant A's attribution decision"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "ParticipantB": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "3": {
+          "code": "async def display_behavior(self, event: Event) -> List[Event]:\n        # Since there is no condition, proceed directly with the handler logic\n\n        # Access necessary data from the agent's profile\n        behavior_type = self.profile.get_data(\"behavior_type\", \"default\")\n        intended_outcome = self.profile.get_data(\"intended_outcome\", \"default\")\n\n        # Prepare the instruction for generating a reaction\n        instruction = \"\"\"\n        Participant B is displaying a behavior intended for observation by Participant A.\n        Please generate the type of behavior and the intended outcome in the following JSON format:\n\n        {\n        \"behavior_type\": \"<Type of behavior displayed>\",\n        \"intended_outcome\": \"<Intended outcome of the behavior>\",\n        \"target_ids\": [\"<The string ID of Participant A>\"]\n        }\n        \"\"\"\n\n        # Generate the reaction using the instruction\n        observation = f\"Behavior type: {behavior_type}, Intended outcome: {intended_outcome}\"\n        result = await self.generate_reaction(instruction, observation)\n\n        # Extract behavior_type, intended_outcome, and target_ids from the result\n        behavior_type = result.get('behavior_type', behavior_type)\n        intended_outcome = result.get('intended_outcome', intended_outcome)\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Update agent's profile with new behavior information\n        self.profile.update_data(\"behavior_type\", behavior_type)\n        self.profile.update_data(\"intended_outcome\", intended_outcome)\n\n        # Prepare and send the BehaviorDisplayedEvent to Participant A\n        events = []\n        for target_id in target_ids:\n            behavior_event = BehaviorDisplayedEvent(self.profile_id, target_id, behavior_type, intended_outcome)\n            events.append(behavior_event)\n\n        return events",
+          "metadata": {
+            "id": 3,
+            "name": "display_behavior",
+            "condition": null,
+            "description": "Participant B displays a specific behavior intended for observation by Participant A.",
+            "type": "OR",
+            "required_variables": [],
+            "output_updates": [
+              {
+                "name": "behavior_type",
+                "type": "string",
+                "context": "agent",
+                "description": "Type of behavior displayed by Participant B"
+              },
+              {
+                "name": "intended_outcome",
+                "type": "string",
+                "context": "agent",
+                "description": "Intended outcome of the behavior displayed by Participant B"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "FeedbackerC": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "4": {
+          "code": "async def evaluate_attribution(self, event: Event) -> List[Event]:\n        # Condition Check\n        if event.__class__.__name__ != \"AttributionDecisionEvent\":\n            return []\n\n        # Access event data\n        attribution_type = event.attribution_type\n        reasoning = event.reasoning\n\n        # Observation and instruction for generate_reaction\n        observation = f\"Attribution Type: {attribution_type}, Reasoning: {reasoning}\"\n        instruction = \"\"\"\n        Evaluate the attribution decision made by Participant A for any biases.\n        Please return the evaluation results in the following JSON format:\n        {\n            \"bias_detected\": <true/false indicating if bias is detected>,\n            \"feedback_message\": \"<Feedback message regarding the attribution decision>\",\n            \"target_ids\": [\"<The string ID(s) of the target agent(s)>\"]\n        }\n        \"\"\"\n\n        # Generate reaction\n        result = await self.generate_reaction(instruction, observation)\n\n        # Parse results\n        bias_detected = result.get('bias_detected', False)\n        feedback_message = result.get('feedback_message', \"\")\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Update agent state\n        self.profile.update_data(\"bias_detected\", bias_detected)\n        self.profile.update_data(\"feedback_message\", feedback_message)\n\n        # Create and return events\n        events = []\n        for target_id in target_ids:\n            feedback_event = AttributionFeedbackEvent(self.profile_id, target_id, bias_detected=bias_detected, feedback_message=feedback_message)\n            events.append(feedback_event)\n\n        return events",
+          "metadata": {
+            "id": 4,
+            "name": "evaluate_attribution",
+            "condition": "Attribution decision received from Participant A",
+            "description": "Feedbacker C evaluates the attribution decision made by Participant A, assessing any bias present.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "attribution_type",
+                "type": "string",
+                "context": "event",
+                "description": "Type of attribution decided by Participant A: internal or external"
+              },
+              {
+                "name": "reasoning",
+                "type": "string",
+                "context": "event",
+                "description": "Reasoning behind Participant A's attribution decision"
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "bias_detected",
+                "type": "boolean",
+                "context": "agent",
+                "description": "Indicates whether an attribution bias was detected by Feedbacker C"
+              },
+              {
+                "name": "feedback_message",
+                "type": "string",
+                "context": "agent",
+                "description": "Feedback provided by Feedbacker C regarding the attribution decision"
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "events": {
+    "imports": "from onesim.events import Event\nfrom typing import Any",
+    "definitions": {
+      "-1": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": -1,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "ParticipantB",
+          "to_action_name": "display_behavior",
+          "from_action_id": 0,
+          "to_action_id": 3,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for Participant B to display behavior",
+          "fields": []
+        }
+      },
+      "1": {
+        "code": "class BehaviorObservedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        behavior_description: str = \"\",\n        observation_context: str = \"\",\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.behavior_description = behavior_description\n        self.observation_context = observation_context",
+        "metadata": {
+          "id": 1,
+          "from_agent_type": "ParticipantA",
+          "from_action_name": "observe_behavior",
+          "to_agent_type": "ParticipantA",
+          "to_action_name": "attribute_behavior",
+          "from_action_id": 1,
+          "to_action_id": 2,
+          "event_name": "BehaviorObservedEvent",
+          "event_info": "Participant A observes Participant B's behavior",
+          "fields": [
+            {
+              "name": "behavior_description",
+              "type": "string",
+              "default_value": "",
+              "description": "Description of the behavior observed by Participant A"
+            },
+            {
+              "name": "observation_context",
+              "type": "string",
+              "default_value": "",
+              "description": "Context in which the behavior was observed"
+            }
+          ]
+        }
+      },
+      "2": {
+        "code": "class AttributionDecisionEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        attribution_type: str = 'external',\n        reasoning: str = \"\",\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.attribution_type = attribution_type\n        self.reasoning = reasoning",
+        "metadata": {
+          "id": 2,
+          "from_agent_type": "ParticipantA",
+          "from_action_name": "attribute_behavior",
+          "to_agent_type": "FeedbackerC",
+          "to_action_name": "evaluate_attribution",
+          "from_action_id": 2,
+          "to_action_id": 4,
+          "event_name": "AttributionDecisionEvent",
+          "event_info": "Participant A decides on internal or external attribution",
+          "fields": [
+            {
+              "name": "attribution_type",
+              "type": "string",
+              "default_value": "external",
+              "description": "Type of attribution decided by Participant A: internal or external"
+            },
+            {
+              "name": "reasoning",
+              "type": "string",
+              "default_value": "",
+              "description": "Reasoning behind Participant A's attribution decision"
+            }
+          ]
+        }
+      },
+      "3": {
+        "code": "class BehaviorDisplayedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        behavior_type: str = \"\",\n        intended_outcome: str = \"\",\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.behavior_type = behavior_type\n        self.intended_outcome = intended_outcome",
+        "metadata": {
+          "id": 3,
+          "from_agent_type": "ParticipantB",
+          "from_action_name": "display_behavior",
+          "to_agent_type": "ParticipantA",
+          "to_action_name": "observe_behavior",
+          "from_action_id": 3,
+          "to_action_id": 1,
+          "event_name": "BehaviorDisplayedEvent",
+          "event_info": "Participant B displays behavior for observation",
+          "fields": [
+            {
+              "name": "behavior_type",
+              "type": "string",
+              "default_value": "",
+              "description": "Type of behavior displayed by Participant B"
+            },
+            {
+              "name": "intended_outcome",
+              "type": "string",
+              "default_value": "",
+              "description": "Intended outcome of the behavior displayed by Participant B"
+            }
+          ]
+        }
+      },
+      "4": {
+        "code": "class AttributionFeedbackEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        bias_detected: bool = False,\n        feedback_message: str = \"\",\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.bias_detected = bias_detected\n        self.feedback_message = feedback_message",
+        "metadata": {
+          "id": 4,
+          "from_agent_type": "FeedbackerC",
+          "from_action_name": "evaluate_attribution",
+          "to_agent_type": "EnvAgent",
+          "to_action_name": "terminate",
+          "from_action_id": 4,
+          "to_action_id": -1,
+          "event_name": "AttributionFeedbackEvent",
+          "event_info": "Feedbacker C evaluates attribution bias and provides feedback",
+          "fields": [
+            {
+              "name": "bias_detected",
+              "type": "boolean",
+              "default_value": false,
+              "description": "Indicates whether an attribution bias was detected by Feedbacker C"
+            },
+            {
+              "name": "feedback_message",
+              "type": "string",
+              "default_value": "",
+              "description": "Feedback provided by Feedbacker C regarding the attribution decision"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

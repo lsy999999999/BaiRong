@@ -1,0 +1,92 @@
+[
+    {
+        "name": "John Doe",
+        "evidenceSubmitted": 0,
+        "caseType": "Personal Injury",
+        "currentStatus": "preparing_case",
+        "communicationSkills": 66,
+        "restitutionDemand": 10000.0,
+        "agent_type": "Plaintiff",
+        "evidenceDetails": "awaiting_submission",
+        "legalKnowledgeLevel": 60,
+        "evidenceList": [
+            {
+                "document": "contract_note",
+                "validity": "pending"
+            }
+        ],
+        "id": "0"
+    },
+    {
+        "name": "Alice Smith",
+        "evidenceSubmitted": 0,
+        "caseType": "Breach of Contract",
+        "currentStatus": "preparing_case",
+        "communicationSkills": 63,
+        "restitutionDemand": 10000.0,
+        "agent_type": "Plaintiff",
+        "evidenceDetails": "awaiting_submission",
+        "legalKnowledgeLevel": 96,
+        "evidenceList": [
+            {
+                "document": "contract_note",
+                "validity": "pending"
+            }
+        ],
+        "id": "1"
+    },
+    {
+        "name": "Michael Johnson",
+        "evidenceSubmitted": 0,
+        "caseType": "Medical Malpractice",
+        "currentStatus": "preparing_case",
+        "communicationSkills": 51,
+        "restitutionDemand": 10000.0,
+        "agent_type": "Plaintiff",
+        "evidenceDetails": "awaiting_submission",
+        "legalKnowledgeLevel": 51,
+        "evidenceList": [
+            {
+                "document": "contract_note",
+                "validity": "pending"
+            }
+        ],
+        "id": "2"
+    },
+    {
+        "name": "Emily Davis",
+        "evidenceSubmitted": 0,
+        "caseType": "Employment Discrimination",
+        "currentStatus": "preparing_case",
+        "communicationSkills": 35,
+        "restitutionDemand": 10000.0,
+        "agent_type": "Plaintiff",
+        "evidenceDetails": "awaiting_submission",
+        "legalKnowledgeLevel": 9,
+        "evidenceList": [
+            {
+                "document": "contract_note",
+                "validity": "pending"
+            }
+        ],
+        "id": "3"
+    },
+    {
+        "name": "David Brown",
+        "evidenceSubmitted": 0,
+        "caseType": "Product Liability",
+        "currentStatus": "preparing_case",
+        "communicationSkills": 45,
+        "restitutionDemand": 10000.0,
+        "agent_type": "Plaintiff",
+        "evidenceDetails": "awaiting_submission",
+        "legalKnowledgeLevel": 52,
+        "evidenceList": [
+            {
+                "document": "contract_note",
+                "validity": "pending"
+            }
+        ],
+        "id": "4"
+    }
+]

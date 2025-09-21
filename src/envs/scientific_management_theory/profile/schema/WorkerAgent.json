@@ -1,0 +1,92 @@
+{
+    "name": {
+        "type": "str",
+        "default": "WorkerAgent",
+        "private": false,
+        "sampling": "llm",
+        "description": "The name of the agent representing a worker in the simulation."
+    },
+    "task_completion_status": {
+        "type": "str",
+        "default": "pending",
+        "private": false,
+        "sampling": "default"
+    },
+    "performance_adjustment_status": {
+        "type": "str",
+        "default": "normal",
+        "private": false,
+        "sampling": "default"
+    },
+    "skill_level": {
+        "type": "int",
+        "default": 50,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            1,
+            100
+        ]
+    },
+    "assigned_tasks": {
+        "type": "list",
+        "default": [
+            "initial_task"
+        ],
+        "private": false,
+        "sampling": "default",
+        "sample_size": 5
+    },
+    "motivation_level": {
+        "type": "float",
+        "default": 75.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "communication_style": {
+        "type": "str",
+        "default": "direct",
+        "private": true,
+        "sampling": "random",
+        "choices": [
+            "direct",
+            "indirect",
+            "formal",
+            "informal"
+        ]
+    },
+    "workflow_adherence": {
+        "type": "str",
+        "default": "strict",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "strict",
+            "flexible",
+            "adaptive"
+        ]
+    },
+    "feedback_responsiveness": {
+        "type": "str",
+        "default": "responsive",
+        "private": false,
+        "sampling": "default"
+    },
+    "incentive_sensitivity": {
+        "type": "int",
+        "default": 80,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            1,
+            100
+        ]
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

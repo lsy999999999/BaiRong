@@ -1,0 +1,107 @@
+[
+    {
+        "name": "Nutrition Specialist",
+        "behavior_type": "Healthy Eating",
+        "intensity": 75,
+        "recipient_behavior_change": "in_progress",
+        "social_support_received": 50,
+        "community_support_level": 60,
+        "agent_type": "HealthBehaviorAdvocate",
+        "communication_channels": [
+            "Email",
+            "Webinars",
+            "Social Media"
+        ],
+        "reciprocal_promises": [
+            {
+                "promise": "help others",
+                "fulfilled": false
+            }
+        ],
+        "id": "0"
+    },
+    {
+        "name": "Fitness Coach",
+        "behavior_type": "Physical Activity",
+        "intensity": 75,
+        "recipient_behavior_change": "in_progress",
+        "social_support_received": 50,
+        "community_support_level": 60,
+        "agent_type": "HealthBehaviorAdvocate",
+        "communication_channels": [
+            "Mobile App",
+            "In-person Workshops",
+            "Video Calls"
+        ],
+        "reciprocal_promises": [
+            {
+                "promise": "help others",
+                "fulfilled": false
+            }
+        ],
+        "id": "1"
+    },
+    {
+        "name": "Mental Health Advisor",
+        "behavior_type": "Mindfulness and Stress Management",
+        "intensity": 75,
+        "recipient_behavior_change": "in_progress",
+        "social_support_received": 50,
+        "community_support_level": 60,
+        "agent_type": "HealthBehaviorAdvocate",
+        "communication_channels": [
+            "Online Forums",
+            "Podcast",
+            "Text Messaging"
+        ],
+        "reciprocal_promises": [
+            {
+                "promise": "help others",
+                "fulfilled": false
+            }
+        ],
+        "id": "2"
+    },
+    {
+        "name": "Sleep Consultant",
+        "behavior_type": "Sleep Hygiene",
+        "intensity": 75,
+        "recipient_behavior_change": "in_progress",
+        "social_support_received": 50,
+        "community_support_level": 60,
+        "agent_type": "HealthBehaviorAdvocate",
+        "communication_channels": [
+            "Blog",
+            "Virtual Consultations",
+            "Newsletters"
+        ],
+        "reciprocal_promises": [
+            {
+                "promise": "help others",
+                "fulfilled": false
+            }
+        ],
+        "id": "3"
+    },
+    {
+        "name": "Substance Abuse Counselor",
+        "behavior_type": "Substance Use Prevention",
+        "intensity": 75,
+        "recipient_behavior_change": "in_progress",
+        "social_support_received": 50,
+        "community_support_level": 60,
+        "agent_type": "HealthBehaviorAdvocate",
+        "communication_channels": [
+            "Community Events",
+            "Telephone Hotline",
+            "Social Media"
+        ],
+        "reciprocal_promises": [
+            {
+                "promise": "help others",
+                "fulfilled": false
+            }
+        ],
+        "id": "4"
+    }
+]

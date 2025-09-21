@@ -1,0 +1,82 @@
+[
+    {
+        "name": "John Doe",
+        "legal_experience": 3,
+        "strategy_type": "negotiation",
+        "current_status": "preparing_defense",
+        "agent_type": "Defendant",
+        "defense_arguments": "awaiting_input",
+        "defense_prepared": 50,
+        "communication_log": [
+            {
+                "event": "initial_contact",
+                "timestamp": "2025-04-01T10:00:00Z"
+            }
+        ],
+        "id": "5"
+    },
+    {
+        "name": "Jane Smith",
+        "legal_experience": 8,
+        "strategy_type": "litigation",
+        "current_status": "preparing_defense",
+        "agent_type": "Defendant",
+        "defense_arguments": "awaiting_input",
+        "defense_prepared": 50,
+        "communication_log": [
+            {
+                "event": "initial_contact",
+                "timestamp": "2025-04-01T10:00:00Z"
+            }
+        ],
+        "id": "6"
+    },
+    {
+        "name": "Michael Johnson",
+        "legal_experience": 13,
+        "strategy_type": "negotiation",
+        "current_status": "preparing_defense",
+        "agent_type": "Defendant",
+        "defense_arguments": "awaiting_input",
+        "defense_prepared": 50,
+        "communication_log": [
+            {
+                "event": "initial_contact",
+                "timestamp": "2025-04-01T10:00:00Z"
+            }
+        ],
+        "id": "7"
+    },
+    {
+        "name": "Emily Davis",
+        "legal_experience": 16,
+        "strategy_type": "litigation",
+        "current_status": "preparing_defense",
+        "agent_type": "Defendant",
+        "defense_arguments": "awaiting_input",
+        "defense_prepared": 50,
+        "communication_log": [
+            {
+                "event": "initial_contact",
+                "timestamp": "2025-04-01T10:00:00Z"
+            }
+        ],
+        "id": "8"
+    },
+    {
+        "name": "Robert Brown",
+        "legal_experience": 19,
+        "strategy_type": "litigation",
+        "current_status": "preparing_defense",
+        "agent_type": "Defendant",
+        "defense_arguments": "awaiting_input",
+        "defense_prepared": 50,
+        "communication_log": [
+            {
+                "event": "initial_contact",
+                "timestamp": "2025-04-01T10:00:00Z"
+            }
+        ],
+        "id": "9"
+    }
+]

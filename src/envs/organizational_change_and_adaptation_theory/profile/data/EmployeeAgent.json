@@ -1,0 +1,102 @@
+[
+    {
+        "name": "Alice Johnson",
+        "feedback": "awaiting_input",
+        "emotional_response": "neutral",
+        "role": "Software Engineer",
+        "support_level": 50,
+        "training_sessions_attended": 0,
+        "change_adaptation_type": "rapid",
+        "performance_score": 75.0,
+        "communication_style": "Direct and concise",
+        "agent_type": "EmployeeAgent",
+        "feedback_received": [
+            {
+                "date": "2023-10-01",
+                "content": "Initial feedback",
+                "type": "positive"
+            }
+        ],
+        "id": "0"
+    },
+    {
+        "name": "Michael Smith",
+        "feedback": "awaiting_input",
+        "emotional_response": "neutral",
+        "role": "Project Manager",
+        "support_level": 50,
+        "training_sessions_attended": 0,
+        "change_adaptation_type": "incremental",
+        "performance_score": 75.0,
+        "communication_style": "Collaborative and inclusive",
+        "agent_type": "EmployeeAgent",
+        "feedback_received": [
+            {
+                "date": "2023-10-01",
+                "content": "Initial feedback",
+                "type": "positive"
+            }
+        ],
+        "id": "1"
+    },
+    {
+        "name": "Sophia Lee",
+        "feedback": "awaiting_input",
+        "emotional_response": "neutral",
+        "role": "UX Designer",
+        "support_level": 50,
+        "training_sessions_attended": 0,
+        "change_adaptation_type": "rapid",
+        "performance_score": 75.0,
+        "communication_style": "Empathetic and visual",
+        "agent_type": "EmployeeAgent",
+        "feedback_received": [
+            {
+                "date": "2023-10-01",
+                "content": "Initial feedback",
+                "type": "positive"
+            }
+        ],
+        "id": "2"
+    },
+    {
+        "name": "David Brown",
+        "feedback": "awaiting_input",
+        "emotional_response": "neutral",
+        "role": "Data Analyst",
+        "support_level": 50,
+        "training_sessions_attended": 0,
+        "change_adaptation_type": "incremental",
+        "performance_score": 75.0,
+        "communication_style": "Analytical and data-driven",
+        "agent_type": "EmployeeAgent",
+        "feedback_received": [
+            {
+                "date": "2023-10-01",
+                "content": "Initial feedback",
+                "type": "positive"
+            }
+        ],
+        "id": "3"
+    },
+    {
+        "name": "Emma Davis",
+        "feedback": "awaiting_input",
+        "emotional_response": "neutral",
+        "role": "Human Resources Specialist",
+        "support_level": 50,
+        "training_sessions_attended": 0,
+        "change_adaptation_type": "strategic",
+        "performance_score": 75.0,
+        "communication_style": "Supportive and understanding",
+        "agent_type": "EmployeeAgent",
+        "feedback_received": [
+            {
+                "date": "2023-10-01",
+                "content": "Initial feedback",
+                "type": "positive"
+            }
+        ],
+        "id": "4"
+    }
+]

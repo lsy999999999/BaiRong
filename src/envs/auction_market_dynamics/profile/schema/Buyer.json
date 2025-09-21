@@ -1,0 +1,90 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Buyer Agent",
+        "private": false,
+        "sampling": "llm",
+        "description": "A name suitable for identifying a buyer agent in the auction simulation."
+    },
+    "private_value": {
+        "type": "float",
+        "default": 0.0,
+        "private": true,
+        "sampling": "random",
+        "range": [
+            0.0,
+            100.0
+        ]
+    },
+    "risk_preference": {
+        "type": "str",
+        "choices": [
+            "low",
+            "medium",
+            "high"
+        ],
+        "default": "medium",
+        "private": false,
+        "sampling": "random"
+    },
+    "budget": {
+        "type": "float",
+        "default": 1000.0,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            500.0,
+            5000.0
+        ]
+    },
+    "bidding_strategy": {
+        "type": "str",
+        "choices": [
+            "aggressive",
+            "conservative",
+            "balanced"
+        ],
+        "default": "balanced",
+        "private": true,
+        "sampling": "random"
+    },
+    "learning_rate": {
+        "type": "float",
+        "default": 0.1,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.01,
+            0.5
+        ]
+    },
+    "experience": {
+        "type": "int",
+        "default": 0,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0,
+            10
+        ]
+    },
+    "reputation": {
+        "type": "float",
+        "default": 0.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "bidding_decision": {
+        "type": "bool",
+        "default": false,
+        "private": false,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "int",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

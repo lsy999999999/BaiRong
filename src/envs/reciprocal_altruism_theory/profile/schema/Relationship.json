@@ -1,0 +1,12 @@
+[
+    {
+        "source_agent": "HealthBehaviorAdvocate",
+        "target_agent": "BehaviorChangeRecipient",
+        "direction": "unidirectional"
+    },
+    {
+        "source_agent": "BehaviorChangeRecipient",
+        "target_agent": "CommunityNetworkFacilitator",
+        "direction": "unidirectional"
+    }
+]

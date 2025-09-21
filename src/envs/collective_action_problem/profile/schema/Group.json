@@ -1,0 +1,70 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Group",
+        "private": false,
+        "sampling": "llm",
+        "description": "The name of the group agent"
+    },
+    "collective_goal": {
+        "type": "str",
+        "default": "maximize public benefit",
+        "private": false,
+        "sampling": "llm",
+        "description": "The main goal of the group agent in the simulation"
+    },
+    "individual_cooperation_levels": {
+        "type": "list",
+        "default": [
+            {
+                "individual_id": 1,
+                "cooperation_level": 0.75
+            }
+        ],
+        "private": true,
+        "sampling": "default",
+        "sample_size": 1
+    },
+    "evaluation_criteria": {
+        "type": "str",
+        "default": "aggregate cooperation",
+        "private": false,
+        "sampling": "llm",
+        "description": "The criteria used by the group to evaluate success in collective action"
+    },
+    "public_benefit_threshold": {
+        "type": "float",
+        "default": 0.8,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.5,
+            1.0
+        ]
+    },
+    "current_public_benefit": {
+        "type": "float",
+        "default": 0.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "interaction_history": {
+        "type": "list",
+        "default": [
+            {
+                "interaction_id": 1,
+                "result": "success"
+            }
+        ],
+        "private": true,
+        "sampling": "default",
+        "sample_size": 1
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

@@ -1,0 +1,15 @@
+{
+    "interaction_scenarios": [
+        "task_collaboration",
+        "social_dialogue",
+        "problem_solving",
+        "conflict_resolution"
+    ],
+    "participant_a_observation": "Participant A noticed Participant B's hesitation during the task.",
+    "participant_b_behavior": "Participant B provided constructive feedback in the group discussion.",
+    "feedbacker_c_analysis": "Feedbacker C identified a tendency for Participant A to overemphasize internal causes.",
+    "task_difficulty_level": 7,
+    "attribution_bias_detected": true,
+    "participant_a_decision": "external",
+    "feedbacker_c_feedback": "Consider the impact of external factors such as time pressure on B's performance."
+}

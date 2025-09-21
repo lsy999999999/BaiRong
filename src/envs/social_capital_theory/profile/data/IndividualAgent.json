@@ -1,0 +1,117 @@
+[
+    {
+        "name": "Alice Johnson",
+        "social_capital_value": 50.0,
+        "cooperation_potential": true,
+        "decision": "undecided",
+        "trust_level": 50.0,
+        "resource_access": "limited",
+        "agent_type": "IndividualAgent",
+        "initial_social_capital": 53.18554283838671,
+        "relationship_network": [
+            {
+                "relation": "friend",
+                "strength": 75.0
+            }
+        ],
+        "interaction_history": [
+            {
+                "interaction": "initial_meeting",
+                "outcome": "neutral"
+            }
+        ],
+        "id": "0"
+    },
+    {
+        "name": "Michael Smith",
+        "social_capital_value": 50.0,
+        "cooperation_potential": true,
+        "decision": "undecided",
+        "trust_level": 50.0,
+        "resource_access": "limited",
+        "agent_type": "IndividualAgent",
+        "initial_social_capital": 27.25353566231886,
+        "relationship_network": [
+            {
+                "relation": "friend",
+                "strength": 75.0
+            }
+        ],
+        "interaction_history": [
+            {
+                "interaction": "initial_meeting",
+                "outcome": "neutral"
+            }
+        ],
+        "id": "1"
+    },
+    {
+        "name": "Sophia Brown",
+        "social_capital_value": 50.0,
+        "cooperation_potential": true,
+        "decision": "undecided",
+        "trust_level": 50.0,
+        "resource_access": "limited",
+        "agent_type": "IndividualAgent",
+        "initial_social_capital": 41.05239546911824,
+        "relationship_network": [
+            {
+                "relation": "friend",
+                "strength": 75.0
+            }
+        ],
+        "interaction_history": [
+            {
+                "interaction": "initial_meeting",
+                "outcome": "neutral"
+            }
+        ],
+        "id": "2"
+    },
+    {
+        "name": "David Wilson",
+        "social_capital_value": 50.0,
+        "cooperation_potential": true,
+        "decision": "undecided",
+        "trust_level": 50.0,
+        "resource_access": "limited",
+        "agent_type": "IndividualAgent",
+        "initial_social_capital": 99.58902693970072,
+        "relationship_network": [
+            {
+                "relation": "friend",
+                "strength": 75.0
+            }
+        ],
+        "interaction_history": [
+            {
+                "interaction": "initial_meeting",
+                "outcome": "neutral"
+            }
+        ],
+        "id": "3"
+    },
+    {
+        "name": "Emma Davis",
+        "social_capital_value": 50.0,
+        "cooperation_potential": true,
+        "decision": "undecided",
+        "trust_level": 50.0,
+        "resource_access": "limited",
+        "agent_type": "IndividualAgent",
+        "initial_social_capital": 79.25320887437519,
+        "relationship_network": [
+            {
+                "relation": "friend",
+                "strength": 75.0
+            }
+        ],
+        "interaction_history": [
+            {
+                "interaction": "initial_meeting",
+                "outcome": "neutral"
+            }
+        ],
+        "id": "4"
+    }
+]

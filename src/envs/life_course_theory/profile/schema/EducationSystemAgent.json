@@ -1,0 +1,78 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Education System Agent",
+        "private": false,
+        "sampling": "llm",
+        "description": "The name of the agent representing the education system"
+    },
+    "education_impact_assessed": {
+        "type": "boolean",
+        "default": false,
+        "private": false,
+        "sampling": "default"
+    },
+    "current_policy": {
+        "type": "str",
+        "default": "standardized_curriculum",
+        "private": true,
+        "sampling": "default"
+    },
+    "budget_allocation": {
+        "type": "float",
+        "default": 5000000.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "student_capacity": {
+        "type": "int",
+        "default": 1000,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            500,
+            2000
+        ]
+    },
+    "educational_programs": {
+        "type": "list",
+        "default": [
+            "STEM",
+            "Arts",
+            "Sports"
+        ],
+        "private": false,
+        "sampling": "random",
+        "sample_size": 3
+    },
+    "teacher_quality_index": {
+        "type": "int",
+        "default": 85,
+        "private": false,
+        "sampling": "default"
+    },
+    "technology_integration_level": {
+        "type": "str",
+        "default": "moderate",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "low",
+            "moderate",
+            "high"
+        ]
+    },
+    "community_engagement_score": {
+        "type": "int",
+        "default": 70,
+        "private": false,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

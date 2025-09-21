@@ -1,0 +1,368 @@
+{
+  "agents": {
+    "CommunityLeader": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "1": {
+          "code": "async def initiate_mobilization(self, event: Event) -> List[Event]:\n        # No condition check needed as the condition is 'null'\n        \n        # Access required environmental variables\n        community_context = await self.get_env_data(\"community_context\", \"default_context\")\n        available_resources = await self.get_env_data(\"available_resources\", \"default_resources\")\n        \n        # Formulate the instruction for the LLM\n        instruction = f\"\"\"\n        Organize community health mobilization activities based on the following context:\n        - Community Context: {community_context}\n        - Available Resources: {available_resources}\n        \n        Please generate mobilization activity details and decide on the target community members to engage.\n        Return the information in the following JSON format:\n        \n        {{\n        \"activity_details\": \"<Description of the health mobilization activity>\",\n        \"target_ids\": [\"<String ID of the Community Member(s)>\"]\n        }}\n        \"\"\"\n        \n        # Generate the reaction using the LLM\n        observation = f\"Community Context: {community_context}, Available Resources: {available_resources}\"\n        result = await self.generate_reaction(instruction, observation)\n        \n        # Extract the details from the result\n        activity_details = result.get('activity_details', 'None')  # Ensure default value is provided\n        target_ids = result.get('target_ids', [])\n        \n        # Ensure target_ids is a list\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n        \n        # Prepare and send the MobilizationEvent to the specified target_ids\n        events = []\n        for target_id in target_ids:\n            mobilization_event = MobilizationEvent(self.profile_id, target_id, activity_details)\n            events.append(mobilization_event)\n        \n        return events",
+          "metadata": {
+            "id": 1,
+            "name": "initiate_mobilization",
+            "condition": "null",
+            "description": "The Community Leader initiates health mobilization activities by organizing events and rallying community members to participate in health improvement efforts.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "community_context",
+                "type": "str",
+                "context": "env",
+                "description": "The socioeconomic and cultural context of the community."
+              },
+              {
+                "name": "available_resources",
+                "type": "str",
+                "context": "env",
+                "description": "Resources available to support mobilization activities."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "mobilization_status",
+                "type": "str",
+                "context": "agent",
+                "description": "Current status of the mobilization effort initiated by the leader."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "CommunityMember": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "2": {
+          "code": "async def engage_in_mobilization(self, event: Event) -> List[Event]:\n        # Access required variables from the event\n        activity_details = getattr(event, 'activity_details', 'None')\n        leader_id = getattr(event, 'leader_id', 'unknown')\n    \n        # Update agent's participation status based on event details\n        participation_status = f\"Participated in {activity_details} organized by leader {leader_id}\"\n        self.profile.update_data(\"participation_status\", participation_status)\n    \n        # Prepare instruction for generate_reaction\n        instruction = \"\"\"\n        Based on the current mobilization activity and peer influence, decide the next actions. \n        You need to identify the target_ids for further peer influence or to mark the mobilization completion.\n        Please return the information in the following JSON format:\n        \n        {\n            \"target_ids\": [\"<List of target IDs for further influence or 'ENV' for completion>\"]\n        }\n        \"\"\"\n        \n        # Observation context\n        observation = f\"Activity: {activity_details}, Leader: {leader_id}\"\n    \n        # Generate reaction to decide on further actions\n        result = await self.generate_reaction(instruction, observation)\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n    \n        # Prepare outgoing events based on target_ids\n        events = []\n        for target_id in target_ids:\n            if target_id == \"ENV\":\n                # Create MobilizationCompletedEvent\n                completion_status = \"success\"\n                summary = f\"Mobilization activity '{activity_details}' completed successfully.\"\n                mobilization_completed_event = MobilizationCompletedEvent(self.profile_id, \"ENV\", completion_status, summary)\n                events.append(mobilization_completed_event)\n            else:\n                # Create BehaviorChangeEvent for peer influence\n                influencing_member_id = self.profile_id\n                influenced_member_id = target_id\n                behavior_change = f\"Influenced by participation in {activity_details}\"\n                behavior_change_event = BehaviorChangeEvent(influencing_member_id, influenced_member_id, behavior_change=behavior_change)\n                events.append(behavior_change_event)\n    \n        return events",
+          "metadata": {
+            "id": 2,
+            "name": "engage_in_mobilization",
+            "condition": "null",
+            "description": "Community Members participate in mobilization activities, potentially altering their health behaviors based on the influence of leaders and peers.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "activity_details",
+                "type": "str",
+                "context": "event",
+                "description": "Description of the health mobilization activity."
+              },
+              {
+                "name": "leader_id",
+                "type": "str",
+                "context": "event",
+                "description": "Identifier for the community leader organizing the event."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "participation_status",
+                "type": "str",
+                "context": "agent",
+                "description": "Status of the member's participation in mobilization activities."
+              }
+            ]
+          }
+        },
+        "3": {
+          "code": "async def influence_peer_behavior(self, event: Event) -> List[Event]:\n        # Extract event data\n        influencing_member_id = getattr(event, 'influencing_member_id', 'unknown')\n        influenced_member_id = getattr(event, 'influenced_member_id', 'unknown')\n        behavior_change = getattr(event, 'behavior_change', 'None')\n    \n        # Create observation and instruction for generate_reaction\n        observation = f\"Influencing member ID: {influencing_member_id}, Influenced member ID: {influenced_member_id}, Behavior change: {behavior_change}\"\n        instruction = \"\"\"Based on the social interaction and shared experiences, determine the influence on health behavior.\n        Please return the information in the following JSON format:\n    \n        {\n        \"behavior_status\": \"<Updated health behavior status>\",\n        \"target_ids\": [\"<The string ID(s) of the influenced community member(s)>\"]\n        }\n        \"\"\"\n    \n        # Generate reaction\n        result = await self.generate_reaction(instruction, observation)\n    \n        # Extract results from LLM response\n        behavior_status = result.get('behavior_status', None)\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n    \n        # Update the influenced member's behavior status if not None\n        if behavior_status is not None:\n            self.profile.update_data(\"behavior_status\", behavior_status)\n    \n        # Prepare and send PeerInfluenceEvent to the influenced member(s)\n        events = []\n        for target_id in target_ids:\n            peer_influence_event = PeerInfluenceEvent(self.profile_id, target_id, influence_type=behavior_change)\n            events.append(peer_influence_event)\n    \n        return events",
+          "metadata": {
+            "id": 3,
+            "name": "influence_peer_behavior",
+            "condition": "null",
+            "description": "Community Members influence each other's health behaviors through social interactions and shared experiences.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "influencing_member_id",
+                "type": "str",
+                "context": "event",
+                "description": "Identifier for the community member influencing behavior."
+              },
+              {
+                "name": "influenced_member_id",
+                "type": "str",
+                "context": "event",
+                "description": "Identifier for the community member whose behavior is influenced."
+              },
+              {
+                "name": "behavior_change",
+                "type": "str",
+                "context": "event",
+                "description": "Description of the health behavior change."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "behavior_status",
+                "type": "str",
+                "context": "agent",
+                "description": "Status of the member's health behavior after influence."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "PublicHealthExpert": {
+      "imports": "from typing import Any, List, Optional\nimport asyncio\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "4": {
+          "code": "async def provide_guidance(self, event: Event) -> List[Event]:\n        # Condition Check: Since the condition is \"null\", we proceed directly.\n\n        # Extract necessary data from the event with default values\n        guidance_details = getattr(event, 'guidance_details', 'None')\n        expert_id = getattr(event, 'expert_id', 'unknown')\n\n        # Instruction for LLM to determine the next steps\n        instruction = \"\"\"\n        You are a Public Health Expert in a community health mobilization simulation. Your task is to provide guidance and resources to support community leaders in health mobilization efforts. Based on the current guidance details and your expert ID, decide the target community leaders who should receive this guidance. Also, update the guidance status.\n        \n        Please return the information in the following JSON format:\n        {\n            \"guidance_status\": \"<Status of the guidance dissemination>\",\n            \"target_ids\": [\"<The string ID(s) of the CommunityLeader agent(s)>\"]\n        }\n        \"\"\"\n\n        # Generate reaction using the LLM\n        observation = f\"Guidance Details: {guidance_details}, Expert ID: {expert_id}\"\n        result = await self.generate_reaction(instruction, observation)\n\n        # Parse the LLM's response\n        guidance_status = result.get('guidance_status', None)\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids] if target_ids else []\n\n        # Update the agent's profile with the new guidance status\n        self.profile.update_data(\"guidance_status\", guidance_status)\n\n        # Prepare outgoing events\n        events = []\n        for target_id in target_ids:\n            guidance_event = GuidanceEvent(self.profile_id, target_id, guidance_details=guidance_details, expert_id=expert_id)\n            events.append(guidance_event)\n\n        # Additionally, send a GuidanceCompletedEvent to the EnvAgent\n        guidance_completed_event = GuidanceCompletedEvent(self.profile_id, \"ENV\", completion_status=\"completed\", results_summary=\"Guidance provided to community leaders.\")\n        events.append(guidance_completed_event)\n\n        return events",
+          "metadata": {
+            "id": 4,
+            "name": "provide_guidance",
+            "condition": "null",
+            "description": "Public Health Experts provide guidance and resources to support community health mobilization efforts, offering data and policy insights.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "guidance_details",
+                "type": "str",
+                "context": "event",
+                "description": "Details of the guidance provided."
+              },
+              {
+                "name": "expert_id",
+                "type": "str",
+                "context": "event",
+                "description": "Identifier for the public health expert providing guidance."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "guidance_status",
+                "type": "str",
+                "context": "agent",
+                "description": "Status of the guidance dissemination process."
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "events": {
+    "imports": "from onesim.events import Event\nfrom typing import Any, List\nfrom datetime import datetime",
+    "definitions": {
+      "-1": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": -1,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "CommunityLeader",
+          "to_action_name": "initiate_mobilization",
+          "from_action_id": 0,
+          "to_action_id": 1,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for community health mobilization process",
+          "fields": []
+        }
+      },
+      "-2": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": -2,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "PublicHealthExpert",
+          "to_action_name": "provide_guidance",
+          "from_action_id": 0,
+          "to_action_id": 4,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for public health guidance dissemination",
+          "fields": []
+        }
+      },
+      "1": {
+        "code": "class MobilizationEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        activity_details: str = 'None',\n        leader_id: str = 'unknown',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.activity_details = activity_details\n        self.leader_id = leader_id",
+        "metadata": {
+          "id": 1,
+          "from_agent_type": "CommunityLeader",
+          "from_action_name": "initiate_mobilization",
+          "to_agent_type": "CommunityMember",
+          "to_action_name": "engage_in_mobilization",
+          "from_action_id": 1,
+          "to_action_id": 2,
+          "event_name": "MobilizationEvent",
+          "event_info": "Community leaders organize health mobilization activities",
+          "fields": [
+            {
+              "name": "activity_details",
+              "type": "str",
+              "default_value": "None",
+              "description": "Description of the health mobilization activity."
+            },
+            {
+              "name": "leader_id",
+              "type": "str",
+              "default_value": "unknown",
+              "description": "Identifier for the community leader organizing the event."
+            }
+          ]
+        }
+      },
+      "2": {
+        "code": "class BehaviorChangeEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        influencing_member_id: str = 'unknown',\n        influenced_member_id: str = 'unknown',\n        behavior_change: str = 'None',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.influencing_member_id = influencing_member_id\n        self.influenced_member_id = influenced_member_id\n        self.behavior_change = behavior_change",
+        "metadata": {
+          "id": 2,
+          "from_agent_type": "CommunityMember",
+          "from_action_name": "engage_in_mobilization",
+          "to_agent_type": "CommunityMember",
+          "to_action_name": "influence_peer_behavior",
+          "from_action_id": 2,
+          "to_action_id": 3,
+          "event_name": "BehaviorChangeEvent",
+          "event_info": "Community members influence each other's health behaviors",
+          "fields": [
+            {
+              "name": "influencing_member_id",
+              "type": "str",
+              "default_value": "unknown",
+              "description": "Identifier for the community member influencing behavior."
+            },
+            {
+              "name": "influenced_member_id",
+              "type": "str",
+              "default_value": "unknown",
+              "description": "Identifier for the community member whose behavior is influenced."
+            },
+            {
+              "name": "behavior_change",
+              "type": "str",
+              "default_value": "None",
+              "description": "Description of the health behavior change."
+            }
+          ]
+        }
+      },
+      "3": {
+        "code": "class MobilizationCompletedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        completion_status: str = 'success',\n        summary: str = 'None',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.completion_status = completion_status\n        self.summary = summary",
+        "metadata": {
+          "id": 3,
+          "from_agent_type": "CommunityMember",
+          "from_action_name": "engage_in_mobilization",
+          "to_agent_type": "EnvAgent",
+          "to_action_name": "terminate",
+          "from_action_id": 2,
+          "to_action_id": -1,
+          "event_name": "MobilizationCompletedEvent",
+          "event_info": "Completion of community mobilization efforts",
+          "fields": [
+            {
+              "name": "completion_status",
+              "type": "str",
+              "default_value": "success",
+              "description": "Status of the mobilization effort completion."
+            },
+            {
+              "name": "summary",
+              "type": "str",
+              "default_value": "None",
+              "description": "Summary of mobilization outcomes."
+            }
+          ]
+        }
+      },
+      "4": {
+        "code": "class PeerInfluenceEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        peer_id: str = 'unknown',\n        target_member_id: str = 'unknown',\n        influence_type: str = 'None',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.peer_id = peer_id\n        self.target_member_id = target_member_id\n        self.influence_type = influence_type",
+        "metadata": {
+          "id": 4,
+          "from_agent_type": "CommunityMember",
+          "from_action_name": "influence_peer_behavior",
+          "to_agent_type": "CommunityMember",
+          "to_action_name": "engage_in_mobilization",
+          "from_action_id": 3,
+          "to_action_id": 2,
+          "event_name": "PeerInfluenceEvent",
+          "event_info": "Peer influence triggers further engagement",
+          "fields": [
+            {
+              "name": "peer_id",
+              "type": "str",
+              "default_value": "unknown",
+              "description": "Identifier for the peer influencing engagement."
+            },
+            {
+              "name": "target_member_id",
+              "type": "str",
+              "default_value": "unknown",
+              "description": "Identifier for the member being influenced."
+            },
+            {
+              "name": "influence_type",
+              "type": "str",
+              "default_value": "None",
+              "description": "Type of influence exerted by the peer."
+            }
+          ]
+        }
+      },
+      "5": {
+        "code": "class GuidanceEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        guidance_details: str = 'None',\n        expert_id: str = 'unknown',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.guidance_details = guidance_details\n        self.expert_id = expert_id",
+        "metadata": {
+          "id": 5,
+          "from_agent_type": "PublicHealthExpert",
+          "from_action_name": "provide_guidance",
+          "to_agent_type": "CommunityLeader",
+          "to_action_name": "initiate_mobilization",
+          "from_action_id": 4,
+          "to_action_id": 1,
+          "event_name": "GuidanceEvent",
+          "event_info": "Public health experts provide guidance and resources",
+          "fields": [
+            {
+              "name": "guidance_details",
+              "type": "str",
+              "default_value": "None",
+              "description": "Details of the guidance provided."
+            },
+            {
+              "name": "expert_id",
+              "type": "str",
+              "default_value": "unknown",
+              "description": "Identifier for the public health expert providing guidance."
+            }
+          ]
+        }
+      },
+      "6": {
+        "code": "class GuidanceCompletedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        completion_status: str = 'completed',\n        results_summary: str = 'None',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.completion_status = completion_status\n        self.results_summary = results_summary",
+        "metadata": {
+          "id": 6,
+          "from_agent_type": "PublicHealthExpert",
+          "from_action_name": "provide_guidance",
+          "to_agent_type": "EnvAgent",
+          "to_action_name": "terminate",
+          "from_action_id": 4,
+          "to_action_id": -1,
+          "event_name": "GuidanceCompletedEvent",
+          "event_info": "Completion of guidance dissemination",
+          "fields": [
+            {
+              "name": "completion_status",
+              "type": "str",
+              "default_value": "completed",
+              "description": "Status of the guidance dissemination completion."
+            },
+            {
+              "name": "results_summary",
+              "type": "str",
+              "default_value": "None",
+              "description": "Summary of the guidance dissemination results."
+            }
+          ]
+        }
+      }
+    }
+  }
+}

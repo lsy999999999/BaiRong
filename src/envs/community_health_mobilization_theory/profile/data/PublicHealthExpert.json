@@ -1,0 +1,82 @@
+[
+    {
+        "name": "Dr. Emily Carter",
+        "guidance_status": "active",
+        "expertise_level": 99,
+        "communication_channels": [
+            "social_media",
+            "community_meetings"
+        ],
+        "policy_influence": 40,
+        "cultural_awareness": 95,
+        "interaction_effectiveness": 94,
+        "mobilization_strategy": "Leveraging digital platforms to disseminate health information and engage communities through interactive webinars and social media campaigns.",
+        "agent_type": "PublicHealthExpert",
+        "resource_allocation": 75.0,
+        "id": "10"
+    },
+    {
+        "name": "Dr. Raj Patel",
+        "guidance_status": "active",
+        "expertise_level": 63,
+        "communication_channels": [
+            "social_media",
+            "community_meetings"
+        ],
+        "policy_influence": 36,
+        "cultural_awareness": 97,
+        "interaction_effectiveness": 64,
+        "mobilization_strategy": "Implementing community-based participatory research to involve local populations in health decision-making and tailor interventions to specific community needs.",
+        "agent_type": "PublicHealthExpert",
+        "resource_allocation": 75.0,
+        "id": "11"
+    },
+    {
+        "name": "Dr. Sofia Hernandez",
+        "guidance_status": "active",
+        "expertise_level": 71,
+        "communication_channels": [
+            "social_media",
+            "community_meetings"
+        ],
+        "policy_influence": 13,
+        "cultural_awareness": 65,
+        "interaction_effectiveness": 67,
+        "mobilization_strategy": "Developing partnerships with local organizations to create grassroots health initiatives and promote peer education programs.",
+        "agent_type": "PublicHealthExpert",
+        "resource_allocation": 75.0,
+        "id": "12"
+    },
+    {
+        "name": "Dr. Ahmed Khan",
+        "guidance_status": "active",
+        "expertise_level": 54,
+        "communication_channels": [
+            "social_media",
+            "community_meetings"
+        ],
+        "policy_influence": 73,
+        "cultural_awareness": 77,
+        "interaction_effectiveness": 68,
+        "mobilization_strategy": "Organizing health fairs and workshops in underserved areas to provide accessible health screenings and educational resources.",
+        "agent_type": "PublicHealthExpert",
+        "resource_allocation": 75.0,
+        "id": "13"
+    },
+    {
+        "name": "Dr. Lisa Nguyen",
+        "guidance_status": "active",
+        "expertise_level": 54,
+        "communication_channels": [
+            "social_media",
+            "community_meetings"
+        ],
+        "policy_influence": 14,
+        "cultural_awareness": 76,
+        "interaction_effectiveness": 68,
+        "mobilization_strategy": "Utilizing mobile clinics to reach remote communities and provide on-the-ground health services and education.",
+        "agent_type": "PublicHealthExpert",
+        "resource_allocation": 75.0,
+        "id": "14"
+    }
+]

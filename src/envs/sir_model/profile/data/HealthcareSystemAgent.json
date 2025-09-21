@@ -1,0 +1,97 @@
+[
+    {
+        "name": "Agent_001",
+        "treatment_status": "pending",
+        "recovery_status": "not_recovered",
+        "capacity": 1264,
+        "policy_compliance": 0.7592403564098475,
+        "treatment_efficiency": 0.75,
+        "interaction_rate": 0.2,
+        "current_load": 800,
+        "agent_type": "HealthcareSystemAgent",
+        "resource_distribution": [
+            {
+                "resource": "ventilators",
+                "quantity": 50
+            }
+        ],
+        "feedback_on_treatment": "The treatment plan was highly effective, with noticeable improvements in patient outcomes within the first month.",
+        "id": "15"
+    },
+    {
+        "name": "Agent_002",
+        "treatment_status": "pending",
+        "recovery_status": "not_recovered",
+        "capacity": 1002,
+        "policy_compliance": 0.917996609720366,
+        "treatment_efficiency": 0.75,
+        "interaction_rate": 0.2,
+        "current_load": 800,
+        "agent_type": "HealthcareSystemAgent",
+        "resource_distribution": [
+            {
+                "resource": "ventilators",
+                "quantity": 50
+            }
+        ],
+        "feedback_on_treatment": "Moderate success observed; some patients responded well, while others showed minimal progress.",
+        "id": "16"
+    },
+    {
+        "name": "Agent_003",
+        "treatment_status": "pending",
+        "recovery_status": "not_recovered",
+        "capacity": 689,
+        "policy_compliance": 0.6249288976577432,
+        "treatment_efficiency": 0.75,
+        "interaction_rate": 0.2,
+        "current_load": 800,
+        "agent_type": "HealthcareSystemAgent",
+        "resource_distribution": [
+            {
+                "resource": "ventilators",
+                "quantity": 50
+            }
+        ],
+        "feedback_on_treatment": "Treatment effectiveness varied significantly, requiring adjustments and personalized approaches for better results.",
+        "id": "17"
+    },
+    {
+        "name": "Agent_004",
+        "treatment_status": "pending",
+        "recovery_status": "not_recovered",
+        "capacity": 980,
+        "policy_compliance": 0.6718887999438153,
+        "treatment_efficiency": 0.75,
+        "interaction_rate": 0.2,
+        "current_load": 800,
+        "agent_type": "HealthcareSystemAgent",
+        "resource_distribution": [
+            {
+                "resource": "ventilators",
+                "quantity": 50
+            }
+        ],
+        "feedback_on_treatment": "The treatment was largely ineffective in its current form, necessitating a complete reevaluation of the approach.",
+        "id": "18"
+    },
+    {
+        "name": "Agent_005",
+        "treatment_status": "pending",
+        "recovery_status": "not_recovered",
+        "capacity": 1386,
+        "policy_compliance": 0.5777525462905244,
+        "treatment_efficiency": 0.75,
+        "interaction_rate": 0.2,
+        "current_load": 800,
+        "agent_type": "HealthcareSystemAgent",
+        "resource_distribution": [
+            {
+                "resource": "ventilators",
+                "quantity": 50
+            }
+        ],
+        "feedback_on_treatment": "Positive feedback overall, with a majority of patients experiencing significant health improvements.",
+        "id": "19"
+    }
+]

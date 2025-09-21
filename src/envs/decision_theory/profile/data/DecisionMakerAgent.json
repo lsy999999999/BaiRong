@@ -1,0 +1,137 @@
+[
+    {
+        "name": "RiskAverseInvestor",
+        "risk_preference": 0.6353999593925181,
+        "utility_function": "Expected Utility Maximization",
+        "decision_strategy": "Minimax Regret",
+        "available_resources": 100,
+        "emotional_state": "Cautious",
+        "goal_priority": [
+            "maximize_utility",
+            "minimize_risk"
+        ],
+        "agent_type": "DecisionMakerAgent",
+        "collected_information": "awaiting_input",
+        "evaluation_result": "pending_evaluation",
+        "decision_result": "undecided",
+        "information_sources": [
+            "source_1",
+            "source_2"
+        ],
+        "interaction_history": [
+            {
+                "timestamp": "2023-10-01T00:00:00Z",
+                "interaction_type": "initial"
+            }
+        ],
+        "id": "0"
+    },
+    {
+        "name": "OpportunisticTrader",
+        "risk_preference": 0.3503462518332946,
+        "utility_function": "Prospect Theory",
+        "decision_strategy": "Heuristic-Based",
+        "available_resources": 100,
+        "emotional_state": "Optimistic",
+        "goal_priority": [
+            "maximize_utility",
+            "minimize_risk"
+        ],
+        "agent_type": "DecisionMakerAgent",
+        "collected_information": "awaiting_input",
+        "evaluation_result": "pending_evaluation",
+        "decision_result": "undecided",
+        "information_sources": [
+            "source_1",
+            "source_2"
+        ],
+        "interaction_history": [
+            {
+                "timestamp": "2023-10-01T00:00:00Z",
+                "interaction_type": "initial"
+            }
+        ],
+        "id": "1"
+    },
+    {
+        "name": "BalancedNegotiator",
+        "risk_preference": 0.9284511799270572,
+        "utility_function": "Multi-Attribute Utility",
+        "decision_strategy": "Tit-for-Tat",
+        "available_resources": 100,
+        "emotional_state": "Calm",
+        "goal_priority": [
+            "maximize_utility",
+            "minimize_risk"
+        ],
+        "agent_type": "DecisionMakerAgent",
+        "collected_information": "awaiting_input",
+        "evaluation_result": "pending_evaluation",
+        "decision_result": "undecided",
+        "information_sources": [
+            "source_1",
+            "source_2"
+        ],
+        "interaction_history": [
+            {
+                "timestamp": "2023-10-01T00:00:00Z",
+                "interaction_type": "initial"
+            }
+        ],
+        "id": "2"
+    },
+    {
+        "name": "AggressiveBargainer",
+        "risk_preference": 0.23787732201064282,
+        "utility_function": "Linear Utility",
+        "decision_strategy": "Zero-Sum Approach",
+        "available_resources": 100,
+        "emotional_state": "Assertive",
+        "goal_priority": [
+            "maximize_utility",
+            "minimize_risk"
+        ],
+        "agent_type": "DecisionMakerAgent",
+        "collected_information": "awaiting_input",
+        "evaluation_result": "pending_evaluation",
+        "decision_result": "undecided",
+        "information_sources": [
+            "source_1",
+            "source_2"
+        ],
+        "interaction_history": [
+            {
+                "timestamp": "2023-10-01T00:00:00Z",
+                "interaction_type": "initial"
+            }
+        ],
+        "id": "3"
+    },
+    {
+        "name": "CautiousPlanner",
+        "risk_preference": 0.4620484948506487,
+        "utility_function": "Risk-Adjusted Return",
+        "decision_strategy": "Scenario Analysis",
+        "available_resources": 100,
+        "emotional_state": "Anxious",
+        "goal_priority": [
+            "maximize_utility",
+            "minimize_risk"
+        ],
+        "agent_type": "DecisionMakerAgent",
+        "collected_information": "awaiting_input",
+        "evaluation_result": "pending_evaluation",
+        "decision_result": "undecided",
+        "information_sources": [
+            "source_1",
+            "source_2"
+        ],
+        "interaction_history": [
+            {
+                "timestamp": "2023-10-01T00:00:00Z",
+                "interaction_type": "initial"
+            }
+        ],
+        "id": "4"
+    }
+]

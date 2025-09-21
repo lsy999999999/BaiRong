@@ -1,0 +1,7 @@
+[
+    {
+        "source_agent": "Individual",
+        "target_agent": "Group",
+        "direction": "unidirectional"
+    }
+]

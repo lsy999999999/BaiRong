@@ -1,0 +1,100 @@
+{
+  "domain": "Organization",
+  "scene_name": "hierarchy_of_needs",
+  "odd_protocol": {
+    "overview": {
+      "system_goal": "To use a Large Language Model (LLM) to simulate how an individual progresses from basic physiological needs to self-actualization needs within an organizational or team environment. The simulation explores how satisfying different levels of needs influences individual behavior, motivation, and decision-making through interactions with other individuals or systems. Scenarios include virtual companies or social environments where individuals interact based on their need levels, affecting work performance, collaboration, and personal growth.",
+      "agent_types": "Agents are individuals with varying levels of needs, ranging from physiological to self-actualization. Each agent can exhibit focus or motivation toward a particular level of need at different times.",
+      "environment_description": "The environment includes organizational culture, work pressure, social networks, leadership styles, and other factors that impact the process of need satisfaction for agents."
+    },
+    "design_concepts": {
+      "interaction_patterns": "Agents interact through language, simulating communication, feedback, and emotional expression as part of the need satisfaction process. For example, agents may seek basic work conditions or physiological resources when physiological needs are unmet, and exhibit cooperation and emotional exchange when social needs are satisfied.",
+      "communication_protocols": "Agents communicate through language interactions, which are analyzed to assess need satisfaction and emotional responses.",
+      "decision_mechanisms": "Agents collect external feedback through interactions and decide how to adjust their need levels accordingly. The system uses language interaction data to evaluate need satisfaction and dynamically adjust agent states."
+    },
+    "details": {
+      "agent_behaviors": "Agents display behaviors based on their need levels, such as seeking basic resources when physiological needs are unmet, or engaging in cooperation when social needs are satisfied. Behaviors change as agents transition to higher need levels.",
+      "decision_algorithms": "The system analyzes agent language, emotional reactions, and work performance to dynamically adjust need levels. Decision algorithms include emotional analysis and need assessment based on language data.",
+      "specific_constraints": "Agents must have at least two for interaction to simulate need level influence. Recommended agent count is at least ten to capture complex interactions. Agents are assigned roles based on need levels, influencing their behavior characteristics."
+    }
+  },
+  "agent_types": {
+    "PhysiologicalAgent": "Focuses on satisfying basic physiological needs such as work conditions and resources, influencing their interactions and decisions.",
+    "SocialAgent": "Engages in cooperation and emotional exchange when social needs are satisfied, impacting teamwork and collaboration.",
+    "SelfActualizationAgent": "Driven by the need for personal growth and self-actualization, influencing their motivation and decision-making within the organization.",
+    "FeedbackAgent": "Collects and analyzes external feedback through language interactions to assess need satisfaction and adjust agent states dynamically."
+  },
+  "portrait": {
+    "PhysiologicalAgent": 3,
+    "SocialAgent": 5,
+    "SelfActualizationAgent": 2,
+    "FeedbackAgent": 4
+  },
+  "metrics": [
+    {
+      "id": "Physiological_Needs_Fulfillment_Rate",
+      "name": "Physiological Needs Fulfillment Rate",
+      "description": "Measures the proportion of PhysiologicalAgents whose physiological needs are marked as 'fulfilled'.",
+      "visualization_type": "pie",
+      "update_frequency": 5,
+      "variables": [
+        {
+          "name": "physiological_needs_status",
+          "source_type": "agent",
+          "agent_type": "PhysiologicalAgent",
+          "path": "physiological_needs_status",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Count the number of PhysiologicalAgents with 'physiological_needs_status' marked as 'fulfilled'. Handle None or empty values by skipping them. Calculate the proportion of fulfilled needs versus total agents, returning a dictionary with keys 'Fulfilled' and 'Unfulfilled' for pie chart visualization.",
+      "function_name": "Physiological_Needs_Fulfillment_Rate"
+    },
+    {
+      "id": "Average_Social_Interactions_Needed",
+      "name": "Average Social Interactions Needed",
+      "description": "Calculates the average number of social interactions needed by SocialAgents to satisfy their social needs.",
+      "visualization_type": "bar",
+      "update_frequency": 5,
+      "variables": [
+        {
+          "name": "social_interactions_needed",
+          "source_type": "agent",
+          "agent_type": "SocialAgent",
+          "path": "social_interactions_needed",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "For each SocialAgent, count the number of interactions in 'social_interactions_needed'. Handle None or empty lists by treating them as zero. Calculate the average across all agents and return a single bar with the average value.",
+      "function_name": "Average_Social_Interactions_Needed"
+    },
+    {
+      "id": "Self_Actualization_Goals_Progress",
+      "name": "Self-Actualization Goals Progress",
+      "description": "Tracks the progress of SelfActualizationAgents towards their self-actualization goals.",
+      "visualization_type": "line",
+      "update_frequency": 5,
+      "variables": [
+        {
+          "name": "self_actualization_goals",
+          "source_type": "agent",
+          "agent_type": "SelfActualizationAgent",
+          "path": "self_actualization_goals",
+          "required": true,
+          "is_list": true
+        },
+        {
+          "name": "self_actualization_status",
+          "source_type": "agent",
+          "agent_type": "SelfActualizationAgent",
+          "path": "self_actualization_status",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "For each SelfActualizationAgent, compare the 'self_actualization_status' to the number of goals in 'self_actualization_goals'. Handle None or empty lists by skipping those agents. Calculate the progress as the ratio of completed goals to total goals for each agent. Aggregate these ratios and plot them over time as a line chart, with each line representing an agent's progress.",
+      "function_name": "Self_Actualization_Goals_Progress"
+    }
+  ]
+}

@@ -1,0 +1,218 @@
+{
+    "CompanyAgent": [
+        {
+            "id": 1,
+            "name": "evaluate_cash_flow",
+            "condition": "Company has cash reserves to evaluate",
+            "description": "Assess the company's current cash flow status to determine financial health and readiness for loan applications.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "cash_reserves",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Current cash reserves held by the company."
+                },
+                {
+                    "name": "debt_levels",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Total outstanding debt of the company."
+                },
+                {
+                    "name": "credit_rating",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Current credit rating of the company."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "cash_flow_status",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Updated status of the company's cash flow after evaluation."
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "name": "apply_for_loan",
+            "condition": "Company has evaluated cash flow and received assessed credit rating",
+            "description": "Submit a loan application to the bank based on the company's financial assessment and credit rating.",
+            "type": "AND",
+            "required_variables": [
+                {
+                    "name": "company_id",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Unique identifier for the company applying for the loan."
+                },
+                {
+                    "name": "loan_amount",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Desired loan amount based on financial needs."
+                },
+                {
+                    "name": "credit_rating",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Assessed credit rating of the company."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "loan_application_status",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Status of the loan application process."
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "name": "manage_expenses",
+            "condition": "Company has revenue from consumer spending",
+            "description": "Handle the company's expenses, including paying debts and taxes, to ensure financial stability.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "total_expenses",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Total expenses the company needs to manage."
+                },
+                {
+                    "name": "incoming_revenue",
+                    "type": "float",
+                    "context": "event",
+                    "description": "Revenue generated from consumer spending."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "cash_reserves",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Updated cash reserves after managing expenses."
+                },
+                {
+                    "name": "completion_status",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Status indicating completion of expense management."
+                }
+            ]
+        }
+    ],
+    "BankAgent": [
+        {
+            "id": 4,
+            "name": "assess_credit_rating",
+            "condition": "Received cash flow evaluation from company",
+            "description": "Evaluate the creditworthiness of a company to determine eligibility and terms for loan offerings.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "company_id",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Unique identifier for the company whose credit rating is being assessed."
+                },
+                {
+                    "name": "cash_flow_status",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Status of the company's cash flow."
+                },
+                {
+                    "name": "debt_levels",
+                    "type": "float",
+                    "context": "event",
+                    "description": "Current debt levels of the company."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "credit_rating",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Determined credit rating of the company."
+                }
+            ]
+        },
+        {
+            "id": 5,
+            "name": "process_loan_application",
+            "condition": "Received loan application from company",
+            "description": "Review and decide on the loan application submitted by a company, considering credit rating and financial health.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "company_id",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Unique identifier for the company applying for the loan."
+                },
+                {
+                    "name": "loan_amount",
+                    "type": "float",
+                    "context": "event",
+                    "description": "Amount of loan requested by the company."
+                },
+                {
+                    "name": "credit_rating",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Credit rating of the company at the time of application."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "loan_decision",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Decision on the loan application, either approved or rejected."
+                },
+                {
+                    "name": "approved_loan_amount",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Amount of loan approved for the company, if applicable."
+                }
+            ]
+        }
+    ],
+    "ConsumerAgent": [
+        {
+            "id": 6,
+            "name": "spend_money",
+            "condition": "Consumers have available funds to spend",
+            "description": "Engage in purchasing activities that generate revenue for companies, affecting their cash flow.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "consumer_id",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Unique identifier for the consumer spending money."
+                },
+                {
+                    "name": "spending_amount",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Amount of money the consumer is spending."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "generated_revenue",
+                    "type": "float",
+                    "context": "event",
+                    "description": "Revenue generated for companies from consumer spending."
+                }
+            ]
+        }
+    ]
+}

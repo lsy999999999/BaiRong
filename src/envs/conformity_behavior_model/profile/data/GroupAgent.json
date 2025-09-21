@@ -1,0 +1,102 @@
+[
+    {
+        "name": "Harmony Collective",
+        "cohesion": 0.2534131968027402,
+        "norms": [
+            "Respect for diversity",
+            "Open communication",
+            "Consensus decision-making",
+            "Conflict resolution"
+        ],
+        "majority_threshold": 0.750107289028548,
+        "communication_structure": "hierarchical",
+        "homogeneity": 0.8705146000745725,
+        "decision_method": "leader_decision",
+        "updated_group_opinion": "",
+        "agent_type": "GroupAgent",
+        "members": [],
+        "member_opinions": [],
+        "opinion_distribution": {},
+        "id": "5"
+    },
+    {
+        "name": "Unity Alliance",
+        "cohesion": 0.31399663487417584,
+        "norms": [
+            "Shared responsibility",
+            "Mutual support",
+            "Transparency",
+            "Inclusive participation"
+        ],
+        "majority_threshold": 0.9674950884856293,
+        "communication_structure": "circle",
+        "homogeneity": 0.07190179885752934,
+        "decision_method": "consensus",
+        "updated_group_opinion": "",
+        "agent_type": "GroupAgent",
+        "members": [],
+        "member_opinions": [],
+        "opinion_distribution": {},
+        "id": "6"
+    },
+    {
+        "name": "Progressive Network",
+        "cohesion": 0.513162927267209,
+        "norms": [
+            "Innovation encouragement",
+            "Sustainable practices",
+            "Continuous learning",
+            "Adaptability"
+        ],
+        "majority_threshold": 0.7491838563649662,
+        "communication_structure": "hierarchical",
+        "homogeneity": 0.016036724237485478,
+        "decision_method": "leader_decision",
+        "updated_group_opinion": "",
+        "agent_type": "GroupAgent",
+        "members": [],
+        "member_opinions": [],
+        "opinion_distribution": {},
+        "id": "7"
+    },
+    {
+        "name": "Empowerment Guild",
+        "cohesion": 0.08718296203846576,
+        "norms": [
+            "Empathy and compassion",
+            "Empowerment and autonomy",
+            "Equality and fairness",
+            "Active listening"
+        ],
+        "majority_threshold": 0.7605581307155029,
+        "communication_structure": "network",
+        "homogeneity": 0.03030212758926798,
+        "decision_method": "consensus",
+        "updated_group_opinion": "",
+        "agent_type": "GroupAgent",
+        "members": [],
+        "member_opinions": [],
+        "opinion_distribution": {},
+        "id": "8"
+    },
+    {
+        "name": "Visionary Consortium",
+        "cohesion": 0.43284832254402816,
+        "norms": [
+            "Future-oriented thinking",
+            "Collaborative creativity",
+            "Strategic foresight",
+            "Holistic perspective"
+        ],
+        "majority_threshold": 0.9569827179331232,
+        "communication_structure": "hierarchical",
+        "homogeneity": 0.4050175765361206,
+        "decision_method": "majority_vote",
+        "updated_group_opinion": "",
+        "agent_type": "GroupAgent",
+        "members": [],
+        "member_opinions": [],
+        "opinion_distribution": {},
+        "id": "9"
+    }
+]

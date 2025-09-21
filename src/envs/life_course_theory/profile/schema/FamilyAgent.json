@@ -1,0 +1,87 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Family Johnson",
+        "private": false,
+        "sampling": "llm",
+        "description": "The name representing the family unit"
+    },
+    "family_resources": {
+        "type": "float",
+        "default": 50000.0,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            10000.0,
+            100000.0
+        ]
+    },
+    "family_support_provided": {
+        "type": "boolean",
+        "default": true,
+        "private": false,
+        "sampling": "default"
+    },
+    "number_of_children": {
+        "type": "int",
+        "default": 2,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0,
+            5
+        ]
+    },
+    "parental_health_status": {
+        "type": "str",
+        "default": "healthy",
+        "private": true,
+        "sampling": "random",
+        "choices": [
+            "healthy",
+            "minor_issues",
+            "chronic_conditions"
+        ]
+    },
+    "educational_investment": {
+        "type": "float",
+        "default": 10000.0,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            50000.0
+        ]
+    },
+    "current_life_stage": {
+        "type": "str",
+        "default": "middle_age",
+        "private": false,
+        "sampling": "default"
+    },
+    "recent_family_events": {
+        "type": "list",
+        "default": [
+            {
+                "event": "birth",
+                "impact": "positive",
+                "date": "2023-05-01"
+            }
+        ],
+        "private": true,
+        "sampling": "default"
+    },
+    "financial_stability_index": {
+        "type": "int",
+        "default": 70,
+        "private": false,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

@@ -1,0 +1,84 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Government Agent",
+        "private": false,
+        "sampling": "llm",
+        "description": "The name of the government agent responsible for implementing policies"
+    },
+    "policy_effect": {
+        "type": "str",
+        "default": "reduce_contact_rate",
+        "private": false,
+        "sampling": "llm",
+        "description": "The intended effect of the policy on the population"
+    },
+    "policy_status": {
+        "type": "str",
+        "default": "active",
+        "private": false,
+        "sampling": "default"
+    },
+    "intervention_level": {
+        "type": "str",
+        "default": "moderate",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "low",
+            "moderate",
+            "high"
+        ]
+    },
+    "compliance_rate": {
+        "type": "float",
+        "default": 0.75,
+        "private": false,
+        "sampling": "default"
+    },
+    "policy_duration": {
+        "type": "int",
+        "default": 30,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            7,
+            90
+        ]
+    },
+    "communication_frequency": {
+        "type": "int",
+        "default": 7,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            1,
+            14
+        ]
+    },
+    "resource_allocation": {
+        "type": "list",
+        "default": [
+            {
+                "resource_type": "vaccines",
+                "amount": 1000,
+                "priority": "high"
+            }
+        ],
+        "private": true,
+        "sampling": "default"
+    },
+    "policy_review_feedback": {
+        "type": "str",
+        "default": "pending_review",
+        "private": true,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

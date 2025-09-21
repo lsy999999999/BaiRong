@@ -1,0 +1,132 @@
+[
+    {
+        "name": "EcoAdvocates",
+        "evaluation_criteria": "impact_assessment",
+        "evaluation_status": "pending_review",
+        "group_interest": "Promoting sustainable environmental practices and awareness",
+        "negotiation_strategy": "compromising",
+        "current_mood": "neutral",
+        "influence_level": 1,
+        "communication_efficiency": 63.51553908757751,
+        "agent_type": "SocialGroupAgent",
+        "contract_history": [
+            {
+                "date": "2025-01-01",
+                "status": "successful",
+                "type": "initial"
+            }
+        ],
+        "policy_impact_assessment": [
+            {
+                "policy": "tax_reform",
+                "impact": "positive",
+                "assessment_date": "2025-04-01"
+            }
+        ],
+        "id": "10"
+    },
+    {
+        "name": "TechInnovators",
+        "evaluation_criteria": "impact_assessment",
+        "evaluation_status": "pending_review",
+        "group_interest": "Advancing technology and innovation for societal benefit",
+        "negotiation_strategy": "competitive",
+        "current_mood": "neutral",
+        "influence_level": 52,
+        "communication_efficiency": 66.50031005858442,
+        "agent_type": "SocialGroupAgent",
+        "contract_history": [
+            {
+                "date": "2025-01-01",
+                "status": "successful",
+                "type": "initial"
+            }
+        ],
+        "policy_impact_assessment": [
+            {
+                "policy": "tax_reform",
+                "impact": "positive",
+                "assessment_date": "2025-04-01"
+            }
+        ],
+        "id": "11"
+    },
+    {
+        "name": "HealthWarriors",
+        "evaluation_criteria": "impact_assessment",
+        "evaluation_status": "pending_review",
+        "group_interest": "Improving public health and access to healthcare services",
+        "negotiation_strategy": "compromising",
+        "current_mood": "neutral",
+        "influence_level": 72,
+        "communication_efficiency": 85.69517616361362,
+        "agent_type": "SocialGroupAgent",
+        "contract_history": [
+            {
+                "date": "2025-01-01",
+                "status": "successful",
+                "type": "initial"
+            }
+        ],
+        "policy_impact_assessment": [
+            {
+                "policy": "tax_reform",
+                "impact": "positive",
+                "assessment_date": "2025-04-01"
+            }
+        ],
+        "id": "12"
+    },
+    {
+        "name": "EduChampions",
+        "evaluation_criteria": "impact_assessment",
+        "evaluation_status": "pending_review",
+        "group_interest": "Enhancing educational opportunities and literacy worldwide",
+        "negotiation_strategy": "compromising",
+        "current_mood": "neutral",
+        "influence_level": 47,
+        "communication_efficiency": 66.2796605928205,
+        "agent_type": "SocialGroupAgent",
+        "contract_history": [
+            {
+                "date": "2025-01-01",
+                "status": "successful",
+                "type": "initial"
+            }
+        ],
+        "policy_impact_assessment": [
+            {
+                "policy": "tax_reform",
+                "impact": "positive",
+                "assessment_date": "2025-04-01"
+            }
+        ],
+        "id": "13"
+    },
+    {
+        "name": "CulturalConnectors",
+        "evaluation_criteria": "impact_assessment",
+        "evaluation_status": "pending_review",
+        "group_interest": "Fostering cross-cultural understanding and exchange",
+        "negotiation_strategy": "competitive",
+        "current_mood": "neutral",
+        "influence_level": 8,
+        "communication_efficiency": 89.23239941392275,
+        "agent_type": "SocialGroupAgent",
+        "contract_history": [
+            {
+                "date": "2025-01-01",
+                "status": "successful",
+                "type": "initial"
+            }
+        ],
+        "policy_impact_assessment": [
+            {
+                "policy": "tax_reform",
+                "impact": "positive",
+                "assessment_date": "2025-04-01"
+            }
+        ],
+        "id": "14"
+    }
+]

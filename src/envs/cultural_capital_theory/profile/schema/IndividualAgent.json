@@ -1,0 +1,94 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Alex Doe",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's full name representing an individual in the societal system"
+    },
+    "cultural_capital_level": {
+        "type": "float",
+        "default": 50.0,
+        "private": true,
+        "sampling": "default"
+    },
+    "education_decision": {
+        "type": "bool",
+        "default": true,
+        "private": false,
+        "sampling": "default"
+    },
+    "education_level": {
+        "type": "str",
+        "default": "high_school",
+        "private": false,
+        "sampling": "llm",
+        "description": "Current educational attainment of the individual"
+    },
+    "job_search_status": {
+        "type": "str",
+        "default": "actively_seeking",
+        "private": false,
+        "sampling": "default"
+    },
+    "job_position": {
+        "type": "str",
+        "default": "entry_level",
+        "private": false,
+        "sampling": "llm",
+        "description": "Current job position held by the individual"
+    },
+    "workflow_completion_status": {
+        "type": "str",
+        "default": "in_progress",
+        "private": true,
+        "sampling": "default"
+    },
+    "social_class": {
+        "type": "str",
+        "default": "middle_class",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "working_class",
+            "middle_class",
+            "upper_class"
+        ]
+    },
+    "economic_capital": {
+        "type": "float",
+        "default": 100000.0,
+        "private": true,
+        "sampling": "random",
+        "range": [
+            50000.0,
+            500000.0
+        ]
+    },
+    "networking_activity": {
+        "type": "list",
+        "default": [
+            "attended_conference",
+            "joined_club"
+        ],
+        "private": false,
+        "sampling": "default"
+    },
+    "social_resources_access": {
+        "type": "int",
+        "default": 3,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            1,
+            5
+        ]
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

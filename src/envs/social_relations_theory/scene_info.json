@@ -1,0 +1,60 @@
+{
+  "domain": "Organization",
+  "scene_name": "social_relations_theory",
+  "odd_protocol": {
+    "overview": {
+      "system_goal": "The goal of this simulation is to use LLMs to simulate how employees in an organization are influenced by social relationships, team interactions, and experiences of being noticed, impacting their work motivation, job satisfaction, and productivity. The simulation focuses on interactions between employees, leaders, and the organizational environment, exploring how social relationships, sense of belonging, and teamwork affect employee work behavior.",
+      "agent_types": "Each agent represents an employee who can exhibit different behaviors, emotional responses, and work motivations. Agents have social and emotional needs, and the quality of their relationships with colleagues and leaders significantly impacts their job satisfaction and motivation.",
+      "environment_description": "The environment simulates the organizational setting where employees interact with leaders, colleagues, and the broader organizational context. It includes elements such as social interactions, team dynamics, leadership styles, and feedback mechanisms that influence employee behavior and emotions."
+    },
+    "design_concepts": {
+      "interaction_patterns": "Agents engage in social interactions, including dialogues, collaborative tasks, and problem-solving. Through these interactions, agents express emotions, feedback, and opinions, affecting their social relationships and work attitudes. The simulation also models the dynamic impact of social relationships, such as the sense of belonging or isolation experienced by employees based on team interactions.",
+      "communication_protocols": "The simulation uses LLM-generated dialogues to facilitate communication between agents. Feedback mechanisms are integrated to reflect changes in agents' emotional states and needs, such as positive feedback from leaders enhancing an employee's motivation.",
+      "decision_mechanisms": "Agents' decision-making is influenced by their emotional responses and social relationship dynamics. Good relationships and leader support can lead to positive emotions and improved work performance, while tense team relations or lack of support may result in negative emotions and reduced performance.",
+      "social_relationship_factors": "Each agent has social and emotional needs that impact their behavior and work motivation. For example, agents may feel dissatisfaction due to a lack of belonging or recognition, or exhibit higher motivation when receiving team acknowledgment.",
+      "team_dynamics_and_trust": "The simulation explores how cooperation, trust-building, and conflicts among team members impact overall team performance and individual contributions. Different interaction modes, such as positive collaboration or challenges in teamwork, are modeled.",
+      "leader_influence": "Different leadership styles, such as supportive or directive leadership, are simulated to observe their effects on employees' social relationships and work performance."
+    },
+    "details": {
+      "agent_behaviors": "Agents exhibit behaviors based on their roles and social context. For example, a newly joined employee may show low motivation and social interaction due to a lack of belonging, while an experienced employee recognized by leaders and supported by the team shows high work enthusiasm. Neutral team members participate in daily tasks but may show low emotional engagement due to lack of social support. Agents also demonstrate emotional responses such as satisfaction, anxiety, or loneliness based on interactions with colleagues and leaders.",
+      "decision_algorithms": "The simulation uses LLMs to generate dialogues and emotional expressions. Emotional analysis tools assess changes in agents' emotions during interactions, identifying language patterns associated with negative emotions (e.g., anxiety, loneliness) or positive emotions (e.g., confidence, satisfaction).",
+      "specific_constraints": "The simulation requires a minimum of 2 agents to model basic social relationships, with a recommended minimum of 10 agents to simulate team environments and complex social interactions. Agents can be assigned different roles, such as a new employee lacking belonging, an experienced employee with high motivation, or a neutral member with low emotional investment.",
+      "simulation_process": "Agents are initialized based on their social relationship background, such as a new employee lacking social support or an experienced employee with strong team ties. Social interactions are simulated using LLMs, including task assignments, feedback, and collaboration scenarios. Emotional feedback is used to dynamically adjust agents' behavior and work performance over time as their social relationships evolve."
+    }
+  },
+  "agent_types": {
+    "NewEmployee": "Represents an employee who has recently joined the organization and may exhibit low motivation and social interaction due to a lack of belonging.",
+    "ExperiencedEmployee": "Represents an employee who is recognized by leaders and supported by the team, showing high work enthusiasm and motivation.",
+    "NeutralMember": "Represents a team member who participates in daily tasks but shows low emotional engagement due to a lack of social support.",
+    "TeamLeader": "Represents a leader who influences employee motivation and performance through feedback and support, impacting team dynamics and social relationships.",
+    "EmotionalAnalyzer": "Represents a tool or mechanism that assesses changes in agents' emotions during interactions, identifying language patterns associated with negative or positive emotions."
+  },
+  "portrait": {
+    "NewEmployee": 3,
+    "ExperiencedEmployee": 3,
+    "NeutralMember": 5,
+    "TeamLeader": 1,
+    "EmotionalAnalyzer": 2
+  },
+  "metrics": [
+    {
+      "id": "Distribution_of_Emotional_Results_from_Emotional_Analyzer",
+      "name": "Distribution of Emotional Results from Emotional Analyzer",
+      "description": "This metric shows the distribution of different emotional states among experienced employees, indicating the emotional climate within the organization.",
+      "visualization_type": "line",
+      "update_frequency": 5,
+      "variables": [
+        {
+          "name": "emotion_analysis_result",
+          "source_type": "agent",
+          "agent_type": "EmotionalAnalyzer",
+          "path": "emotion_analysis_result",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Count the occurrences of each emotional state from the 'emotional_state' list of ExperiencedEmployee agents, ignoring None values. If the list is empty or contains only None values, return an empty dictionary. Use a dictionary to represent the proportion of each emotional state, ensuring that only valid entries are included in the calculation.",
+      "function_name": "Distribution_of_Emotional_Results_from_Emotional_Analyzer"
+    }
+  ]
+}

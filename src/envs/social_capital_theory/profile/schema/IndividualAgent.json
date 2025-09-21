@@ -1,0 +1,80 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Alex Doe",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's full name"
+    },
+    "initial_social_capital": {
+        "type": "float",
+        "default": 50.0,
+        "private": true,
+        "sampling": "random",
+        "range": [
+            0.0,
+            100.0
+        ]
+    },
+    "social_capital_value": {
+        "type": "float",
+        "default": 50.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "cooperation_potential": {
+        "type": "bool",
+        "default": true,
+        "private": false,
+        "sampling": "default"
+    },
+    "decision": {
+        "type": "str",
+        "default": "undecided",
+        "private": false,
+        "sampling": "default"
+    },
+    "trust_level": {
+        "type": "float",
+        "default": 50.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "relationship_network": {
+        "type": "list",
+        "default": [
+            {
+                "relation": "friend",
+                "strength": 75.0
+            }
+        ],
+        "private": true,
+        "sampling": "default",
+        "sample_size": 5
+    },
+    "resource_access": {
+        "type": "str",
+        "default": "limited",
+        "private": false,
+        "sampling": "default"
+    },
+    "interaction_history": {
+        "type": "list",
+        "default": [
+            {
+                "interaction": "initial_meeting",
+                "outcome": "neutral"
+            }
+        ],
+        "private": true,
+        "sampling": "default",
+        "sample_size": 3
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

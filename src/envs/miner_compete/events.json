@@ -1,0 +1,206 @@
+{
+    "-1": {
+        "id": -1,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "ResourceMiner",
+        "to_action_name": "start_workflow",
+        "from_action_id": 0,
+        "to_action_id": 1,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for the ResourceMiner workflow branch.",
+        "fields": [],
+        "code": ""
+    },
+    "-2": {
+        "id": -2,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "AdjudicatorAgent",
+        "to_action_name": "initiate_resolution",
+        "from_action_id": 0,
+        "to_action_id": 4,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for the AdjudicatorAgent resolution process.",
+        "fields": [],
+        "code": ""
+    },
+    "1": {
+        "id": 1,
+        "from_agent_type": "ResourceMiner",
+        "from_action_name": "start_workflow",
+        "to_agent_type": "ResourceMiner",
+        "to_action_name": "observe_environment",
+        "from_action_id": 1,
+        "to_action_id": 2,
+        "event_name": "ResourceAvailabilityEvent",
+        "event_info": "Event indicating initial or updated resource availability, prompting the ResourceMiner to observe the global map state.",
+        "fields": [],
+        "code": ""
+    },
+    "2": {
+        "id": 2,
+        "from_agent_type": "ResourceMiner",
+        "from_action_name": "observe_environment",
+        "to_agent_type": "ResourceMiner",
+        "to_action_name": "decide_investment_strategy",
+        "from_action_id": 2,
+        "to_action_id": 3,
+        "event_name": "LandOwnershipEvent",
+        "event_info": "Event detailing current land ownership status, prompting decision-making on energy investment for land contestation or maintenance.",
+        "fields": [],
+        "code": ""
+    },
+    "3": {
+        "id": 3,
+        "from_agent_type": "ResourceMiner",
+        "from_action_name": "decide_investment_strategy",
+        "to_agent_type": "AdjudicatorAgent",
+        "to_action_name": "resolve_investment_outcome",
+        "from_action_id": 3,
+        "to_action_id": 5,
+        "event_name": "InvestmentStrategyEvent",
+        "event_info": "Event conveying the miner's chosen investment strategy to the adjudicator for outcome determination.",
+        "fields": [
+            {
+                "name": "miner_id",
+                "type": "string",
+                "default_value": "",
+                "description": "Unique identifier for the ResourceMiner making the investment."
+            },
+            {
+                "name": "grid_cell_id",
+                "type": "string",
+                "default_value": "",
+                "description": "Unique identifier for the grid cell being contested or maintained."
+            },
+            {
+                "name": "investment_amount",
+                "type": "integer",
+                "default_value": "0",
+                "description": "Amount of energy invested by the miner."
+            }
+        ],
+        "code": ""
+    },
+    "4": {
+        "id": 4,
+        "from_agent_type": "AdjudicatorAgent",
+        "from_action_name": "initiate_resolution",
+        "to_agent_type": "ResourceMiner",
+        "to_action_name": "process_resolution_outcome",
+        "from_action_id": 4,
+        "to_action_id": 6,
+        "event_name": "ResolutionOutcomeEvent",
+        "event_info": "Event indicating the outcome of the resolution process for contested land.",
+        "fields": [
+            {
+                "name": "miner_id",
+                "type": "string",
+                "default_value": "",
+                "description": "Unique identifier for the ResourceMiner receiving the outcome."
+            },
+            {
+                "name": "grid_cell_id",
+                "type": "string",
+                "default_value": "",
+                "description": "Unique identifier for the contested or maintained grid cell."
+            },
+            {
+                "name": "winner_id",
+                "type": "string",
+                "default_value": "",
+                "description": "Unique identifier for the ResourceMiner who won the contest."
+            },
+            {
+                "name": "investment_amount",
+                "type": "integer",
+                "default_value": "0",
+                "description": "Amount of energy invested by the winning miner."
+            },
+            {
+                "name": "tie_resolution",
+                "type": "boolean",
+                "default_value": "false",
+                "description": "Flag indicating if the outcome was resolved due to a tie."
+            }
+        ],
+        "code": ""
+    },
+    "5": {
+        "id": 5,
+        "from_agent_type": "AdjudicatorAgent",
+        "from_action_name": "resolve_investment_outcome",
+        "to_agent_type": "ResourceMiner",
+        "to_action_name": "process_resolution_outcome",
+        "from_action_id": 5,
+        "to_action_id": 6,
+        "event_name": "ResolutionOutcomeEvent",
+        "event_info": "Event delivering the adjudication results based on investment competitions.",
+        "fields": [
+            {
+                "name": "miner_id",
+                "type": "string",
+                "default_value": "",
+                "description": "Unique identifier for the ResourceMiner receiving the outcome."
+            },
+            {
+                "name": "grid_cell_id",
+                "type": "string",
+                "default_value": "",
+                "description": "Unique identifier for the contested or maintained grid cell."
+            },
+            {
+                "name": "winner_id",
+                "type": "string",
+                "default_value": "",
+                "description": "Unique identifier for the ResourceMiner who won the contest."
+            },
+            {
+                "name": "investment_amount",
+                "type": "integer",
+                "default_value": "0",
+                "description": "Amount of energy invested by the winning miner."
+            },
+            {
+                "name": "tie_resolution",
+                "type": "boolean",
+                "default_value": "false",
+                "description": "Flag indicating if the outcome was resolved due to a tie."
+            }
+        ],
+        "code": ""
+    },
+    "6": {
+        "id": 6,
+        "from_agent_type": "ResourceMiner",
+        "from_action_name": "process_resolution_outcome",
+        "to_agent_type": "EnvAgent",
+        "to_action_name": "terminate",
+        "from_action_id": 6,
+        "to_action_id": -1,
+        "event_name": "ActivityCompletionEvent",
+        "event_info": "Event signaling the conclusion of the ResourceMiner's current workflow operations.",
+        "fields": [
+            {
+                "name": "completion_status",
+                "type": "string",
+                "default_value": "success",
+                "description": "Status of the workflow operation completion, e.g., success or failure."
+            },
+            {
+                "name": "miner_id",
+                "type": "string",
+                "default_value": "",
+                "description": "Unique identifier for the ResourceMiner completing the activity."
+            },
+            {
+                "name": "activities_completed",
+                "type": "string",
+                "default_value": "",
+                "description": "Description of activities that were completed during the miner's operation."
+            }
+        ],
+        "code": ""
+    }
+}

@@ -1,0 +1,157 @@
+{
+    "-1": {
+        "id": -1,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "Innovators",
+        "to_action_name": "initiate_innovation_spread",
+        "from_action_id": 0,
+        "to_action_id": 1,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for innovation diffusion",
+        "fields": []
+    },
+    "1": {
+        "id": 1,
+        "from_agent_type": "Innovators",
+        "from_action_name": "initiate_innovation_spread",
+        "to_agent_type": "EarlyAdopters",
+        "to_action_name": "evaluate_and_adopt_innovation",
+        "from_action_id": 1,
+        "to_action_id": 2,
+        "event_name": "InnovationSpreadEvent",
+        "event_info": "Spread innovation to early adopters",
+        "fields": [
+            {
+                "name": "innovation_id",
+                "type": "str",
+                "default_value": "",
+                "description": "Unique identifier for the innovation being spread"
+            },
+            {
+                "name": "network_connections",
+                "type": "list",
+                "default_value": "[]",
+                "description": "List of social network connections through which the innovation is spread"
+            },
+            {
+                "name": "relative_advantage",
+                "type": "float",
+                "default_value": "0.0",
+                "description": "Perceived relative advantage of the innovation"
+            }
+        ]
+    },
+    "2": {
+        "id": 2,
+        "from_agent_type": "EarlyAdopters",
+        "from_action_name": "evaluate_and_adopt_innovation",
+        "to_agent_type": "EarlyMajority",
+        "to_action_name": "consider_adoption",
+        "from_action_id": 2,
+        "to_action_id": 3,
+        "event_name": "AdoptionEvent",
+        "event_info": "Early adopters pass innovation to early majority",
+        "fields": [
+            {
+                "name": "innovation_id",
+                "type": "str",
+                "default_value": "",
+                "description": "Unique identifier for the innovation being adopted"
+            },
+            {
+                "name": "adoption_rate",
+                "type": "float",
+                "default_value": "0.0",
+                "description": "Rate at which early adopters are passing the innovation to early majority"
+            },
+            {
+                "name": "social_pressure",
+                "type": "float",
+                "default_value": "0.0",
+                "description": "Level of social pressure influencing adoption"
+            }
+        ]
+    },
+    "3": {
+        "id": 3,
+        "from_agent_type": "EarlyMajority",
+        "from_action_name": "consider_adoption",
+        "to_agent_type": "LateMajority",
+        "to_action_name": "evaluate_broad_acceptance",
+        "from_action_id": 3,
+        "to_action_id": 4,
+        "event_name": "EarlyMajorityAdoptionEvent",
+        "event_info": "Early majority adoption triggers late majority consideration",
+        "fields": [
+            {
+                "name": "innovation_id",
+                "type": "str",
+                "default_value": "",
+                "description": "Unique identifier for the innovation being adopted by early majority"
+            },
+            {
+                "name": "acceptance_threshold",
+                "type": "float",
+                "default_value": "0.0",
+                "description": "Threshold of acceptance needed to influence late majority"
+            }
+        ]
+    },
+    "4": {
+        "id": 4,
+        "from_agent_type": "LateMajority",
+        "from_action_name": "evaluate_broad_acceptance",
+        "to_agent_type": "Laggards",
+        "to_action_name": "adopt_under_pressure",
+        "from_action_id": 4,
+        "to_action_id": 5,
+        "event_name": "LateMajorityAdoptionEvent",
+        "event_info": "Late majority adoption influences laggards",
+        "fields": [
+            {
+                "name": "innovation_id",
+                "type": "str",
+                "default_value": "",
+                "description": "Unique identifier for the innovation being adopted by late majority"
+            },
+            {
+                "name": "influence_factor",
+                "type": "float",
+                "default_value": "0.0",
+                "description": "Factor indicating the influence on laggards"
+            }
+        ]
+    },
+    "5": {
+        "id": 5,
+        "from_agent_type": "Laggards",
+        "from_action_name": "adopt_under_pressure",
+        "to_agent_type": "EnvAgent",
+        "to_action_name": "terminate",
+        "from_action_id": 5,
+        "to_action_id": -1,
+        "event_name": "LaggardAdoptionEvent",
+        "event_info": "Final adoption event completing the diffusion process",
+        "fields": [
+            {
+                "name": "innovation_id",
+                "type": "str",
+                "default_value": "",
+                "description": "Unique identifier for the innovation being adopted by laggards"
+            },
+            {
+                "name": "completion_status",
+                "type": "bool",
+                "default_value": "false",
+                "description": "Indicates whether the diffusion process is completed"
+            },
+            {
+                "name": "final_adoption_rate",
+                "type": "float",
+                "default_value": "0.0",
+                "description": "Final rate of adoption after laggards adopt"
+            }
+        ]
+    }
+}

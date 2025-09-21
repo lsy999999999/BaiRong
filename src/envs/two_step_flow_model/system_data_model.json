@@ -1,0 +1,64 @@
+{
+    "environment": {
+        "variables": []
+    },
+    "agents": {
+        "MediaAgent": {
+            "variables": [
+                {
+                    "name": "information_content",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "target_opinion_leaders",
+                    "type": "list",
+                    "default_value": null
+                }
+            ]
+        },
+        "OpinionLeaderAgent": {
+            "variables": [
+                {
+                    "name": "original_information",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "modified_information",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "opinion_leader_id",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "target_public_agents",
+                    "type": "list",
+                    "default_value": null
+                }
+            ]
+        },
+        "PublicAgent": {
+            "variables": [
+                {
+                    "name": "received_information",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "public_agent_reaction",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "completion_status",
+                    "type": "string",
+                    "default_value": null
+                }
+            ]
+        }
+    }
+}

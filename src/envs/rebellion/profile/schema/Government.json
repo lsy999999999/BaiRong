@@ -1,0 +1,71 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Government",
+        "private": false,
+        "sampling": "llm",
+        "description": "The name of the government agent"
+    },
+    "rebellion_level": {
+        "type": "float",
+        "default": 0.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "repression_strategy": {
+        "type": "str",
+        "default": "moderate",
+        "private": false,
+        "sampling": "default"
+    },
+    "effectiveness": {
+        "type": "float",
+        "default": 75.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "political_stability": {
+        "type": "float",
+        "default": 50.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "communication_protocol": {
+        "type": "str",
+        "default": "implicit",
+        "private": true,
+        "sampling": "llm",
+        "description": "The communication protocol used by the government"
+    },
+    "decision_algorithm": {
+        "type": "str",
+        "default": "adaptive",
+        "private": true,
+        "sampling": "llm",
+        "description": "The algorithm used by the government to decide repression intensity"
+    },
+    "interaction_pattern": {
+        "type": "str",
+        "default": "responsive",
+        "private": false,
+        "sampling": "llm",
+        "description": "The pattern of interaction between the government and citizens"
+    },
+    "resource_allocation": {
+        "type": "list",
+        "default": [
+            "police",
+            "legal measures"
+        ],
+        "private": false,
+        "sampling": "random",
+        "sample_size": 2
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

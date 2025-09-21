@@ -1,0 +1,72 @@
+[
+    {
+        "name": "Johnathan Doe",
+        "type": "offline",
+        "reach": 781013,
+        "cost": 6874.118677840215,
+        "information_richness": "medium",
+        "filtering_mechanism": "hybrid",
+        "matching_algorithm": "simple",
+        "status_indicator": "",
+        "performance_score": 0.0,
+        "agent_type": "RecruitmentChannel",
+        "interaction_logs": [],
+        "id": "10"
+    },
+    {
+        "name": "Emily Smith",
+        "type": "agency",
+        "reach": 669767,
+        "cost": 9805.467776151425,
+        "information_richness": "high",
+        "filtering_mechanism": "automated",
+        "matching_algorithm": "AI-based",
+        "status_indicator": "",
+        "performance_score": 0.0,
+        "agent_type": "RecruitmentChannel",
+        "interaction_logs": [],
+        "id": "11"
+    },
+    {
+        "name": "Michael Johnson",
+        "type": "online",
+        "reach": 808965,
+        "cost": 3936.7921160656483,
+        "information_richness": "medium",
+        "filtering_mechanism": "manual",
+        "matching_algorithm": "simple",
+        "status_indicator": "",
+        "performance_score": 0.0,
+        "agent_type": "RecruitmentChannel",
+        "interaction_logs": [],
+        "id": "12"
+    },
+    {
+        "name": "Sophia Brown",
+        "type": "online",
+        "reach": 43543,
+        "cost": 2948.3809983711617,
+        "information_richness": "high",
+        "filtering_mechanism": "automated",
+        "matching_algorithm": "simple",
+        "status_indicator": "",
+        "performance_score": 0.0,
+        "agent_type": "RecruitmentChannel",
+        "interaction_logs": [],
+        "id": "13"
+    },
+    {
+        "name": "Daniela Martinez",
+        "type": "referral",
+        "reach": 346382,
+        "cost": 1820.2064527052387,
+        "information_richness": "low",
+        "filtering_mechanism": "hybrid",
+        "matching_algorithm": "complex",
+        "status_indicator": "",
+        "performance_score": 0.0,
+        "agent_type": "RecruitmentChannel",
+        "interaction_logs": [],
+        "id": "14"
+    }
+]

@@ -1,0 +1,133 @@
+{
+    "Family": [
+        {
+            "id": 1,
+            "name": "decide_education_investment",
+            "condition": null,
+            "description": "The decision-making process regarding the allocation of resources for educational investments.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "collective_resources",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Total resources available to the family for investment."
+                },
+                {
+                    "name": "education_strategy",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "The strategy employed by the family regarding education investments."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "education_investment",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Resources allocated for education investment."
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "name": "receive_admission_decision",
+            "condition": "Admission decision received from educational institutions",
+            "description": "The process of receiving and processing admission decisions from educational institutions.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "application_status",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Status of the admission decision received from the institution."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "admission_decisions",
+                    "type": "list",
+                    "context": "agent",
+                    "description": "List of admission decisions received."
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "name": "allocate_education_resources",
+            "condition": null,
+            "description": "Allocating resources based on the received admission decisions.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "admission_decisions",
+                    "type": "list",
+                    "context": "agent",
+                    "description": "List of admission decisions received."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "allocated_resources",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Total resources allocated for education."
+                }
+            ]
+        }
+    ],
+    "EducationalInstitution": [
+        {
+            "id": 4,
+            "name": "select_students",
+            "condition": "Applications received from families",
+            "description": "Selecting students for admission based on predefined criteria.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "admission_criteria",
+                    "type": "dict",
+                    "context": "agent",
+                    "description": "Criteria used by the institution to select students."
+                },
+                {
+                    "name": "applications_received",
+                    "type": "list",
+                    "context": "agent",
+                    "description": "List of applications received by the institution."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "selected_students",
+                    "type": "list",
+                    "context": "agent",
+                    "description": "List of students selected for admission."
+                }
+            ]
+        },
+        {
+            "id": 5,
+            "name": "receive_application",
+            "condition": null,
+            "description": "The process of receiving applications from families for student admission.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "application_data",
+                    "type": "dict",
+                    "context": "event",
+                    "description": "Data contained within the received application."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "applications_received",
+                    "type": "list",
+                    "context": "agent",
+                    "description": "Updated list of applications received by the institution."
+                }
+            ]
+        }
+    ]
+}

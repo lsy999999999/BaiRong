@@ -1,0 +1,500 @@
+{
+  "agents": {
+    "Media": {
+      "imports": "from typing import Any, List, Optional\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "1": {
+          "code": "async def set_agenda(self, event: Event) -> List[Event]:\n        # Retrieve necessary data from agent and environment\n        media_ideology_bias = self.profile.get_data(\"media_ideology_bias\", \"neutral\")\n        agenda_setting_power = self.profile.get_data(\"agenda_setting_power\", 0.0)\n        current_issues = await self.get_env_data(\"current_issues\", [])\n\n        # Construct the observation and instruction for the LLM\n        observation = f\"Media Ideology Bias: {media_ideology_bias}, Agenda Setting Power: {agenda_setting_power}, Current Issues: {current_issues}\"\n        instruction = \"\"\"Based on the media's ideology bias and agenda setting power, select and prioritize issues from the current issues list to set the agenda. \n        Please return the information in the following JSON format:\n    \n        {\n        \"agenda_topics\": [\"<List of selected agenda topics>\"],\n        \"framing_strategy\": \"<The strategy used by the media to frame issues>\",\n        \"target_ids\": [\"<The string ID(s) of the Voter agent(s)>\"]\n        }\n        \"\"\"\n\n        # Generate reaction using the LLM\n        result = await self.generate_reaction(instruction, observation)\n\n        # Parse the LLM's response\n        agenda_topics = result.get('agenda_topics', [])\n        framing_strategy = result.get('framing_strategy', \"\")\n        target_ids = result.get('target_ids', None)\n        \n        # Check if target_ids is None before converting it to a list\n        if target_ids is None:\n            logger.warning(\"No target_ids provided, returning empty event list.\")\n            return []  # Return empty list if target_ids is None\n\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Update agent's state with new agenda topics\n        self.profile.update_data(\"agenda_topics\", agenda_topics)\n\n        # Prepare and send the AgendaSetEvent to each target\n        events = []\n        for target_id in target_ids:\n            agenda_set_event = AgendaSetEvent(self.profile_id, target_id, agenda_topics=agenda_topics, framing_strategy=framing_strategy)\n            events.append(agenda_set_event)\n\n        return events",
+          "metadata": {
+            "id": 1,
+            "name": "set_agenda",
+            "condition": null,
+            "description": "The action of setting the agenda involves selecting and prioritizing issues to be highlighted in media content. This influences public discourse and voter attention.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "media_ideology_bias",
+                "type": "str",
+                "context": "agent",
+                "description": "The ideological bias of the media outlet, influencing agenda setting."
+              },
+              {
+                "name": "agenda_setting_power",
+                "type": "float",
+                "context": "agent",
+                "description": "The media's capacity to influence public agenda."
+              },
+              {
+                "name": "current_issues",
+                "type": "list",
+                "context": "env",
+                "description": "List of current issues in the environment that can be selected for agenda setting."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "agenda_topics",
+                "type": "list",
+                "context": "agent",
+                "description": "Updated list of topics set by the media as the agenda."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "Party": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "2": {
+          "code": "async def position_policy(self, event: Event) -> List[Event]:\n        # Retrieve required variables\n        voter_issue_positions = await self.get_env_data(\"voter_issue_positions\", {})\n        party_ideology = self.profile.get_data(\"party_ideology\", \"\")\n\n        # Generate reaction with instruction\n        instruction = \"\"\"\n        Formulate and adjust policy positions to align with voter preferences and differentiate from competitors.\n        Please return the information in the following JSON format:\n\n        {\n        \"policy_positions\": \"<Updated policy positions of the party>\",\n        \"target_voter_demographics\": \"<Demographics of voters targeted by the party's policy positions>\",\n        \"target_ids\": \"<The string ID or list of string IDs of the Voter agent(s)>\"\n        }\n        \"\"\"\n    \n        observation = f\"Voter Issue Positions: {voter_issue_positions}, Party Ideology: {party_ideology}\"\n        result = await self.generate_reaction(instruction, observation)\n\n        # Parse the LLM's JSON response\n        policy_positions = result.get('policy_positions', {})\n        target_voter_demographics = result.get('target_voter_demographics', [])\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids] if target_ids is not None else []\n\n        # Update agent's policy positions\n        self.profile.update_data(\"policy_positions\", policy_positions)\n\n        # Prepare and send PolicyPositionedEvent to each target\n        events = []\n        for target_id in target_ids:\n            event = PolicyPositionedEvent(\n                self.profile_id,\n                target_id,\n                policy_positions=policy_positions,\n                target_voter_demographics=target_voter_demographics\n            )\n            events.append(event)\n\n        return events",
+          "metadata": {
+            "id": 2,
+            "name": "position_policy",
+            "condition": null,
+            "description": "This action involves formulating and adjusting policy positions to align with voter preferences and differentiate from competitors.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "voter_issue_positions",
+                "type": "dict",
+                "context": "env",
+                "description": "The distribution of voter issue positions in the environment."
+              },
+              {
+                "name": "party_ideology",
+                "type": "str",
+                "context": "agent",
+                "description": "The ideological stance of the party guiding policy positioning."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "policy_positions",
+                "type": "dict",
+                "context": "agent",
+                "description": "Updated policy positions of the party."
+              }
+            ]
+          }
+        },
+        "3": {
+          "code": "async def adapt_strategy(self, event: Event) -> List[Event]:\n        # Condition Check: Feedback from election results\n        feedback_data = event.updated_attitudes if hasattr(event, 'updated_attitudes') else {}\n        if not feedback_data:\n            return []\n\n        # Retrieve current strategy from agent's profile\n        current_strategy = self.profile.get_data(\"current_strategy\", \"\")\n\n        # Generate reaction for strategy adaptation\n        observation = f\"Current strategy: {current_strategy}, Feedback data: {feedback_data}\"\n        instruction = \"\"\"Please adapt the party's strategy based on the given feedback data from election results.\n        Provide the new strategy and the target voters to whom this strategy should be communicated.\n        Return the information in the following JSON format:\n        {\n            \"new_strategy\": \"<Description of the new strategy>\",\n            \"target_ids\": [\"<List of target voter IDs>\"]\n        }\n        \"\"\"\n    \n        result = await self.generate_reaction(instruction, observation)\n\n        # Parse the response\n        new_strategy = result.get('new_strategy', \"\")\n        target_ids = result.get('target_ids', [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids] if target_ids is not None else []\n\n        # Update agent's profile with new strategy\n        self.profile.update_data(\"new_strategy\", new_strategy)\n\n        # Prepare and send StrategyAdaptedEvent to the target voters\n        events = []\n        for target_id in target_ids:\n            strategy_event = StrategyAdaptedEvent(self.profile_id, target_id, feedback_data=feedback_data, new_strategy=new_strategy)\n            events.append(strategy_event)\n\n        return events",
+          "metadata": {
+            "id": 3,
+            "name": "adapt_strategy",
+            "condition": "Feedback from election results",
+            "description": "The action of adapting strategy involves modifying campaign approaches based on voter feedback and changing electoral conditions.",
+            "type": "AND",
+            "required_variables": [
+              {
+                "name": "feedback_data",
+                "type": "dict",
+                "context": "event",
+                "description": "Data collected from voter feedback that influences strategy adaptation."
+              },
+              {
+                "name": "current_strategy",
+                "type": "str",
+                "context": "agent",
+                "description": "The current strategy being employed by the party."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "new_strategy",
+                "type": "str",
+                "context": "agent",
+                "description": "Description of the new strategy adopted by the party."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "InterestGroup": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "4": {
+          "code": "async def influence_media(self, event: Event) -> List[Event]:\n        # No condition to check as per the specification\n        # Retrieve necessary agent data\n        influence_strategy = self.profile.get_data(\"influence_strategy\", \"default_strategy\")\n        connections = self.profile.get_data(\"connections\", [])\n\n        # Generate reaction using the LLM\n        instruction = \"\"\"\n        You are an interest group aiming to influence media agendas using your strategy and connections. \n        Please decide on the media outlets to target based on your influence strategy and current connections. \n        Return the information in the following JSON format:\n\n        {\n        \"target_ids\": [\"<List of media outlet IDs you aim to influence>\"]\n        }\n        \"\"\"\n\n        observation = f\"Influence Strategy: {influence_strategy}, Connections: {connections}\"\n        result = await self.generate_reaction(instruction, observation)\n\n        # Parse the result\n        target_ids = result.get('target_ids', [])\n        if target_ids is None:\n            target_ids = []\n        elif not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Create and send MediaInfluencedEvent to each target\n        events = []\n        for target_id in target_ids:\n            media_influenced_event = MediaInfluencedEvent(\n                from_agent_id=self.profile_id,\n                to_agent_id=target_id,\n                influence_strategy=influence_strategy,\n                target_media_outlets=target_ids\n            )\n            events.append(media_influenced_event)\n\n        return events",
+          "metadata": {
+            "id": 4,
+            "name": "influence_media",
+            "condition": null,
+            "description": "This action involves using resources and strategies to affect media content and agenda, aligning it with the interest group's goals.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "influence_strategy",
+                "type": "str",
+                "context": "agent",
+                "description": "The strategy used by the interest group to influence media."
+              },
+              {
+                "name": "connections",
+                "type": "list",
+                "context": "agent",
+                "description": "List of connections the interest group has with media outlets."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "media_influence_effect",
+                "type": "dict",
+                "context": "agent",
+                "description": "The impact of the interest group's influence on media agendas."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "Voter": {
+      "imports": "from typing import Any, List\nimport asyncio\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "5": {
+          "code": "async def consume_media(self, event: Event) -> List[Event]:\n        media_content = event.content_type\n        voter_information_level = self.profile.get_data(\"voter_information_level\", 0.0)\n\n        observation = f\"Media Content: {media_content}, Voter Information Level: {voter_information_level}\"\n        instruction = \"\"\"Process the 'consume_media' action using the media content provided. \n        Update the voter's attitude based on the media content. \n        Return the information in the following JSON format:\n\n        {\n            \"attitude_change\": \"<Degree of attitude change>\",\n            \"target_ids\": [\"<The string ID(s) of the Voter agent(s)>\"]\n        }\n        \"\"\"\n\n        result = await self.generate_reaction(instruction, observation)\n\n        attitude_change = result.get('attitude_change', 0.0)\n        target_ids = result.get('target_ids', [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        self.profile.update_data(\"attitude_change\", attitude_change)\n\n        events = []\n        for target_id in target_ids:\n            media_consumed_event = MediaConsumedEvent(self.profile_id, target_id, media_content, attitude_change)\n            events.append(media_consumed_event)\n\n        return events",
+          "metadata": {
+            "id": 5,
+            "name": "consume_media",
+            "condition": null,
+            "description": "The action of consuming media involves accessing and interpreting media content, which influences voter attitudes and perceptions.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "media_content",
+                "type": "str",
+                "context": "event",
+                "description": "Content provided by media for consumption."
+              },
+              {
+                "name": "voter_information_level",
+                "type": "float",
+                "context": "agent",
+                "description": "The level of information the voter currently possesses."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "attitude_change",
+                "type": "float",
+                "context": "agent",
+                "description": "Degree of attitude change in voters after consuming media."
+              }
+            ]
+          }
+        },
+        "6": {
+          "code": "async def evaluate_candidates(self, event: Event) -> List[Event]:\n        if event.__class__.__name__ not in [\"MediaConsumedEvent\", \"PolicyPositionedEvent\"]:\n            return []\n\n        self.profile.update_data(event.__class__.__name__, True)\n\n        if not (self.profile.get_data(\"MediaConsumedEvent\", False) and self.profile.get_data(\"PolicyPositionedEvent\", False)):\n            return []\n\n        candidate_profiles = await self.get_env_data(\"candidate_profiles\", [])\n        evaluation_criteria = event.evaluation_criteria if hasattr(event, 'evaluation_criteria') else []\n\n        observation = f\"Candidate Profiles: {candidate_profiles}, Evaluation Criteria: {evaluation_criteria}\"\n        instruction = \"\"\"Evaluate candidates based on the provided profiles and criteria.\n        Please return the results in the following JSON format:\n\n        {\n        \"evaluation_results\": \"<Results of the candidate evaluation process>\",\n        \"target_ids\": [\"<The string ID of the EnvAgent>\"]\n        }\n        \"\"\"\n    \n        result = await self.generate_reaction(instruction, observation)\n\n        evaluation_results = result.get('evaluation_results', {})\n        target_ids = result.get('target_ids', [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        self.profile.update_data(\"evaluation_results\", evaluation_results)\n\n        events = []\n        for target_id in target_ids:\n            candidates_evaluated_event = CandidatesEvaluatedEvent(self.profile_id, target_id, evaluation_criteria, evaluation_results)\n            events.append(candidates_evaluated_event)\n\n        return events",
+          "metadata": {
+            "id": 6,
+            "name": "evaluate_candidates",
+            "condition": "MediaConsumedEvent or PolicyPositionedEvent",
+            "description": "The action of evaluating candidates involves assessing candidate profiles and policies to make informed voting decisions.",
+            "type": "AND",
+            "required_variables": [
+              {
+                "name": "candidate_profiles",
+                "type": "list",
+                "context": "env",
+                "description": "Profiles of candidates available for evaluation."
+              },
+              {
+                "name": "evaluation_criteria",
+                "type": "list",
+                "context": "event",
+                "description": "Criteria used by voters to evaluate candidates."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "evaluation_results",
+                "type": "dict",
+                "context": "agent",
+                "description": "Results of the candidate evaluation process."
+              }
+            ]
+          }
+        },
+        "7": {
+          "code": "async def update_attitudes(self, event: Event) -> List[Event]:\n        if event.__class__.__name__ != \"MediaConsumedEvent\":\n            return []\n\n        new_information = event.content_type\n        attitude_change = event.attitude_change\n        current_attitudes = self.profile.get_data(\"current_attitudes\", {})\n\n        instruction = \"\"\"\n        You are updating voter attitudes based on new media information. \n        Use the 'new_information' from the event to modify 'current_attitudes'. \n        Calculate 'updated_attitudes' and specify 'target_ids' as a single or list of party agent IDs to send the update.\n        Return the result in the following JSON format:\n        {\n            \"updated_attitudes\": \"<The dictionary of updated voter attitudes>\",\n            \"target_ids\": [\"<List of party agent IDs>\"]\n        }\n        \"\"\"\n        observation = f\"New information: {new_information}, Attitude change: {attitude_change}, Current attitudes: {current_attitudes}\"\n    \n        result = await self.generate_reaction(instruction, observation)\n\n        updated_attitudes = result.get('updated_attitudes', {})\n        target_ids = result.get('target_ids', [])\n\n        self.profile.update_data(\"updated_attitudes\", updated_attitudes)\n\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        events = []\n        for target_id in target_ids:\n            attitudes_updated_event = AttitudesUpdatedEvent(self.profile_id, target_id, updated_attitudes, influence_factors=[])\n            events.append(attitudes_updated_event)\n\n        return events",
+          "metadata": {
+            "id": 7,
+            "name": "update_attitudes",
+            "condition": "MediaConsumedEvent",
+            "description": "This action involves revising voter attitudes based on new information from media and social interactions.",
+            "type": "AND",
+            "required_variables": [
+              {
+                "name": "new_information",
+                "type": "str",
+                "context": "event",
+                "description": "New information that influences voter attitudes."
+              },
+              {
+                "name": "current_attitudes",
+                "type": "dict",
+                "context": "agent",
+                "description": "The current attitudes held by the voter."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "updated_attitudes",
+                "type": "dict",
+                "context": "agent",
+                "description": "Revised attitudes of the voter after processing new information."
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "events": {
+    "imports": "from onesim.events import Event\nfrom typing import Dict, List, Any",
+    "definitions": {
+      "-1": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n                 from_agent_id: str,\n                 to_agent_id: str,\n                 **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": -1,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "Media",
+          "to_action_name": "set_agenda",
+          "from_action_id": 0,
+          "to_action_id": 1,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for media to set agenda and frame issues",
+          "fields": []
+        }
+      },
+      "-2": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n                 from_agent_id: str,\n                 to_agent_id: str,\n                 **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": -2,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "Party",
+          "to_action_name": "position_policy",
+          "from_action_id": 0,
+          "to_action_id": 2,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for parties to position policies based on electoral context",
+          "fields": []
+        }
+      },
+      "-3": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n                 from_agent_id: str,\n                 to_agent_id: str,\n                 **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": -3,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "InterestGroup",
+          "to_action_name": "influence_media",
+          "from_action_id": 0,
+          "to_action_id": 4,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for interest groups to influence media agendas",
+          "fields": []
+        }
+      },
+      "1": {
+        "code": "class AgendaSetEvent(Event):\n    def __init__(self,\n                 from_agent_id: str,\n                 to_agent_id: str,\n                 agenda_topics: List[str] = None,\n                 framing_strategy: str = \"\",\n                 **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.agenda_topics = agenda_topics if agenda_topics is not None else []\n        self.framing_strategy = framing_strategy",
+        "metadata": {
+          "id": 1,
+          "from_agent_type": "Media",
+          "from_action_name": "set_agenda",
+          "to_agent_type": "Voter",
+          "to_action_name": "consume_media",
+          "from_action_id": 1,
+          "to_action_id": 5,
+          "event_name": "AgendaSetEvent",
+          "event_info": "Media sets the agenda and frames issues for voters",
+          "fields": [
+            {
+              "name": "agenda_topics",
+              "type": "list",
+              "default_value": "[]",
+              "description": "List of topics set by the media as the agenda for voters."
+            },
+            {
+              "name": "framing_strategy",
+              "type": "str",
+              "default_value": "",
+              "description": "The strategy used by the media to frame issues."
+            }
+          ]
+        }
+      },
+      "2": {
+        "code": "class PolicyPositionedEvent(Event):\n    def __init__(self,\n                 from_agent_id: str,\n                 to_agent_id: str,\n                 policy_positions: Dict[str, Any] = None,\n                 target_voter_demographics: List[str] = None,\n                 **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.policy_positions = policy_positions if policy_positions is not None else {}\n        self.target_voter_demographics = target_voter_demographics if target_voter_demographics is not None else []",
+        "metadata": {
+          "id": 2,
+          "from_agent_type": "Party",
+          "from_action_name": "position_policy",
+          "to_agent_type": "Voter",
+          "to_action_name": "evaluate_candidates",
+          "from_action_id": 2,
+          "to_action_id": 6,
+          "event_name": "PolicyPositionedEvent",
+          "event_info": "Parties position their policies to attract voters",
+          "fields": [
+            {
+              "name": "policy_positions",
+              "type": "dict",
+              "default_value": "{}",
+              "description": "Dictionary of policy positions that the party is advocating."
+            },
+            {
+              "name": "target_voter_demographics",
+              "type": "list",
+              "default_value": "[]",
+              "description": "Demographics of voters targeted by the party's policy positions."
+            }
+          ]
+        }
+      },
+      "3": {
+        "code": "class StrategyAdaptedEvent(Event):\n    def __init__(self,\n                 from_agent_id: str,\n                 to_agent_id: str,\n                 feedback_data: Dict[str, Any] = None,\n                 new_strategy: str = \"\",\n                 **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.feedback_data = feedback_data if feedback_data is not None else {}\n        self.new_strategy = new_strategy",
+        "metadata": {
+          "id": 3,
+          "from_agent_type": "Party",
+          "from_action_name": "adapt_strategy",
+          "to_agent_type": "Voter",
+          "to_action_name": "evaluate_candidates",
+          "from_action_id": 3,
+          "to_action_id": 6,
+          "event_name": "StrategyAdaptedEvent",
+          "event_info": "Parties adapt strategies based on voter feedback",
+          "fields": [
+            {
+              "name": "feedback_data",
+              "type": "dict",
+              "default_value": "{}",
+              "description": "Data collected from voter feedback that influences strategy adaptation."
+            },
+            {
+              "name": "new_strategy",
+              "type": "str",
+              "default_value": "",
+              "description": "Description of the new strategy adopted by the party."
+            }
+          ]
+        }
+      },
+      "4": {
+        "code": "class MediaInfluencedEvent(Event):\n    def __init__(self,\n                 from_agent_id: str,\n                 to_agent_id: str,\n                 influence_strategy: str = \"\",\n                 target_media_outlets: List[str] = None,\n                 **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.influence_strategy = influence_strategy\n        self.target_media_outlets = target_media_outlets if target_media_outlets is not None else []",
+        "metadata": {
+          "id": 4,
+          "from_agent_type": "InterestGroup",
+          "from_action_name": "influence_media",
+          "to_agent_type": "Media",
+          "to_action_name": "set_agenda",
+          "from_action_id": 4,
+          "to_action_id": 1,
+          "event_name": "MediaInfluencedEvent",
+          "event_info": "Interest groups influence media to set favorable agendas",
+          "fields": [
+            {
+              "name": "influence_strategy",
+              "type": "str",
+              "default_value": "",
+              "description": "Strategy used by interest groups to influence media."
+            },
+            {
+              "name": "target_media_outlets",
+              "type": "list",
+              "default_value": "[]",
+              "description": "List of media outlets targeted by the interest group."
+            }
+          ]
+        }
+      },
+      "5": {
+        "code": "class MediaConsumedEvent(Event):\n    def __init__(self,\n                 from_agent_id: str,\n                 to_agent_id: str,\n                 content_type: str = \"\",\n                 attitude_change: float = 0.0,\n                 **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.content_type = content_type\n        self.attitude_change = attitude_change",
+        "metadata": {
+          "id": 5,
+          "from_agent_type": "Voter",
+          "from_action_name": "consume_media",
+          "to_agent_type": "Voter",
+          "to_action_name": "update_attitudes",
+          "from_action_id": 5,
+          "to_action_id": 7,
+          "event_name": "MediaConsumedEvent",
+          "event_info": "Voters consume media content and update their attitudes",
+          "fields": [
+            {
+              "name": "content_type",
+              "type": "str",
+              "default_value": "",
+              "description": "Type of media content consumed by voters."
+            },
+            {
+              "name": "attitude_change",
+              "type": "float",
+              "default_value": "0.0",
+              "description": "Degree of attitude change in voters after consuming media."
+            }
+          ]
+        }
+      },
+      "6": {
+        "code": "class CandidatesEvaluatedEvent(Event):\n    def __init__(self,\n                 from_agent_id: str,\n                 to_agent_id: str,\n                 evaluation_criteria: List[str] = None,\n                 evaluation_results: Dict[str, Any] = None,\n                 **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.evaluation_criteria = evaluation_criteria if evaluation_criteria is not None else []\n        self.evaluation_results = evaluation_results if evaluation_results is not None else {}",
+        "metadata": {
+          "id": 6,
+          "from_agent_type": "Voter",
+          "from_action_name": "evaluate_candidates",
+          "to_agent_type": "EnvAgent",
+          "to_action_name": "terminate",
+          "from_action_id": 6,
+          "to_action_id": -1,
+          "event_name": "CandidatesEvaluatedEvent",
+          "event_info": "Voters evaluate candidates based on media and party policies",
+          "fields": [
+            {
+              "name": "evaluation_criteria",
+              "type": "list",
+              "default_value": "[]",
+              "description": "List of criteria used by voters to evaluate candidates."
+            },
+            {
+              "name": "evaluation_results",
+              "type": "dict",
+              "default_value": "{}",
+              "description": "Results of the candidate evaluation process."
+            }
+          ]
+        }
+      },
+      "7": {
+        "code": "class AttitudesUpdatedEvent(Event):\n    def __init__(self,\n                 from_agent_id: str,\n                 to_agent_id: str,\n                 updated_attitudes: Dict[str, Any] = None,\n                 influence_factors: List[str] = None,\n                 **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.updated_attitudes = updated_attitudes if updated_attitudes is not None else {}\n        self.influence_factors = influence_factors if influence_factors is not None else []",
+        "metadata": {
+          "id": 7,
+          "from_agent_type": "Voter",
+          "from_action_name": "update_attitudes",
+          "to_agent_type": "Party",
+          "to_action_name": "adapt_strategy",
+          "from_action_id": 7,
+          "to_action_id": 3,
+          "event_name": "AttitudesUpdatedEvent",
+          "event_info": "Voters update attitudes, influencing party strategies",
+          "fields": [
+            {
+              "name": "updated_attitudes",
+              "type": "dict",
+              "default_value": "{}",
+              "description": "Dictionary of updated voter attitudes affecting party strategies."
+            },
+            {
+              "name": "influence_factors",
+              "type": "list",
+              "default_value": "[]",
+              "description": "Factors that influenced the update in voter attitudes."
+            }
+          ]
+        }
+      }
+    }
+  }
+}

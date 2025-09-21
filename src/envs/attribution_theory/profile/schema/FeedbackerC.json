@@ -1,0 +1,67 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Feedbacker C",
+        "private": false,
+        "sampling": "llm",
+        "description": "The name of the agent responsible for analyzing attribution bias"
+    },
+    "bias_detected": {
+        "type": "int",
+        "default": 0,
+        "private": true,
+        "sampling": "default"
+    },
+    "feedback_message": {
+        "type": "str",
+        "default": "awaiting_analysis",
+        "private": false,
+        "sampling": "default"
+    },
+    "analysis_depth": {
+        "type": "int",
+        "default": 5,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            1,
+            10
+        ]
+    },
+    "evaluation_accuracy": {
+        "type": "float",
+        "default": 0.85,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.5,
+            1.0
+        ]
+    },
+    "feedback_history": {
+        "type": "list",
+        "default": [
+            {
+                "date": "2023-10-01",
+                "message": "Initial feedback",
+                "bias_level": 0
+            }
+        ],
+        "private": true,
+        "sampling": "default"
+    },
+    "communication_style": {
+        "type": "str",
+        "default": "constructive",
+        "private": false,
+        "sampling": "llm",
+        "description": "The style in which Feedbacker C communicates its feedback"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

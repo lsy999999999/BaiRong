@@ -1,0 +1,95 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Community A",
+        "private": false,
+        "sampling": "llm",
+        "description": "The name of the community agent"
+    },
+    "social_capital": {
+        "type": "str",
+        "default": "medium",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "low",
+            "medium",
+            "high"
+        ]
+    },
+    "public_resources": {
+        "type": "str",
+        "default": "adequate",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "scarce",
+            "adequate",
+            "abundant"
+        ]
+    },
+    "medical_facilities": {
+        "type": "str",
+        "default": "basic",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "none",
+            "basic",
+            "advanced"
+        ]
+    },
+    "community_health_level": {
+        "type": "str",
+        "default": "moderate",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "poor",
+            "moderate",
+            "good"
+        ]
+    },
+    "policy_influence": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "default"
+    },
+    "health_behavior_index": {
+        "type": "int",
+        "default": 50,
+        "private": false,
+        "sampling": "default"
+    },
+    "education_level_distribution": {
+        "type": "list",
+        "default": [
+            "high school",
+            "bachelor",
+            "master"
+        ],
+        "private": false,
+        "sampling": "default",
+        "sample_size": 3
+    },
+    "resource_allocation_efficiency": {
+        "type": "float",
+        "default": 0.75,
+        "private": false,
+        "sampling": "default"
+    },
+    "community_engagement_level": {
+        "type": "int",
+        "default": 70,
+        "private": false,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

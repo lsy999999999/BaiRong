@@ -1,0 +1,387 @@
+{
+    "-1": {
+        "id": -1,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "AuctionPlatform",
+        "to_action_name": "initialize_auction",
+        "from_action_id": 0,
+        "to_action_id": 1,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for auction setup",
+        "fields": [
+            {
+                "name": "market_conditions",
+                "type": "dict",
+                "default_value": {},
+                "description": "Current market conditions affecting auction setup."
+            }
+        ]
+    },
+    "1": {
+        "id": 1,
+        "from_agent_type": "AuctionPlatform",
+        "from_action_name": "initialize_auction",
+        "to_agent_type": "Buyer",
+        "to_action_name": "evaluate_auction",
+        "from_action_id": 1,
+        "to_action_id": 8,
+        "event_name": "AuctionInitializedEvent",
+        "event_info": "Announce auction details to buyers for evaluation",
+        "fields": [
+            {
+                "name": "auction_id",
+                "type": "str",
+                "default_value": "",
+                "description": "Unique identifier for the auction"
+            },
+            {
+                "name": "mechanism_type",
+                "type": "str",
+                "default_value": "",
+                "description": "Type of auction mechanism being used"
+            },
+            {
+                "name": "fee_structure",
+                "type": "str",
+                "default_value": "",
+                "description": "Fee structure applicable for the auction"
+            },
+            {
+                "name": "transparency_level",
+                "type": "str",
+                "default_value": "",
+                "description": "Level of transparency for the auction"
+            }
+        ]
+    },
+    "2": {
+        "id": 2,
+        "from_agent_type": "AuctionPlatform",
+        "from_action_name": "initialize_auction",
+        "to_agent_type": "Seller",
+        "to_action_name": "evaluate_auction",
+        "from_action_id": 1,
+        "to_action_id": 9,
+        "event_name": "AuctionInitializedEvent",
+        "event_info": "Announce auction details to sellers for evaluation",
+        "fields": [
+            {
+                "name": "auction_id",
+                "type": "str",
+                "default_value": "",
+                "description": "Unique identifier for the auction"
+            },
+            {
+                "name": "mechanism_type",
+                "type": "str",
+                "default_value": "",
+                "description": "Type of auction mechanism being used"
+            },
+            {
+                "name": "fee_structure",
+                "type": "str",
+                "default_value": "",
+                "description": "Fee structure applicable for the auction"
+            },
+            {
+                "name": "transparency_level",
+                "type": "str",
+                "default_value": "",
+                "description": "Level of transparency for the auction"
+            }
+        ]
+    },
+    "3": {
+        "id": 3,
+        "from_agent_type": "AuctionPlatform",
+        "from_action_name": "initialize_auction",
+        "to_agent_type": "Speculator",
+        "to_action_name": "evaluate_auction",
+        "from_action_id": 1,
+        "to_action_id": 10,
+        "event_name": "AuctionInitializedEvent",
+        "event_info": "Announce auction details to speculators for evaluation",
+        "fields": [
+            {
+                "name": "auction_id",
+                "type": "str",
+                "default_value": "",
+                "description": "Unique identifier for the auction"
+            },
+            {
+                "name": "mechanism_type",
+                "type": "str",
+                "default_value": "",
+                "description": "Type of auction mechanism being used"
+            },
+            {
+                "name": "fee_structure",
+                "type": "str",
+                "default_value": "",
+                "description": "Fee structure applicable for the auction"
+            },
+            {
+                "name": "transparency_level",
+                "type": "str",
+                "default_value": "",
+                "description": "Level of transparency for the auction"
+            }
+        ]
+    },
+    "4": {
+        "id": 4,
+        "from_agent_type": "AuctionPlatform",
+        "from_action_name": "receive_bid",
+        "to_agent_type": "AuctionPlatform",
+        "to_action_name": "process_bid",
+        "from_action_id": 2,
+        "to_action_id": 5,
+        "event_name": "BidReceivedEvent",
+        "event_info": "Process incoming bid",
+        "fields": [
+            {
+                "name": "bid_id",
+                "type": "str",
+                "default_value": "",
+                "description": "Unique identifier for the bid"
+            },
+            {
+                "name": "bid_amount",
+                "type": "float",
+                "default_value": 0.0,
+                "description": "Amount of the bid placed"
+            },
+            {
+                "name": "buyer_id",
+                "type": "str",
+                "default_value": "",
+                "description": "Identifier for the buyer placing the bid"
+            }
+        ]
+    },
+    "5": {
+        "id": 5,
+        "from_agent_type": "AuctionPlatform",
+        "from_action_name": "set_reserve_price",
+        "to_agent_type": "AuctionPlatform",
+        "to_action_name": "process_bid",
+        "from_action_id": 3,
+        "to_action_id": 5,
+        "event_name": "ReservePriceSetEvent",
+        "event_info": "Reserve price set for auction",
+        "fields": [
+            {
+                "name": "auction_id",
+                "type": "str",
+                "default_value": "",
+                "description": "Unique identifier for the auction"
+            },
+            {
+                "name": "reserve_price",
+                "type": "float",
+                "default_value": 0.0,
+                "description": "Reserve price set for the auction"
+            }
+        ]
+    },
+    "6": {
+        "id": 6,
+        "from_agent_type": "AuctionPlatform",
+        "from_action_name": "influence_market_conditions",
+        "to_agent_type": "AuctionPlatform",
+        "to_action_name": "adjust_bidding_process",
+        "from_action_id": 4,
+        "to_action_id": 6,
+        "event_name": "MarketConditionChangedEvent",
+        "event_info": "Adjust bidding process based on speculator influence",
+        "fields": [
+            {
+                "name": "market_volatility",
+                "type": "float",
+                "default_value": 0.0,
+                "description": "Current market volatility affecting the auction"
+            },
+            {
+                "name": "information_asymmetry",
+                "type": "float",
+                "default_value": 0.0,
+                "description": "Level of information asymmetry in the market"
+            }
+        ]
+    },
+    "7": {
+        "id": 7,
+        "from_agent_type": "AuctionPlatform",
+        "from_action_name": "process_bid",
+        "to_agent_type": "AuctionPlatform",
+        "to_action_name": "finalize_auction",
+        "from_action_id": 5,
+        "to_action_id": 7,
+        "event_name": "BiddingEligibilityConfirmedEvent",
+        "event_info": "Bids processed and eligible, ready for auction finalization",
+        "fields": [
+            {
+                "name": "eligible_bids",
+                "type": "list",
+                "default_value": [],
+                "description": "List of eligible bids"
+            },
+            {
+                "name": "auction_id",
+                "type": "str",
+                "default_value": "",
+                "description": "Unique identifier for the auction"
+            }
+        ]
+    },
+    "8": {
+        "id": 8,
+        "from_agent_type": "AuctionPlatform",
+        "from_action_name": "adjust_bidding_process",
+        "to_agent_type": "AuctionPlatform",
+        "to_action_name": "finalize_auction",
+        "from_action_id": 6,
+        "to_action_id": 7,
+        "event_name": "BiddingProcessAdjustedEvent",
+        "event_info": "Bidding process adjusted, ready for auction finalization",
+        "fields": [
+            {
+                "name": "adjustment_reason",
+                "type": "str",
+                "default_value": "",
+                "description": "Reason for adjusting the bidding process"
+            },
+            {
+                "name": "auction_id",
+                "type": "str",
+                "default_value": "",
+                "description": "Unique identifier for the auction"
+            }
+        ]
+    },
+    "9": {
+        "id": 9,
+        "from_agent_type": "AuctionPlatform",
+        "from_action_name": "finalize_auction",
+        "to_agent_type": "EnvAgent",
+        "to_action_name": "terminate",
+        "from_action_id": 7,
+        "to_action_id": -1,
+        "event_name": "AuctionOutcomeEvent",
+        "event_info": "Auction outcome determined and sent for termination",
+        "fields": [
+            {
+                "name": "auction_id",
+                "type": "str",
+                "default_value": "",
+                "description": "Unique identifier for the auction"
+            },
+            {
+                "name": "outcome",
+                "type": "str",
+                "default_value": "",
+                "description": "Outcome of the auction (e.g., winner, final price)"
+            },
+            {
+                "name": "completion_status",
+                "type": "str",
+                "default_value": "completed",
+                "description": "Status of auction completion"
+            }
+        ]
+    },
+    "10": {
+        "id": 10,
+        "from_agent_type": "Buyer",
+        "from_action_name": "evaluate_auction",
+        "to_agent_type": "AuctionPlatform",
+        "to_action_name": "receive_bid",
+        "from_action_id": 8,
+        "to_action_id": 2,
+        "event_name": "BidDecisionEvent",
+        "event_info": "Submit bid based on auction details and strategy",
+        "fields": [
+            {
+                "name": "buyer_id",
+                "type": "str",
+                "default_value": "",
+                "description": "Identifier for the buyer making the bid decision"
+            },
+            {
+                "name": "bid_amount",
+                "type": "float",
+                "default_value": 0.0,
+                "description": "Amount decided for the bid"
+            },
+            {
+                "name": "auction_id",
+                "type": "str",
+                "default_value": "",
+                "description": "Unique identifier for the auction"
+            },
+            {
+                "name": "bid_id",
+                "type": "str",
+                "default_value": "",
+                "description": "Unique identifier for the bid"
+            }
+        ]
+    },
+    "11": {
+        "id": 11,
+        "from_agent_type": "Seller",
+        "from_action_name": "evaluate_auction",
+        "to_agent_type": "AuctionPlatform",
+        "to_action_name": "set_reserve_price",
+        "from_action_id": 9,
+        "to_action_id": 3,
+        "event_name": "SetReservePriceEvent",
+        "event_info": "Set reserve price based on auction details",
+        "fields": [
+            {
+                "name": "seller_id",
+                "type": "str",
+                "default_value": "",
+                "description": "Identifier for the seller setting the reserve price"
+            },
+            {
+                "name": "reserve_price",
+                "type": "float",
+                "default_value": 0.0,
+                "description": "Reserve price set by the seller"
+            },
+            {
+                "name": "auction_id",
+                "type": "str",
+                "default_value": "",
+                "description": "Unique identifier for the auction"
+            }
+        ]
+    },
+    "12": {
+        "id": 12,
+        "from_agent_type": "Speculator",
+        "from_action_name": "evaluate_auction",
+        "to_agent_type": "AuctionPlatform",
+        "to_action_name": "influence_market_conditions",
+        "from_action_id": 10,
+        "to_action_id": 4,
+        "event_name": "MarketInfluenceEvent",
+        "event_info": "Speculator attempts to influence auction outcomes",
+        "fields": [
+            {
+                "name": "speculator_id",
+                "type": "str",
+                "default_value": "",
+                "description": "Identifier for the speculator attempting to influence the market"
+            },
+            {
+                "name": "influence_strategy",
+                "type": "str",
+                "default_value": "",
+                "description": "Strategy used by the speculator to influence the market"
+            }
+        ]
+    }
+}

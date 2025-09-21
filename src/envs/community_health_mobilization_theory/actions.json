@@ -1,0 +1,130 @@
+{
+    "CommunityLeader": [
+        {
+            "id": 1,
+            "name": "initiate_mobilization",
+            "condition": "null",
+            "description": "The Community Leader initiates health mobilization activities by organizing events and rallying community members to participate in health improvement efforts.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "community_context",
+                    "type": "str",
+                    "context": "env",
+                    "description": "The socioeconomic and cultural context of the community."
+                },
+                {
+                    "name": "available_resources",
+                    "type": "str",
+                    "context": "env",
+                    "description": "Resources available to support mobilization activities."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "mobilization_status",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Current status of the mobilization effort initiated by the leader."
+                }
+            ]
+        }
+    ],
+    "CommunityMember": [
+        {
+            "id": 2,
+            "name": "engage_in_mobilization",
+            "condition": "null",
+            "description": "Community Members participate in mobilization activities, potentially altering their health behaviors based on the influence of leaders and peers.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "activity_details",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Description of the health mobilization activity."
+                },
+                {
+                    "name": "leader_id",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Identifier for the community leader organizing the event."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "participation_status",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Status of the member's participation in mobilization activities."
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "name": "influence_peer_behavior",
+            "condition": "null",
+            "description": "Community Members influence each other's health behaviors through social interactions and shared experiences.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "influencing_member_id",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Identifier for the community member influencing behavior."
+                },
+                {
+                    "name": "influenced_member_id",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Identifier for the community member whose behavior is influenced."
+                },
+                {
+                    "name": "behavior_change",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Description of the health behavior change."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "behavior_status",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Status of the member's health behavior after influence."
+                }
+            ]
+        }
+    ],
+    "PublicHealthExpert": [
+        {
+            "id": 4,
+            "name": "provide_guidance",
+            "condition": "null",
+            "description": "Public Health Experts provide guidance and resources to support community health mobilization efforts, offering data and policy insights.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "guidance_details",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Details of the guidance provided."
+                },
+                {
+                    "name": "expert_id",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Identifier for the public health expert providing guidance."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "guidance_status",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Status of the guidance dissemination process."
+                }
+            ]
+        }
+    ]
+}

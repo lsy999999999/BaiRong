@@ -1,0 +1,74 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Actor A",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's role in the cognitive dissonance simulation"
+    },
+    "dissonance_level": {
+        "type": "float",
+        "default": 50.0,
+        "private": true,
+        "sampling": "default"
+    },
+    "dissonance_cause": {
+        "type": "str",
+        "default": "conflicting_belief",
+        "private": true,
+        "sampling": "default"
+    },
+    "strategy_type": {
+        "type": "str",
+        "default": "awaiting_decision",
+        "private": false,
+        "sampling": "default"
+    },
+    "expected_outcome": {
+        "type": "str",
+        "default": "reduce_dissonance",
+        "private": false,
+        "sampling": "default"
+    },
+    "interaction_pattern": {
+        "type": "str",
+        "default": "Actor faces dissonance",
+        "private": false,
+        "sampling": "llm",
+        "description": "Pattern of interaction in the cognitive dissonance scenario"
+    },
+    "communication_feedback": {
+        "type": "list",
+        "default": [
+            "Observer B feedback",
+            "Feedbacker C evaluation"
+        ],
+        "private": false,
+        "sampling": "default"
+    },
+    "decision_mechanism": {
+        "type": "str",
+        "default": "belief_change",
+        "private": true,
+        "sampling": "random",
+        "choices": [
+            "belief_change",
+            "behavior_change",
+            "rationalization"
+        ]
+    },
+    "environment_description": {
+        "type": "str",
+        "default": "Simulated cognitive dissonance environment",
+        "private": false,
+        "sampling": "llm",
+        "description": "Description of the environment where the agent operates"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

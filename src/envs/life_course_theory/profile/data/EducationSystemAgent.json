@@ -1,0 +1,67 @@
+[
+    {
+        "name": "EduAgent Alpha",
+        "education_impact_assessed": false,
+        "budget_allocation": 5000000.0,
+        "student_capacity": 1892,
+        "educational_programs": null,
+        "teacher_quality_index": 85,
+        "technology_integration_level": "low",
+        "community_engagement_score": 70,
+        "agent_type": "EducationSystemAgent",
+        "current_policy": "standardized_curriculum",
+        "id": "10"
+    },
+    {
+        "name": "LearningBot Beta",
+        "education_impact_assessed": false,
+        "budget_allocation": 5000000.0,
+        "student_capacity": 1686,
+        "educational_programs": null,
+        "teacher_quality_index": 85,
+        "technology_integration_level": "high",
+        "community_engagement_score": 70,
+        "agent_type": "EducationSystemAgent",
+        "current_policy": "standardized_curriculum",
+        "id": "11"
+    },
+    {
+        "name": "TeachAssistant Gamma",
+        "education_impact_assessed": false,
+        "budget_allocation": 5000000.0,
+        "student_capacity": 1916,
+        "educational_programs": null,
+        "teacher_quality_index": 85,
+        "technology_integration_level": "low",
+        "community_engagement_score": 70,
+        "agent_type": "EducationSystemAgent",
+        "current_policy": "standardized_curriculum",
+        "id": "12"
+    },
+    {
+        "name": "KnowledgeGuide Delta",
+        "education_impact_assessed": false,
+        "budget_allocation": 5000000.0,
+        "student_capacity": 1342,
+        "educational_programs": null,
+        "teacher_quality_index": 85,
+        "technology_integration_level": "moderate",
+        "community_engagement_score": 70,
+        "agent_type": "EducationSystemAgent",
+        "current_policy": "standardized_curriculum",
+        "id": "13"
+    },
+    {
+        "name": "StudyHelper Epsilon",
+        "education_impact_assessed": false,
+        "budget_allocation": 5000000.0,
+        "student_capacity": 1647,
+        "educational_programs": null,
+        "teacher_quality_index": 85,
+        "technology_integration_level": "low",
+        "community_engagement_score": 70,
+        "agent_type": "EducationSystemAgent",
+        "current_policy": "standardized_curriculum",
+        "id": "14"
+    }
+]

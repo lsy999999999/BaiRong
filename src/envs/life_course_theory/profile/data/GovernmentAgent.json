@@ -1,0 +1,67 @@
+[
+    {
+        "name": "Alice Johnson",
+        "policy_details": "Overseeing the implementation of the national digital literacy initiative.",
+        "policy_implemented": true,
+        "economic_influence": 63,
+        "healthcare_priority": "low",
+        "education_policy_focus": "Digital Literacy and Technology Integration",
+        "current_budget": 1000000.0,
+        "socioeconomic_policy_impact": null,
+        "policy_effectiveness": 75,
+        "agent_type": "GovernmentAgent",
+        "id": "15"
+    },
+    {
+        "name": "Michael Smith",
+        "policy_details": "Responsible for the rollout of the inclusive education framework across schools.",
+        "policy_implemented": true,
+        "economic_influence": 7,
+        "healthcare_priority": "low",
+        "education_policy_focus": "Inclusive Education",
+        "current_budget": 1000000.0,
+        "socioeconomic_policy_impact": null,
+        "policy_effectiveness": 75,
+        "agent_type": "GovernmentAgent",
+        "id": "16"
+    },
+    {
+        "name": "Sophia Martinez",
+        "policy_details": "Leading efforts to improve STEM education in rural areas.",
+        "policy_implemented": true,
+        "economic_influence": 55,
+        "healthcare_priority": "medium",
+        "education_policy_focus": "STEM Education Enhancement",
+        "current_budget": 1000000.0,
+        "socioeconomic_policy_impact": null,
+        "policy_effectiveness": 75,
+        "agent_type": "GovernmentAgent",
+        "id": "17"
+    },
+    {
+        "name": "David Brown",
+        "policy_details": "Coordinating the teacher training programs aimed at modernizing teaching methods.",
+        "policy_implemented": true,
+        "economic_influence": 9,
+        "healthcare_priority": "low",
+        "education_policy_focus": "Teacher Professional Development",
+        "current_budget": 1000000.0,
+        "socioeconomic_policy_impact": null,
+        "policy_effectiveness": 75,
+        "agent_type": "GovernmentAgent",
+        "id": "18"
+    },
+    {
+        "name": "Emma Davis",
+        "policy_details": "Managing the national scholarship program for underprivileged students.",
+        "policy_implemented": true,
+        "economic_influence": 13,
+        "healthcare_priority": "low",
+        "education_policy_focus": "Higher Education Accessibility",
+        "current_budget": 1000000.0,
+        "socioeconomic_policy_impact": null,
+        "policy_effectiveness": 75,
+        "agent_type": "GovernmentAgent",
+        "id": "19"
+    }
+]

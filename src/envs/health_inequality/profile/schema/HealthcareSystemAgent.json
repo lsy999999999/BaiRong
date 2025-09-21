@@ -1,0 +1,81 @@
+{
+    "name": {
+        "type": "str",
+        "default": "HealthcareSystemAgent",
+        "private": false,
+        "sampling": "llm",
+        "description": "The name of the agent representing the healthcare system"
+    },
+    "resource_availability": {
+        "type": "float",
+        "default": 70.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "service_quality": {
+        "type": "str",
+        "default": "standard",
+        "private": false,
+        "sampling": "default"
+    },
+    "insurance_coverage": {
+        "type": "str",
+        "default": "basic",
+        "private": false,
+        "sampling": "default"
+    },
+    "allocated_resources": {
+        "type": "float",
+        "default": 50.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "individual_health_status": {
+        "type": "str",
+        "default": "stable",
+        "private": true,
+        "sampling": "default"
+    },
+    "service_provision_status": {
+        "type": "str",
+        "default": "operational",
+        "private": false,
+        "sampling": "default"
+    },
+    "policy_impact_assessment": {
+        "type": "str",
+        "default": "pending",
+        "private": false,
+        "sampling": "default"
+    },
+    "regional_health_disparities": {
+        "type": "list",
+        "default": [
+            {
+                "region": "urban",
+                "disparity_level": "medium"
+            }
+        ],
+        "private": true,
+        "sampling": "default"
+    },
+    "healthcare_accessibility": {
+        "type": "float",
+        "default": 75.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "health_policy_effectiveness": {
+        "type": "float",
+        "default": 60.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

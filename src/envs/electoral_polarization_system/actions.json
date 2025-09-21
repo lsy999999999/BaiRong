@@ -1,0 +1,219 @@
+{
+    "Media": [
+        {
+            "id": 1,
+            "name": "set_agenda",
+            "condition": null,
+            "description": "The action of setting the agenda involves selecting and prioritizing issues to be highlighted in media content. This influences public discourse and voter attention.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "media_ideology_bias",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "The ideological bias of the media outlet, influencing agenda setting."
+                },
+                {
+                    "name": "agenda_setting_power",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "The media's capacity to influence public agenda."
+                },
+                {
+                    "name": "current_issues",
+                    "type": "list",
+                    "context": "env",
+                    "description": "List of current issues in the environment that can be selected for agenda setting."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "agenda_topics",
+                    "type": "list",
+                    "context": "agent",
+                    "description": "Updated list of topics set by the media as the agenda."
+                }
+            ]
+        }
+    ],
+    "Party": [
+        {
+            "id": 2,
+            "name": "position_policy",
+            "condition": null,
+            "description": "This action involves formulating and adjusting policy positions to align with voter preferences and differentiate from competitors.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "voter_issue_positions",
+                    "type": "dict",
+                    "context": "env",
+                    "description": "The distribution of voter issue positions in the environment."
+                },
+                {
+                    "name": "party_ideology",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "The ideological stance of the party guiding policy positioning."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "policy_positions",
+                    "type": "dict",
+                    "context": "agent",
+                    "description": "Updated policy positions of the party."
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "name": "adapt_strategy",
+            "condition": "Feedback from election results",
+            "description": "The action of adapting strategy involves modifying campaign approaches based on voter feedback and changing electoral conditions.",
+            "type": "AND",
+            "required_variables": [
+                {
+                    "name": "feedback_data",
+                    "type": "dict",
+                    "context": "event",
+                    "description": "Data collected from voter feedback that influences strategy adaptation."
+                },
+                {
+                    "name": "current_strategy",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "The current strategy being employed by the party."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "new_strategy",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Description of the new strategy adopted by the party."
+                }
+            ]
+        }
+    ],
+    "InterestGroup": [
+        {
+            "id": 4,
+            "name": "influence_media",
+            "condition": null,
+            "description": "This action involves using resources and strategies to affect media content and agenda, aligning it with the interest group's goals.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "influence_strategy",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "The strategy used by the interest group to influence media."
+                },
+                {
+                    "name": "connections",
+                    "type": "list",
+                    "context": "agent",
+                    "description": "List of connections the interest group has with media outlets."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "media_influence_effect",
+                    "type": "dict",
+                    "context": "agent",
+                    "description": "The impact of the interest group's influence on media agendas."
+                }
+            ]
+        }
+    ],
+    "Voter": [
+        {
+            "id": 5,
+            "name": "consume_media",
+            "condition": null,
+            "description": "The action of consuming media involves accessing and interpreting media content, which influences voter attitudes and perceptions.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "media_content",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Content provided by media for consumption."
+                },
+                {
+                    "name": "voter_information_level",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "The level of information the voter currently possesses."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "attitude_change",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Degree of attitude change in voters after consuming media."
+                }
+            ]
+        },
+        {
+            "id": 6,
+            "name": "evaluate_candidates",
+            "condition": "MediaConsumedEvent or PolicyPositionedEvent",
+            "description": "The action of evaluating candidates involves assessing candidate profiles and policies to make informed voting decisions.",
+            "type": "AND",
+            "required_variables": [
+                {
+                    "name": "candidate_profiles",
+                    "type": "list",
+                    "context": "env",
+                    "description": "Profiles of candidates available for evaluation."
+                },
+                {
+                    "name": "evaluation_criteria",
+                    "type": "list",
+                    "context": "event",
+                    "description": "Criteria used by voters to evaluate candidates."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "evaluation_results",
+                    "type": "dict",
+                    "context": "agent",
+                    "description": "Results of the candidate evaluation process."
+                }
+            ]
+        },
+        {
+            "id": 7,
+            "name": "update_attitudes",
+            "condition": "MediaConsumedEvent",
+            "description": "This action involves revising voter attitudes based on new information from media and social interactions.",
+            "type": "AND",
+            "required_variables": [
+                {
+                    "name": "new_information",
+                    "type": "str",
+                    "context": "event",
+                    "description": "New information that influences voter attitudes."
+                },
+                {
+                    "name": "current_attitudes",
+                    "type": "dict",
+                    "context": "agent",
+                    "description": "The current attitudes held by the voter."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "updated_attitudes",
+                    "type": "dict",
+                    "context": "agent",
+                    "description": "Revised attitudes of the voter after processing new information."
+                }
+            ]
+        }
+    ]
+}

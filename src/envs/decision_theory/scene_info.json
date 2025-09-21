@@ -1,0 +1,98 @@
+{
+  "domain": "Psychology",
+  "scene_name": "decision_theory",
+  "odd_protocol": {
+    "overview": {
+      "system_goal": "The simulation aims to model different decision-making processes within decision theory using LLMs, studying how choices are made in uncertain and complex environments. It analyzes decision-makers' behaviors when faced with limited information and multiple options, focusing on decision processes in the presence of risks, costs, utilities, and how to make optimal decisions based on goals and constraints.",
+      "agent_types": "Decision Maker Agents representing individuals or teams making choices based on different criteria such as cost, utility, and risk. Environment Agents representing external factors affecting decisions, simulating uncertainty, risks, and resource constraints. Alternative Options Agents representing different choices faced by decision-makers, each with distinct costs, utilities, and risks.",
+      "environment_description": "The environment includes elements of uncertainty, risk, and resource constraints that impact decision-making. It simulates various factors influencing decisions, such as external conditions, available information, and constraints that decision-makers must navigate."
+    },
+    "design_concepts": {
+      "interaction_patterns": "Decision Maker Agents interact with Environment Agents to gather information and assess external factors. They evaluate Alternative Options Agents by weighing costs, utilities, and risks. Agents engage in feedback loops to adjust decisions based on outcomes and new information.",
+      "communication_protocols": "LLM models facilitate communication, enabling Decision Maker Agents to collect information, assess alternatives, and make informed decisions. Emotional analysis tools provide feedback on agents' perceptions of risk, utility, and cost, influencing their decision-making.",
+      "decision_mechanisms": "Decision mechanisms include expected utility theory for evaluating choices based on probability and utility values, prospect theory for assessing risk preferences, and multi-objective decision theory for balancing multiple goals with limited resources. Decision processes involve information collection, weighing alternatives, and feedback-based adjustments."
+    },
+    "details": {
+      "agent_behaviors": "Decision Maker Agents collect information, evaluate options, and make final decisions based on rational or bounded rationality models. Alternative Options Agents present distinct scenarios with varying costs, utilities, and risks. Environment Agents simulate external factors impacting decisions.",
+      "decision_algorithms": "Algorithms include decision trees for simulating outcomes and helping Decision Maker Agents choose optimal options. LLM models generate dialogues and thought processes for information gathering, option evaluation, and decision-making.",
+      "specific_constraints": "Constraints include limited information availability, resource restrictions, and varying risk factors. Minimum agent count is three, with one Decision Maker and two Alternative Options Agents. Recommended agent count is ten for complex decision environments."
+    }
+  },
+  "agent_types": {
+    "DecisionMakerAgent": "Represents individuals or teams making choices based on different criteria such as cost, utility, and risk.",
+    "EnvironmentAgent": "Simulates external factors affecting decisions, including uncertainty, risks, and resource constraints.",
+    "AlternativeOptionsAgent": "Represents different choices faced by decision-makers, each with distinct costs, utilities, and risks."
+  },
+  "portrait": {
+    "DecisionMakerAgent": 1,
+    "EnvironmentAgent": 2,
+    "AlternativeOptionsAgent": 5
+  },
+  "metrics": [
+    {
+      "id": "average_decision_making_time",
+      "name": "average_decision_making_time",
+      "description": "Measures the average time taken by Decision Maker Agents to make a decision.",
+      "visualization_type": "line",
+      "update_interval": 5,
+      "variables": [
+        {
+          "name": "decision_id",
+          "source_type": "agent",
+          "agent_type": "DecisionMakerAgent",
+          "path": "profile.decision_id",
+          "required": true,
+          "is_list": true
+        },
+        {
+          "name": "decision_result",
+          "source_type": "agent",
+          "agent_type": "DecisionMakerAgent",
+          "path": "profile.decision_result",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Calculate the time difference between decision_id and decision_result timestamps for each Decision Maker Agent. Handle None or empty values by skipping those entries. Aggregate the times and compute the average.",
+      "function_name": "average_decision_making_time"
+    },
+    {
+      "id": "decision_quality_distribution",
+      "name": "decision_quality_distribution",
+      "description": "Shows the distribution of decision qualities (e.g., optimal, suboptimal) made by Decision Maker Agents.",
+      "visualization_type": "pie",
+      "update_interval": 5,
+      "variables": [
+        {
+          "name": "evaluation_result",
+          "source_type": "agent",
+          "agent_type": "DecisionMakerAgent",
+          "path": "profile.evaluation_result",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Count the occurrences of each evaluation_result category (e.g., optimal, suboptimal). Handle None or empty values by skipping those entries. Present the counts as proportions of the total.",
+      "function_name": "decision_quality_distribution"
+    },
+    {
+      "id": "information_collection_rate",
+      "name": "information_collection_rate",
+      "description": "Measures the rate at which Decision Maker Agents collect information over time.",
+      "visualization_type": "line",
+      "update_interval": 5,
+      "variables": [
+        {
+          "name": "collected_information",
+          "source_type": "agent",
+          "agent_type": "DecisionMakerAgent",
+          "path": "profile.collected_information",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Count the number of collected_information entries for each Decision Maker Agent at each time step. Handle None or empty values by skipping those entries. Aggregate the counts and plot the rate over time.",
+      "function_name": "information_collection_rate"
+    }
+  ]
+}

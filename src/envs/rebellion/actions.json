@@ -1,0 +1,122 @@
+{
+    "Citizen": [
+        {
+            "id": 1,
+            "name": "evaluate_grievance",
+            "condition": null,
+            "description": "The citizen evaluates their personal level of grievance to determine if the current regime is unjust enough to consider rebellion.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "personal_experience",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "The citizen's personal experience of injustice and dissatisfaction."
+                },
+                {
+                    "name": "social_influence",
+                    "type": "float",
+                    "context": "env",
+                    "description": "The influence of social networks and media on the citizen's perception of injustice."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "grievance_level",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Updated grievance level after evaluation."
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "name": "decide_rebellion",
+            "condition": "GrievanceEvaluatedEvent",
+            "description": "After evaluating their grievance, the citizen decides whether to participate in rebellion based on their grievance level.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "grievance_level",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "The level of grievance evaluated by the citizen."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "rebellion_decision",
+                    "type": "bool",
+                    "context": "agent",
+                    "description": "Indicates whether the citizen decides to participate in rebellion."
+                }
+            ]
+        }
+    ],
+    "Government": [
+        {
+            "id": 3,
+            "name": "assess_rebellion",
+            "condition": null,
+            "description": "The government assesses the current level of rebellion activity to determine the necessary response.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "public_discontent",
+                    "type": "float",
+                    "context": "env",
+                    "description": "Overall level of public discontent as perceived by the government."
+                },
+                {
+                    "name": "reported_incidents",
+                    "type": "int",
+                    "context": "env",
+                    "description": "Number of rebellion incidents reported to the government."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "rebellion_level",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "The assessed level of rebellion by the government."
+                }
+            ]
+        },
+        {
+            "id": 4,
+            "name": "implement_repression",
+            "condition": "RebellionAssessedEvent OR RebellionDecisionEvent",
+            "description": "The government implements a repression strategy to manage rebellion based on the assessed rebellion level.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "rebellion_level",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "The assessed level of rebellion by the government."
+                },
+                {
+                    "name": "available_resources",
+                    "type": "float",
+                    "context": "env",
+                    "description": "Resources available to the government for implementing repression."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "repression_strategy",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "The strategy implemented by the government to manage rebellion."
+                },
+                {
+                    "name": "effectiveness",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "The effectiveness of the repression strategy."
+                }
+            ]
+        }
+    ]
+}

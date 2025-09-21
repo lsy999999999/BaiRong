@@ -1,0 +1,88 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Media Organization",
+        "private": false,
+        "sampling": "llm",
+        "description": "A name suitable for a media organization, representing traditional or social media platforms."
+    },
+    "editorial_policy": {
+        "type": "str",
+        "default": "",
+        "private": false,
+        "sampling": "default"
+    },
+    "selected_content": {
+        "type": "str",
+        "default": "",
+        "private": true,
+        "sampling": "default"
+    },
+    "published_content": {
+        "type": "str",
+        "default": "",
+        "private": false,
+        "sampling": "default"
+    },
+    "reach": {
+        "type": "float",
+        "default": 0.0,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "credibility": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "fact_checking_rigor": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "content_queue": {
+        "type": "list",
+        "default": [],
+        "private": true,
+        "sampling": "default"
+    },
+    "amplified_trends": {
+        "type": "list",
+        "default": [],
+        "private": false,
+        "sampling": "default"
+    },
+    "agenda_priority": {
+        "type": "list",
+        "default": [],
+        "private": true,
+        "sampling": "default"
+    },
+    "interaction_log": {
+        "type": "list",
+        "default": [],
+        "private": true,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

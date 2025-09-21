@@ -1,0 +1,95 @@
+{
+  "domain": "Law",
+  "scene_name": "tort_law_and_compensation",
+  "odd_protocol": {
+    "overview": {
+      "system_goal": "Simulate compensation mechanisms in tort cases to explore how different compensation types affect case decisions and behaviors of parties involved.",
+      "agent_types": "Plaintiff (victim), Defendant (tortfeasor), Judge (decision-maker)",
+      "environment_description": "A simulated legal environment where agents interact based on roles in a tort case scenario.",
+      "compensation_types": "Restitution compensation, actual loss compensation, punitive compensation",
+      "focus_of_simulation": "Modeling decisions on compensation amounts and types, analyzing their impact on behaviors and case outcomes"
+    },
+    "design_concepts": {
+      "interaction_patterns": "Plaintiff requests compensation, Defendant defends actions, Judge evaluates and decides.",
+      "communication_protocols": "Agents communicate through legal arguments, evidence presentation, and rebuttals.",
+      "decision_mechanisms": "Agents make decisions based on legal knowledge and situational conditions, with the Judge considering evidence, legal provisions, and behaviors.",
+      "incomplete_information": "Agents may not fully understand each other's motives or evidence, affecting decision-making.",
+      "compensation_influence": "Each compensation type influences the Judge's decision-making process differently."
+    },
+    "details": {
+      "agent_behaviors": "Plaintiff submits compensation requests and damage facts, Defendant defends and argues for liability reduction, Judge assesses evidence and decides on compensation.",
+      "decision_algorithms": "Judge uses evidence and compensation mechanism rules such as legal texts and precedents for decisions.",
+      "specific_constraints": "Legal principles and precedents guide Judge's decisions, balancing justice and efficiency.",
+      "scenario_examples": "Traffic accidents or product liability cases where parties interact post-incident.",
+      "compensation_simulation": "Restitution involves restoring victim's condition, actual loss covers economic damages, punitive applies to malicious or gross misconduct."
+    }
+  },
+  "agent_types": {
+    "Plaintiff": "Represents the victim in a tort case, submits compensation requests and damage facts to seek justice.",
+    "Defendant": "Acts as the tortfeasor, defends against claims and argues for liability reduction in the compensation process.",
+    "Judge": "Serves as the decision-maker, evaluates evidence, legal provisions, and behaviors to decide on compensation."
+  },
+  "portrait": {
+    "Plaintiff": 5,
+    "Defendant": 4,
+    "Judge": 1
+  },
+  "metrics": [
+    {
+      "id": "Average_Compensation_Awarded",
+      "name": "Average Compensation Awarded",
+      "description": "Measures the average compensation awarded across all cases.",
+      "visualization_type": "line",
+      "update_frequency": 5,
+      "variables": [
+        {
+          "name": "compensation_awarded",
+          "source_type": "env",
+          "path": "compensation_awarded",
+          "required": true,
+          "is_list": false
+        }
+      ],
+      "calculation_logic": "Aggregate the compensation_awarded values over time to compute the average. Handle None values by excluding them from the average calculation. This metric will be plotted as a time-series line chart showing the trend of average compensation awarded.",
+      "function_name": "Average_Compensation_Awarded"
+    },
+    {
+      "id": "Plaintiff_Compensation_Request_Submission_Rate",
+      "name": "Plaintiff Compensation Request Submission Rate",
+      "description": "Tracks the rate at which plaintiffs submit compensation requests.",
+      "visualization_type": "line",
+      "update_frequency": 5,
+      "variables": [
+        {
+          "name": "compensation_request_submitted",
+          "source_type": "agent",
+          "agent_type": "Plaintiff",
+          "path": "compensation_request_submitted",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Count the number of True values in the compensation_request_submitted list to determine the submission rate. Handle None values by treating them as False (not submitted). Represent this metric as a bar chart with categories for each plaintiff showing their submission rate.",
+      "function_name": "Plaintiff_Compensation_Request_Submission_Rate"
+    },
+    {
+      "id": "Evidence_Utilization_by_Defendant",
+      "name": "Evidence Utilization by Defendant",
+      "description": "Analyzes how defendants utilize counter evidence in their defense.",
+      "visualization_type": "pie",
+      "update_frequency": 5,
+      "variables": [
+        {
+          "name": "counter_evidence_list",
+          "source_type": "agent",
+          "agent_type": "Defendant",
+          "path": "counter_evidence_list",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Aggregate the lengths of counter_evidence_list for each defendant to assess evidence utilization. Handle None values or empty lists by considering them as zero evidence utilized. This metric is represented as a pie chart showing the proportion of evidence utilization across different defendants.",
+      "function_name": "Evidence_Utilization_by_Defendant"
+    }
+  ]
+}

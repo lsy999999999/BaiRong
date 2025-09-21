@@ -1,0 +1,72 @@
+[
+    {
+        "name": "Sophia Nguyen",
+        "participation_status": "not_participating",
+        "behavior_status": "inactive",
+        "age": 62,
+        "socioeconomic_status": "low_income",
+        "cultural_background": "Vietnamese-American",
+        "health_issues": null,
+        "communication_channels": null,
+        "resource_access": "moderate",
+        "agent_type": "CommunityMember",
+        "interaction_influence": 0.5,
+        "id": "5"
+    },
+    {
+        "name": "Carlos Ramirez",
+        "participation_status": "not_participating",
+        "behavior_status": "inactive",
+        "age": 29,
+        "socioeconomic_status": "low_income",
+        "cultural_background": "Mexican",
+        "health_issues": null,
+        "communication_channels": null,
+        "resource_access": "ample",
+        "agent_type": "CommunityMember",
+        "interaction_influence": 0.5,
+        "id": "6"
+    },
+    {
+        "name": "Aisha Khan",
+        "participation_status": "not_participating",
+        "behavior_status": "inactive",
+        "age": 60,
+        "socioeconomic_status": "low_income",
+        "cultural_background": "Pakistani",
+        "health_issues": null,
+        "communication_channels": null,
+        "resource_access": "moderate",
+        "agent_type": "CommunityMember",
+        "interaction_influence": 0.5,
+        "id": "7"
+    },
+    {
+        "name": "Liam O'Sullivan",
+        "participation_status": "not_participating",
+        "behavior_status": "inactive",
+        "age": 78,
+        "socioeconomic_status": "high_income",
+        "cultural_background": "Irish",
+        "health_issues": null,
+        "communication_channels": null,
+        "resource_access": "moderate",
+        "agent_type": "CommunityMember",
+        "interaction_influence": 0.5,
+        "id": "8"
+    },
+    {
+        "name": "Chen Wei",
+        "participation_status": "not_participating",
+        "behavior_status": "inactive",
+        "age": 19,
+        "socioeconomic_status": "high_income",
+        "cultural_background": "Chinese",
+        "health_issues": null,
+        "communication_channels": null,
+        "resource_access": "moderate",
+        "agent_type": "CommunityMember",
+        "interaction_influence": 0.5,
+        "id": "9"
+    }
+]

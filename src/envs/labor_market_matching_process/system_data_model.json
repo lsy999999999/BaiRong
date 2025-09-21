@@ -1,0 +1,114 @@
+{
+    "environment": {
+        "variables": [
+            {
+                "name": "application_cost",
+                "type": "float",
+                "default_value": null
+            },
+            {
+                "name": "distributed_jobs",
+                "type": "list",
+                "default_value": null
+            }
+        ]
+    },
+    "agents": {
+        "JobSeeker": {
+            "variables": [
+                {
+                    "name": "skills",
+                    "type": "list",
+                    "default_value": null
+                },
+                {
+                    "name": "education",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "experience",
+                    "type": "int",
+                    "default_value": null
+                },
+                {
+                    "name": "job_preferences",
+                    "type": "list",
+                    "default_value": null
+                },
+                {
+                    "name": "network",
+                    "type": "list",
+                    "default_value": null
+                },
+                {
+                    "name": "risk_attitude",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "job_search_strategy",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "market_status",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "applications_submitted",
+                    "type": "list",
+                    "default_value": null
+                },
+                {
+                    "name": "negotiation_outcomes",
+                    "type": "list",
+                    "default_value": null
+                },
+                {
+                    "name": "employment_status",
+                    "type": "str",
+                    "default_value": null
+                }
+            ]
+        },
+        "Employer": {
+            "variables": [
+                {
+                    "name": "job_id",
+                    "type": "int",
+                    "default_value": null
+                },
+                {
+                    "name": "job_description",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "required_skills",
+                    "type": "list",
+                    "default_value": null
+                },
+                {
+                    "name": "posted_jobs",
+                    "type": "list",
+                    "default_value": null
+                },
+                {
+                    "name": "screened_candidates",
+                    "type": "list",
+                    "default_value": null
+                },
+                {
+                    "name": "interview_results",
+                    "type": "list",
+                    "default_value": null
+                }
+            ]
+        },
+        "RecruitmentChannel": {
+            "variables": []
+        }
+    }
+}

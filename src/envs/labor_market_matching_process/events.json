@@ -1,0 +1,328 @@
+{
+    "-1": {
+        "id": -1,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "JobSeeker",
+        "to_action_name": "enter_market",
+        "from_action_id": 0,
+        "to_action_id": 1,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for job seeker to enter the labor market",
+        "fields": []
+    },
+    "-2": {
+        "id": -2,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "Employer",
+        "to_action_name": "post_job_vacancies",
+        "from_action_id": 0,
+        "to_action_id": 5,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for employer to post job vacancies",
+        "fields": []
+    },
+    "1": {
+        "id": 1,
+        "from_agent_type": "JobSeeker",
+        "from_action_name": "enter_market",
+        "to_agent_type": "RecruitmentChannel",
+        "to_action_name": "distribute_job_postings",
+        "from_action_id": 1,
+        "to_action_id": 8,
+        "event_name": "JobMarketEntryEvent",
+        "event_info": "Job seeker enters the market and looks for job postings",
+        "fields": [
+            {
+                "name": "skills",
+                "type": "list",
+                "default_value": [],
+                "description": "List of skills possessed by the job seeker."
+            },
+            {
+                "name": "education",
+                "type": "str",
+                "default_value": "",
+                "description": "Education level of the job seeker."
+            },
+            {
+                "name": "experience",
+                "type": "int",
+                "default_value": 0,
+                "description": "Years of experience the job seeker has."
+            },
+            {
+                "name": "job_preferences",
+                "type": "list",
+                "default_value": [],
+                "description": "Preferences of the job seeker regarding job attributes."
+            },
+            {
+                "name": "network",
+                "type": "list",
+                "default_value": [],
+                "description": "Professional network connections of the job seeker."
+            },
+            {
+                "name": "risk_attitude",
+                "type": "str",
+                "default_value": "neutral",
+                "description": "Risk-taking attitude of the job seeker."
+            },
+            {
+                "name": "job_search_strategy",
+                "type": "str",
+                "default_value": "active",
+                "description": "Strategy adopted by the job seeker for job searching."
+            }
+        ]
+    },
+    "2": {
+        "id": 2,
+        "from_agent_type": "JobSeeker",
+        "from_action_name": "evaluate_job_applications",
+        "to_agent_type": "Employer",
+        "to_action_name": "screen_candidates",
+        "from_action_id": 2,
+        "to_action_id": 6,
+        "event_name": "JobApplicationEvaluationEvent",
+        "event_info": "Job seeker evaluates job applications and applies",
+        "fields": [
+            {
+                "name": "job_seeker_id",
+                "type": "int",
+                "default_value": 0,
+                "description": "Unique identifier for the job seeker"
+            },
+            {
+                "name": "job_id",
+                "type": "int",
+                "default_value": 0,
+                "description": "Unique identifier for the job being applied to"
+            },
+            {
+                "name": "application_value",
+                "type": "float",
+                "default_value": 0.0,
+                "description": "Calculated value of the job application based on job seeker's evaluation"
+            },
+            {
+                "name": "candidate_id",
+                "type": "int",
+                "default_value": 0,
+                "description": "Unique identifier for the candidate being screened"
+            }
+        ]
+    },
+    "3": {
+        "id": 3,
+        "from_agent_type": "JobSeeker",
+        "from_action_name": "negotiate_salaries",
+        "to_agent_type": "Employer",
+        "to_action_name": "conduct_interviews",
+        "from_action_id": 3,
+        "to_action_id": 7,
+        "event_name": "SalaryNegotiationEvent",
+        "event_info": "Job seeker negotiates salary with employer",
+        "fields": [
+            {
+                "name": "job_seeker_id",
+                "type": "int",
+                "default_value": 0,
+                "description": "Unique identifier for the job seeker"
+            },
+            {
+                "name": "employer_id",
+                "type": "int",
+                "default_value": 0,
+                "description": "Unique identifier for the employer"
+            },
+            {
+                "name": "proposed_salary",
+                "type": "float",
+                "default_value": 0.0,
+                "description": "Salary proposed by the job seeker during negotiation"
+            },
+            {
+                "name": "interview_outcome",
+                "type": "str",
+                "default_value": "pending",
+                "description": "Outcome of the interview"
+            }
+        ]
+    },
+    "4": {
+        "id": 4,
+        "from_agent_type": "JobSeeker",
+        "from_action_name": "decide_on_job_offers",
+        "to_agent_type": "EnvAgent",
+        "to_action_name": "terminate",
+        "from_action_id": 4,
+        "to_action_id": -1,
+        "event_name": "JobOfferDecisionEvent",
+        "event_info": "Job seeker decides on job offer and exits the job search process",
+        "fields": [
+            {
+                "name": "job_seeker_id",
+                "type": "int",
+                "default_value": 0,
+                "description": "Unique identifier for the job seeker"
+            },
+            {
+                "name": "offer_accepted",
+                "type": "bool",
+                "default_value": false,
+                "description": "Indicates whether the job offer was accepted by the job seeker"
+            },
+            {
+                "name": "offer_details",
+                "type": "dict",
+                "default_value": {},
+                "description": "Details of the job offer received"
+            }
+        ]
+    },
+    "5": {
+        "id": 5,
+        "from_agent_type": "Employer",
+        "from_action_name": "post_job_vacancies",
+        "to_agent_type": "RecruitmentChannel",
+        "to_action_name": "distribute_job_postings",
+        "from_action_id": 5,
+        "to_action_id": 8,
+        "event_name": "JobPostingEvent",
+        "event_info": "Employer posts job vacancies to recruitment channels",
+        "fields": [
+            {
+                "name": "employer_id",
+                "type": "int",
+                "default_value": 0,
+                "description": "Unique identifier for the employer"
+            },
+            {
+                "name": "job_id",
+                "type": "int",
+                "default_value": 0,
+                "description": "Unique identifier for the job being posted"
+            },
+            {
+                "name": "job_description",
+                "type": "str",
+                "default_value": "",
+                "description": "Description of the job being posted"
+            },
+            {
+                "name": "required_skills",
+                "type": "list",
+                "default_value": [],
+                "description": "Skills required for the job"
+            }
+        ]
+    },
+    "6": {
+        "id": 6,
+        "from_agent_type": "Employer",
+        "from_action_name": "screen_candidates",
+        "to_agent_type": "JobSeeker",
+        "to_action_name": "negotiate_salaries",
+        "from_action_id": 6,
+        "to_action_id": 3,
+        "event_name": "CandidateScreeningEvent",
+        "event_info": "Employer screens candidates and initiates salary negotiations",
+        "fields": [
+            {
+                "name": "employer_id",
+                "type": "int",
+                "default_value": 0,
+                "description": "Unique identifier for the employer"
+            },
+            {
+                "name": "candidate_id",
+                "type": "int",
+                "default_value": 0,
+                "description": "Unique identifier for the candidate being screened"
+            },
+            {
+                "name": "screening_result",
+                "type": "str",
+                "default_value": "pending",
+                "description": "Result of the candidate screening process"
+            },
+            {
+                "name": "proposed_salary",
+                "type": "float",
+                "default_value": 0.0,
+                "description": "Salary proposed by the employer for negotiation"
+            }
+        ]
+    },
+    "7": {
+        "id": 7,
+        "from_agent_type": "Employer",
+        "from_action_name": "conduct_interviews",
+        "to_agent_type": "JobSeeker",
+        "to_action_name": "decide_on_job_offers",
+        "from_action_id": 7,
+        "to_action_id": 4,
+        "event_name": "InterviewEvent",
+        "event_info": "Employer conducts interviews and extends job offers",
+        "fields": [
+            {
+                "name": "employer_id",
+                "type": "int",
+                "default_value": 0,
+                "description": "Unique identifier for the employer"
+            },
+            {
+                "name": "candidate_id",
+                "type": "int",
+                "default_value": 0,
+                "description": "Unique identifier for the candidate being interviewed"
+            },
+            {
+                "name": "interview_outcome",
+                "type": "str",
+                "default_value": "pending",
+                "description": "Outcome of the interview process"
+            },
+            {
+                "name": "offer_details",
+                "type": "dict",
+                "default_value": {},
+                "description": "Details of the job offer extended"
+            }
+        ]
+    },
+    "8": {
+        "id": 8,
+        "from_agent_type": "RecruitmentChannel",
+        "from_action_name": "distribute_job_postings",
+        "to_agent_type": "JobSeeker",
+        "to_action_name": "evaluate_job_applications",
+        "from_action_id": 8,
+        "to_action_id": 2,
+        "event_name": "JobPostingDistributionEvent",
+        "event_info": "Recruitment channel distributes job postings to job seekers",
+        "fields": [
+            {
+                "name": "channel_type",
+                "type": "str",
+                "default_value": "online",
+                "description": "Type of recruitment channel distributing the job postings"
+            },
+            {
+                "name": "job_id",
+                "type": "int",
+                "default_value": 0,
+                "description": "Unique identifier for the job being distributed"
+            },
+            {
+                "name": "application_cost",
+                "type": "float",
+                "default_value": 0.0,
+                "description": "Cost associated with applying to the job"
+            }
+        ]
+    }
+}

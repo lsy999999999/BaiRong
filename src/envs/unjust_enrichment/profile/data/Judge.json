@@ -1,0 +1,97 @@
+[
+    {
+        "name": "Judge Emily Carter",
+        "legal_expertise_level": 66,
+        "current_status": "evaluating_case",
+        "communication_skill_level": 94,
+        "case_complexity": 0.06542145515293396,
+        "agent_type": "Judge",
+        "evidence_evaluation_result": "awaiting_input",
+        "defense_evaluation_result": "awaiting_input",
+        "case_id": "unassigned",
+        "decision_history": [
+            {
+                "case": "2025-01",
+                "decision": "pending",
+                "date": "2025-04-01"
+            }
+        ],
+        "id": "10"
+    },
+    {
+        "name": "Judge Michael Thompson",
+        "legal_expertise_level": 99,
+        "current_status": "evaluating_case",
+        "communication_skill_level": 60,
+        "case_complexity": 0.9844882744601106,
+        "agent_type": "Judge",
+        "evidence_evaluation_result": "awaiting_input",
+        "defense_evaluation_result": "awaiting_input",
+        "case_id": "unassigned",
+        "decision_history": [
+            {
+                "case": "2025-01",
+                "decision": "pending",
+                "date": "2025-04-01"
+            }
+        ],
+        "id": "11"
+    },
+    {
+        "name": "Judge Sophia Ramirez",
+        "legal_expertise_level": 99,
+        "current_status": "evaluating_case",
+        "communication_skill_level": 67,
+        "case_complexity": 0.20663743307053473,
+        "agent_type": "Judge",
+        "evidence_evaluation_result": "awaiting_input",
+        "defense_evaluation_result": "awaiting_input",
+        "case_id": "unassigned",
+        "decision_history": [
+            {
+                "case": "2025-01",
+                "decision": "pending",
+                "date": "2025-04-01"
+            }
+        ],
+        "id": "12"
+    },
+    {
+        "name": "Judge Daniel Nguyen",
+        "legal_expertise_level": 90,
+        "current_status": "evaluating_case",
+        "communication_skill_level": 94,
+        "case_complexity": 0.1742282443468105,
+        "agent_type": "Judge",
+        "evidence_evaluation_result": "awaiting_input",
+        "defense_evaluation_result": "awaiting_input",
+        "case_id": "unassigned",
+        "decision_history": [
+            {
+                "case": "2025-01",
+                "decision": "pending",
+                "date": "2025-04-01"
+            }
+        ],
+        "id": "13"
+    },
+    {
+        "name": "Judge Olivia Patel",
+        "legal_expertise_level": 53,
+        "current_status": "evaluating_case",
+        "communication_skill_level": 95,
+        "case_complexity": 0.2081939266830789,
+        "agent_type": "Judge",
+        "evidence_evaluation_result": "awaiting_input",
+        "defense_evaluation_result": "awaiting_input",
+        "case_id": "unassigned",
+        "decision_history": [
+            {
+                "case": "2025-01",
+                "decision": "pending",
+                "date": "2025-04-01"
+            }
+        ],
+        "id": "14"
+    }
+]

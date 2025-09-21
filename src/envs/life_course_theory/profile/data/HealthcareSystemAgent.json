@@ -1,0 +1,122 @@
+[
+    {
+        "name": "AgentHealthOne",
+        "current_health_policy_effectiveness": 75.0,
+        "available_resources": [
+            "doctors",
+            "nurses",
+            "medications"
+        ],
+        "policy_influence": 100,
+        "communication_status": "active",
+        "budget_allocation": 1000000.0,
+        "service_coverage_area": [
+            "urban",
+            "rural"
+        ],
+        "emergency_response_time": 26,
+        "public_health_campaigns": [
+            "vaccination",
+            "nutrition"
+        ],
+        "agent_type": "HealthcareSystemAgent",
+        "health_services_evaluated": false,
+        "id": "20"
+    },
+    {
+        "name": "MediCareGuide",
+        "current_health_policy_effectiveness": 75.0,
+        "available_resources": [
+            "doctors",
+            "nurses",
+            "medications"
+        ],
+        "policy_influence": 83,
+        "communication_status": "active",
+        "budget_allocation": 1000000.0,
+        "service_coverage_area": [
+            "urban",
+            "rural"
+        ],
+        "emergency_response_time": 14,
+        "public_health_campaigns": [
+            "vaccination",
+            "nutrition"
+        ],
+        "agent_type": "HealthcareSystemAgent",
+        "health_services_evaluated": false,
+        "id": "21"
+    },
+    {
+        "name": "WellnessNavigator",
+        "current_health_policy_effectiveness": 75.0,
+        "available_resources": [
+            "doctors",
+            "nurses",
+            "medications"
+        ],
+        "policy_influence": 61,
+        "communication_status": "active",
+        "budget_allocation": 1000000.0,
+        "service_coverage_area": [
+            "urban",
+            "rural"
+        ],
+        "emergency_response_time": 27,
+        "public_health_campaigns": [
+            "vaccination",
+            "nutrition"
+        ],
+        "agent_type": "HealthcareSystemAgent",
+        "health_services_evaluated": false,
+        "id": "22"
+    },
+    {
+        "name": "CareCoordinatorX",
+        "current_health_policy_effectiveness": 75.0,
+        "available_resources": [
+            "doctors",
+            "nurses",
+            "medications"
+        ],
+        "policy_influence": 48,
+        "communication_status": "active",
+        "budget_allocation": 1000000.0,
+        "service_coverage_area": [
+            "urban",
+            "rural"
+        ],
+        "emergency_response_time": 18,
+        "public_health_campaigns": [
+            "vaccination",
+            "nutrition"
+        ],
+        "agent_type": "HealthcareSystemAgent",
+        "health_services_evaluated": false,
+        "id": "23"
+    },
+    {
+        "name": "HealthAssistPro",
+        "current_health_policy_effectiveness": 75.0,
+        "available_resources": [
+            "doctors",
+            "nurses",
+            "medications"
+        ],
+        "policy_influence": 4,
+        "communication_status": "active",
+        "budget_allocation": 1000000.0,
+        "service_coverage_area": [
+            "urban",
+            "rural"
+        ],
+        "emergency_response_time": 29,
+        "public_health_campaigns": [
+            "vaccination",
+            "nutrition"
+        ],
+        "agent_type": "HealthcareSystemAgent",
+        "health_services_evaluated": false,
+        "id": "24"
+    }
+]

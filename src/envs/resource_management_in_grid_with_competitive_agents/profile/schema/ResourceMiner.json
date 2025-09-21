@@ -1,0 +1,89 @@
+{
+  "name": {
+    "type": "str",
+    "default": "ResourceMiner",
+    "private": false,
+    "sampling": "llm",
+    "description": "The agent's name, used to identify it within the system"
+  },
+  "map_state": {
+    "type": "list",
+    "default": [
+      {
+        "cell_id": 1,
+        "resources_available": 3,
+        "owner": "none"
+      }
+    ],
+    "private": true,
+    "sampling": "default"
+  },
+  "action_plan": {
+    "type": "dict",
+    "default": {
+      "action": "awaiting",
+      "target_cell": 0
+    },
+    "private": true,
+    "sampling": "default"
+  },
+  "resource_count": {
+    "type": "int",
+    "default": 0,
+    "private": false,
+    "sampling": "default"
+  },
+  "energy_level": {
+    "type": "float",
+    "default": 100,
+    "private": true,
+    "sampling": "default"
+  },
+  "strategy": {
+    "type": "str",
+    "default": "cautious",
+    "private": false,
+    "sampling": "random",
+    "choices": [
+      "aggressive",
+      "defensive",
+      "cautious"
+    ]
+  },
+  "visibility": {
+    "type": "int",
+    "default": 5,
+    "private": false,
+    "sampling": "random",
+    "range": [
+      3,
+      7
+    ]
+  },
+  "investment_history": {
+    "type": "list",
+    "default": [
+      {
+        "round": 1,
+        "investment": 10
+      }
+    ],
+    "private": true,
+    "sampling": "default",
+    "sample_size": 5
+  },
+  "communication_protocol": {
+    "type": "str",
+    "default": "visible",
+    "private": false,
+    "sampling": "llm",
+    "description": "Defines the communication behavior of the agent, such as sharing resource availability."
+  },
+  "id": {
+    "type": "str",
+    "default": "0",
+    "private": true,
+    "sampling": "default",
+    "description": "Unique id of agent"
+  }
+}

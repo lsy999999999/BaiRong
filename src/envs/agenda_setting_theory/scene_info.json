@@ -1,0 +1,107 @@
+{
+  "domain": "Communication",
+  "scene_name": "agenda_setting_theory",
+  "odd_protocol": {
+    "overview": {
+      "system_goal": "Simulate how media influences public agenda by selecting specific topics and study the process of media agenda setting and its impact on public attention.",
+      "agent_types": "Media Agents representing media institutions or news platforms and Public Agents representing audiences or public groups.",
+      "environment_description": "The environment includes a topic library with various issues like social problems, political events, and economic phenomena, allowing media to select topics for reporting.",
+      "system_assumptions": "Media influences public focus by selecting and emphasizing specific topics, shaping public attitudes and behaviors. Interaction and feedback mechanisms exist between media agenda and public agenda."
+    },
+    "design_concepts": {
+      "interaction_patterns": "Media Agents select specific topics for reporting and emphasize their importance through reporting frequency, framing, and emotional language. Public Agents adjust their focus based on media reports.",
+      "communication_protocols": "Interaction occurs mainly through social platforms and information channels like social media platforms and news websites.",
+      "decision_mechanisms": "Media Agents decide on topics and reporting methods to influence public focus, while Public Agents adjust focus based on media reporting frequency, emotional presentation, and social influence.",
+      "feedback_mechanism": "Public Agents' focus on certain topics may prompt Media Agents to adjust reporting strategies and content."
+    },
+    "details": {
+      "agent_behaviors": "Media Agents choose topics from a topic library to report on, using increased frequency and emotional language to highlight importance. Public Agents adjust their focus based on media reporting frequency and content.",
+      "decision_algorithms": "Media Agents select topics and reporting methods to influence public focus. Public Agents adjust focus based on media reporting frequency and emotional presentation.",
+      "specific_constraints": "Each Public Agent has an initial topic focus value that changes with media reporting frequency, content, and framing.",
+      "simulation_process": "Initialize multiple Media and Public Agents. Media Agents choose topics to report on, and Public Agents adjust focus based on media reports, forming a public agenda."
+    }
+  },
+  "agent_types": {
+    "MediaAgent": "Represents media institutions or news platforms that select topics for reporting, using techniques like framing and emotional language to influence public attention.",
+    "PublicAgent": "Represents audiences or public groups that adjust their focus and attention based on the media's reporting frequency, content, and presentation."
+  },
+  "portrait": {
+    "MediaAgent": 1,
+    "PublicAgent": 5
+  },
+  "metrics": [
+    {
+      "id": "Public_Focus_Distribution",
+      "name": "Public Focus Distribution",
+      "description": "Measures the distribution of focus values across all Public Agents to understand how media reporting affects public attention.",
+      "visualization_type": "pie",
+      "update_interval": 5,
+      "variables": [
+        {
+          "name": "focus_value",
+          "source_type": "agent",
+          "agent_type": "PublicAgent",
+          "path": "focus_value",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Aggregate focus values from all Public Agents. Handle None values by treating them as zero focus. If the list is empty, return an empty dictionary. Calculate the proportion of focus for each unique focus value and return as slices for the pie chart.",
+      "function_name": "Public_Focus_Distribution"
+    },
+    {
+      "id": "Media_Reporting_Frequency_Analysis",
+      "name": "Media Reporting Frequency Analysis",
+      "description": "Analyzes the average reporting frequency of topics by Media Agents to assess media emphasis.",
+      "visualization_type": "bar",
+      "update_interval": 5,
+      "variables": [
+        {
+          "name": "reporting_frequency",
+          "source_type": "agent",
+          "agent_type": "MediaAgent",
+          "path": "reporting_frequency",
+          "required": true,
+          "is_list": true
+        },
+        {
+          "name": "selected_topic",
+          "source_type": "agent",
+          "agent_type": "MediaAgent",
+          "path": "selected_topic",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Pair reporting frequencies with their respective selected topics. Handle None values by excluding them from calculations. If the list is empty, return an empty dictionary. Calculate the average reporting frequency for each topic and return as categories for the bar chart.",
+      "function_name": "Media_Reporting_Frequency_Analysis"
+    },
+    {
+      "id": "Emotional_Tone_Impact",
+      "name": "Emotional Tone Impact",
+      "description": "Evaluates the impact of emotional tone used by Media Agents on public focus values.",
+      "visualization_type": "line",
+      "update_interval": 5,
+      "variables": [
+        {
+          "name": "emotional_tone",
+          "source_type": "agent",
+          "agent_type": "MediaAgent",
+          "path": "emotional_tone",
+          "required": true,
+          "is_list": true
+        },
+        {
+          "name": "focus_value",
+          "source_type": "agent",
+          "agent_type": "PublicAgent",
+          "path": "focus_value",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "For each distinct emotional tone, calculate the average focus value from Public Agents. Handle None values by treating them as zero focus. If the list is empty, return an empty dictionary. Return a dictionary with emotional tones as keys and average focus values as line series.",
+      "function_name": "Emotional_Tone_Impact"
+    }
+  ]
+}

@@ -1,0 +1,475 @@
+{
+  "agents": {
+    "JudgeAgent": {
+      "imports": "from typing import Any, List\nimport asyncio\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import Event\nfrom onesim.relationship import RelationshipManager\nfrom .events import PrecedentInterpretedEvent, JudgmentAppliedEvent",
+      "handlers": {
+        "1": {
+          "code": "async def interpret_precedents(self, event: Event) -> List[Event]:\n        # No condition specified, proceed directly\n        stored_principles = getattr(event, 'stored_principles', \"\")\n        \n        # Prepare observation and instruction for decision making\n        observation = f\"Stored principles: {stored_principles}\"\n        instruction = \"\"\"Interpret the given legal principles to generate a detailed description of the interpreted precedents. \n        The description should be ready for application in current cases. \n        Please return the information in the following JSON format:\n\n        {\n        \"interpreted_precedents\": \"<Details of the interpreted precedents>\",\n        \"target_ids\": [\"<The string ID(s) of the CaseAgent(s)>\"]\n        }\n        \"\"\"\n\n        # Generate reaction using LLM\n        result = await self.generate_reaction(instruction, observation)\n\n        # Parse the LLM's response\n        interpreted_precedents = result.get('interpreted_precedents', \"\")\n        target_ids = result.get('target_ids', [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Update agent's state with interpreted precedents\n        self.profile.update_data(\"interpreted_precedents\", interpreted_precedents)\n\n        # Prepare and send PrecedentInterpretedEvent to each target\n        events = []\n        for target_id in target_ids:\n            precedent_event = PrecedentInterpretedEvent(self.profile_id, target_id, interpreted_precedents)\n            events.append(precedent_event)\n\n        return events",
+          "metadata": {
+            "id": 1,
+            "name": "interpret_precedents",
+            "condition": "null",
+            "description": "The JudgeAgent interprets historical legal precedents to understand their implications on current cases.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "stored_principles",
+                "type": "string",
+                "context": "event",
+                "description": "Legal principles stored for interpretation."
+              },
+              {
+                "name": "socio_political_influences",
+                "type": "string",
+                "context": "event",
+                "description": "Analyzed socio-political influences affecting judgments."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "interpreted_precedents",
+                "type": "string",
+                "context": "agent",
+                "description": "Details of the interpreted precedents ready for application."
+              }
+            ]
+          }
+        },
+        "2": {
+          "code": "async def apply_judgment(self, event: Event) -> List[Event]:\n        # Check if the required conditions are met\n        interpreted_precedents = self.profile.get_data(\"interpreted_precedents\", \"\")\n        socio_political_influences = getattr(event, 'socio_political_influences', \"\")\n        \n        if not interpreted_precedents or not socio_political_influences:\n            return []\n\n        # Prepare the instruction for generate_reaction\n        observation = f\"Interpreted Precedents: {interpreted_precedents}, Socio-Political Influences: {socio_political_influences}\"\n        instruction = \"\"\"Please apply the judgment based on the given interpreted precedents and socio-political influences.\n        Return the result in the following JSON format:\n\n        {\n        \"judgment_result\": \"<The result of the applied judgment>\",\n        \"target_ids\": [\"<The ID(s) of the agent(s) to send the JudgmentAppliedEvent>\"]\n        }\n        \"\"\"\n\n        result = await self.generate_reaction(instruction, observation)\n\n        judgment_result = result.get('judgment_result', \"\")\n        target_ids = result.get('target_ids', [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Update the profile with the judgment result\n        self.profile.update_data(\"judgment_result\", judgment_result)\n\n        # Create and send JudgmentAppliedEvent(s)\n        events = []\n        for target_id in target_ids:\n            judgment_event = JudgmentAppliedEvent(self.profile_id, target_id, judgment_result, \"completed\")\n            events.append(judgment_event)\n\n        return events",
+          "metadata": {
+            "id": 2,
+            "name": "apply_judgment",
+            "condition": "Reception of interpreted precedents and socio-political analysis results",
+            "description": "The JudgeAgent applies the interpreted precedents and socio-political influences to issue a final judgment.",
+            "type": "AND",
+            "required_variables": [
+              {
+                "name": "interpreted_precedents",
+                "type": "string",
+                "context": "agent",
+                "description": "Details of the interpreted precedents."
+              },
+              {
+                "name": "socio_political_influences",
+                "type": "string",
+                "context": "event",
+                "description": "Analyzed socio-political influences affecting judgments."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "judgment_result",
+                "type": "string",
+                "context": "agent",
+                "description": "Result of the judgment applied."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "CaseAgent": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "3": {
+          "code": "async def define_legal_context(self, event: Event) -> List[Event]:\n        # No condition check required as the condition is 'null'\n    \n        # Retrieve the legal context from the environment\n        legal_context = await self.get_env_data(\"legal_context\", \"\")\n    \n        # Prepare observation and instruction for generate_reaction\n        observation = f\"Legal context: {legal_context}\"\n        instruction = \"\"\"Define the legal context for the case and determine the appropriate target_id(s) for sending the legal context to precedent agents.\n        The response should be in the following JSON format:\n        {\n            \"case_context\": \"<Updated legal context for the case>\",\n            \"target_ids\": [\"<List of string IDs of PrecedentAgent(s)>\"]\n        }\n        \"\"\"\n    \n        # Generate reaction using LLM\n        result = await self.generate_reaction(instruction, observation)\n    \n        # Parse the LLM's response\n        case_context = result.get('case_context', None)\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n    \n        # Update the agent's case context\n        self.profile.update_data(\"case_context\", case_context)\n    \n        # Prepare and send the LegalContextDefinedEvent to PrecedentAgent(s)\n        events = []\n        for target_id in target_ids:\n            legal_context_event = LegalContextDefinedEvent(self.profile_id, target_id, case_context, \"\")\n            events.append(legal_context_event)\n    \n        return events",
+          "metadata": {
+            "id": 3,
+            "name": "define_legal_context",
+            "condition": "null",
+            "description": "The CaseAgent defines the legal context for a case, including relevant legal fields and principles.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "legal_context",
+                "type": "string",
+                "context": "env",
+                "description": "Defined legal context based on case details."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "case_context",
+                "type": "string",
+                "context": "agent",
+                "description": "Updated legal context for the case."
+              }
+            ]
+          }
+        },
+        "4": {
+          "code": "async def apply_interpretation(self, event: Event) -> List[Event]:\n        # Condition Check Implementation\n        if event.__class__.__name__ != \"PrecedentInterpretedEvent\" or not event.precedent_details:\n            return []\n    \n        # Data Access\n        interpreted_precedents = event.precedent_details\n        case_context = self.profile.get_data(\"case_context\", \"\")\n    \n        # Decision Making\n        observation = f\"Interpreted precedents: {interpreted_precedents}, Case context: {case_context}\"\n        instruction = \"\"\"Please apply the interpreted precedents to the case context and determine the target agent(s) for the next event.\n        Return the information in the following JSON format:\n        {\n        \"applied_interpretation\": \"<Details of how the interpreted precedents are applied to the case context>\",\n        \"target_ids\": [\"<The string ID(s) of the LegalExpertAgent(s)>\"]\n        }\n        \"\"\"\n    \n        result = await self.generate_reaction(instruction, observation)\n    \n        # Response Processing\n        applied_interpretation = result.get('applied_interpretation', None)\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n    \n        # Update agent's profile\n        self.profile.update_data(\"applied_interpretation\", applied_interpretation)\n    \n        # Prepare and send the InterpretationAppliedEvent to LegalExpertAgent(s)\n        events = []\n        for target_id in target_ids:\n            interpretation_event = InterpretationAppliedEvent(self.profile_id, target_id, applied_interpretation, \"\")\n            events.append(interpretation_event)\n    \n        return events",
+          "metadata": {
+            "id": 4,
+            "name": "apply_interpretation",
+            "condition": "Reception of interpreted precedents",
+            "description": "The CaseAgent applies interpreted precedents to the defined legal context of a case.",
+            "type": "AND",
+            "required_variables": [
+              {
+                "name": "interpreted_precedents",
+                "type": "string",
+                "context": "event",
+                "description": "Details of the interpreted precedents."
+              },
+              {
+                "name": "case_context",
+                "type": "string",
+                "context": "agent",
+                "description": "Defined legal context for the case."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "applied_interpretation",
+                "type": "string",
+                "context": "agent",
+                "description": "Details of the applied interpretation to the case context."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "PrecedentAgent": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "5": {
+          "code": "async def store_legal_principles(self, event: Event) -> List[Event]:\n        # Condition Check\n        if event.__class__.__name__ != \"LegalContextDefinedEvent\":\n            return []\n\n        # Data Access and Validation\n        legal_context = event.legal_context\n        if not legal_context or not isinstance(legal_context, str):\n            return []\n\n        # Decision Making\n        instruction = \"\"\"Store the legal principles derived from the event's legal context for future reference.\n        Please return the information in the following JSON format:\n\n        {\n        \"stored_principles\": \"<Legal principles derived from the legal context>\",\n        \"target_ids\": [\"<The string ID(s) of the JudgeAgent(s) to notify>\"]\n        }\n        \"\"\"\n        observation = f\"Legal context: {legal_context}\"\n        result = await self.generate_reaction(instruction, observation)\n\n        # Response Processing\n        stored_principles = result.get('stored_principles', None)\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Data Modification\n        if stored_principles:\n            self.profile.update_data(\"stored_principles\", stored_principles)\n\n        # Prepare and send the PrinciplesStoredEvent to JudgeAgents\n        events = []\n        for target_id in target_ids:\n            if target_id:\n                judge_request_id = f\"request_{target_id}\"\n                principles_stored_event = PrinciplesStoredEvent(self.profile_id, target_id, stored_principles, judge_request_id)\n                events.append(principles_stored_event)\n\n        return events",
+          "metadata": {
+            "id": 5,
+            "name": "store_legal_principles",
+            "condition": "null",
+            "description": "The PrecedentAgent stores legal principles derived from defined legal contexts for future reference.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "legal_context",
+                "type": "string",
+                "context": "event",
+                "description": "Defined legal context for storage."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "stored_principles",
+                "type": "string",
+                "context": "agent",
+                "description": "Legal principles stored for future interpretation."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "SocioPoliticalAgent": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "6": {
+          "code": "async def analyze_environmental_influences(self, event: Event) -> List[Event]:\n        # No condition specified, proceed with handler logic\n        \n        # Retrieve socio-political data from the environment\n        socio_political_data = await self.get_env_data(\"socio_political_data\", \"\")\n        \n        # Craft instruction for LLM to analyze socio-political influences\n        instruction = \"\"\"Analyze the given socio-political data to determine influences on legal judgments.\n        Please return the information in the following JSON format:\n        \n        {\n        \"socio_political_influences\": \"<Analyzed socio-political influences>\",\n        \"target_ids\": [\"<The string ID(s) of the Judge agent(s)>\"]\n        }\n        \"\"\"\n        \n        # Generate reaction using LLM\n        result = await self.generate_reaction(instruction, socio_political_data)\n        \n        # Extract results from LLM response\n        influences = result.get('socio_political_influences', \"\")\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n        \n        # Update agent's profile with analyzed influences\n        self.profile.update_data(\"socio_political_influences\", influences)\n        \n        # Prepare and send InfluencesAnalyzedEvent to JudgeAgent(s)\n        events = []\n        for target_id in target_ids:\n            influence_event = InfluencesAnalyzedEvent(self.profile_id, target_id, influences, judgment_id=\"\")\n            events.append(influence_event)\n        \n        return events",
+          "metadata": {
+            "id": 6,
+            "name": "analyze_environmental_influences",
+            "condition": "null",
+            "description": "The SocioPoliticalAgent analyzes socio-political factors that might influence legal judgments.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "socio_political_data",
+                "type": "string",
+                "context": "env",
+                "description": "Socio-political data relevant to the current legal scenario."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "socio_political_influences",
+                "type": "string",
+                "context": "agent",
+                "description": "Analyzed socio-political influences affecting judgments."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "LegalExpertAgent": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "7": {
+          "code": "async def analyze_outcomes(self, event: Event) -> List[Event]:\n        # Condition Check Implementation\n        if not hasattr(event, 'interpretation_details') or not event.interpretation_details:\n            return []\n\n        # Data Access\n        interpretation_details = event.interpretation_details\n\n        # Decision Making\n        observation = f\"Interpretation details received: {interpretation_details}\"\n        instruction = \"\"\"Analyze the outcomes of the provided legal interpretation details. \n        The analysis should consider the impact on legal precedents and socio-political influences.\n        Return the information in the following JSON format:\n        \n        {\n        \"outcome_analysis\": \"<Detailed analysis of the interpretation outcomes>\",\n        \"target_ids\": [\"<The string ID(s) of the agent(s) to send the results to>\"]\n        }\n        \"\"\"\n\n        result = await self.generate_reaction(instruction, observation)\n\n        # Response Processing\n        outcome_analysis = result.get('outcome_analysis', None)\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Data Modification\n        self.profile.update_data(\"outcome_analysis\", outcome_analysis)\n\n        # Prepare and send the OutcomesAnalyzedEvent to the specified targets\n        events = []\n        for target_id in target_ids:\n            outcomes_event = OutcomesAnalyzedEvent(self.profile_id, target_id, outcome_analysis, \"terminated\")\n            events.append(outcomes_event)\n\n        return events",
+          "metadata": {
+            "id": 7,
+            "name": "analyze_outcomes",
+            "condition": "Reception of applied interpretations",
+            "description": "The LegalExpertAgent analyzes the outcomes of applied interpretations on cases.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "applied_interpretation",
+                "type": "string",
+                "context": "event",
+                "description": "Details of the applied interpretation."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "outcome_analysis",
+                "type": "string",
+                "context": "agent",
+                "description": "Completed analysis of outcomes."
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "events": {
+    "imports": "from onesim.events import Event\nfrom typing import Any",
+    "definitions": {
+      "-1": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": -1,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "JudgeAgent",
+          "to_action_name": "interpret_precedents",
+          "from_action_id": 0,
+          "to_action_id": 1,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for judge agents to begin interpreting case law precedents",
+          "fields": []
+        }
+      },
+      "-2": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": -2,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "CaseAgent",
+          "to_action_name": "define_legal_context",
+          "from_action_id": 0,
+          "to_action_id": 3,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for case agents to define the legal context",
+          "fields": []
+        }
+      },
+      "-3": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": -3,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "SocioPoliticalAgent",
+          "to_action_name": "analyze_environmental_influences",
+          "from_action_id": 0,
+          "to_action_id": 6,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for socio-political agents to analyze influences on legal judgments",
+          "fields": []
+        }
+      },
+      "1": {
+        "code": "class PrecedentInterpretedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        precedent_details: str = \"\",\n        case_id: str = \"\",\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.precedent_details = precedent_details\n        self.case_id = case_id",
+        "metadata": {
+          "id": 1,
+          "from_agent_type": "JudgeAgent",
+          "from_action_name": "interpret_precedents",
+          "to_agent_type": "CaseAgent",
+          "to_action_name": "apply_interpretation",
+          "from_action_id": 1,
+          "to_action_id": 4,
+          "event_name": "PrecedentInterpretedEvent",
+          "event_info": "Event carrying interpreted precedents to case agents for application",
+          "fields": [
+            {
+              "name": "precedent_details",
+              "type": "string",
+              "default_value": "",
+              "description": "Details of the interpreted precedents"
+            },
+            {
+              "name": "case_id",
+              "type": "string",
+              "default_value": "",
+              "description": "Identifier for the case to which precedents are applied"
+            }
+          ]
+        }
+      },
+      "2": {
+        "code": "class JudgmentAppliedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        judgment_result: str = \"\",\n        completion_status: str = 'completed',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.judgment_result = judgment_result\n        self.completion_status = completion_status",
+        "metadata": {
+          "id": 2,
+          "from_agent_type": "JudgeAgent",
+          "from_action_name": "apply_judgment",
+          "to_agent_type": "EnvAgent",
+          "to_action_name": "terminate",
+          "from_action_id": 2,
+          "to_action_id": -1,
+          "event_name": "JudgmentAppliedEvent",
+          "event_info": "Final judgment applied, completing the workflow",
+          "fields": [
+            {
+              "name": "judgment_result",
+              "type": "string",
+              "default_value": "",
+              "description": "Result of the judgment applied"
+            },
+            {
+              "name": "completion_status",
+              "type": "string",
+              "default_value": "completed",
+              "description": "Status indicating the completion of the workflow"
+            }
+          ]
+        }
+      },
+      "3": {
+        "code": "class LegalContextDefinedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        legal_context: str = \"\",\n        precedent_id: str = \"\",\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.legal_context = legal_context\n        self.precedent_id = precedent_id",
+        "metadata": {
+          "id": 3,
+          "from_agent_type": "CaseAgent",
+          "from_action_name": "define_legal_context",
+          "to_agent_type": "PrecedentAgent",
+          "to_action_name": "store_legal_principles",
+          "from_action_id": 3,
+          "to_action_id": 5,
+          "event_name": "LegalContextDefinedEvent",
+          "event_info": "Event defining legal context sent to precedent agents for storage",
+          "fields": [
+            {
+              "name": "legal_context",
+              "type": "string",
+              "default_value": "",
+              "description": "Defined legal context for storage"
+            },
+            {
+              "name": "precedent_id",
+              "type": "string",
+              "default_value": "",
+              "description": "Identifier for the precedent related to the legal context"
+            }
+          ]
+        }
+      },
+      "4": {
+        "code": "class InterpretationAppliedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        interpretation_details: str = \"\",\n        analysis_request_id: str = \"\",\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.interpretation_details = interpretation_details\n        self.analysis_request_id = analysis_request_id",
+        "metadata": {
+          "id": 4,
+          "from_agent_type": "CaseAgent",
+          "from_action_name": "apply_interpretation",
+          "to_agent_type": "LegalExpertAgent",
+          "to_action_name": "analyze_outcomes",
+          "from_action_id": 4,
+          "to_action_id": 7,
+          "event_name": "InterpretationAppliedEvent",
+          "event_info": "Event of applied interpretation sent to legal experts for outcome analysis",
+          "fields": [
+            {
+              "name": "interpretation_details",
+              "type": "string",
+              "default_value": "",
+              "description": "Details of the applied interpretation"
+            },
+            {
+              "name": "analysis_request_id",
+              "type": "string",
+              "default_value": "",
+              "description": "Identifier for the request sent to legal experts for analysis"
+            }
+          ]
+        }
+      },
+      "5": {
+        "code": "class PrinciplesStoredEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        stored_principles: str = \"\",\n        judge_request_id: str = \"\",\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.stored_principles = stored_principles\n        self.judge_request_id = judge_request_id",
+        "metadata": {
+          "id": 5,
+          "from_agent_type": "PrecedentAgent",
+          "from_action_name": "store_legal_principles",
+          "to_agent_type": "JudgeAgent",
+          "to_action_name": "interpret_precedents",
+          "from_action_id": 5,
+          "to_action_id": 1,
+          "event_name": "PrinciplesStoredEvent",
+          "event_info": "Stored legal principles sent to judge agents for interpretation",
+          "fields": [
+            {
+              "name": "stored_principles",
+              "type": "string",
+              "default_value": "",
+              "description": "Legal principles stored for future interpretation"
+            },
+            {
+              "name": "judge_request_id",
+              "type": "string",
+              "default_value": "",
+              "description": "Identifier for the request to judge agents for interpretation"
+            }
+          ]
+        }
+      },
+      "6": {
+        "code": "class InfluencesAnalyzedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        socio_political_influences: str = \"\",\n        judgment_id: str = \"\",\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.socio_political_influences = socio_political_influences\n        self.judgment_id = judgment_id",
+        "metadata": {
+          "id": 6,
+          "from_agent_type": "SocioPoliticalAgent",
+          "from_action_name": "analyze_environmental_influences",
+          "to_agent_type": "JudgeAgent",
+          "to_action_name": "apply_judgment",
+          "from_action_id": 6,
+          "to_action_id": 2,
+          "event_name": "InfluencesAnalyzedEvent",
+          "event_info": "Socio-political influences analyzed and sent to judge agents for judgment application",
+          "fields": [
+            {
+              "name": "socio_political_influences",
+              "type": "string",
+              "default_value": "",
+              "description": "Analyzed socio-political influences affecting judgments"
+            },
+            {
+              "name": "judgment_id",
+              "type": "string",
+              "default_value": "",
+              "description": "Identifier for the judgment application"
+            }
+          ]
+        }
+      },
+      "7": {
+        "code": "class OutcomesAnalyzedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        outcome_analysis: str = \"\",\n        workflow_status: str = 'terminated',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.outcome_analysis = outcome_analysis\n        self.workflow_status = workflow_status",
+        "metadata": {
+          "id": 7,
+          "from_agent_type": "LegalExpertAgent",
+          "from_action_name": "analyze_outcomes",
+          "to_agent_type": "EnvAgent",
+          "to_action_name": "terminate",
+          "from_action_id": 7,
+          "to_action_id": -1,
+          "event_name": "OutcomesAnalyzedEvent",
+          "event_info": "Final outcome analysis completed, terminating the workflow",
+          "fields": [
+            {
+              "name": "outcome_analysis",
+              "type": "string",
+              "default_value": "",
+              "description": "Completed analysis of outcomes"
+            },
+            {
+              "name": "workflow_status",
+              "type": "string",
+              "default_value": "terminated",
+              "description": "Status indicating the termination of the workflow"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

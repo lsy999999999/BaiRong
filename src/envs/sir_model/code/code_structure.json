@@ -1,0 +1,479 @@
+{
+  "agents": {
+    "IndividualAgent": {
+      "imports": "from typing import Any, List, Optional\nimport asyncio\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "1": {
+          "code": "async def assess_risk(self, event: Event) -> List[Event]:\n        # No condition to check as it's 'null'\n        \n        # Access required data\n        current_health_state = self.profile.get_data(\"current_health_state\", \"S\")\n        social_contact_pattern = event.social_contact_pattern\n        policy_effect = event.policy_effect\n        risk_level = self.profile.get_data(\"risk_level\", 0.0)  # Include risk_level in observation\n        \n        # Prepare observation and instruction for LLM\n        observation = f\"Health State: {current_health_state}, Social Contact Pattern: {social_contact_pattern}, Policy Effect: {policy_effect}, Risk Level: {risk_level}\"\n        instruction = \"\"\"Evaluate the risk of infection based on the current health state, social contact patterns, and government policies. \n        Determine the risk level and identify target group agents to inform about changes in social contact patterns. \n        Please return the information in the following JSON format:\n        \n        {\n        \"risk_level\": \"<Calculated risk level as a float>\",\n        \"target_ids\": [\"<The string ID(s) of the GroupAgent(s) to inform>\"]\n        }\n        \"\"\"\n        \n        # Generate reaction using LLM\n        result = await self.generate_reaction(instruction, observation)\n        \n        risk_level = result.get('risk_level', 0.0)\n        target_ids = result.get('target_ids', [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n        \n        # Update agent's risk level\n        self.profile.update_data(\"risk_level\", risk_level)\n        \n        # Prepare outgoing events\n        events = []\n        for target_id in target_ids:\n            risk_assessment_event = RiskAssessmentEvent(self.profile_id, target_id, individual_id=self.profile_id, risk_level=risk_level, social_contact_pattern=social_contact_pattern)\n            events.append(risk_assessment_event)\n        \n        return events",
+          "metadata": {
+            "id": 1,
+            "name": "assess_risk",
+            "condition": "null",
+            "description": "Evaluate the risk of infection based on current health state, social contact patterns, and government policies.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "current_health_state",
+                "type": "string",
+                "context": "agent",
+                "description": "Current health state of the individual (S, I, R)."
+              },
+              {
+                "name": "social_contact_pattern",
+                "type": "string",
+                "context": "event",
+                "description": "Current social contact pattern status."
+              },
+              {
+                "name": "policy_effect",
+                "type": "string",
+                "context": "event",
+                "description": "Description of the policy effect on individual behavior."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "risk_level",
+                "type": "float",
+                "context": "agent",
+                "description": "Updated calculated risk level of the individual agent."
+              }
+            ]
+          }
+        },
+        "2": {
+          "code": "async def change_health_state(self, event: Event) -> List[Event]:\n        # Extract necessary data from the event and self.profile\n        contact_pattern = event.contact_pattern\n        risk_level = event.risk_level\n        current_health_state = self.profile.get_data(\"current_health_state\", \"S\")\n    \n        # Check if all required events have been received (AND condition)\n        if not (contact_pattern and risk_level):\n            return []\n    \n        # Condition check: Contact with infected agent and probability threshold met\n        infected_patterns = [\"infected\", \"high_risk\", \"exposed\"]  # Example list of known infected patterns\n        if not any(pattern in contact_pattern for pattern in infected_patterns) or risk_level <= 0.5:\n            return []\n    \n        # Update the previous health state\n        self.profile.update_data(\"previous_health_state\", current_health_state)\n    \n        # Decision-making using generate_reaction\n        observation = f\"Current health state: {current_health_state}, Risk level: {risk_level}\"\n        instruction = \"\"\"Determine the new health state based on the current health state and risk level.\n        Return the information in the following JSON format:\n        {\n            \"new_health_state\": \"<The updated health state (S, I, R)>\",\n            \"target_ids\": [\"<The string ID(s) of the HealthcareSystemAgent(s) if treatment is needed>\"]\n        }\n        \"\"\"\n        \n        result = await self.generate_reaction(instruction, observation)\n        \n        new_health_state = result.get('new_health_state', current_health_state)\n        target_ids = result.get('target_ids', [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n    \n        # Update the current health state\n        self.profile.update_data(\"current_health_state\", new_health_state)\n    \n        # Prepare outgoing events if the health state change requires treatment\n        events = []\n        requires_treatment = new_health_state == \"I\"  # Assuming treatment is needed if infected\n        for target_id in target_ids:\n            health_state_change_event = HealthStateChangeEvent(\n                self.profile_id, target_id,\n                individual_id=self.profile_id,\n                previous_health_state=current_health_state,\n                current_health_state=new_health_state,\n                requires_treatment=requires_treatment\n            )\n            events.append(health_state_change_event)\n        \n        return events",
+          "metadata": {
+            "id": 2,
+            "name": "change_health_state",
+            "condition": "Contact with infected agent and probability threshold met",
+            "description": "Transition the individual's health state based on infection risk and current state.",
+            "type": "AND",
+            "required_variables": [
+              {
+                "name": "current_health_state",
+                "type": "string",
+                "context": "agent",
+                "description": "Current health state of the individual (S, I, R)."
+              },
+              {
+                "name": "risk_level",
+                "type": "float",
+                "context": "agent",
+                "description": "Calculated risk level of the individual agent."
+              },
+              {
+                "name": "contact_pattern",
+                "type": "string",
+                "context": "event",
+                "description": "Updated social contact pattern."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "previous_health_state",
+                "type": "string",
+                "context": "agent",
+                "description": "Previous health state of the individual agent."
+              },
+              {
+                "name": "current_health_state",
+                "type": "string",
+                "context": "agent",
+                "description": "Updated health state of the individual agent."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "GroupAgent": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "3": {
+          "code": "async def update_social_contact_pattern(self, event: Event) -> List[Event]:\n        # No condition specified for this action, proceed with handler logic\n\n        # Retrieve required data\n        contact_pattern = self.profile.get_data(\"contact_pattern\", \"normal\")\n        impact_level = getattr(event, 'impact_level', 0.0)\n\n        # Check validity of impact_level\n        if impact_level < 0.0 or impact_level > 1.0:\n            logger.error(f\"Invalid impact_level: {impact_level}\")\n            return []  # Return empty list if impact_level is invalid\n\n        # Prepare instruction for generate_reaction\n        instruction = \"\"\"Modify the social contact pattern within the group based on external influences like policies.\n        Return the updated contact pattern and the target_ids as a list of IDs affected by this change.\n        Please provide the information in the following JSON format:\n        {\n            \"updated_contact_pattern\": \"<new contact pattern>\",\n            \"target_ids\": [\"<list of target IDs>\"]\n        }\n        \"\"\"\n        observation = f\"Current contact pattern: {contact_pattern}, Impact level: {impact_level}\"\n\n        # Generate reaction using LLM\n        result = await self.generate_reaction(instruction, observation)\n\n        # Parse the LLM's JSON response\n        updated_contact_pattern = result.get('updated_contact_pattern', contact_pattern)\n        target_ids = result.get('target_ids', [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Update agent's state with the updated contact pattern\n        self.profile.update_data(\"contact_pattern\", updated_contact_pattern)\n\n        # Prepare and send the SocialContactPatternEvent to each target_id\n        events = []\n        for target_id in target_ids:\n            social_contact_event = SocialContactPatternEvent(self.profile_id, target_id, group_id=self.profile_id, contact_pattern=updated_contact_pattern)\n            events.append(social_contact_event)\n\n        return events",
+          "metadata": {
+            "id": 3,
+            "name": "update_social_contact_pattern",
+            "condition": "null",
+            "description": "Modify the social contact pattern within the group based on external influences like policies.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "contact_pattern",
+                "type": "string",
+                "context": "agent",
+                "description": "Current social contact pattern within the group."
+              },
+              {
+                "name": "impact_level",
+                "type": "float",
+                "context": "event",
+                "description": "Quantitative measure of policy impact on group dynamics."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "updated_contact_pattern",
+                "type": "string",
+                "context": "agent",
+                "description": "Updated social contact pattern within the group."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "GovernmentAgent": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "4": {
+          "code": "async def implement_policy(self, event: Event) -> List[Event]:\n        # There is no specific condition to check for implement_policy, proceed directly\n\n        # Extract necessary fields from the event\n        policy_id = event.policy_id\n        policy_effect = event.policy_effect\n\n        # Update the agent's profile with the policy status\n        self.profile.update_data(\"policy_status\", \"Policy Implemented\")\n\n        # Prepare the instruction for the LLM\n        instruction = f\"\"\"\n        You are implementing a government policy with ID '{policy_id}' which has the following effect: '{policy_effect}'.\n        Determine the appropriate target IDs to receive the policy implementation impact. \n        The target IDs can be individual agents or group agents based on the policy effect.\n        Please return the information in the following JSON format:\n\n        {{\n            \"policy_status\": \"Policy Implemented\",\n            \"target_ids\": [\"<List of target agent IDs>\"]\n        }}\n        \"\"\"\n\n        # Generate a reaction using the LLM\n        observation = f\"Policy ID: {policy_id}, Policy Effect: {policy_effect}\"\n        result = await self.generate_reaction(instruction, observation)\n\n        # Extract the target IDs from the result\n        target_ids = result.get('target_ids', [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Create events to send to the target agents\n        events = []\n        for target_id in target_ids:\n            if \"Individual\" in target_id:\n                event = PolicyImplementationEvent(self.profile_id, target_id, policy_id=policy_id, policy_effect=policy_effect)\n            elif \"Group\" in target_id:\n                event = PolicyImpactEvent(self.profile_id, target_id, policy_id=policy_id, impact_level=1.0)  # Example impact level\n            events.append(event)\n\n        return events",
+          "metadata": {
+            "id": 4,
+            "name": "implement_policy",
+            "condition": "null",
+            "description": "Enact policies to influence social behaviors and control disease spread.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "policy_id",
+                "type": "string",
+                "context": "agent",
+                "description": "Unique identifier for the government policy."
+              },
+              {
+                "name": "policy_effect",
+                "type": "string",
+                "context": "agent",
+                "description": "Description of the policy effect on social behaviors."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "policy_status",
+                "type": "string",
+                "context": "agent",
+                "description": "Current implementation status of the policy."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "HealthcareSystemAgent": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "5": {
+          "code": "async def manage_treatment(self, event: Event) -> List[Event]:\n        # Condition Check: Since the condition is \"null\", proceed directly with handler logic\n\n        # Access required event data\n        individual_id = event.individual_id\n        requires_treatment = event.requires_treatment\n\n        # Observation for LLM decision making\n        observation = f\"Individual ID: {individual_id}, Requires Treatment: {requires_treatment}\"\n\n        # Instruction for LLM to decide treatment management and target_ids\n        instruction = \"\"\"\n        Oversee the treatment and recovery processes for individuals who have changed health states. \n        Based on the 'requires_treatment' field, determine the treatment outcome and recovery status.\n        Please return the information in the following JSON format:\n\n        {\n        \"treatment_status\": \"<Current status of treatment outcome>\",\n        \"recovery_status\": \"<Final recovery status of the individual>\",\n        \"target_ids\": [\"<The string ID(s) of the EnvAgent>\"]\n        }\n        \"\"\"\n\n        # Generate reaction using LLM\n        result = await self.generate_reaction(instruction, observation)\n\n        treatment_status = result.get('treatment_status', \"pending\")\n        recovery_status = result.get('recovery_status', \"not_recovered\")\n        target_ids = result.get('target_ids', [])\n\n        # Ensure target_ids is a list\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Update agent data\n        self.profile.update_data(\"treatment_status\", treatment_status)\n        self.profile.update_data(\"recovery_status\", recovery_status)\n\n        # Prepare and send TreatmentOutcomeEvent(s)\n        events = []\n        for target_id in target_ids:\n            treatment_outcome_event = TreatmentOutcomeEvent(\n                self.profile_id, target_id, individual_id, treatment_status, recovery_status\n            )\n            events.append(treatment_outcome_event)\n\n        return events",
+          "metadata": {
+            "id": 5,
+            "name": "manage_treatment",
+            "condition": "null",
+            "description": "Oversee treatment and recovery processes for individuals who have changed health states.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "individual_id",
+                "type": "string",
+                "context": "event",
+                "description": "Unique identifier for the individual agent."
+              },
+              {
+                "name": "requires_treatment",
+                "type": "boolean",
+                "context": "event",
+                "description": "Indicator if treatment is required."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "treatment_status",
+                "type": "string",
+                "context": "agent",
+                "description": "Current status of treatment outcome."
+              },
+              {
+                "name": "recovery_status",
+                "type": "string",
+                "context": "agent",
+                "description": "Final recovery status of the individual."
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "events": {
+    "imports": "from onesim.events import Event\nfrom typing import Any",
+    "definitions": {
+      "-1": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        social_contact_pattern: str = 'normal',\n        policy_effect: str = 'none',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.social_contact_pattern = social_contact_pattern\n        self.policy_effect = policy_effect",
+        "metadata": {
+          "id": -1,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "IndividualAgent",
+          "to_action_name": "assess_risk",
+          "from_action_id": 0,
+          "to_action_id": 1,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for individual agents to evaluate health risk and decide on behaviors",
+          "fields": [
+            {
+              "name": "social_contact_pattern",
+              "type": "string",
+              "default_value": "normal",
+              "description": "Current social contact pattern status."
+            },
+            {
+              "name": "policy_effect",
+              "type": "string",
+              "default_value": "none",
+              "description": "Description of the policy effect on individual behavior."
+            }
+          ]
+        }
+      },
+      "-2": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        social_contact_pattern: str = 'normal',\n        policy_effect: str = 'none',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.social_contact_pattern = social_contact_pattern\n        self.policy_effect = policy_effect",
+        "metadata": {
+          "id": -2,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "GovernmentAgent",
+          "to_action_name": "implement_policy",
+          "from_action_id": 0,
+          "to_action_id": 4,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for government agents to implement policies affecting social behaviors",
+          "fields": [
+            {
+              "name": "policy_id",
+              "type": "string",
+              "default_value": "none",
+              "description": "Unique identifier for the government policy."
+            },
+            {
+              "name": "policy_effect",
+              "type": "string",
+              "default_value": "none",
+              "description": "Description of the policy effect on social behaviors."
+            }
+          ]
+        }
+      },
+      "1": {
+        "code": "class RiskAssessmentEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        individual_id: str,\n        risk_level: float = 0.0,\n        social_contact_pattern: str = 'normal',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        if not individual_id:\n            raise ValueError(\"individual_id must be specified for RiskAssessmentEvent\")\n        self.individual_id = individual_id\n        self.risk_level = risk_level\n        self.social_contact_pattern = social_contact_pattern",
+        "metadata": {
+          "id": 1,
+          "from_agent_type": "IndividualAgent",
+          "from_action_name": "assess_risk",
+          "to_agent_type": "GroupAgent",
+          "to_action_name": "update_social_contact_pattern",
+          "from_action_id": 1,
+          "to_action_id": 3,
+          "event_name": "RiskAssessmentEvent",
+          "event_info": "Assessment of individual risk influencing social contact patterns within groups",
+          "fields": [
+            {
+              "name": "individual_id",
+              "type": "string",
+              "default_value": "",
+              "description": "Unique identifier for the individual agent"
+            },
+            {
+              "name": "risk_level",
+              "type": "float",
+              "default_value": 0.0,
+              "description": "Calculated risk level of the individual agent"
+            },
+            {
+              "name": "social_contact_pattern",
+              "type": "string",
+              "default_value": "normal",
+              "description": "Current social contact pattern status"
+            }
+          ]
+        }
+      },
+      "2": {
+        "code": "class HealthStateChangeEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        individual_id: str = \"\",\n        previous_health_state: str = 'S',\n        current_health_state: str = 'S',\n        requires_treatment: bool = False,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.individual_id = individual_id\n        self.previous_health_state = previous_health_state\n        self.current_health_state = current_health_state\n        self.requires_treatment = requires_treatment",
+        "metadata": {
+          "id": 2,
+          "from_agent_type": "IndividualAgent",
+          "from_action_name": "change_health_state",
+          "to_agent_type": "HealthcareSystemAgent",
+          "to_action_name": "manage_treatment",
+          "from_action_id": 2,
+          "to_action_id": 5,
+          "event_name": "HealthStateChangeEvent",
+          "event_info": "Notification of health state change requiring treatment management",
+          "fields": [
+            {
+              "name": "individual_id",
+              "type": "string",
+              "default_value": "",
+              "description": "Unique identifier for the individual agent"
+            },
+            {
+              "name": "previous_health_state",
+              "type": "string",
+              "default_value": "S",
+              "description": "Previous health state of the individual agent"
+            },
+            {
+              "name": "current_health_state",
+              "type": "string",
+              "default_value": "S",
+              "description": "Current health state of the individual agent"
+            },
+            {
+              "name": "requires_treatment",
+              "type": "boolean",
+              "default_value": false,
+              "description": "Indicator if treatment is required"
+            }
+          ]
+        }
+      },
+      "3": {
+        "code": "class SocialContactPatternEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        group_id: str,\n        contact_pattern: str = 'normal',\n        risk_level: float = 0.0,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        if not group_id:\n            raise ValueError(\"group_id must be specified for SocialContactPatternEvent\")\n        self.group_id = group_id\n        self.contact_pattern = contact_pattern\n        self.risk_level = risk_level",
+        "metadata": {
+          "id": 3,
+          "from_agent_type": "GroupAgent",
+          "from_action_name": "update_social_contact_pattern",
+          "to_agent_type": "IndividualAgent",
+          "to_action_name": "change_health_state",
+          "from_action_id": 3,
+          "to_action_id": 2,
+          "event_name": "SocialContactPatternEvent",
+          "event_info": "Updated contact patterns influencing individual health state transitions",
+          "fields": [
+            {
+              "name": "group_id",
+              "type": "string",
+              "default_value": "",
+              "description": "Unique identifier for the group agent"
+            },
+            {
+              "name": "contact_pattern",
+              "type": "string",
+              "default_value": "normal",
+              "description": "Updated social contact pattern"
+            },
+            {
+              "name": "risk_level",
+              "type": "float",
+              "default_value": 0.0,
+              "description": "Calculated risk level of the individual agent"
+            }
+          ]
+        }
+      },
+      "4": {
+        "code": "class PolicyImplementationEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        policy_id: str = \"\",\n        individual_id: str = \"\",\n        policy_effect: str = 'none',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.policy_id = policy_id\n        self.individual_id = individual_id\n        self.policy_effect = policy_effect",
+        "metadata": {
+          "id": 4,
+          "from_agent_type": "GovernmentAgent",
+          "from_action_name": "implement_policy",
+          "to_agent_type": "IndividualAgent",
+          "to_action_name": "assess_risk",
+          "from_action_id": 4,
+          "to_action_id": 1,
+          "event_name": "PolicyImplementationEvent",
+          "event_info": "Government policy affecting individual risk assessment and behavior decisions",
+          "fields": [
+            {
+              "name": "policy_id",
+              "type": "string",
+              "default_value": "",
+              "description": "Unique identifier for the government policy"
+            },
+            {
+              "name": "individual_id",
+              "type": "string",
+              "default_value": "",
+              "description": "Unique identifier for the individual agent"
+            },
+            {
+              "name": "policy_effect",
+              "type": "string",
+              "default_value": "none",
+              "description": "Description of the policy effect on individual behavior"
+            }
+          ]
+        }
+      },
+      "5": {
+        "code": "class PolicyImpactEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        policy_id: str = \"\",\n        group_id: str = \"\",\n        impact_level: float = 0.0,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.policy_id = policy_id\n        self.group_id = group_id\n        self.impact_level = impact_level",
+        "metadata": {
+          "id": 5,
+          "from_agent_type": "GovernmentAgent",
+          "from_action_name": "implement_policy",
+          "to_agent_type": "GroupAgent",
+          "to_action_name": "update_social_contact_pattern",
+          "from_action_id": 4,
+          "to_action_id": 3,
+          "event_name": "PolicyImpactEvent",
+          "event_info": "Government policy impacting group social contact dynamics",
+          "fields": [
+            {
+              "name": "policy_id",
+              "type": "string",
+              "default_value": "",
+              "description": "Unique identifier for the government policy"
+            },
+            {
+              "name": "group_id",
+              "type": "string",
+              "default_value": "",
+              "description": "Unique identifier for the group agent"
+            },
+            {
+              "name": "impact_level",
+              "type": "float",
+              "default_value": 0.0,
+              "description": "Quantitative measure of policy impact on group dynamics"
+            }
+          ]
+        }
+      },
+      "6": {
+        "code": "class TreatmentOutcomeEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        individual_id: str = \"\",\n        treatment_status: str = 'pending',\n        recovery_status: str = 'not_recovered',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.individual_id = individual_id\n        self.treatment_status = treatment_status\n        self.recovery_status = recovery_status",
+        "metadata": {
+          "id": 6,
+          "from_agent_type": "HealthcareSystemAgent",
+          "from_action_name": "manage_treatment",
+          "to_agent_type": "EnvAgent",
+          "to_action_name": "terminate",
+          "from_action_id": 5,
+          "to_action_id": -1,
+          "event_name": "TreatmentOutcomeEvent",
+          "event_info": "Final treatment outcome indicating recovery or further intervention required",
+          "fields": [
+            {
+              "name": "individual_id",
+              "type": "string",
+              "default_value": "",
+              "description": "Unique identifier for the individual agent"
+            },
+            {
+              "name": "treatment_status",
+              "type": "string",
+              "default_value": "pending",
+              "description": "Current status of treatment outcome"
+            },
+            {
+              "name": "recovery_status",
+              "type": "string",
+              "default_value": "not_recovered",
+              "description": "Final recovery status of the individual"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

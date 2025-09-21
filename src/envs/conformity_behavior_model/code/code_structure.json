@@ -1,0 +1,552 @@
+{
+  "agents": {
+    "IndividualAgent": {
+      "imports": "from typing import Any, List\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "1": {
+          "code": "async def form_initial_judgment(self, event: Event) -> List[Event]:\n        conformity_tendency = self.profile.get_data(\"conformity_tendency\", 0.0)\n        self_confidence = self.profile.get_data(\"self_confidence\", 0.0)\n        opinion_visibility = self.profile.get_data(\"opinion_visibility\", False)\n        environmental_factors = await self.get_env_data(\"environmental_factors\", {})\n\n        observation = f\"\"\"Conformity tendency: {conformity_tendency}, \n        Self-confidence: {self_confidence}, \n        Opinion visibility: {opinion_visibility}, \n        Environmental factors: {environmental_factors}\"\"\"\n\n        instruction = \"\"\"Based on the provided attributes and environmental context, \n        form an initial judgment for the individual. Return the result in the following JSON format:\n        {\n            \"initial_judgment\": \"<The initial judgment formed>\",\n            \"target_ids\": [\"<The string ID(s) of GroupAgent(s) to receive the initial judgment>\"]\n        }\n        Ensure to include the individual's ID and the initial judgment in the response.\"\"\"\n\n        result = await self.generate_reaction(instruction, observation)\n\n        initial_judgment = result.get('initial_judgment', None)\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        self.profile.update_data(\"initial_judgment\", initial_judgment)\n\n        events = []\n        individual_id = self.profile_id\n        for target_id in target_ids:\n            initial_judgment_event = InitialJudgmentFormedEvent(\n                self.profile_id, target_id, individual_id=individual_id, initial_judgment=initial_judgment)\n            events.append(initial_judgment_event)\n\n        return events",
+          "metadata": {
+            "id": 1,
+            "name": "form_initial_judgment",
+            "condition": null,
+            "description": "The individual forms an initial judgment based on their personal attributes and environmental context, setting the baseline for their opinion.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "conformity_tendency",
+                "type": "float",
+                "context": "agent",
+                "description": "The tendency of the individual to conform to group opinions."
+              },
+              {
+                "name": "self_confidence",
+                "type": "float",
+                "context": "agent",
+                "description": "The self-assuredness of the individual in their own opinions."
+              },
+              {
+                "name": "opinion_visibility",
+                "type": "bool",
+                "context": "agent",
+                "description": "Whether the individual's opinion is visible to others."
+              },
+              {
+                "name": "environmental_factors",
+                "type": "dict",
+                "context": "env",
+                "description": "External factors influencing the individual's opinion formation."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "initial_judgment",
+                "type": "str",
+                "context": "agent",
+                "description": "The initial opinion formed by the individual."
+              }
+            ]
+          }
+        },
+        "2": {
+          "code": "async def decide_conformity(self, event: Event) -> List[Event]:\n        social_pressure = await self.get_env_data(\"social_pressure\", 0.0)\n        leader_influence = getattr(event, 'influence_strength', None)\n        if leader_influence is None:\n            return []\n\n        conformity_threshold = self.profile.get_data(\"conformity_threshold\", 1.0)\n\n        if not (social_pressure + leader_influence >= conformity_threshold):\n            return []\n\n        observation = f\"Social pressure: {social_pressure}, Leader influence: {leader_influence}, Conformity threshold: {conformity_threshold}\"\n        instruction = \"\"\"Evaluate whether the individual's conformity threshold is surpassed by the combined influence of social pressure and leader influence.\n        Please return the information in the following JSON format:\n\n        {\n        \"conformity_decision\": <true if the individual decides to conform, false otherwise>,\n        \"target_ids\": [\"<The string ID(s) of the GroupAgent(s) to inform about the decision>\"]\n        }\n        \"\"\"\n\n        result = await self.generate_reaction(instruction, observation)\n\n        conformity_decision = result.get('conformity_decision', False)\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        self.profile.update_data(\"conformity_decision\", conformity_decision)\n\n        events = []\n        individual_id = self.profile_id\n        for target_id in target_ids:\n            conformity_event = ConformityDecisionEvent(\n                self.profile_id, target_id, individual_id=individual_id, conformity_decision=conformity_decision\n            )\n            events.append(conformity_event)\n\n        return events",
+          "metadata": {
+            "id": 2,
+            "name": "decide_conformity",
+            "condition": "Received social pressure and leader influence",
+            "description": "The individual decides whether to conform to the group's opinion based on social pressure and influence from opinion leaders.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "social_pressure",
+                "type": "float",
+                "context": "env",
+                "description": "The level of social pressure exerted on the individual."
+              },
+              {
+                "name": "leader_influence",
+                "type": "float",
+                "context": "event",
+                "description": "The influence strength from the opinion leader."
+              },
+              {
+                "name": "conformity_threshold",
+                "type": "float",
+                "context": "agent",
+                "description": "The threshold at which the individual decides to conform."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "conformity_decision",
+                "type": "bool",
+                "context": "agent",
+                "description": "The decision whether to conform (true) or not (false)."
+              }
+            ]
+          }
+        },
+        "3": {
+          "code": "async def update_internal_belief(self, event: Event) -> List[Event]:\n        new_information = getattr(event, 'updated_belief', None)\n        if new_information is None:\n            return []\n\n        belief_certainty = self.profile.get_data(\"belief_certainty\", 0.0)\n\n        instruction = \"\"\"\n        You need to update the individual's internal belief based on new social pressure information and their current belief certainty.\n        Please calculate the new belief and specify the target_ids for any agents that should be informed about this belief update.\n        Return the response in the following JSON format:\n        {\n            \"updated_belief\": \"<The updated belief string>\",\n            \"target_ids\": [\"<The string ID(s) of the GroupAgent(s) to be informed>\"]\n        }\n        \"\"\"\n        observation = f\"New Information: {new_information}, Belief Certainty: {belief_certainty}\"\n\n        result = await self.generate_reaction(instruction, observation)\n\n        updated_belief = result.get('updated_belief', None)\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        self.profile.update_data(\"updated_belief\", updated_belief)\n\n        events = []\n        individual_id = self.profile_id\n        for target_id in target_ids:\n            belief_updated_event = BeliefUpdatedEvent(\n                self.profile_id, target_id, individual_id=individual_id, updated_belief=updated_belief\n            )\n            events.append(belief_updated_event)\n\n        return events",
+          "metadata": {
+            "id": 3,
+            "name": "update_internal_belief",
+            "condition": "Received new social pressure information",
+            "description": "The individual updates their internal belief system based on new information and influences.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "new_information",
+                "type": "str",
+                "context": "event",
+                "description": "The new information received that may influence belief."
+              },
+              {
+                "name": "belief_certainty",
+                "type": "float",
+                "context": "agent",
+                "description": "The individual's certainty in their current beliefs."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "updated_belief",
+                "type": "str",
+                "context": "agent",
+                "description": "The updated belief of the individual."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "GroupAgent": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "4": {
+          "code": "async def track_opinion_distribution(self, event: Event) -> List[Event]:\n        member_opinions = self.profile.get_data(\"member_opinions\", [])\n\n        instruction = \"\"\"\n        You are tasked with tracking the opinion distribution within a group. \n        Based on the member opinions provided, calculate the distribution and \n        decide on the target agent(s) to send this information to. \n        Please return the information in the following JSON format:\n\n        {\n            \"opinion_distribution\": \"<A dictionary representing the opinion distribution>\",\n            \"target_ids\": [\"<The string ID(s) of the DecisionContextAgent>\"]\n        }\n        \"\"\"\n\n        observation = f\"Member Opinions: {member_opinions}\"\n\n        result = await self.generate_reaction(instruction, observation)\n\n        opinion_distribution = result.get('opinion_distribution', {})\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        self.profile.update_data(\"opinion_distribution\", opinion_distribution)\n\n        events = []\n        for target_id in target_ids:\n            opinion_event = OpinionDistributionTrackedEvent(\n                self.profile_id, target_id, group_id=self.profile_id, opinion_distribution=opinion_distribution\n            )\n            events.append(opinion_event)\n\n        return events",
+          "metadata": {
+            "id": 4,
+            "name": "track_opinion_distribution",
+            "condition": null,
+            "description": "The group tracks the distribution of opinions among its members to understand the collective stance.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "member_opinions",
+                "type": "list",
+                "context": "agent",
+                "description": "List of opinions from group members."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "opinion_distribution",
+                "type": "dict",
+                "context": "agent",
+                "description": "The distribution of opinions within the group."
+              }
+            ]
+          }
+        },
+        "5": {
+          "code": "async def update_group_opinion(self, event: Event) -> List[Event]:\n        valid_event_types = ['InitialJudgmentFormedEvent', 'ConformityDecisionEvent', 'BeliefUpdatedEvent']\n        if event.event_type not in valid_event_types:\n            return []\n\n        individual_inputs = self.profile.get_data(\"individual_inputs\", [])\n\n        if isinstance(event, InitialJudgmentFormedEvent):\n            individual_inputs.append({\n                \"individual_id\": event.individual_id,\n                \"initial_judgment\": event.initial_judgment\n            })\n        elif isinstance(event, ConformityDecisionEvent):\n            individual_inputs.append({\n                \"individual_id\": event.individual_id,\n                \"conformity_decision\": event.conformity_decision\n            })\n        elif isinstance(event, BeliefUpdatedEvent):\n            individual_inputs.append({\n                \"individual_id\": event.individual_id,\n                \"updated_belief\": event.updated_belief\n            })\n        else:\n            return []\n\n        self.profile.update_data(\"individual_inputs\", individual_inputs)\n\n        instruction = \"\"\"\n        The group needs to update its collective opinion based on the received individual inputs.\n        Consider the dynamics of social influence and conformity processes.\n        Please return the information in the following JSON format:\n\n        {\n            \"updated_group_opinion\": \"<The updated collective opinion of the group>\",\n            \"target_ids\": [\"<The string ID(s) of the agents to notify>\"]\n        }\n        \"\"\"\n\n        observation = f\"Individual inputs: {individual_inputs}\"\n        result = await self.generate_reaction(instruction, observation)\n\n        updated_group_opinion = result.get('updated_group_opinion', \"\")\n        target_ids = result.get('target_ids', [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        self.profile.update_data(\"updated_group_opinion\", updated_group_opinion)\n\n        events = []\n        for target_id in target_ids:\n            group_opinion_event = GroupOpinionUpdatedEvent(self.profile_id, target_id, group_id=self.profile_id, updated_group_opinion=updated_group_opinion)\n            events.append(group_opinion_event)\n\n        return events",
+          "metadata": {
+            "id": 5,
+            "name": "update_group_opinion",
+            "condition": "Received inputs from individuals and leaders",
+            "description": "The group updates its collective opinion based on individual inputs and dynamics.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "individual_inputs",
+                "type": "list",
+                "context": "event",
+                "description": "Inputs from individuals regarding their opinions."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "updated_group_opinion",
+                "type": "str",
+                "context": "agent",
+                "description": "The updated collective opinion of the group."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "OpinionLeaderAgent": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "6": {
+          "code": "async def exert_influence(self, event: Event) -> List[Event]:\n        # Retrieve charisma and credibility from the agent's profile\n        charisma = self.profile.get_data(\"charisma\", 0.0)\n        credibility = self.profile.get_data(\"credibility\", 0.0)\n    \n        # Calculate influence strength based on charisma and credibility\n        influence_strength = charisma * credibility\n    \n        # Update the agent's profile with the calculated influence strength\n        self.profile.update_data(\"influence_strength\", influence_strength)\n    \n        # Construct the instruction for generate_reaction\n        instruction = \"\"\"\n        As an opinion leader, exert influence on individual agents to sway their opinions or conformity decisions.\n        Use your charisma and credibility to determine the influence strength.\n        Please return the information in the following JSON format:\n\n        {\n        \"target_ids\": [\"<The string ID(s) of the Individual agents>\"],\n        \"influence_strength\": <calculated influence strength>\n        }\n        \"\"\"\n        \n        # Construct observation context\n        observation = f\"Charisma: {charisma}, Credibility: {credibility}, Calculated Influence Strength: {influence_strength}\"\n    \n        # Generate reaction and get the result\n        result = await self.generate_reaction(instruction, observation)\n    \n        # Extract target_ids and influence_strength from the result\n        target_ids = result.get('target_ids', [])\n        influence_strength = result.get('influence_strength', 0.0)\n    \n        # Ensure target_ids is a list\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n    \n        # Prepare and send the InfluenceExertedEvent and LeaderInfluenceUpdatedEvent to each target\n        events = []\n        for target_id in target_ids:\n            influence_event = InfluenceExertedEvent(\n                from_agent_id=self.profile_id,\n                to_agent_id=target_id,\n                leader_id=self.profile_id,\n                target_individual_id=target_id,\n                influence_strength=influence_strength\n            )\n            belief_update_event = LeaderInfluenceUpdatedEvent(\n                from_agent_id=self.profile_id,\n                to_agent_id=target_id,\n                leader_id=self.profile_id,\n                target_individual_id=target_id,\n                updated_belief=f\"Updated belief after influence with strength {influence_strength}\"\n            )\n            events.append(influence_event)\n            events.append(belief_update_event)\n    \n        return events",
+          "metadata": {
+            "id": 6,
+            "name": "exert_influence",
+            "condition": null,
+            "description": "The opinion leader exerts influence on individuals to sway their opinions or conformity decisions.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "charisma",
+                "type": "float",
+                "context": "agent",
+                "description": "The charisma level of the opinion leader."
+              },
+              {
+                "name": "credibility",
+                "type": "float",
+                "context": "agent",
+                "description": "The credibility of the opinion leader."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "influence_strength",
+                "type": "float",
+                "context": "agent",
+                "description": "The strength of influence exerted by the leader."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "DecisionContextAgent": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "7": {
+          "code": "async def handle_decision_context(self, event: Event) -> List[Event]:\n        # Determine event type and update profile flags\n        if event.__class__.__name__ == \"OpinionDistributionTrackedEvent\":\n            self.profile.update_data(\"opinion_distribution_received\", True)\n            self.profile.update_data(\"opinion_distribution\", event.opinion_distribution)\n        elif event.__class__.__name__ == \"GroupOpinionUpdatedEvent\":\n            self.profile.update_data(\"group_opinion_update_received\", True)\n            self.profile.update_data(\"group_opinion\", event.updated_group_opinion)\n\n        # Check if all required events have been received\n        opinion_distribution_received = self.profile.get_data(\"opinion_distribution_received\", False)\n        group_opinion_update_received = self.profile.get_data(\"group_opinion_update_received\", False)\n\n        if not (opinion_distribution_received and group_opinion_update_received):\n            return []\n\n        # Retrieve required variables\n        group_opinion = self.profile.get_data(\"group_opinion\", \"\")\n        opinion_distribution = self.profile.get_data(\"opinion_distribution\", {})\n        environmental_factors = await self.get_env_data(\"environmental_factors\", {})\n\n        # Generate reaction\n        instruction = \"\"\"\n        Process the decision context using the given group opinion, opinion distribution, and environmental factors.\n        Provide the results and completion status. Return the information in the following JSON format:\n        {\n            \"completion_status\": \"<Status of processing>\",\n            \"results\": <Outcomes of processing as a dictionary>,\n            \"target_ids\": [\"<List of target IDs to send the results>\"]\n        }\n        \"\"\"\n        observation = f\"Group Opinion: {group_opinion}, Opinion Distribution: {opinion_distribution}, Environmental Factors: {environmental_factors}\"\n        result = await self.generate_reaction(instruction, observation)\n\n        # Parse the LLM's JSON response\n        completion_status = result.get('completion_status', 'pending')\n        results = result.get('results', {})\n        target_ids = result.get('target_ids', [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Update environment with results\n        await self.env.update_data(\"completion_status\", completion_status)\n        await self.env.update_data(\"results\", results)\n\n        # Prepare and send DecisionContextHandledEvent to each target\n        events = []\n        decision_context_id = self.profile.get_data(\"decision_context_id\", \"\")\n        for target_id in target_ids:\n            decision_context_event = DecisionContextHandledEvent(\n                self.profile_id, target_id, decision_context_id=decision_context_id,\n                completion_status=completion_status, results=results\n            )\n            events.append(decision_context_event)\n\n        # Reset flags after processing\n        self.profile.update_data(\"opinion_distribution_received\", False)\n        self.profile.update_data(\"group_opinion_update_received\", False)\n\n        return events",
+          "metadata": {
+            "id": 7,
+            "name": "handle_decision_context",
+            "condition": "Received group opinion update and opinion distribution",
+            "description": "The decision context agent processes the decision context, considering group opinions and environmental factors.",
+            "type": "AND",
+            "required_variables": [
+              {
+                "name": "group_opinion",
+                "type": "str",
+                "context": "event",
+                "description": "The current opinion of the group."
+              },
+              {
+                "name": "environmental_factors",
+                "type": "dict",
+                "context": "env",
+                "description": "Factors from the environment affecting the decision context."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "completion_status",
+                "type": "str",
+                "context": "env",
+                "description": "The status of the decision context processing."
+              },
+              {
+                "name": "results",
+                "type": "dict",
+                "context": "env",
+                "description": "The outcomes of the decision context handling."
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "events": {
+    "imports": "from onesim.events import Event\nfrom typing import Dict, List, Any",
+    "definitions": {
+      "-1": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": -1,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "IndividualAgent",
+          "to_action_name": "form_initial_judgment",
+          "from_action_id": 0,
+          "to_action_id": 1,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for individuals to form initial opinions",
+          "fields": []
+        }
+      },
+      "-2": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": -2,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "GroupAgent",
+          "to_action_name": "track_opinion_distribution",
+          "from_action_id": 0,
+          "to_action_id": 4,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for groups to start tracking opinions",
+          "fields": []
+        }
+      },
+      "-3": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": -3,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "OpinionLeaderAgent",
+          "to_action_name": "exert_influence",
+          "from_action_id": 0,
+          "to_action_id": 6,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for opinion leaders to exert influence",
+          "fields": []
+        }
+      },
+      "1": {
+        "code": "class InitialJudgmentFormedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        individual_id: str = \"\",\n        initial_judgment: str = \"\",\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.individual_id = individual_id\n        self.initial_judgment = initial_judgment",
+        "metadata": {
+          "id": 1,
+          "from_agent_type": "IndividualAgent",
+          "from_action_name": "form_initial_judgment",
+          "to_agent_type": "GroupAgent",
+          "to_action_name": "update_group_opinion",
+          "from_action_id": 1,
+          "to_action_id": 5,
+          "event_name": "InitialJudgmentFormedEvent",
+          "event_info": "Individual's initial judgment is shared with the group",
+          "fields": [
+            {
+              "name": "individual_id",
+              "type": "str",
+              "default_value": "",
+              "description": "Unique identifier of the individual forming the judgment"
+            },
+            {
+              "name": "initial_judgment",
+              "type": "str",
+              "default_value": "",
+              "description": "The initial judgment or opinion formed by the individual"
+            }
+          ]
+        }
+      },
+      "2": {
+        "code": "class ConformityDecisionEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        individual_id: str = \"\",\n        conformity_decision: bool = False,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.individual_id = individual_id\n        self.conformity_decision = conformity_decision",
+        "metadata": {
+          "id": 2,
+          "from_agent_type": "IndividualAgent",
+          "from_action_name": "decide_conformity",
+          "to_agent_type": "GroupAgent",
+          "to_action_name": "update_group_opinion",
+          "from_action_id": 2,
+          "to_action_id": 5,
+          "event_name": "ConformityDecisionEvent",
+          "event_info": "Individual's decision to conform or not is shared with the group",
+          "fields": [
+            {
+              "name": "individual_id",
+              "type": "str",
+              "default_value": "",
+              "description": "Unique identifier of the individual making the conformity decision"
+            },
+            {
+              "name": "conformity_decision",
+              "type": "bool",
+              "default_value": false,
+              "description": "Whether the individual decides to conform (true) or not (false)"
+            }
+          ]
+        }
+      },
+      "3": {
+        "code": "class BeliefUpdatedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        individual_id: str = \"\",\n        updated_belief: str = \"\",\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.individual_id = individual_id\n        self.updated_belief = updated_belief",
+        "metadata": {
+          "id": 3,
+          "from_agent_type": "IndividualAgent",
+          "from_action_name": "update_internal_belief",
+          "to_agent_type": "GroupAgent",
+          "to_action_name": "update_group_opinion",
+          "from_action_id": 3,
+          "to_action_id": 5,
+          "event_name": "BeliefUpdatedEvent",
+          "event_info": "Individual updates belief and shares with the group",
+          "fields": [
+            {
+              "name": "individual_id",
+              "type": "str",
+              "default_value": "",
+              "description": "Unique identifier of the individual updating their belief"
+            },
+            {
+              "name": "updated_belief",
+              "type": "str",
+              "default_value": "",
+              "description": "The new belief or opinion after the update"
+            }
+          ]
+        }
+      },
+      "4": {
+        "code": "class OpinionDistributionTrackedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        group_id: str = \"\",\n        opinion_distribution: dict = {},\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.group_id = group_id\n        self.opinion_distribution = opinion_distribution",
+        "metadata": {
+          "id": 4,
+          "from_agent_type": "GroupAgent",
+          "from_action_name": "track_opinion_distribution",
+          "to_agent_type": "DecisionContextAgent",
+          "to_action_name": "handle_decision_context",
+          "from_action_id": 4,
+          "to_action_id": 7,
+          "event_name": "OpinionDistributionTrackedEvent",
+          "event_info": "Group's opinion distribution is tracked and sent to decision context",
+          "fields": [
+            {
+              "name": "group_id",
+              "type": "str",
+              "default_value": "",
+              "description": "Unique identifier of the group whose opinion distribution is tracked"
+            },
+            {
+              "name": "opinion_distribution",
+              "type": "dict",
+              "default_value": {},
+              "description": "Current distribution of opinions within the group"
+            }
+          ]
+        }
+      },
+      "5": {
+        "code": "class GroupOpinionUpdatedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        group_id: str = \"\",\n        updated_group_opinion: str = \"\",\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.group_id = group_id\n        self.updated_group_opinion = updated_group_opinion",
+        "metadata": {
+          "id": 5,
+          "from_agent_type": "GroupAgent",
+          "from_action_name": "update_group_opinion",
+          "to_agent_type": "DecisionContextAgent",
+          "to_action_name": "handle_decision_context",
+          "from_action_id": 5,
+          "to_action_id": 7,
+          "event_name": "GroupOpinionUpdatedEvent",
+          "event_info": "Group opinion updated based on individual inputs and sent to decision context",
+          "fields": [
+            {
+              "name": "group_id",
+              "type": "str",
+              "default_value": "",
+              "description": "Unique identifier of the group updating its opinion"
+            },
+            {
+              "name": "updated_group_opinion",
+              "type": "str",
+              "default_value": "",
+              "description": "The updated collective opinion of the group"
+            }
+          ]
+        }
+      },
+      "6": {
+        "code": "class InfluenceExertedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        leader_id: str = \"\",\n        target_individual_id: str = \"\",\n        influence_strength: float = 0.0,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.leader_id = leader_id\n        self.target_individual_id = target_individual_id\n        self.influence_strength = influence_strength",
+        "metadata": {
+          "id": 6,
+          "from_agent_type": "OpinionLeaderAgent",
+          "from_action_name": "exert_influence",
+          "to_agent_type": "IndividualAgent",
+          "to_action_name": "decide_conformity",
+          "from_action_id": 6,
+          "to_action_id": 2,
+          "event_name": "InfluenceExertedEvent",
+          "event_info": "Leader's influence exerted on individuals for conformity decision",
+          "fields": [
+            {
+              "name": "leader_id",
+              "type": "str",
+              "default_value": "",
+              "description": "Unique identifier of the opinion leader exerting influence"
+            },
+            {
+              "name": "target_individual_id",
+              "type": "str",
+              "default_value": "",
+              "description": "Unique identifier of the individual being influenced"
+            },
+            {
+              "name": "influence_strength",
+              "type": "float",
+              "default_value": 0.0,
+              "description": "Strength of the influence exerted by the leader"
+            }
+          ]
+        }
+      },
+      "7": {
+        "code": "class LeaderInfluenceUpdatedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        leader_id: str = \"\",\n        target_individual_id: str = \"\",\n        updated_belief: str = \"\",\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.leader_id = leader_id\n        self.target_individual_id = target_individual_id\n        self.updated_belief = updated_belief",
+        "metadata": {
+          "id": 7,
+          "from_agent_type": "OpinionLeaderAgent",
+          "from_action_name": "exert_influence",
+          "to_agent_type": "IndividualAgent",
+          "to_action_name": "update_internal_belief",
+          "from_action_id": 6,
+          "to_action_id": 3,
+          "event_name": "LeaderInfluenceUpdatedEvent",
+          "event_info": "Leader's influence leads to belief update in individuals",
+          "fields": [
+            {
+              "name": "leader_id",
+              "type": "str",
+              "default_value": "",
+              "description": "Unique identifier of the opinion leader whose influence is being updated"
+            },
+            {
+              "name": "target_individual_id",
+              "type": "str",
+              "default_value": "",
+              "description": "Unique identifier of the individual whose belief is updated"
+            },
+            {
+              "name": "updated_belief",
+              "type": "str",
+              "default_value": "",
+              "description": "The new belief of the individual after leader's influence"
+            }
+          ]
+        }
+      },
+      "8": {
+        "code": "class DecisionContextHandledEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        decision_context_id: str = \"\",\n        completion_status: str = 'pending',\n        results: dict = {},\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.decision_context_id = decision_context_id\n        self.completion_status = completion_status\n        self.results = results",
+        "metadata": {
+          "id": 8,
+          "from_agent_type": "DecisionContextAgent",
+          "from_action_name": "handle_decision_context",
+          "to_agent_type": "EnvAgent",
+          "to_action_name": "terminate",
+          "from_action_id": 7,
+          "to_action_id": -1,
+          "event_name": "DecisionContextHandledEvent",
+          "event_info": "Decision context processed and results sent to environment for termination",
+          "fields": [
+            {
+              "name": "decision_context_id",
+              "type": "str",
+              "default_value": "",
+              "description": "Unique identifier of the decision context being handled"
+            },
+            {
+              "name": "completion_status",
+              "type": "str",
+              "default_value": "pending",
+              "description": "Status of the decision context processing, e.g., completed, pending"
+            },
+            {
+              "name": "results",
+              "type": "dict",
+              "default_value": {},
+              "description": "Results or outcomes of the decision context handling"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

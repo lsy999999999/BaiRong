@@ -1,0 +1,103 @@
+{
+    "environment": {
+        "variables": [
+            {
+                "name": "socioeconomic_status",
+                "type": "string",
+                "default_value": null
+            },
+            {
+                "name": "initial_health_status",
+                "type": "string",
+                "default_value": null
+            },
+            {
+                "name": "educational_resources",
+                "type": "float",
+                "default_value": null
+            },
+            {
+                "name": "healthcare_resources",
+                "type": "float",
+                "default_value": null
+            }
+        ]
+    },
+    "agents": {
+        "IndividualAgent": {
+            "variables": [
+                {
+                    "name": "current_life_stage",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "family_support_status",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "education_adaptation_status",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "health_integration_status",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "policy_adjustment_status",
+                    "type": "string",
+                    "default_value": null
+                }
+            ]
+        },
+        "FamilyAgent": {
+            "variables": [
+                {
+                    "name": "family_resources",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "family_support_provided",
+                    "type": "boolean",
+                    "default_value": null
+                }
+            ]
+        },
+        "EducationSystemAgent": {
+            "variables": [
+                {
+                    "name": "education_impact_assessed",
+                    "type": "boolean",
+                    "default_value": null
+                }
+            ]
+        },
+        "HealthcareSystemAgent": {
+            "variables": [
+                {
+                    "name": "health_services_evaluated",
+                    "type": "boolean",
+                    "default_value": null
+                }
+            ]
+        },
+        "GovernmentAgent": {
+            "variables": [
+                {
+                    "name": "policy_details",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "policy_implemented",
+                    "type": "boolean",
+                    "default_value": null
+                }
+            ]
+        }
+    }
+}

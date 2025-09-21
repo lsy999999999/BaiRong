@@ -1,0 +1,76 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Social Group A",
+        "private": false,
+        "sampling": "llm",
+        "description": "The name of the social group agent"
+    },
+    "members": {
+        "type": "list",
+        "default": [
+            "Individual1",
+            "Individual2"
+        ],
+        "private": true,
+        "sampling": "default",
+        "sample_size": 5
+    },
+    "updated_norms": {
+        "type": "list",
+        "default": [
+            "cooperation",
+            "respect"
+        ],
+        "private": false,
+        "sampling": "default",
+        "sample_size": 3
+    },
+    "behavior_tendency": {
+        "type": "str",
+        "default": "neutral",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "aggressive",
+            "passive",
+            "neutral"
+        ]
+    },
+    "group_pressure": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "interaction_count": {
+        "type": "int",
+        "default": 10,
+        "private": true,
+        "sampling": "default"
+    },
+    "norm_acceptance_rate": {
+        "type": "float",
+        "default": 0.75,
+        "private": false,
+        "sampling": "default"
+    },
+    "communication_mode": {
+        "type": "str",
+        "default": "implicit",
+        "private": false,
+        "sampling": "llm",
+        "description": "Mode of communication among individuals"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

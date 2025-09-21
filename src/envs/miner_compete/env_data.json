@@ -1,0 +1,526 @@
+{
+    "global_map_state": {
+        "grid": [
+            [
+                {
+                    "owner": "MinerA",
+                    "visible_resources": 3,
+                    "productivity": 2.5
+                },
+                {
+                    "owner": "MinerB",
+                    "visible_resources": 3,
+                    "productivity": 2.8
+                },
+                {
+                    "owner": null,
+                    "visible_resources": 3,
+                    "productivity": 2.1
+                },
+                {
+                    "owner": "MinerC",
+                    "visible_resources": 3,
+                    "productivity": 2.9
+                },
+                {
+                    "owner": null,
+                    "visible_resources": 3,
+                    "productivity": 2.3
+                },
+                {
+                    "owner": "MinerA",
+                    "visible_resources": 3,
+                    "productivity": 2.7
+                },
+                {
+                    "owner": null,
+                    "visible_resources": 3,
+                    "productivity": 2.4
+                },
+                {
+                    "owner": "MinerB",
+                    "visible_resources": 3,
+                    "productivity": 2.6
+                },
+                {
+                    "owner": "MinerC",
+                    "visible_resources": 3,
+                    "productivity": 2.2
+                },
+                {
+                    "owner": null,
+                    "visible_resources": 3,
+                    "productivity": 2.0
+                }
+            ],
+            [
+                {
+                    "owner": "MinerB",
+                    "visible_resources": 3,
+                    "productivity": 2.5
+                },
+                {
+                    "owner": null,
+                    "visible_resources": 3,
+                    "productivity": 2.3
+                },
+                {
+                    "owner": "MinerA",
+                    "visible_resources": 3,
+                    "productivity": 2.7
+                },
+                {
+                    "owner": "MinerC",
+                    "visible_resources": 3,
+                    "productivity": 2.8
+                },
+                {
+                    "owner": null,
+                    "visible_resources": 3,
+                    "productivity": 2.1
+                },
+                {
+                    "owner": "MinerB",
+                    "visible_resources": 3,
+                    "productivity": 2.9
+                },
+                {
+                    "owner": "MinerA",
+                    "visible_resources": 3,
+                    "productivity": 2.4
+                },
+                {
+                    "owner": null,
+                    "visible_resources": 3,
+                    "productivity": 2.2
+                },
+                {
+                    "owner": "MinerC",
+                    "visible_resources": 3,
+                    "productivity": 2.6
+                },
+                {
+                    "owner": "MinerA",
+                    "visible_resources": 3,
+                    "productivity": 2.0
+                }
+            ],
+            [
+                {
+                    "owner": null,
+                    "visible_resources": 3,
+                    "productivity": 2.3
+                },
+                {
+                    "owner": "MinerC",
+                    "visible_resources": 3,
+                    "productivity": 2.5
+                },
+                {
+                    "owner": "MinerB",
+                    "visible_resources": 3,
+                    "productivity": 2.7
+                },
+                {
+                    "owner": null,
+                    "visible_resources": 3,
+                    "productivity": 2.1
+                },
+                {
+                    "owner": "MinerA",
+                    "visible_resources": 3,
+                    "productivity": 2.9
+                },
+                {
+                    "owner": "MinerC",
+                    "visible_resources": 3,
+                    "productivity": 2.4
+                },
+                {
+                    "owner": "MinerB",
+                    "visible_resources": 3,
+                    "productivity": 2.8
+                },
+                {
+                    "owner": null,
+                    "visible_resources": 3,
+                    "productivity": 2.2
+                },
+                {
+                    "owner": "MinerA",
+                    "visible_resources": 3,
+                    "productivity": 2.6
+                },
+                {
+                    "owner": "MinerB",
+                    "visible_resources": 3,
+                    "productivity": 2.0
+                }
+            ],
+            [
+                {
+                    "owner": "MinerA",
+                    "visible_resources": 3,
+                    "productivity": 2.5
+                },
+                {
+                    "owner": null,
+                    "visible_resources": 3,
+                    "productivity": 2.3
+                },
+                {
+                    "owner": "MinerC",
+                    "visible_resources": 3,
+                    "productivity": 2.7
+                },
+                {
+                    "owner": "MinerB",
+                    "visible_resources": 3,
+                    "productivity": 2.8
+                },
+                {
+                    "owner": null,
+                    "visible_resources": 3,
+                    "productivity": 2.1
+                },
+                {
+                    "owner": "MinerA",
+                    "visible_resources": 3,
+                    "productivity": 2.9
+                },
+                {
+                    "owner": "MinerC",
+                    "visible_resources": 3,
+                    "productivity": 2.4
+                },
+                {
+                    "owner": null,
+                    "visible_resources": 3,
+                    "productivity": 2.2
+                },
+                {
+                    "owner": "MinerB",
+                    "visible_resources": 3,
+                    "productivity": 2.6
+                },
+                {
+                    "owner": "MinerA",
+                    "visible_resources": 3,
+                    "productivity": 2.0
+                }
+            ],
+            [
+                {
+                    "owner": null,
+                    "visible_resources": 3,
+                    "productivity": 2.3
+                },
+                {
+                    "owner": "MinerB",
+                    "visible_resources": 3,
+                    "productivity": 2.5
+                },
+                {
+                    "owner": "MinerA",
+                    "visible_resources": 3,
+                    "productivity": 2.7
+                },
+                {
+                    "owner": null,
+                    "visible_resources": 3,
+                    "productivity": 2.1
+                },
+                {
+                    "owner": "MinerC",
+                    "visible_resources": 3,
+                    "productivity": 2.9
+                },
+                {
+                    "owner": "MinerB",
+                    "visible_resources": 3,
+                    "productivity": 2.4
+                },
+                {
+                    "owner": "MinerA",
+                    "visible_resources": 3,
+                    "productivity": 2.8
+                },
+                {
+                    "owner": null,
+                    "visible_resources": 3,
+                    "productivity": 2.2
+                },
+                {
+                    "owner": "MinerC",
+                    "visible_resources": 3,
+                    "productivity": 2.6
+                },
+                {
+                    "owner": "MinerB",
+                    "visible_resources": 3,
+                    "productivity": 2.0
+                }
+            ],
+            [
+                {
+                    "owner": "MinerC",
+                    "visible_resources": 3,
+                    "productivity": 2.5
+                },
+                {
+                    "owner": null,
+                    "visible_resources": 3,
+                    "productivity": 2.3
+                },
+                {
+                    "owner": "MinerB",
+                    "visible_resources": 3,
+                    "productivity": 2.7
+                },
+                {
+                    "owner": "MinerA",
+                    "visible_resources": 3,
+                    "productivity": 2.8
+                },
+                {
+                    "owner": null,
+                    "visible_resources": 3,
+                    "productivity": 2.1
+                },
+                {
+                    "owner": "MinerC",
+                    "visible_resources": 3,
+                    "productivity": 2.9
+                },
+                {
+                    "owner": "MinerB",
+                    "visible_resources": 3,
+                    "productivity": 2.4
+                },
+                {
+                    "owner": null,
+                    "visible_resources": 3,
+                    "productivity": 2.2
+                },
+                {
+                    "owner": "MinerA",
+                    "visible_resources": 3,
+                    "productivity": 2.6
+                },
+                {
+                    "owner": "MinerC",
+                    "visible_resources": 3,
+                    "productivity": 2.0
+                }
+            ],
+            [
+                {
+                    "owner": null,
+                    "visible_resources": 3,
+                    "productivity": 2.3
+                },
+                {
+                    "owner": "MinerA",
+                    "visible_resources": 3,
+                    "productivity": 2.5
+                },
+                {
+                    "owner": "MinerC",
+                    "visible_resources": 3,
+                    "productivity": 2.7
+                },
+                {
+                    "owner": null,
+                    "visible_resources": 3,
+                    "productivity": 2.1
+                },
+                {
+                    "owner": "MinerB",
+                    "visible_resources": 3,
+                    "productivity": 2.9
+                },
+                {
+                    "owner": "MinerA",
+                    "visible_resources": 3,
+                    "productivity": 2.4
+                },
+                {
+                    "owner": "MinerC",
+                    "visible_resources": 3,
+                    "productivity": 2.8
+                },
+                {
+                    "owner": null,
+                    "visible_resources": 3,
+                    "productivity": 2.2
+                },
+                {
+                    "owner": "MinerB",
+                    "visible_resources": 3,
+                    "productivity": 2.6
+                },
+                {
+                    "owner": "MinerA",
+                    "visible_resources": 3,
+                    "productivity": 2.0
+                }
+            ],
+            [
+                {
+                    "owner": "MinerB",
+                    "visible_resources": 3,
+                    "productivity": 2.5
+                },
+                {
+                    "owner": null,
+                    "visible_resources": 3,
+                    "productivity": 2.3
+                },
+                {
+                    "owner": "MinerA",
+                    "visible_resources": 3,
+                    "productivity": 2.7
+                },
+                {
+                    "owner": "MinerC",
+                    "visible_resources": 3,
+                    "productivity": 2.8
+                },
+                {
+                    "owner": null,
+                    "visible_resources": 3,
+                    "productivity": 2.1
+                },
+                {
+                    "owner": "MinerB",
+                    "visible_resources": 3,
+                    "productivity": 2.9
+                },
+                {
+                    "owner": "MinerA",
+                    "visible_resources": 3,
+                    "productivity": 2.4
+                },
+                {
+                    "owner": null,
+                    "visible_resources": 3,
+                    "productivity": 2.2
+                },
+                {
+                    "owner": "MinerC",
+                    "visible_resources": 3,
+                    "productivity": 2.6
+                },
+                {
+                    "owner": "MinerB",
+                    "visible_resources": 3,
+                    "productivity": 2.0
+                }
+            ],
+            [
+                {
+                    "owner": null,
+                    "visible_resources": 3,
+                    "productivity": 2.3
+                },
+                {
+                    "owner": "MinerC",
+                    "visible_resources": 3,
+                    "productivity": 2.5
+                },
+                {
+                    "owner": "MinerB",
+                    "visible_resources": 3,
+                    "productivity": 2.7
+                },
+                {
+                    "owner": null,
+                    "visible_resources": 3,
+                    "productivity": 2.1
+                },
+                {
+                    "owner": "MinerA",
+                    "visible_resources": 3,
+                    "productivity": 2.9
+                },
+                {
+                    "owner": "MinerC",
+                    "visible_resources": 3,
+                    "productivity": 2.4
+                },
+                {
+                    "owner": "MinerB",
+                    "visible_resources": 3,
+                    "productivity": 2.8
+                },
+                {
+                    "owner": null,
+                    "visible_resources": 3,
+                    "productivity": 2.2
+                },
+                {
+                    "owner": "MinerA",
+                    "visible_resources": 3,
+                    "productivity": 2.6
+                },
+                {
+                    "owner": "MinerB",
+                    "visible_resources": 3,
+                    "productivity": 2.0
+                }
+            ],
+            [
+                {
+                    "owner": "MinerA",
+                    "visible_resources": 3,
+                    "productivity": 2.5
+                },
+                {
+                    "owner": null,
+                    "visible_resources": 3,
+                    "productivity": 2.3
+                },
+                {
+                    "owner": "MinerC",
+                    "visible_resources": 3,
+                    "productivity": 2.7
+                },
+                {
+                    "owner": "MinerB",
+                    "visible_resources": 3,
+                    "productivity": 2.8
+                },
+                {
+                    "owner": null,
+                    "visible_resources": 3,
+                    "productivity": 2.1
+                },
+                {
+                    "owner": "MinerA",
+                    "visible_resources": 3,
+                    "productivity": 2.9
+                },
+                {
+                    "owner": "MinerC",
+                    "visible_resources": 3,
+                    "productivity": 2.4
+                },
+                {
+                    "owner": null,
+                    "visible_resources": 3,
+                    "productivity": 2.2
+                },
+                {
+                    "owner": "MinerB",
+                    "visible_resources": 3,
+                    "productivity": 2.6
+                },
+                {
+                    "owner": "MinerA",
+                    "visible_resources": 3,
+                    "productivity": 2.0
+                }
+            ]
+        ]
+    }
+}

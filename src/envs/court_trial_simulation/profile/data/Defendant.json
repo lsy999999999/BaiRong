@@ -1,0 +1,87 @@
+[
+    {
+        "name": "Defendant",
+        "stress_level": 50,
+        "public_perception": "neutral",
+        "agent_type": "Defendant",
+        "plea_acceptance": "undecided",
+        "testimony_risk_assessment": 0.5,
+        "legal_knowledge": 98,
+        "supporting_evidence": [
+            {
+                "type": "character_witness",
+                "strength": 75
+            }
+        ],
+        "decision_making_strategy": "Consultative approach, seeking advice from legal counsel and family before making decisions",
+        "id": "0"
+    },
+    {
+        "name": "Defendant",
+        "stress_level": 50,
+        "public_perception": "neutral",
+        "agent_type": "Defendant",
+        "plea_acceptance": "undecided",
+        "testimony_risk_assessment": 0.5,
+        "legal_knowledge": 83,
+        "supporting_evidence": [
+            {
+                "type": "character_witness",
+                "strength": 75
+            }
+        ],
+        "decision_making_strategy": "Analytical strategy, focusing on reviewing all evidence and legal precedents before proceeding",
+        "id": "1"
+    },
+    {
+        "name": "Defendant",
+        "stress_level": 50,
+        "public_perception": "neutral",
+        "agent_type": "Defendant",
+        "plea_acceptance": "undecided",
+        "testimony_risk_assessment": 0.5,
+        "legal_knowledge": 49,
+        "supporting_evidence": [
+            {
+                "type": "character_witness",
+                "strength": 75
+            }
+        ],
+        "decision_making_strategy": "Intuitive method, relying on gut feelings and immediate reactions during the trial process",
+        "id": "2"
+    },
+    {
+        "name": "Defendant",
+        "stress_level": 50,
+        "public_perception": "neutral",
+        "agent_type": "Defendant",
+        "plea_acceptance": "undecided",
+        "testimony_risk_assessment": 0.5,
+        "legal_knowledge": 70,
+        "supporting_evidence": [
+            {
+                "type": "character_witness",
+                "strength": 75
+            }
+        ],
+        "decision_making_strategy": "Risk-averse strategy, prioritizing options that minimize potential negative outcomes",
+        "id": "3"
+    },
+    {
+        "name": "Defendant",
+        "stress_level": 50,
+        "public_perception": "neutral",
+        "agent_type": "Defendant",
+        "plea_acceptance": "undecided",
+        "testimony_risk_assessment": 0.5,
+        "legal_knowledge": 63,
+        "supporting_evidence": [
+            {
+                "type": "character_witness",
+                "strength": 75
+            }
+        ],
+        "decision_making_strategy": "Collaborative approach, engaging with a team of advisors to reach a consensus on major decisions",
+        "id": "4"
+    }
+]

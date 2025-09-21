@@ -1,0 +1,391 @@
+{
+  "agents": {
+    "IndividualAgent": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "1": {
+          "code": "async def initialize_behavior_tendencies(self, event: Event) -> List[Event]:\n        behavior_tendencies = await self.get_env_data(\"behavior_tendencies\", [])\n        self.profile.update_data(\"behavior_tendencies\", behavior_tendencies)\n\n        instruction = \"\"\"\n        You are tasked with setting initial behavior tendencies for an individual agent. \n        Use the provided environmental data to determine the initial behavior tendencies. \n        Please return the information in the following JSON format:\n\n        {\n        \"behavior_tendencies\": <Updated list of behavior tendencies>,\n        \"target_ids\": <The string ID or list of string IDs of the target agents>\n        }\n        \"\"\"\n\n        result = await self.generate_reaction(instruction)\n        updated_behavior_tendencies = result.get('behavior_tendencies', behavior_tendencies)\n        target_ids = result.get('target_ids', [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        self.profile.update_data(\"behavior_tendencies\", updated_behavior_tendencies)\n\n        events = []\n        for target_id in target_ids:\n            event = BehaviorTendenciesInitializedEvent(\n                from_agent_id=self.profile_id,\n                to_agent_id=target_id,\n                individual_id=self.profile_id,\n                behavior_tendencies=updated_behavior_tendencies\n            )\n            events.append(event)\n\n        return events",
+          "metadata": {
+            "id": 1,
+            "name": "initialize_behavior_tendencies",
+            "condition": null,
+            "description": "Sets initial behavior tendencies for the individual agent based on environmental factors and agent characteristics.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "behavior_tendencies",
+                "type": "list",
+                "context": "env",
+                "description": "Initial behavior tendencies derived from environmental settings."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "behavior_tendencies",
+                "type": "list",
+                "context": "agent",
+                "description": "Updated initial behavior tendencies stored within the agent."
+              }
+            ]
+          }
+        },
+        "2": {
+          "code": "async def assign_to_social_group(self, event: Event) -> List[Event]:\n        if not isinstance(event, BehaviorTendenciesInitializedEvent):\n            return []\n\n        individual_id = event.individual_id\n\n        instruction = \"\"\"Assign the individual agent to a social group based on random selection or predefined criteria.\n        Please return the information in the following JSON format:\n\n        {\n        \"group_id\": \"<The string ID of the social group to which the individual is assigned>\",\n        \"target_ids\": [\"<The string ID of the SocialGroupAgent>\"]\n        }\n        \"\"\"\n        observation = f\"Individual ID: {individual_id}, Behavior Tendencies: {event.behavior_tendencies}\"\n        result = await self.generate_reaction(instruction, observation)\n\n        group_id = result.get('group_id', 0)\n        target_ids = result.get('target_ids', [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        self.profile.update_data(\"group_id\", group_id)\n\n        events = []\n        for target_id in target_ids:\n            assigned_event = AssignedToGroupEvent(\n                from_agent_id=self.profile_id,\n                to_agent_id=target_id,\n                individual_id=individual_id,\n                group_id=group_id\n            )\n            events.append(assigned_event)\n\n        return events",
+          "metadata": {
+            "id": 2,
+            "name": "assign_to_social_group",
+            "condition": "BehaviorTendenciesInitializedEvent received",
+            "description": "Assigns the individual agent to a social group based on random selection or predefined criteria.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "individual_id",
+                "type": "int",
+                "context": "agent",
+                "description": "Unique identifier for the individual agent."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "group_id",
+                "type": "int",
+                "context": "agent",
+                "description": "Identifier of the social group to which the agent is assigned."
+              }
+            ]
+          }
+        },
+        "3": {
+          "code": "async def observe_and_interact(self, event: Event) -> List[Event]:\n        group_id = self.profile.get_data(\"group_id\", 0)\n        if group_id == 0:\n            return []\n\n        individual_id = self.profile_id\n\n        observation = f\"Individual {individual_id} observing interactions in group {group_id}.\"\n        instruction = \"\"\"Please generate details of the observed interaction and specify target_ids \n        which can be a single ID or a list of IDs, indicating which agents are affected by the observed interactions.\n        Return the information in the following JSON format:\n\n        {\n        \"interaction_details\": \"<Details of the observed interaction>\",\n        \"target_ids\": [\"<The string ID of the affected agents>\"]\n        }\n        \"\"\"\n\n        result = await self.generate_reaction(instruction, observation)\n\n        interaction_details = result.get('interaction_details', \"\")\n        target_ids = result.get('target_ids', [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        self.profile.update_data(\"interaction_details\", interaction_details)\n\n        events = []\n        for target_id in target_ids:\n            interaction_event = InteractionObservedEvent(\n                from_agent_id=self.profile_id,\n                to_agent_id=target_id,\n                observer_id=individual_id,\n                interaction_details=interaction_details\n            )\n            events.append(interaction_event)\n\n        return events",
+          "metadata": {
+            "id": 3,
+            "name": "observe_and_interact",
+            "condition": "Individual is part of a social group",
+            "description": "Allows the individual agent to observe interactions within the social group and engage with other members.",
+            "type": "AND",
+            "required_variables": [
+              {
+                "name": "individual_id",
+                "type": "int",
+                "context": "agent",
+                "description": "Unique identifier for the individual agent."
+              },
+              {
+                "name": "group_id",
+                "type": "int",
+                "context": "event",
+                "description": "Identifier of the social group the agent is observing."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "interaction_details",
+                "type": "str",
+                "context": "agent",
+                "description": "Details of observed interactions stored within the agent."
+              }
+            ]
+          }
+        },
+        "4": {
+          "code": "async def adjust_behavior(self, event: Event) -> List[Event]:\n        if not isinstance(event, InteractionObservedEvent):\n            return []\n\n        interaction_details = event.interaction_details\n        group_pressure = await self.get_env_data(\"group_pressure\", 0.0)\n\n        instruction = \"\"\"\n        Based on the observed interaction details and the level of group pressure, adjust the behavior tendencies of the individual agent.\n        Please return the information in the following JSON format:\n\n        {\n        \"adjusted_behavior_tendencies\": [\"<List of new behavior tendencies>\"],\n        \"target_ids\": [\"<The string ID(s) of the SocialGroupAgent(s) to notify>\"]\n        }\n        \"\"\"\n        observation = f\"Interaction details: {interaction_details}, Group pressure: {group_pressure}\"\n        result = await self.generate_reaction(instruction, observation)\n\n        adjusted_behavior_tendencies = result.get('adjusted_behavior_tendencies', [])\n        target_ids = result.get('target_ids', [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        self.profile.update_data(\"adjusted_behavior_tendencies\", adjusted_behavior_tendencies)\n\n        events = []\n        for target_id in target_ids:\n            behavior_adjusted_event = BehaviorAdjustedEvent(\n                from_agent_id=self.profile_id,\n                to_agent_id=target_id,\n                individual_id=self.profile_id,\n                adjusted_behavior_tendencies=adjusted_behavior_tendencies\n            )\n            events.append(behavior_adjusted_event)\n\n        return events",
+          "metadata": {
+            "id": 4,
+            "name": "adjust_behavior",
+            "condition": "InteractionObservedEvent received",
+            "description": "Adjusts the individual agent's behavior tendencies based on observed interactions and group norms.",
+            "type": "AND",
+            "required_variables": [
+              {
+                "name": "interaction_details",
+                "type": "str",
+                "context": "agent",
+                "description": "Details of interactions observed by the agent."
+              },
+              {
+                "name": "group_pressure",
+                "type": "float",
+                "context": "env",
+                "description": "Level of pressure exerted by the group to conform."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "adjusted_behavior_tendencies",
+                "type": "list",
+                "context": "agent",
+                "description": "New behavior tendencies after adjustment."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "SocialGroupAgent": {
+      "imports": "from typing import Any, List, Optional\nimport asyncio\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "5": {
+          "code": "async def add_member(self, event: Event) -> List[Event]:\n        if event.__class__.__name__ != \"AssignedToGroupEvent\":\n            return []\n\n        individual_id = event.individual_id\n        current_members = self.profile.get_data(\"members\", [])\n        if individual_id not in current_members:\n            current_members.append(individual_id)\n            self.profile.update_data(\"members\", current_members)\n\n        instruction = \"\"\"Incorporate the new individual agent into the social group and update the group composition.\n        Please return the information in the following JSON format:\n\n        {\n        \"target_ids\": [\"<The string ID(s) of the IndividualAgent(s) to notify>\"]\n        }\n        \"\"\"\n        result = await self.generate_reaction(instruction, observation=f\"New member added: {individual_id}\")\n\n        target_ids = result.get('target_ids', [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        events = []\n        for target_id in target_ids:\n            member_added_event = MemberAddedEvent(self.profile_id, target_id, group_id=event.group_id, individual_id=individual_id)\n            events.append(member_added_event)\n\n        return events",
+          "metadata": {
+            "id": 5,
+            "name": "add_member",
+            "condition": "AssignedToGroupEvent received",
+            "description": "Incorporates a new individual agent into the social group, updating group composition.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "individual_id",
+                "type": "int",
+                "context": "event",
+                "description": "Unique identifier for the individual agent being added."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "members",
+                "type": "list",
+                "context": "agent",
+                "description": "Updated list of members in the social group."
+              }
+            ]
+          }
+        },
+        "6": {
+          "code": "async def update_group_norms(self, event: Event) -> List[Event]:\n        if event.__class__.__name__ != \"BehaviorAdjustedEvent\":\n            return []\n\n        adjusted_behavior_tendencies = event.adjusted_behavior_tendencies\n\n        observation = f\"Adjusted behavior tendencies: {adjusted_behavior_tendencies}\"\n        instruction = \"\"\"Reassess and update the social group's norms based on the collective behavior adjustments of its members.\n        Please return the information in the following JSON format:\n\n        {\n        \"updated_norms\": \"<A list of updated norms for the social group>\",\n        \"target_ids\": [\"<The string ID of the EnvAgent>\"],\n        \"status\": \"success\"\n        }\n        \"\"\"\n\n        result = await self.generate_reaction(instruction, observation)\n\n        updated_norms = result.get('updated_norms', [])\n        target_ids = result.get('target_ids', [])\n        group_id = self.profile.get_data(\"group_id\", 0)\n        status = result.get('status', \"success\")\n\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        self.profile.update_data(\"updated_norms\", updated_norms)\n\n        events = []\n        for target_id in target_ids:\n            norms_updated_event = GroupNormsUpdatedEvent(self.profile_id, target_id, group_id=group_id, updated_norms=updated_norms, status=status)\n            events.append(norms_updated_event)\n\n        return events",
+          "metadata": {
+            "id": 6,
+            "name": "update_group_norms",
+            "condition": "BehaviorAdjustedEvent received",
+            "description": "Reassesses and updates the social group's norms based on the collective behavior adjustments of its members.",
+            "type": "AND",
+            "required_variables": [
+              {
+                "name": "adjusted_behavior_tendencies",
+                "type": "list",
+                "context": "event",
+                "description": "Behavior tendencies of individuals after adjustment."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "updated_norms",
+                "type": "list",
+                "context": "agent",
+                "description": "Revised norms of the social group."
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "events": {
+    "imports": "from onesim.events import Event\nfrom typing import Any, List",
+    "definitions": {
+      "-1": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": -1,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "IndividualAgent",
+          "to_action_name": "initialize_behavior_tendencies",
+          "from_action_id": 0,
+          "to_action_id": 1,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for setting up individual behavior tendencies",
+          "fields": []
+        }
+      },
+      "-2": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": -2,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "IndividualAgent",
+          "to_action_name": "assign_to_social_group",
+          "from_action_id": 0,
+          "to_action_id": 2,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for assigning individuals to social groups",
+          "fields": []
+        }
+      },
+      "1": {
+        "code": "class BehaviorTendenciesInitializedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        individual_id: int = 0,\n        behavior_tendencies: List = [],\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.individual_id = individual_id\n        self.behavior_tendencies = behavior_tendencies",
+        "metadata": {
+          "id": 1,
+          "from_agent_type": "IndividualAgent",
+          "from_action_name": "initialize_behavior_tendencies",
+          "to_agent_type": "IndividualAgent",
+          "to_action_name": "assign_to_social_group",
+          "from_action_id": 1,
+          "to_action_id": 2,
+          "event_name": "BehaviorTendenciesInitializedEvent",
+          "event_info": "Behavior tendencies initialized for the individual",
+          "fields": [
+            {
+              "name": "individual_id",
+              "type": "int",
+              "default_value": "0",
+              "description": "Unique identifier for the individual agent"
+            },
+            {
+              "name": "behavior_tendencies",
+              "type": "list",
+              "default_value": "[]",
+              "description": "Initial behavior tendencies of the individual"
+            }
+          ]
+        }
+      },
+      "2": {
+        "code": "class AssignedToGroupEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        individual_id: int = 0,\n        group_id: int = 0,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.individual_id = individual_id\n        self.group_id = group_id",
+        "metadata": {
+          "id": 2,
+          "from_agent_type": "IndividualAgent",
+          "from_action_name": "assign_to_social_group",
+          "to_agent_type": "SocialGroupAgent",
+          "to_action_name": "add_member",
+          "from_action_id": 2,
+          "to_action_id": 5,
+          "event_name": "AssignedToGroupEvent",
+          "event_info": "Individual assigned to a social group",
+          "fields": [
+            {
+              "name": "individual_id",
+              "type": "int",
+              "default_value": "0",
+              "description": "Unique identifier for the individual agent"
+            },
+            {
+              "name": "group_id",
+              "type": "int",
+              "default_value": "0",
+              "description": "Unique identifier for the social group"
+            }
+          ]
+        }
+      },
+      "3": {
+        "code": "class InteractionObservedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        observer_id: int = 0,\n        interaction_details: str = \"\",\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.observer_id = observer_id\n        self.interaction_details = interaction_details",
+        "metadata": {
+          "id": 3,
+          "from_agent_type": "IndividualAgent",
+          "from_action_name": "observe_and_interact",
+          "to_agent_type": "IndividualAgent",
+          "to_action_name": "adjust_behavior",
+          "from_action_id": 3,
+          "to_action_id": 4,
+          "event_name": "InteractionObservedEvent",
+          "event_info": "Individual observed interaction within the group",
+          "fields": [
+            {
+              "name": "observer_id",
+              "type": "int",
+              "default_value": "0",
+              "description": "Unique identifier for the observing individual agent"
+            },
+            {
+              "name": "interaction_details",
+              "type": "str",
+              "default_value": "",
+              "description": "Details of the observed interaction"
+            }
+          ]
+        }
+      },
+      "4": {
+        "code": "class BehaviorAdjustedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        individual_id: int = 0,\n        adjusted_behavior_tendencies: List = [],\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.individual_id = individual_id\n        self.adjusted_behavior_tendencies = adjusted_behavior_tendencies",
+        "metadata": {
+          "id": 4,
+          "from_agent_type": "IndividualAgent",
+          "from_action_name": "adjust_behavior",
+          "to_agent_type": "SocialGroupAgent",
+          "to_action_name": "update_group_norms",
+          "from_action_id": 4,
+          "to_action_id": 6,
+          "event_name": "BehaviorAdjustedEvent",
+          "event_info": "Individual adjusted behavior based on group interaction",
+          "fields": [
+            {
+              "name": "individual_id",
+              "type": "int",
+              "default_value": "0",
+              "description": "Unique identifier for the individual agent"
+            },
+            {
+              "name": "adjusted_behavior_tendencies",
+              "type": "list",
+              "default_value": "[]",
+              "description": "Adjusted behavior tendencies of the individual"
+            }
+          ]
+        }
+      },
+      "5": {
+        "code": "class MemberAddedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        group_id: int = 0,\n        individual_id: int = 0,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.group_id = group_id\n        self.individual_id = individual_id",
+        "metadata": {
+          "id": 5,
+          "from_agent_type": "SocialGroupAgent",
+          "from_action_name": "add_member",
+          "to_agent_type": "IndividualAgent",
+          "to_action_name": "observe_and_interact",
+          "from_action_id": 5,
+          "to_action_id": 3,
+          "event_name": "MemberAddedEvent",
+          "event_info": "Individual added to social group",
+          "fields": [
+            {
+              "name": "group_id",
+              "type": "int",
+              "default_value": "0",
+              "description": "Unique identifier for the social group"
+            },
+            {
+              "name": "individual_id",
+              "type": "int",
+              "default_value": "0",
+              "description": "Unique identifier for the individual agent"
+            }
+          ]
+        }
+      },
+      "6": {
+        "code": "class GroupNormsUpdatedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        group_id: int = 0,\n        updated_norms: List = [],\n        status: str = 'success',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.group_id = group_id\n        self.updated_norms = updated_norms\n        self.status = status",
+        "metadata": {
+          "id": 6,
+          "from_agent_type": "SocialGroupAgent",
+          "from_action_name": "update_group_norms",
+          "to_agent_type": "EnvAgent",
+          "to_action_name": "terminate",
+          "from_action_id": 6,
+          "to_action_id": -1,
+          "event_name": "GroupNormsUpdatedEvent",
+          "event_info": "Group norms updated based on individual behavior adjustment",
+          "fields": [
+            {
+              "name": "group_id",
+              "type": "int",
+              "default_value": "0",
+              "description": "Unique identifier for the social group"
+            },
+            {
+              "name": "updated_norms",
+              "type": "list",
+              "default_value": "[]",
+              "description": "Updated norms of the social group"
+            },
+            {
+              "name": "status",
+              "type": "str",
+              "default_value": "success",
+              "description": "Status of the norm update process"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,106 @@
+{
+  "name": {
+    "type": "str",
+    "default": "StrategistAgent",
+    "private": false,
+    "sampling": "llm",
+    "description": "The agent's name"
+  },
+  "energyLevel": {
+    "type": "int",
+    "default": 50,
+    "private": false,
+    "sampling": "preset",
+    "range": [
+      50,
+      200
+    ]
+  },
+  "currentCell": {
+    "type": "int",
+    "default": 0,
+    "private": false,
+    "sampling": "preset",
+    "range": [
+      0,
+      99
+    ]
+  },
+  "transactionHistory": {
+    "type": "list",
+    "default": [
+      {
+        "date": "2023-01-01",
+        "amount": 100,
+        "type": "initial"
+      }
+    ],
+    "private": true,
+    "sampling": "default"
+  },
+  "currentStatus": {
+    "type": "str",
+    "default": "available",
+    "private": false,
+    "sampling": "default"
+  },
+  "resourceExploited": {
+    "type": "int",
+    "default": 0,
+    "private": false,
+    "sampling": "preset"
+  },
+  "strategyLevel": {
+    "type": "int",
+    "default": 50,
+    "private": false,
+    "sampling": "llm",
+    "range": [
+      0,
+      100
+    ]
+  },
+  "isAdvisor": {
+    "type": "bool",
+    "default": true,
+    "private": false,
+    "sampling": "llm"
+  },
+  "minEnergyToMaintain": {
+    "type": "int",
+    "default": 10,
+    "private": false,
+    "sampling": "preset"
+  },
+  "lastAction": {
+    "type": "str",
+    "default": "none",
+    "private": true,
+    "sampling": "llm"
+  },
+  "landOwnership": {
+    "type": "bool",
+    "default": false,
+    "private": false,
+    "sampling": "llm"
+  },
+  "energyInvested": {
+    "type": "int",
+    "default": 10,
+    "private": false,
+    "sampling": "llm"
+  },
+  "nextAction": {
+    "type": "str",
+    "default": "awaiting_input",
+    "private": false,
+    "sampling": "llm"
+  },
+  "id": {
+    "type": "str",
+    "default": "0",
+    "private": true,
+    "sampling": "default",
+    "description": "Unique id of agent"
+  }
+}

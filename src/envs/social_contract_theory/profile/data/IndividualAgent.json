@@ -1,0 +1,122 @@
+[
+    {
+        "name": "Alice Johnson",
+        "proposal_details": "Initial proposal for contract negotiation",
+        "negotiation_status": "awaiting_response",
+        "historical_influence": 79,
+        "social_context": "stable",
+        "contract_adaptability": 0.7223988550933048,
+        "interaction_pattern": "Collaborative",
+        "agent_type": "IndividualAgent",
+        "individual_interests": [
+            "freedom",
+            "security"
+        ],
+        "negotiation_terms": {
+            "rights": "basic",
+            "duties": "minimal"
+        },
+        "personal_goals": [
+            "Achieve financial stability",
+            "Build a strong community network",
+            "Enhance personal development"
+        ],
+        "id": "0"
+    },
+    {
+        "name": "Michael Smith",
+        "proposal_details": "Initial proposal for contract negotiation",
+        "negotiation_status": "awaiting_response",
+        "historical_influence": 55,
+        "social_context": "stable",
+        "contract_adaptability": 0.2688337015855571,
+        "interaction_pattern": "Innovative",
+        "agent_type": "IndividualAgent",
+        "individual_interests": [
+            "freedom",
+            "security"
+        ],
+        "negotiation_terms": {
+            "rights": "basic",
+            "duties": "minimal"
+        },
+        "personal_goals": [
+            "Promote environmental sustainability",
+            "Increase social awareness",
+            "Foster innovation in technology"
+        ],
+        "id": "1"
+    },
+    {
+        "name": "Sophia Martinez",
+        "proposal_details": "Initial proposal for contract negotiation",
+        "negotiation_status": "awaiting_response",
+        "historical_influence": 16,
+        "social_context": "stable",
+        "contract_adaptability": 0.09925356730634727,
+        "interaction_pattern": "Supportive",
+        "agent_type": "IndividualAgent",
+        "individual_interests": [
+            "freedom",
+            "security"
+        ],
+        "negotiation_terms": {
+            "rights": "basic",
+            "duties": "minimal"
+        },
+        "personal_goals": [
+            "Improve health and wellness",
+            "Strengthen family bonds",
+            "Contribute to educational initiatives"
+        ],
+        "id": "2"
+    },
+    {
+        "name": "Daniel Kim",
+        "proposal_details": "Initial proposal for contract negotiation",
+        "negotiation_status": "awaiting_response",
+        "historical_influence": 54,
+        "social_context": "stable",
+        "contract_adaptability": 0.22630900317323543,
+        "interaction_pattern": "Expressive",
+        "agent_type": "IndividualAgent",
+        "individual_interests": [
+            "freedom",
+            "security"
+        ],
+        "negotiation_terms": {
+            "rights": "basic",
+            "duties": "minimal"
+        },
+        "personal_goals": [
+            "Expand cultural understanding",
+            "Develop leadership skills",
+            "Enhance artistic expression"
+        ],
+        "id": "3"
+    },
+    {
+        "name": "Emma Brown",
+        "proposal_details": "Initial proposal for contract negotiation",
+        "negotiation_status": "awaiting_response",
+        "historical_influence": 93,
+        "social_context": "stable",
+        "contract_adaptability": 0.4112945657754361,
+        "interaction_pattern": "Activist",
+        "agent_type": "IndividualAgent",
+        "individual_interests": [
+            "freedom",
+            "security"
+        ],
+        "negotiation_terms": {
+            "rights": "basic",
+            "duties": "minimal"
+        },
+        "personal_goals": [
+            "Advance career opportunities",
+            "Increase community engagement",
+            "Promote equality and justice"
+        ],
+        "id": "4"
+    }
+]

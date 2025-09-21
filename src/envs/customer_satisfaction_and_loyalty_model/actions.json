@@ -1,0 +1,256 @@
+{
+    "CustomerAgent": [
+        {
+            "id": 1,
+            "name": "initialize_customer",
+            "condition": null,
+            "description": "Sets up initial attributes for the customer, including sensitivity coefficients and initial loyalty.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "service_sensitivity_coefficient",
+                    "type": "float",
+                    "context": "env",
+                    "description": "Randomly initialized sensitivity coefficient for service quality perception"
+                },
+                {
+                    "name": "product_sensitivity_coefficient",
+                    "type": "float",
+                    "context": "env",
+                    "description": "Randomly initialized sensitivity coefficient for product experience perception"
+                },
+                {
+                    "name": "initial_loyalty",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Initial loyalty level of the customer"
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "loyalty",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Sets initial loyalty level for the customer"
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "name": "perceive_quality",
+            "condition": null,
+            "description": "Calculates perceived service quality and product experience based on merchant's baseline and personal sensitivity coefficients.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "baseline_service_quality",
+                    "type": "float",
+                    "context": "event",
+                    "description": "Merchant's baseline service quality level"
+                },
+                {
+                    "name": "baseline_product_quality",
+                    "type": "float",
+                    "context": "event",
+                    "description": "Merchant's baseline product quality level"
+                },
+                {
+                    "name": "service_sensitivity_coefficient",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Customer's sensitivity coefficient for service quality"
+                },
+                {
+                    "name": "product_sensitivity_coefficient",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Customer's sensitivity coefficient for product experience"
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "perceived_service_quality",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Calculated perceived service quality by the customer"
+                },
+                {
+                    "name": "product_experience_score",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Calculated product experience score by the customer"
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "name": "evaluate_satisfaction",
+            "condition": null,
+            "description": "Evaluates customer satisfaction based on perceived service quality and product experience.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "perceived_service_quality",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Customer's perceived service quality"
+                },
+                {
+                    "name": "product_experience_score",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Customer's product experience score"
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "satisfaction",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Calculated satisfaction score of the customer"
+                }
+            ]
+        },
+        {
+            "id": 4,
+            "name": "update_loyalty",
+            "condition": null,
+            "description": "Updates customer loyalty based on satisfaction trends over time.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "satisfaction",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Customer's satisfaction score"
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "loyalty",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Updated loyalty score of the customer"
+                }
+            ]
+        },
+        {
+            "id": 5,
+            "name": "make_purchase_decision",
+            "condition": null,
+            "description": "Determines whether the customer will make a purchase based on current satisfaction and loyalty.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "satisfaction",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Customer's satisfaction score"
+                },
+                {
+                    "name": "loyalty",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Customer's loyalty score"
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "purchase_decision",
+                    "type": "bool",
+                    "context": "agent",
+                    "description": "Indicates whether the customer made a purchase"
+                }
+            ]
+        }
+    ],
+    "MerchantAgent": [
+        {
+            "id": 6,
+            "name": "initialize_merchant",
+            "condition": null,
+            "description": "Sets up initial baseline service and product quality levels for the merchant.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "baseline_service_quality",
+                    "type": "float",
+                    "context": "env",
+                    "description": "Initial baseline service quality level"
+                },
+                {
+                    "name": "baseline_product_quality",
+                    "type": "float",
+                    "context": "env",
+                    "description": "Initial baseline product quality level"
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "service_quality",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Sets initial service quality level for the merchant"
+                },
+                {
+                    "name": "product_quality",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Sets initial product quality level for the merchant"
+                }
+            ]
+        },
+        {
+            "id": 7,
+            "name": "collect_feedback",
+            "condition": null,
+            "description": "Gathers feedback from customers based on their purchasing decisions.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "purchase_decision",
+                    "type": "bool",
+                    "context": "event",
+                    "description": "Indicates whether the customer made a purchase"
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "average_feedback_score",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Average feedback score collected from customers"
+                }
+            ]
+        },
+        {
+            "id": 8,
+            "name": "adjust_quality",
+            "condition": "Every 3 time steps",
+            "description": "Adjusts service and product quality levels based on average customer feedback.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "average_feedback_score",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Average feedback score collected from customers"
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "service_quality",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Adjusted service quality level"
+                },
+                {
+                    "name": "product_quality",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Adjusted product quality level"
+                }
+            ]
+        }
+    ]
+}

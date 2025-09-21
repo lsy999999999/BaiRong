@@ -1,0 +1,77 @@
+[
+    {
+        "name": "AgentAlpha",
+        "resource_level": 21,
+        "decision_strategy": "Rational",
+        "risk_tolerance": 0.5004383654639097,
+        "goal_priority": [
+            "Efficiency",
+            "Growth",
+            "Sustainability"
+        ],
+        "current_status": "active",
+        "agent_type": "UtilityEvaluator",
+        "utility_value": 100.0,
+        "id": "5"
+    },
+    {
+        "name": "AgentBeta",
+        "resource_level": 28,
+        "decision_strategy": "Heuristic",
+        "risk_tolerance": 0.4304206169179118,
+        "goal_priority": [
+            "Innovation",
+            "Cost Reduction",
+            "Market Expansion"
+        ],
+        "current_status": "active",
+        "agent_type": "UtilityEvaluator",
+        "utility_value": 100.0,
+        "id": "6"
+    },
+    {
+        "name": "AgentGamma",
+        "resource_level": 86,
+        "decision_strategy": "Adaptive",
+        "risk_tolerance": 0.13195291863955072,
+        "goal_priority": [
+            "Customer Satisfaction",
+            "Quality Improvement",
+            "Brand Loyalty"
+        ],
+        "current_status": "active",
+        "agent_type": "UtilityEvaluator",
+        "utility_value": 100.0,
+        "id": "7"
+    },
+    {
+        "name": "AgentDelta",
+        "resource_level": 10,
+        "decision_strategy": "Predictive",
+        "risk_tolerance": 0.5321698568725693,
+        "goal_priority": [
+            "Risk Management",
+            "Profit Maximization",
+            "Resource Allocation"
+        ],
+        "current_status": "active",
+        "agent_type": "UtilityEvaluator",
+        "utility_value": 100.0,
+        "id": "8"
+    },
+    {
+        "name": "AgentEpsilon",
+        "resource_level": 55,
+        "decision_strategy": "Collaborative",
+        "risk_tolerance": 0.9748327146564303,
+        "goal_priority": [
+            "Team Building",
+            "Community Engagement",
+            "Diversity"
+        ],
+        "current_status": "active",
+        "agent_type": "UtilityEvaluator",
+        "utility_value": 100.0,
+        "id": "9"
+    }
+]

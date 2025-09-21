@@ -1,0 +1,436 @@
+{
+  "agents": {
+    "IndividualAgent": {
+      "imports": "from typing import Any, List,Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "1": {
+          "code": "async def initiate_contract_negotiation(self, event: Event) -> List[Event]:\n        # Since the condition is 'null', proceed with the handler logic immediately\n        \n        # Retrieve required data from agent's profile\n        individual_interests = self.profile.get_data(\"individual_interests\", [])\n        proposal_details = self.profile.get_data(\"proposal_details\", \"\")\n        negotiation_terms = self.profile.get_data(\"negotiation_terms\", {})\n        \n        # Create observation from the agent's current state\n        observation = f\"Individual interests: {individual_interests}, Proposal details: {proposal_details}, Negotiation terms: {negotiation_terms}\"\n        \n        # Instruction for LLM to generate reaction\n        instruction = \"\"\"Initiate the contract negotiation process by evaluating individual interests and desired terms.\n        Please return the negotiation status and target_ids in the following JSON format:\n    \n        {\n        \"negotiation_status\": \"<Updated negotiation status>\",\n        \"target_ids\": [\"<The string ID(s) of the target agent(s)>\"]\n        }\n        \"\"\"\n        \n        # Generate reaction using LLM\n        result = await self.generate_reaction(instruction, observation)\n        \n        # Extract negotiation status and target_ids from the result\n        negotiation_status = result.get('negotiation_status', \"Pending\")\n        target_ids = result.get('target_ids', [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n        \n        # Update agent's profile with the new negotiation status\n        self.profile.update_data(\"negotiation_status\", negotiation_status)\n        \n        # Prepare and send ContractProposalEvent to each target agent\n        events = []\n        for target_id in target_ids:\n            contract_proposal_event = ContractProposalEvent(\n                from_agent_id=self.profile_id,\n                to_agent_id=target_id,\n                individual_interests=individual_interests,\n                proposal_details=proposal_details,\n                negotiation_terms=negotiation_terms\n            )\n            events.append(contract_proposal_event)\n        \n        return events",
+          "metadata": {
+            "id": 1,
+            "name": "initiate_contract_negotiation",
+            "condition": "null",
+            "description": "This action initiates the process of negotiating a social contract based on individual interests and desired terms.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "individual_interests",
+                "type": "list",
+                "context": "agent",
+                "description": "List of individual interests that drive the need for a contract negotiation."
+              },
+              {
+                "name": "proposal_details",
+                "type": "string",
+                "context": "agent",
+                "description": "Detailed description of the contract proposal to be negotiated."
+              },
+              {
+                "name": "negotiation_terms",
+                "type": "dict",
+                "context": "agent",
+                "description": "Terms proposed for negotiation in the contract."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "negotiation_status",
+                "type": "string",
+                "context": "agent",
+                "description": "Current status of the negotiation process."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "SocialGroupAgent": {
+      "imports": "from typing import Any, List,Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "2": {
+          "code": "async def evaluate_collective_interests(self, event: Event) -> List[Event]:\n        # Condition check: Reception of ContractProposalEvent\n        if event.__class__.__name__ != \"ContractProposalEvent\":\n            return []\n    \n        # Access required variables\n        collective_interests = event.individual_interests\n        evaluation_criteria = self.profile.get_data(\"evaluation_criteria\", \"\")\n    \n        # Decision making using generate_reaction\n        instruction = \"\"\"\n        Evaluate the collective interests against the agent's evaluation criteria.\n        Please return the information in the following JSON format:\n    \n        {\n        \"evaluation_status\": \"<Status of the evaluation process>\",\n        \"target_ids\": [\"<The string ID(s) of the GovernmentAgent(s) to review the social contract>\"]\n        }\n        \"\"\"\n        observation = f\"Collective interests: {collective_interests}, Evaluation criteria: {evaluation_criteria}\"\n        result = await self.generate_reaction(instruction, observation)\n    \n        # Process the LLM's returned results\n        evaluation_status = result.get('evaluation_status', \"Pending\")\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n    \n        # Update agent's profile data\n        self.profile.update_data(\"evaluation_status\", evaluation_status)\n    \n        # Prepare and send CollectiveInterestEvent to each target\n        events = []\n        for target_id in target_ids:\n            collective_interest_event = CollectiveInterestEvent(self.profile_id, target_id, collective_interests, evaluation_criteria)\n            events.append(collective_interest_event)\n    \n        return events",
+          "metadata": {
+            "id": 2,
+            "name": "evaluate_collective_interests",
+            "condition": "Reception of ContractProposalEvent",
+            "description": "This action evaluates the collective interests of the social group to form or modify a social contract.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "collective_interests",
+                "type": "list",
+                "context": "event",
+                "description": "List of collective interests presented by the individual agent."
+              },
+              {
+                "name": "evaluation_criteria",
+                "type": "string",
+                "context": "agent",
+                "description": "Criteria used for evaluating the collective interests."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "evaluation_status",
+                "type": "string",
+                "context": "agent",
+                "description": "Status of the collective interest evaluation process."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "GovernmentAgent": {
+      "imports": "from typing import Any, List,Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "3": {
+          "code": "async def enforce_laws(self, event: Event) -> List[Event]:\n        # Condition check: The action condition is 'null', so proceed directly.\n        \n        # Retrieve law details from the agent's profile\n        law_details = self.profile.get_data(\"law_details\", \"\")\n        \n        # Prepare observation and instruction for LLM\n        observation = f\"Law details: {law_details}\"\n        instruction = \"\"\"Please determine if the enforcement of the given law triggers a conflict. \n        Return the information in the following JSON format:\n    \n        {\n        \"conflict_trigger\": \"<Boolean indicating if a conflict is triggered>\",\n        \"target_ids\": [\"<The string ID of the ContractBreakdownAgent>\"]\n        }\n        \"\"\"\n        \n        # Generate reaction using LLM\n        result = await self.generate_reaction(instruction, observation)\n        \n        conflict_trigger = result.get('conflict_trigger', False)\n        target_ids = result.get('target_ids', None)\n        \n        # Ensure target_ids is a list\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n        \n        # Prepare outgoing events\n        events = []\n        for target_id in target_ids:\n            law_enforcement_event = LawEnforcementEvent(\n                self.profile_id, \n                target_id, \n                law_details=law_details, \n                conflict_trigger=conflict_trigger\n            )\n            events.append(law_enforcement_event)\n        \n        return events",
+          "metadata": {
+            "id": 3,
+            "name": "enforce_laws",
+            "condition": "null",
+            "description": "This action enforces the laws as per the social contract, potentially triggering conflicts.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "law_details",
+                "type": "string",
+                "context": "agent",
+                "description": "Details of the law being enforced."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "enforcement_status",
+                "type": "string",
+                "context": "agent",
+                "description": "Current status of law enforcement."
+              }
+            ]
+          }
+        },
+        "4": {
+          "code": "async def review_social_contract(self, event: Event) -> List[Event]:\n        # Condition Check: Ensure the event is CollectiveInterestEvent\n        if event.__class__.__name__ != \"CollectiveInterestEvent\":\n            return []\n    \n        # Access required variables from the event\n        contract_terms = event.contract_terms\n    \n        # Generate reaction to decide on actions based on contract terms\n        observation = f\"Received contract terms: {contract_terms}\"\n        instruction = \"\"\"Please review the terms of the social contract and decide on the review status. \n        If the terms are acceptable, update review_status to 'approved'; otherwise, set it to 'pending further review'.\n        Return the information in the following JSON format:\n    \n        {\n        \"review_status\": \"<The status of the contract review process>\",\n        \"target_ids\": [\"<The string ID(s) of the PublicPolicyAgent(s)>\"]\n        }\n        \"\"\"\n        \n        result = await self.generate_reaction(instruction, observation)\n        \n        # Process the LLM's returned results\n        review_status = result.get('review_status', \"pending further review\")\n        target_ids = result.get('target_ids', [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n    \n        # Update the agent's state with review_status\n        self.profile.update_data(\"review_status\", review_status)\n    \n        # Prepare and send the SocialContractApprovalEvent to the PublicPolicyAgent(s)\n        events = []\n        for target_id in target_ids:\n            approval_event = SocialContractApprovalEvent(\n                self.profile_id, target_id, contract_terms, review_status\n            )\n            events.append(approval_event)\n    \n        return events",
+          "metadata": {
+            "id": 4,
+            "name": "review_social_contract",
+            "condition": "Reception of CollectiveInterestEvent",
+            "description": "This action reviews the terms of the social contract for approval and potential policy implications.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "contract_terms",
+                "type": "dict",
+                "context": "event",
+                "description": "Terms of the social contract being reviewed."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "review_status",
+                "type": "string",
+                "context": "agent",
+                "description": "Current status of the social contract review process."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "ContractBreakdownAgent": {
+      "imports": "from typing import Any, List,Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "5": {
+          "code": "async def simulate_conflict(self, event: Event) -> List[Event]:\n        # Condition check: Only proceed if the event is LawEnforcementEvent and conflict_trigger is true\n        if event.__class__.__name__ != \"LawEnforcementEvent\" or not event.conflict_trigger:\n            return []\n    \n        # Access required variables\n        conflict_trigger = event.conflict_trigger\n        conflict_details = self.profile.get_data(\"conflict_details\", \"\")\n    \n        # Generate decision using LLM\n        observation = f\"Conflict Trigger: {conflict_trigger}, Conflict Details: {conflict_details}\"\n        instruction = \"\"\"Simulate the conflict arising from the law enforcement event. \n        Provide the conflict details and determine the target IDs for resolution. \n        Return the following JSON format:\n    \n        {\n        \"conflict_details\": \"<Details of the simulated conflict>\",\n        \"target_ids\": [\"<Target ID(s) for conflict resolution>\"]\n        }\n        \"\"\"\n    \n        result = await self.generate_reaction(instruction, observation)\n        \n        conflict_details = result.get('conflict_details', \"\")\n        target_ids = result.get('target_ids', [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n    \n        # Update conflict status in agent profile\n        self.profile.update_data(\"conflict_status\", \"simulating\")\n    \n        # Prepare and send ConflictResolutionEvent to each target\n        events = []\n        for target_id in target_ids:\n            conflict_event = ConflictResolutionEvent(self.profile_id, target_id, conflict_details, \"\", \"in_progress\")\n            events.append(conflict_event)\n    \n        return events",
+          "metadata": {
+            "id": 5,
+            "name": "simulate_conflict",
+            "condition": "Reception of LawEnforcementEvent",
+            "description": "This action simulates conflicts that may arise from law enforcement or contract breakdown.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "conflict_trigger",
+                "type": "boolean",
+                "context": "event",
+                "description": "Indicates if the law enforcement triggers a conflict."
+              },
+              {
+                "name": "conflict_details",
+                "type": "string",
+                "context": "agent",
+                "description": "Details of the conflict being simulated."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "conflict_status",
+                "type": "string",
+                "context": "agent",
+                "description": "Current status of the conflict simulation process."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "PublicPolicyAgent": {
+      "imports": "from typing import Any, List,Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "6": {
+          "code": "async def evaluate_policy_impacts(self, event: Event) -> List[Event]:\n        # Condition check for the action\n        if event.__class__.__name__ != \"SocialContractApprovalEvent\":\n            return []\n    \n        # Retrieve necessary event data\n        policy_details = event.contract_terms\n        approval_status = event.approval_status\n    \n        # Retrieve agent-specific data\n        impact_analysis_results = self.profile.get_data(\"impact_analysis_results\", {})\n    \n        # Generate instruction for decision making\n        observation = f\"Policy Details: {policy_details}, Approval Status: {approval_status}, Impact Analysis Results: {impact_analysis_results}\"\n        instruction = \"\"\"Evaluate the impacts of the given policy details following the approval of social contract terms. \n        Return the analysis results in the following JSON format:\n        \n        {\n        \"policy_details\": \"<Details of the policy being analyzed>\",\n        \"impact_analysis_results\": <Results of the policy impact analysis as a dictionary>,\n        \"analysis_status\": \"<Status of the policy impact analysis>\",\n        \"target_ids\": [\"<The string ID(s) of the EnvAgent>\"]\n        }\n        \"\"\"\n    \n        # Generate reaction using LLM\n        result = await self.generate_reaction(instruction, observation)\n    \n        # Parse the response\n        policy_details = result.get('policy_details', policy_details)\n        impact_analysis_results = result.get('impact_analysis_results', impact_analysis_results)\n        analysis_status = result.get('analysis_status', 'completed')\n        target_ids = result.get('target_ids', 'ENV')\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n    \n        # Update agent's profile with analysis results\n        self.profile.update_data(\"impact_analysis_results\", impact_analysis_results)\n        self.profile.update_data(\"analysis_status\", analysis_status)\n    \n        # Prepare and send PolicyImpactAnalysisEvent to the EnvAgent(s)\n        events = []\n        for target_id in target_ids:\n            policy_impact_event = PolicyImpactAnalysisEvent(\n                self.profile_id, target_id, policy_details, impact_analysis_results, analysis_status)\n            events.append(policy_impact_event)\n    \n        return events",
+          "metadata": {
+            "id": 6,
+            "name": "evaluate_policy_impacts",
+            "condition": "Reception of SocialContractApprovalEvent",
+            "description": "This action evaluates the impacts of public policies following the approval of social contract terms.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "policy_details",
+                "type": "string",
+                "context": "event",
+                "description": "Details of the policy being analyzed."
+              },
+              {
+                "name": "impact_analysis_results",
+                "type": "dict",
+                "context": "agent",
+                "description": "Results of the policy impact analysis."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "analysis_status",
+                "type": "string",
+                "context": "agent",
+                "description": "Status of the policy impact analysis."
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "events": {
+    "imports": "from onesim.events import Event\nfrom typing import Dict, List, Any",
+    "definitions": {
+      "-1": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": -1,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "IndividualAgent",
+          "to_action_name": "initiate_contract_negotiation",
+          "from_action_id": 0,
+          "to_action_id": 1,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for contract negotiation workflow",
+          "fields": []
+        }
+      },
+      "-2": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": -2,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "GovernmentAgent",
+          "to_action_name": "enforce_laws",
+          "from_action_id": 0,
+          "to_action_id": 3,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for law enforcement workflow",
+          "fields": []
+        }
+      },
+      "1": {
+        "code": "class ContractProposalEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        individual_interests: List[Any] = [],\n        proposal_details: str = \"\",\n        negotiation_terms: Dict[str, Any] = {},\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.individual_interests = individual_interests\n        self.proposal_details = proposal_details\n        self.negotiation_terms = negotiation_terms",
+        "metadata": {
+          "id": 1,
+          "from_agent_type": "IndividualAgent",
+          "from_action_name": "initiate_contract_negotiation",
+          "to_agent_type": "SocialGroupAgent",
+          "to_action_name": "evaluate_collective_interests",
+          "from_action_id": 1,
+          "to_action_id": 2,
+          "event_name": "ContractProposalEvent",
+          "event_info": "Proposal for contract negotiation based on individual interests",
+          "fields": [
+            {
+              "name": "individual_interests",
+              "type": "list",
+              "default_value": "[]",
+              "description": "List of individual interests driving the contract proposal"
+            },
+            {
+              "name": "proposal_details",
+              "type": "string",
+              "default_value": "",
+              "description": "Detailed description of the contract proposal"
+            },
+            {
+              "name": "negotiation_terms",
+              "type": "dict",
+              "default_value": "{}",
+              "description": "Terms proposed for negotiation in the contract"
+            }
+          ]
+        }
+      },
+      "2": {
+        "code": "class CollectiveInterestEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        collective_interests: List[Any] = [],\n        evaluation_criteria: str = \"\",\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.collective_interests = collective_interests\n        self.evaluation_criteria = evaluation_criteria",
+        "metadata": {
+          "id": 2,
+          "from_agent_type": "SocialGroupAgent",
+          "from_action_name": "evaluate_collective_interests",
+          "to_agent_type": "GovernmentAgent",
+          "to_action_name": "review_social_contract",
+          "from_action_id": 2,
+          "to_action_id": 4,
+          "event_name": "CollectiveInterestEvent",
+          "event_info": "Evaluation of collective interests for contract formation",
+          "fields": [
+            {
+              "name": "collective_interests",
+              "type": "list",
+              "default_value": "[]",
+              "description": "List of collective interests of the social group"
+            },
+            {
+              "name": "evaluation_criteria",
+              "type": "string",
+              "default_value": "",
+              "description": "Criteria used for evaluating collective interests"
+            }
+          ]
+        }
+      },
+      "3": {
+        "code": "class LawEnforcementEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        law_details: str = \"\",\n        conflict_trigger: bool = False,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.law_details = law_details\n        self.conflict_trigger = conflict_trigger",
+        "metadata": {
+          "id": 3,
+          "from_agent_type": "GovernmentAgent",
+          "from_action_name": "enforce_laws",
+          "to_agent_type": "ContractBreakdownAgent",
+          "to_action_name": "simulate_conflict",
+          "from_action_id": 3,
+          "to_action_id": 5,
+          "event_name": "LawEnforcementEvent",
+          "event_info": "Enforcement of laws triggering potential conflicts",
+          "fields": [
+            {
+              "name": "law_details",
+              "type": "string",
+              "default_value": "",
+              "description": "Details of the law being enforced"
+            },
+            {
+              "name": "conflict_trigger",
+              "type": "boolean",
+              "default_value": "false",
+              "description": "Indicates if the law enforcement triggers a conflict"
+            }
+          ]
+        }
+      },
+      "4": {
+        "code": "class SocialContractApprovalEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        contract_terms: Dict[str, Any] = {},\n        approval_status: str = 'pending',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.contract_terms = contract_terms\n        self.approval_status = approval_status",
+        "metadata": {
+          "id": 4,
+          "from_agent_type": "GovernmentAgent",
+          "from_action_name": "review_social_contract",
+          "to_agent_type": "PublicPolicyAgent",
+          "to_action_name": "evaluate_policy_impacts",
+          "from_action_id": 4,
+          "to_action_id": 6,
+          "event_name": "SocialContractApprovalEvent",
+          "event_info": "Approval and review of social contract terms",
+          "fields": [
+            {
+              "name": "contract_terms",
+              "type": "dict",
+              "default_value": "{}",
+              "description": "Terms of the social contract being approved"
+            },
+            {
+              "name": "approval_status",
+              "type": "string",
+              "default_value": "pending",
+              "description": "Current status of the contract approval process"
+            }
+          ]
+        }
+      },
+      "5": {
+        "code": "class ConflictResolutionEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        conflict_details: str = \"\",\n        resolution_method: str = \"\",\n        resolution_status: str = 'in_progress',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.conflict_details = conflict_details\n        self.resolution_method = resolution_method\n        self.resolution_status = resolution_status",
+        "metadata": {
+          "id": 5,
+          "from_agent_type": "ContractBreakdownAgent",
+          "from_action_name": "simulate_conflict",
+          "to_agent_type": "EnvAgent",
+          "to_action_name": "terminate",
+          "from_action_id": 5,
+          "to_action_id": -1,
+          "event_name": "ConflictResolutionEvent",
+          "event_info": "Resolution of contract breakdown or conflict",
+          "fields": [
+            {
+              "name": "conflict_details",
+              "type": "string",
+              "default_value": "",
+              "description": "Details of the conflict being resolved"
+            },
+            {
+              "name": "resolution_method",
+              "type": "string",
+              "default_value": "",
+              "description": "Method used for resolving the conflict"
+            },
+            {
+              "name": "resolution_status",
+              "type": "string",
+              "default_value": "in_progress",
+              "description": "Status of the conflict resolution process"
+            }
+          ]
+        }
+      },
+      "6": {
+        "code": "class PolicyImpactAnalysisEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        policy_details: str = \"\",\n        impact_analysis_results: Dict[str, Any] = {},\n        analysis_status: str = 'completed',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.policy_details = policy_details\n        self.impact_analysis_results = impact_analysis_results\n        self.analysis_status = analysis_status",
+        "metadata": {
+          "id": 6,
+          "from_agent_type": "PublicPolicyAgent",
+          "from_action_name": "evaluate_policy_impacts",
+          "to_agent_type": "EnvAgent",
+          "to_action_name": "terminate",
+          "from_action_id": 6,
+          "to_action_id": -1,
+          "event_name": "PolicyImpactAnalysisEvent",
+          "event_info": "Analysis of policy impacts following social contract approval",
+          "fields": [
+            {
+              "name": "policy_details",
+              "type": "string",
+              "default_value": "",
+              "description": "Details of the policy being analyzed"
+            },
+            {
+              "name": "impact_analysis_results",
+              "type": "dict",
+              "default_value": "{}",
+              "description": "Results of the policy impact analysis"
+            },
+            {
+              "name": "analysis_status",
+              "type": "string",
+              "default_value": "completed",
+              "description": "Status of the policy impact analysis"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,137 @@
+[
+    {
+        "name": "AlexJohnson",
+        "potential_updates": [
+            "Update connections",
+            "Increase social capital"
+        ],
+        "update_status": "ready",
+        "social_capital": 76.7142411471772,
+        "trust_level": 87,
+        "relationship_status": "neutral",
+        "resource_access": "limited",
+        "agent_type": "SocialNetworkAgent",
+        "analysis_summary": "Initial analysis pending",
+        "changes_applied": [
+            {
+                "date": "2023-10-01",
+                "change": "Initial setup"
+            }
+        ],
+        "interaction_history": [
+            {
+                "interaction": "initial",
+                "result": "neutral"
+            }
+        ],
+        "id": "5"
+    },
+    {
+        "name": "SamanthaLee",
+        "potential_updates": [
+            "Update connections",
+            "Increase social capital"
+        ],
+        "update_status": "ready",
+        "social_capital": 52.524051518827186,
+        "trust_level": 32,
+        "relationship_status": "neutral",
+        "resource_access": "limited",
+        "agent_type": "SocialNetworkAgent",
+        "analysis_summary": "Initial analysis pending",
+        "changes_applied": [
+            {
+                "date": "2023-10-01",
+                "change": "Initial setup"
+            }
+        ],
+        "interaction_history": [
+            {
+                "interaction": "initial",
+                "result": "neutral"
+            }
+        ],
+        "id": "6"
+    },
+    {
+        "name": "MichaelSmith",
+        "potential_updates": [
+            "Update connections",
+            "Increase social capital"
+        ],
+        "update_status": "ready",
+        "social_capital": 95.19764776793971,
+        "trust_level": 86,
+        "relationship_status": "neutral",
+        "resource_access": "limited",
+        "agent_type": "SocialNetworkAgent",
+        "analysis_summary": "Initial analysis pending",
+        "changes_applied": [
+            {
+                "date": "2023-10-01",
+                "change": "Initial setup"
+            }
+        ],
+        "interaction_history": [
+            {
+                "interaction": "initial",
+                "result": "neutral"
+            }
+        ],
+        "id": "7"
+    },
+    {
+        "name": "JessicaBrown",
+        "potential_updates": [
+            "Update connections",
+            "Increase social capital"
+        ],
+        "update_status": "ready",
+        "social_capital": 48.97878996967208,
+        "trust_level": 27,
+        "relationship_status": "neutral",
+        "resource_access": "limited",
+        "agent_type": "SocialNetworkAgent",
+        "analysis_summary": "Initial analysis pending",
+        "changes_applied": [
+            {
+                "date": "2023-10-01",
+                "change": "Initial setup"
+            }
+        ],
+        "interaction_history": [
+            {
+                "interaction": "initial",
+                "result": "neutral"
+            }
+        ],
+        "id": "8"
+    },
+    {
+        "name": "DavidWilson",
+        "potential_updates": [
+            "Update connections",
+            "Increase social capital"
+        ],
+        "update_status": "ready",
+        "social_capital": 51.01761650131182,
+        "trust_level": 95,
+        "relationship_status": "neutral",
+        "resource_access": "limited",
+        "agent_type": "SocialNetworkAgent",
+        "analysis_summary": "Initial analysis pending",
+        "changes_applied": [
+            {
+                "date": "2023-10-01",
+                "change": "Initial setup"
+            }
+        ],
+        "interaction_history": [
+            {
+                "interaction": "initial",
+                "result": "neutral"
+            }
+        ],
+        "id": "9"
+    }
+]

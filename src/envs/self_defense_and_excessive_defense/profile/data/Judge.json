@@ -1,0 +1,102 @@
+[
+    {
+        "name": "Judge Emily Carter",
+        "judgment_result": "pending",
+        "threat_assessment": 50,
+        "defense_assessment": 50,
+        "completion_status": "in_progress",
+        "years_of_experience": 6,
+        "specialty": "Criminal Law",
+        "decision_making_style": "analytical",
+        "agent_type": "Judge",
+        "legal_reasons": "awaiting_evaluation",
+        "reputation_score": 75.0,
+        "previous_cases": [
+            {
+                "case_id": "1234",
+                "outcome": "justified"
+            }
+        ],
+        "id": "10"
+    },
+    {
+        "name": "Judge Michael Thompson",
+        "judgment_result": "pending",
+        "threat_assessment": 50,
+        "defense_assessment": 50,
+        "completion_status": "in_progress",
+        "years_of_experience": 31,
+        "specialty": "Civil Law",
+        "decision_making_style": "balanced",
+        "agent_type": "Judge",
+        "legal_reasons": "awaiting_evaluation",
+        "reputation_score": 75.0,
+        "previous_cases": [
+            {
+                "case_id": "1234",
+                "outcome": "justified"
+            }
+        ],
+        "id": "11"
+    },
+    {
+        "name": "Judge Sophia Hernandez",
+        "judgment_result": "pending",
+        "threat_assessment": 50,
+        "defense_assessment": 50,
+        "completion_status": "in_progress",
+        "years_of_experience": 27,
+        "specialty": "Family Law",
+        "decision_making_style": "analytical",
+        "agent_type": "Judge",
+        "legal_reasons": "awaiting_evaluation",
+        "reputation_score": 75.0,
+        "previous_cases": [
+            {
+                "case_id": "1234",
+                "outcome": "justified"
+            }
+        ],
+        "id": "12"
+    },
+    {
+        "name": "Judge David Lee",
+        "judgment_result": "pending",
+        "threat_assessment": 50,
+        "defense_assessment": 50,
+        "completion_status": "in_progress",
+        "years_of_experience": 10,
+        "specialty": "Intellectual Property Law",
+        "decision_making_style": "intuitive",
+        "agent_type": "Judge",
+        "legal_reasons": "awaiting_evaluation",
+        "reputation_score": 75.0,
+        "previous_cases": [
+            {
+                "case_id": "1234",
+                "outcome": "justified"
+            }
+        ],
+        "id": "13"
+    },
+    {
+        "name": "Judge Olivia Patel",
+        "judgment_result": "pending",
+        "threat_assessment": 50,
+        "defense_assessment": 50,
+        "completion_status": "in_progress",
+        "years_of_experience": 7,
+        "specialty": "Environmental Law",
+        "decision_making_style": "analytical",
+        "agent_type": "Judge",
+        "legal_reasons": "awaiting_evaluation",
+        "reputation_score": 75.0,
+        "previous_cases": [
+            {
+                "case_id": "1234",
+                "outcome": "justified"
+            }
+        ],
+        "id": "14"
+    }
+]

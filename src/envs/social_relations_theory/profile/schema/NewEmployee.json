@@ -1,0 +1,87 @@
+{
+    "name": {
+        "type": "str",
+        "default": "NewEmployee",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's role in the organization as a new employee"
+    },
+    "initiator_emotion": {
+        "type": "str",
+        "default": "neutral",
+        "private": true,
+        "sampling": "default"
+    },
+    "interaction_status": {
+        "type": "str",
+        "default": "awaiting_input",
+        "private": false,
+        "sampling": "default"
+    },
+    "job_satisfaction": {
+        "type": "float",
+        "default": 50.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "work_motivation": {
+        "type": "int",
+        "default": 50,
+        "private": false,
+        "sampling": "default"
+    },
+    "social_needs": {
+        "type": "str",
+        "default": "moderate",
+        "private": false,
+        "sampling": "llm",
+        "description": "The level of social interaction the agent requires"
+    },
+    "relationship_quality": {
+        "type": "str",
+        "default": "average",
+        "private": false,
+        "sampling": "default"
+    },
+    "team_interaction_level": {
+        "type": "int",
+        "default": 3,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            1,
+            5
+        ]
+    },
+    "emotional_response": {
+        "type": "str",
+        "default": "calm",
+        "private": true,
+        "sampling": "default"
+    },
+    "feedback_received": {
+        "type": "list",
+        "default": [
+            {
+                "date": "2025-04-01",
+                "type": "initial",
+                "content": "Welcome to the team!"
+            }
+        ],
+        "private": true,
+        "sampling": "default"
+    },
+    "sense_of_belonging": {
+        "type": "int",
+        "default": 40,
+        "private": false,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

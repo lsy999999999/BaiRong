@@ -1,0 +1,82 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Judge Doe",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's full name"
+    },
+    "evidence_evaluation_result": {
+        "type": "str",
+        "default": "awaiting_input",
+        "private": true,
+        "sampling": "default"
+    },
+    "defense_evaluation_result": {
+        "type": "str",
+        "default": "awaiting_input",
+        "private": true,
+        "sampling": "default"
+    },
+    "case_id": {
+        "type": "str",
+        "default": "unassigned",
+        "private": true,
+        "sampling": "default"
+    },
+    "legal_expertise_level": {
+        "type": "int",
+        "default": 85,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            50,
+            100
+        ]
+    },
+    "decision_history": {
+        "type": "list",
+        "default": [
+            {
+                "case": "2025-01",
+                "decision": "pending",
+                "date": "2025-04-01"
+            }
+        ],
+        "private": true,
+        "sampling": "default"
+    },
+    "current_status": {
+        "type": "str",
+        "default": "evaluating_case",
+        "private": false,
+        "sampling": "default"
+    },
+    "communication_skill_level": {
+        "type": "int",
+        "default": 90,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            60,
+            100
+        ]
+    },
+    "case_complexity": {
+        "type": "float",
+        "default": 0.75,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

@@ -1,0 +1,98 @@
+{
+    "name": {
+        "type": "str",
+        "default": "EarlyAdopterAgent",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's designation in the diffusion process"
+    },
+    "adoption_decision": {
+        "type": "bool",
+        "default": false,
+        "private": false,
+        "sampling": "default"
+    },
+    "social_influence": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "network_connections": {
+        "type": "list",
+        "default": [
+            "Innovator1",
+            "Innovator2"
+        ],
+        "private": true,
+        "sampling": "default",
+        "sample_size": 5
+    },
+    "innovation_perceived_advantage": {
+        "type": "float",
+        "default": 0.7,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "current_status": {
+        "type": "str",
+        "default": "considering",
+        "private": false,
+        "sampling": "default"
+    },
+    "trialability": {
+        "type": "float",
+        "default": 0.6,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "observability": {
+        "type": "float",
+        "default": 0.8,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "compatibility": {
+        "type": "float",
+        "default": 0.75,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "innovation_complexity": {
+        "type": "float",
+        "default": 0.4,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

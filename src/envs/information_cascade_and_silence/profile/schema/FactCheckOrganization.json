@@ -1,0 +1,98 @@
+{
+    "name": {
+        "type": "str",
+        "default": "FactCheck Organization",
+        "private": false,
+        "sampling": "llm",
+        "description": "A formal name suitable for a third-party fact-checking organization."
+    },
+    "detection_ability": {
+        "type": "float",
+        "default": 0.8,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "response_speed": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "credibility": {
+        "type": "float",
+        "default": 0.9,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "reach": {
+        "type": "int",
+        "default": 100000,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            1000,
+            1000000
+        ]
+    },
+    "editorial_policy": {
+        "type": "str",
+        "choices": [
+            "neutral",
+            "biased",
+            "fact-focused",
+            "agenda-driven"
+        ],
+        "default": "fact-focused",
+        "private": false,
+        "sampling": "random"
+    },
+    "detected_rumors": {
+        "type": "list",
+        "default": [],
+        "private": true,
+        "sampling": "default"
+    },
+    "verification_result": {
+        "type": "str",
+        "default": "",
+        "private": true,
+        "sampling": "default"
+    },
+    "rumor_priority": {
+        "type": "list",
+        "default": [],
+        "private": true,
+        "sampling": "default"
+    },
+    "verification_logs": {
+        "type": "list",
+        "default": [],
+        "private": true,
+        "sampling": "default"
+    },
+    "current_status": {
+        "type": "str",
+        "default": "",
+        "private": false,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

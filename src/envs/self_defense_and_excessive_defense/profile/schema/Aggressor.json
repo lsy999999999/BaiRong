@@ -1,0 +1,85 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Aggressor",
+        "private": false,
+        "sampling": "llm",
+        "description": "The role of the agent in the scenario"
+    },
+    "threat_level": {
+        "type": "int",
+        "default": 50,
+        "private": false,
+        "sampling": "default"
+    },
+    "aggressor_behavior": {
+        "type": "str",
+        "default": "initiating_conflict",
+        "private": true,
+        "sampling": "default"
+    },
+    "defender_id": {
+        "type": "str",
+        "default": "unknown_defender",
+        "private": true,
+        "sampling": "default"
+    },
+    "aggression_type": {
+        "type": "str",
+        "default": "verbal",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "verbal",
+            "physical",
+            "psychological"
+        ]
+    },
+    "motivation": {
+        "type": "str",
+        "default": "unknown",
+        "private": false,
+        "sampling": "llm",
+        "description": "The reason behind the aggressor's actions"
+    },
+    "aggression_intensity": {
+        "type": "int",
+        "default": 70,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            1,
+            100
+        ]
+    },
+    "conflict_history": {
+        "type": "list",
+        "default": [
+            {
+                "date": "2023-10-01",
+                "event": "verbal_threat",
+                "intensity": 60
+            }
+        ],
+        "private": true,
+        "sampling": "default"
+    },
+    "communication_style": {
+        "type": "str",
+        "default": "aggressive",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "aggressive",
+            "passive",
+            "assertive"
+        ]
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

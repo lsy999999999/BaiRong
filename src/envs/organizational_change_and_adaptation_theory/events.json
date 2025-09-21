@@ -1,0 +1,157 @@
+{
+    "-1": {
+        "id": -1,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "LeaderAgent",
+        "to_action_name": "initiate_change_process",
+        "from_action_id": 0,
+        "to_action_id": 1,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for organizational change",
+        "fields": []
+    },
+    "1": {
+        "id": 1,
+        "from_agent_type": "LeaderAgent",
+        "from_action_name": "initiate_change_process",
+        "to_agent_type": "ManagerAgent",
+        "to_action_name": "execute_change_plan",
+        "from_action_id": 1,
+        "to_action_id": 2,
+        "event_name": "ChangeInitiatedEvent",
+        "event_info": "Leader initiates the change process and communicates goals",
+        "fields": [
+            {
+                "name": "change_type",
+                "type": "string",
+                "default_value": "incremental",
+                "description": "Type of change being initiated (incremental, rapid, strategic)"
+            },
+            {
+                "name": "change_goals",
+                "type": "string",
+                "default_value": "",
+                "description": "Goals of the change process"
+            },
+            {
+                "name": "leader_id",
+                "type": "string",
+                "default_value": "",
+                "description": "Identifier of the leader initiating the change"
+            }
+        ]
+    },
+    "2": {
+        "id": 2,
+        "from_agent_type": "ManagerAgent",
+        "from_action_name": "execute_change_plan",
+        "to_agent_type": "EmployeeAgent",
+        "to_action_name": "respond_to_change",
+        "from_action_id": 2,
+        "to_action_id": 3,
+        "event_name": "ChangeExecutionEvent",
+        "event_info": "Manager implements change plan and coordinates execution",
+        "fields": [
+            {
+                "name": "manager_id",
+                "type": "string",
+                "default_value": "",
+                "description": "Identifier of the manager executing the change"
+            },
+            {
+                "name": "execution_plan",
+                "type": "string",
+                "default_value": "",
+                "description": "Details of the change execution plan"
+            }
+        ]
+    },
+    "3": {
+        "id": 3,
+        "from_agent_type": "EmployeeAgent",
+        "from_action_name": "respond_to_change",
+        "to_agent_type": "ManagerAgent",
+        "to_action_name": "adjust_change_strategy",
+        "from_action_id": 3,
+        "to_action_id": 4,
+        "event_name": "FeedbackEvent",
+        "event_info": "Employee provides feedback on change process",
+        "fields": [
+            {
+                "name": "employee_id",
+                "type": "string",
+                "default_value": "",
+                "description": "Identifier of the employee providing feedback"
+            },
+            {
+                "name": "feedback",
+                "type": "string",
+                "default_value": "",
+                "description": "Feedback provided by the employee"
+            },
+            {
+                "name": "emotional_response",
+                "type": "string",
+                "default_value": "neutral",
+                "description": "Emotional response of the employee to the change"
+            }
+        ]
+    },
+    "4": {
+        "id": 4,
+        "from_agent_type": "ManagerAgent",
+        "from_action_name": "adjust_change_strategy",
+        "to_agent_type": "LeaderAgent",
+        "to_action_name": "finalize_change_process",
+        "from_action_id": 4,
+        "to_action_id": 5,
+        "event_name": "StrategyAdjustedEvent",
+        "event_info": "Manager adjusts strategy based on employee feedback",
+        "fields": [
+            {
+                "name": "manager_id",
+                "type": "string",
+                "default_value": "",
+                "description": "Identifier of the manager adjusting the strategy"
+            },
+            {
+                "name": "adjusted_strategy",
+                "type": "string",
+                "default_value": "",
+                "description": "Details of the adjusted strategy based on feedback"
+            }
+        ]
+    },
+    "5": {
+        "id": 5,
+        "from_agent_type": "LeaderAgent",
+        "from_action_name": "finalize_change_process",
+        "to_agent_type": "EnvAgent",
+        "to_action_name": "terminate",
+        "from_action_id": 5,
+        "to_action_id": -1,
+        "event_name": "ChangeFinalizedEvent",
+        "event_info": "Leader finalizes the change process and reports completion",
+        "fields": [
+            {
+                "name": "leader_id",
+                "type": "string",
+                "default_value": "",
+                "description": "Identifier of the leader finalizing the change"
+            },
+            {
+                "name": "completion_status",
+                "type": "string",
+                "default_value": "success",
+                "description": "Status of the change process completion"
+            },
+            {
+                "name": "results",
+                "type": "string",
+                "default_value": "",
+                "description": "Results and outcomes of the change process"
+            }
+        ]
+    }
+}

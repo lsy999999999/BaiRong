@@ -1,0 +1,579 @@
+{
+  "agents": {
+    "CustomerAgent": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nimport random\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "1": {
+          "code": "async def initialize_customer(self, event: Event) -> List[Event]:\n        # Prepare the instruction with observation context\n        observation = \"Initial setup for customer attributes.\"\n        instruction = \"\"\"\n        Please generate the initialized values for 'service_sensitivity_coefficient', 'product_sensitivity_coefficient', and 'initial_loyalty'.\n        Additionally, specify target_ids, which can be a single ID or a list, depending on the scenario.\n        Return the information in the following JSON format:\n        {\n            \"service_sensitivity_coefficient\": <initialized service sensitivity coefficient>,\n            \"product_sensitivity_coefficient\": <initialized product sensitivity coefficient>,\n            \"initial_loyalty\": <initialized loyalty>,\n            \"target_ids\": [\"<The string ID of the MerchantAgent>\"]\n        }\n        \"\"\"\n        # Generate the reaction from the LLM\n        result = await self.generate_reaction(instruction, observation)\n\n        # Parse the LLM's JSON response\n        service_sensitivity_coefficient = result.get('service_sensitivity_coefficient', random.uniform(0.8, 1.2))\n        product_sensitivity_coefficient = result.get('product_sensitivity_coefficient', random.uniform(0.8, 1.2))\n        initial_loyalty = result.get('initial_loyalty', 0.0)\n        target_ids = result.get('target_ids', [])\n\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Update agent's profile with the initialized values\n        self.profile.update_data(\"service_sensitivity_coefficient\", service_sensitivity_coefficient)\n        self.profile.update_data(\"product_sensitivity_coefficient\", product_sensitivity_coefficient)\n        self.profile.update_data(\"loyalty\", initial_loyalty)\n\n        # Create and send the CustomerInitializedEvent to the MerchantAgent\n        events = []\n        for target_id in target_ids:\n            customer_initialized_event = CustomerInitializedEvent(self.profile_id, target_id, initial_loyalty=initial_loyalty)\n            events.append(customer_initialized_event)\n\n        return events",
+          "metadata": {
+            "id": 1,
+            "name": "initialize_customer",
+            "condition": null,
+            "description": "Sets up initial attributes for the customer, including sensitivity coefficients and initial loyalty.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "service_sensitivity_coefficient",
+                "type": "float",
+                "context": "env",
+                "description": "Randomly initialized sensitivity coefficient for service quality perception"
+              },
+              {
+                "name": "product_sensitivity_coefficient",
+                "type": "float",
+                "context": "env",
+                "description": "Randomly initialized sensitivity coefficient for product experience perception"
+              },
+              {
+                "name": "initial_loyalty",
+                "type": "float",
+                "context": "agent",
+                "description": "Initial loyalty level of the customer"
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "loyalty",
+                "type": "float",
+                "context": "agent",
+                "description": "Sets initial loyalty level for the customer"
+              }
+            ]
+          }
+        },
+        "2": {
+          "code": "async def perceive_quality(self, event: Event) -> List[Event]:\n        # Retrieve required data from event and agent profile\n        if event.__class__.__name__ == \"MerchantInitializedEvent\":\n            baseline_service_quality = event.baseline_service_quality\n            baseline_product_quality = event.baseline_product_quality\n        elif event.__class__.__name__ == \"QualityAdjustedEvent\":\n            baseline_service_quality = event.new_service_quality\n            baseline_product_quality = event.new_product_quality\n        else:\n            logger.warning(f\"Unexpected event type: {event.__class__.__name__}\")\n            return []\n\n        service_sensitivity_coefficient = self.profile.get_data(\"service_sensitivity_coefficient\", 1.0)\n        product_sensitivity_coefficient = self.profile.get_data(\"product_sensitivity_coefficient\", 1.0)\n\n        # Calculate perceived service quality and product experience score\n        perceived_service_quality = baseline_service_quality * service_sensitivity_coefficient * (1 + 0.1 * (2 * random.random() - 1))\n        product_experience_score = baseline_product_quality * product_sensitivity_coefficient * (1 + 0.1 * (2 * random.random() - 1))\n\n        # Update agent profile with calculated values\n        self.profile.update_data(\"perceived_service_quality\", perceived_service_quality)\n        self.profile.update_data(\"product_experience_score\", product_experience_score)\n\n        # Generate reaction instruction\n        instruction = \"\"\"Calculate perceived quality scores and return target_ids. \n        The event must include the calculated perceived_service_quality and product_experience_score.\n        The JSON format should be:\n        {\n            \"target_ids\": [\"<The string ID of the Customer agent>\"]\n        }\n        \"\"\"\n        observation = f\"Perceived service quality: {perceived_service_quality}, Product experience score: {product_experience_score}\"\n\n        result = await self.generate_reaction(instruction, observation)\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Prepare and send QualityPerceptionEvent to the next action 'evaluate_satisfaction'\n        events = []\n        for target_id in target_ids:\n            quality_perception_event = QualityPerceptionEvent(self.profile_id, target_id, perceived_service_quality, product_experience_score)\n            events.append(quality_perception_event)\n\n        return events",
+          "metadata": {
+            "id": 2,
+            "name": "perceive_quality",
+            "condition": null,
+            "description": "Calculates perceived service quality and product experience based on merchant's baseline and personal sensitivity coefficients.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "baseline_service_quality",
+                "type": "float",
+                "context": "event",
+                "description": "Merchant's baseline service quality level"
+              },
+              {
+                "name": "baseline_product_quality",
+                "type": "float",
+                "context": "event",
+                "description": "Merchant's baseline product quality level"
+              },
+              {
+                "name": "service_sensitivity_coefficient",
+                "type": "float",
+                "context": "agent",
+                "description": "Customer's sensitivity coefficient for service quality"
+              },
+              {
+                "name": "product_sensitivity_coefficient",
+                "type": "float",
+                "context": "agent",
+                "description": "Customer's sensitivity coefficient for product experience"
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "perceived_service_quality",
+                "type": "float",
+                "context": "agent",
+                "description": "Calculated perceived service quality by the customer"
+              },
+              {
+                "name": "product_experience_score",
+                "type": "float",
+                "context": "agent",
+                "description": "Calculated product experience score by the customer"
+              }
+            ]
+          }
+        },
+        "3": {
+          "code": "async def evaluate_satisfaction(self, event: Event) -> List[Event]:\n        # Retrieve required data from the event\n        perceived_service_quality = event.perceived_service_quality\n        product_experience_score = event.product_experience_score\n\n        # Calculate satisfaction based on the provided formula\n        satisfaction = 0.6 * perceived_service_quality + 0.4 * product_experience_score\n\n        # Prepare the instruction for generating the reaction\n        instruction = \"\"\"\n        Evaluate customer satisfaction based on perceived quality and product experience.\n        Please return the information in the following JSON format:\n\n        {\n        \"satisfaction_score\": \"<Calculated satisfaction score>\",\n        \"target_ids\": [\"<The string ID(s) of the agent(s) for the next action>\"]\n        }\n        \"\"\"\n\n        # Generate the reaction using the instruction and current context\n        observation = f\"Perceived Service Quality: {perceived_service_quality}, Product Experience Score: {product_experience_score}\"\n        result = await self.generate_reaction(instruction, observation)\n\n        # Extract satisfaction score and target_ids from the result\n        satisfaction_score = result.get('satisfaction_score', satisfaction)\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Update the agent's profile with the new satisfaction score\n        self.profile.update_data(\"satisfaction\", satisfaction_score)\n\n        # Prepare and send the SatisfactionEvaluatedEvent to the next action\n        events = []\n        for target_id in target_ids:\n            satisfaction_event = SatisfactionEvaluatedEvent(self.profile_id, target_id, satisfaction_score)\n            events.append(satisfaction_event)\n\n        return events",
+          "metadata": {
+            "id": 3,
+            "name": "evaluate_satisfaction",
+            "condition": null,
+            "description": "Evaluates customer satisfaction based on perceived service quality and product experience.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "perceived_service_quality",
+                "type": "float",
+                "context": "agent",
+                "description": "Customer's perceived service quality"
+              },
+              {
+                "name": "product_experience_score",
+                "type": "float",
+                "context": "agent",
+                "description": "Customer's product experience score"
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "satisfaction",
+                "type": "float",
+                "context": "agent",
+                "description": "Calculated satisfaction score of the customer"
+              }
+            ]
+          }
+        },
+        "4": {
+          "code": "async def update_loyalty(self, event: Event) -> List[Event]:\n        # Retrieve the satisfaction score from the incoming event\n        satisfaction_score = event.satisfaction_score\n\n        # Retrieve the current loyalty score of the agent\n        current_loyalty = self.profile.get_data(\"loyalty\", 0.0)\n\n        # Calculate the updated loyalty score based on satisfaction trends\n        decay_factor = 0.1\n        neutral_satisfaction = 0.5\n        loyalty_update = (satisfaction_score - neutral_satisfaction) * decay_factor\n        updated_loyalty = max(0.0, min(1.0, current_loyalty + loyalty_update))  # Constrain loyalty to [0, 1]\n\n        # Update the loyalty score in the agent's profile\n        self.profile.update_data(\"loyalty\", updated_loyalty)\n\n        # Prepare instruction for generating the next action's target IDs\n        observation = f\"Satisfaction score: {satisfaction_score}, Updated loyalty: {updated_loyalty}\"\n        instruction = \"\"\"Based on the updated loyalty score, determine the target agent(s) for the next action 'make_purchase_decision'.\n        Please return the information in the following JSON format:\n        {\n            \"target_ids\": [\"<The string ID of the target agent(s)>\"]\n        }\n        \"\"\"\n\n        # Generate reaction to determine target IDs for the next action\n        result = await self.generate_reaction(instruction, observation)\n        target_ids = result.get(\"target_ids\", [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Prepare and send the LoyaltyUpdatedEvent to the target agents\n        events = []\n        for target_id in target_ids:\n            loyalty_event = LoyaltyUpdatedEvent(self.profile_id, target_id, updated_loyalty)\n            events.append(loyalty_event)\n\n        return events",
+          "metadata": {
+            "id": 4,
+            "name": "update_loyalty",
+            "condition": null,
+            "description": "Updates customer loyalty based on satisfaction trends over time.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "satisfaction",
+                "type": "float",
+                "context": "agent",
+                "description": "Customer's satisfaction score"
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "loyalty",
+                "type": "float",
+                "context": "agent",
+                "description": "Updated loyalty score of the customer"
+              }
+            ]
+          }
+        },
+        "5": {
+          "code": "async def make_purchase_decision(self, event: Event) -> List[Event]:\n        # Retrieve required agent data\n        satisfaction = self.profile.get_data(\"satisfaction\", 0.5)\n        loyalty = self.profile.get_data(\"loyalty\", 0.0)\n\n        # Generate observation for the LLM\n        observation = f\"Satisfaction: {satisfaction}, Loyalty: {loyalty}\"\n\n        # Craft instruction for the LLM\n        instruction = \"\"\"Calculate the purchase probability using the sigmoid function with inputs 2 * loyalty + 1.5 * satisfaction.\n        Determine if a purchase is made by generating a random number and checking if it is less than the calculated purchase probability.\n        Return the results in the following JSON format:\n        {\n            \"purchase_decision\": <true or false>,\n            \"purchase_probability\": <a float between 0.0 and 1.0>,\n            \"target_ids\": [\"<The string ID(s) of the agent(s) for the next action>\"]\n        }\n        \"\"\"\n\n        # Generate reaction using the LLM\n        result = await self.generate_reaction(instruction, observation)\n\n        # Parse the results\n        purchase_decision = result.get('purchase_decision', False)\n        purchase_probability = result.get('purchase_probability', 0.0)\n        target_ids = result.get('target_ids', [])\n\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Handle cases where target_ids might be empty or invalid\n        if not target_ids:\n            logger.warning(\"No valid target IDs found for the next action.\")\n            return []\n\n        # Update agent's state\n        self.profile.update_data(\"purchase_decision\", purchase_decision)\n        self.profile.update_data(\"purchase_probability\", purchase_probability)\n\n        # Prepare outgoing events\n        events = []\n        for target_id in target_ids:\n            if target_id == \"MerchantAgent\":\n                purchase_event = PurchaseDecisionEvent(self.profile_id, target_id, purchase_decision, purchase_probability)\n                events.append(purchase_event)\n            elif target_id == \"EnvAgent\":\n                end_event = EndEvent(self.profile_id, target_id, \"Completed\")\n                events.append(end_event)\n\n        return events",
+          "metadata": {
+            "id": 5,
+            "name": "make_purchase_decision",
+            "condition": null,
+            "description": "Determines whether the customer will make a purchase based on current satisfaction and loyalty.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "satisfaction",
+                "type": "float",
+                "context": "agent",
+                "description": "Customer's satisfaction score"
+              },
+              {
+                "name": "loyalty",
+                "type": "float",
+                "context": "agent",
+                "description": "Customer's loyalty score"
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "purchase_decision",
+                "type": "bool",
+                "context": "agent",
+                "description": "Indicates whether the customer made a purchase"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "MerchantAgent": {
+      "imports": "from typing import Any, List\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import Event\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "6": {
+          "code": "async def initialize_merchant(self, event: Event) -> List[Event]:\n        # Access environment variables for initial baseline service and product quality\n        baseline_service_quality = await self.get_env_data(\"baseline_service_quality\", 0.0)\n        baseline_product_quality = await self.get_env_data(\"baseline_product_quality\", 0.0)\n\n        # Initialize baseline service and product quality levels with random values between 0.3 and 0.7\n        import random\n        service_quality = random.uniform(0.3, 0.7)\n        product_quality = random.uniform(0.3, 0.7)\n\n        # Update agent profile with the initialized values\n        self.profile.update_data(\"service_quality\", service_quality)\n        self.profile.update_data(\"product_quality\", product_quality)\n\n        # Prepare instruction for LLM to generate reaction\n        instruction = \"\"\"\n        Initialize the merchant's baseline service and product quality levels.\n        Ensure to return the target_ids for the next event.\n        Please return the information in the following JSON format:\n\n        {\n        \"merchant_id\": \"<Unique identifier for the merchant>\",\n        \"baseline_service_quality\": <The initialized baseline service quality level>,\n        \"baseline_product_quality\": <The initialized baseline product quality level>,\n        \"target_ids\": [\"<The string ID(s) of the CustomerAgent(s)>\"]\n        }\n        \"\"\"\n\n        # Generate reaction using LLM\n        observation = f\"Service Quality: {service_quality}, Product Quality: {product_quality}\"\n        result = await self.generate_reaction(instruction, observation)\n\n        # Extract results from LLM response\n        merchant_id = result.get('merchant_id', None)\n        target_ids = result.get('target_ids', [])\n\n        # Ensure target_ids is a list\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Create and send MerchantInitializedEvent to each target_id\n        events = []\n        for target_id in target_ids:\n            merchant_initialized_event = MerchantInitializedEvent(\n                self.profile_id, target_id,\n                merchant_id=merchant_id,\n                baseline_service_quality=service_quality,\n                baseline_product_quality=product_quality\n            )\n            events.append(merchant_initialized_event)\n\n        return events",
+          "metadata": {
+            "id": 6,
+            "name": "initialize_merchant",
+            "condition": null,
+            "description": "Sets up initial baseline service and product quality levels for the merchant.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "baseline_service_quality",
+                "type": "float",
+                "context": "env",
+                "description": "Initial baseline service quality level"
+              },
+              {
+                "name": "baseline_product_quality",
+                "type": "float",
+                "context": "env",
+                "description": "Initial baseline product quality level"
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "service_quality",
+                "type": "float",
+                "context": "agent",
+                "description": "Sets initial service quality level for the merchant"
+              },
+              {
+                "name": "product_quality",
+                "type": "float",
+                "context": "agent",
+                "description": "Sets initial product quality level for the merchant"
+              }
+            ]
+          }
+        },
+        "7": {
+          "code": "async def collect_feedback(self, event: Event) -> List[Event]:\n        # Extract the purchase decision from the event\n        purchase_decision = getattr(event, 'purchase_decision', False)\n\n        # Calculate the feedback score based on the purchase decision\n        feedback_score = 1.0 if purchase_decision else 0.0\n\n        # Retrieve current average feedback score and customer count from the agent profile\n        current_feedback_score = self.profile.get_data(\"average_feedback_score\", 0.0)\n        customer_count = self.profile.get_data(\"customer_count\", 1)\n\n        # Update the average feedback score\n        new_average_feedback_score = ((current_feedback_score * customer_count) + feedback_score) / (customer_count + 1)\n        self.profile.update_data(\"average_feedback_score\", new_average_feedback_score)\n        self.profile.update_data(\"customer_count\", customer_count + 1)\n\n        # Prepare the instruction for the LLM to generate the reaction\n        instruction = \"\"\"\n        Calculate the average feedback score from customer purchase decisions and determine the target_ids for sending the FeedbackCollectedEvent. \n        Please return the information in the following JSON format:\n        {\n            \"average_feedback_score\": <calculated average feedback score>,\n            \"target_ids\": [\"<The string ID(s) of the MerchantAgent(s)>\"]\n        }\n        \"\"\"\n\n        # Generate the reaction using the LLM\n        observation = f\"Current feedback score: {new_average_feedback_score}\"\n        result = await self.generate_reaction(instruction, observation)\n\n        # Parse the result\n        average_feedback_score = result.get('average_feedback_score', new_average_feedback_score)\n        target_ids = result.get('target_ids', [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Create and return the FeedbackCollectedEvent for each target_id\n        events = []\n        for target_id in target_ids:\n            feedback_event = FeedbackCollectedEvent(self.profile_id, target_id, average_feedback_score)\n            events.append(feedback_event)\n\n        return events",
+          "metadata": {
+            "id": 7,
+            "name": "collect_feedback",
+            "condition": null,
+            "description": "Gathers feedback from customers based on their purchasing decisions.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "purchase_decision",
+                "type": "bool",
+                "context": "event",
+                "description": "Indicates whether the customer made a purchase"
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "average_feedback_score",
+                "type": "float",
+                "context": "agent",
+                "description": "Average feedback score collected from customers"
+              }
+            ]
+          }
+        },
+        "8": {
+          "code": "async def adjust_quality(self, event: Event) -> List[Event]:\n        # Condition check: Every 3 time steps\n        current_time_step = self.profile.get_data(\"current_time_step\", 0)\n        if current_time_step % 3 != 0:\n            self.profile.update_data(\"current_time_step\", current_time_step + 1)\n            return []\n\n        # Update the current time step in the agent profile\n        self.profile.update_data(\"current_time_step\", current_time_step + 1)\n\n        # Accessing the average feedback score from the event\n        average_feedback_score = event.average_feedback_score\n\n        # Instruction for LLM to adjust qualities and decide target_ids\n        instruction = \"\"\"\n        Context: The MerchantAgent needs to adjust service and product quality levels based on average customer feedback.\n        Average feedback score received: {}\n    \n        Please calculate the new service quality and product quality based on the feedback score.\n        Return the results in the following JSON format:\n\n        {\n            \"new_service_quality\": \"<Calculated new service quality>\",\n            \"new_product_quality\": \"<Calculated new product quality>\",\n            \"target_ids\": [\"<The string ID of the CustomerAgent>\", \"ENV\"]\n        }\n        \"\"\".format(average_feedback_score)\n\n        # Generate reaction using LLM\n        result = await self.generate_reaction(instruction)\n\n        # Extract new quality levels and target_ids\n        new_service_quality = result.get(\"new_service_quality\", 0.0)\n        new_product_quality = result.get(\"new_product_quality\", 0.0)\n        target_ids = result.get(\"target_ids\", [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Update the agent's profile with new quality levels\n        self.profile.update_data(\"service_quality\", new_service_quality)\n        self.profile.update_data(\"product_quality\", new_product_quality)\n\n        # Prepare outgoing events\n        events = []\n        for target_id in target_ids:\n            if target_id == \"ENV\":\n                # Send EndEvent to EnvAgent\n                end_event = EndEvent(self.profile_id, target_id, completion_status=\"Completed\")\n                events.append(end_event)\n            else:\n                # Send QualityAdjustedEvent to CustomerAgent\n                quality_event = QualityAdjustedEvent(\n                    self.profile_id, target_id,\n                    new_service_quality=new_service_quality,\n                    new_product_quality=new_product_quality\n                )\n                events.append(quality_event)\n\n        return events",
+          "metadata": {
+            "id": 8,
+            "name": "adjust_quality",
+            "condition": "Every 3 time steps",
+            "description": "Adjusts service and product quality levels based on average customer feedback.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "average_feedback_score",
+                "type": "float",
+                "context": "agent",
+                "description": "Average feedback score collected from customers"
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "service_quality",
+                "type": "float",
+                "context": "agent",
+                "description": "Adjusted service quality level"
+              },
+              {
+                "name": "product_quality",
+                "type": "float",
+                "context": "agent",
+                "description": "Adjusted product quality level"
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "events": {
+    "imports": "from onesim.events import Event\nfrom typing import Any",
+    "definitions": {
+      "-1": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": -1,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "CustomerAgent",
+          "to_action_name": "initialize_customer",
+          "from_action_id": 0,
+          "to_action_id": 1,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger to set up customer attributes and begin simulation",
+          "fields": []
+        }
+      },
+      "-2": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": -2,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "MerchantAgent",
+          "to_action_name": "initialize_merchant",
+          "from_action_id": 0,
+          "to_action_id": 6,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger to set up merchant baseline service and product quality",
+          "fields": []
+        }
+      },
+      "1": {
+        "code": "class CustomerInitializedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        customer_id: str = None,\n        initial_loyalty: float = 0.0,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.customer_id = customer_id\n        self.initial_loyalty = initial_loyalty",
+        "metadata": {
+          "id": 1,
+          "from_agent_type": "CustomerAgent",
+          "from_action_name": "initialize_customer",
+          "to_agent_type": "MerchantAgent",
+          "to_action_name": "collect_feedback",
+          "from_action_id": 1,
+          "to_action_id": 7,
+          "event_name": "CustomerInitializedEvent",
+          "event_info": "Signals customer initialization and readiness for interaction",
+          "fields": [
+            {
+              "name": "customer_id",
+              "type": "str",
+              "default_value": "None",
+              "description": "Unique identifier for the customer"
+            },
+            {
+              "name": "initial_loyalty",
+              "type": "float",
+              "default_value": "0.0",
+              "description": "Initial loyalty level of the customer"
+            }
+          ]
+        }
+      },
+      "2": {
+        "code": "class QualityPerceptionEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        perceived_service_quality: float = 0.0,\n        product_experience_score: float = 0.0,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.perceived_service_quality = perceived_service_quality\n        self.product_experience_score = product_experience_score",
+        "metadata": {
+          "id": 2,
+          "from_agent_type": "CustomerAgent",
+          "from_action_name": "perceive_quality",
+          "to_agent_type": "CustomerAgent",
+          "to_action_name": "evaluate_satisfaction",
+          "from_action_id": 2,
+          "to_action_id": 3,
+          "event_name": "QualityPerceptionEvent",
+          "event_info": "Customer perceives service and product quality based on merchant baseline and sensitivity coefficients",
+          "fields": [
+            {
+              "name": "perceived_service_quality",
+              "type": "float",
+              "default_value": "0.0",
+              "description": "Customer's perceived service quality"
+            },
+            {
+              "name": "product_experience_score",
+              "type": "float",
+              "default_value": "0.0",
+              "description": "Customer's product experience score"
+            }
+          ]
+        }
+      },
+      "3": {
+        "code": "class SatisfactionEvaluatedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        satisfaction_score: float = 0.0,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.satisfaction_score = satisfaction_score",
+        "metadata": {
+          "id": 3,
+          "from_agent_type": "CustomerAgent",
+          "from_action_name": "evaluate_satisfaction",
+          "to_agent_type": "CustomerAgent",
+          "to_action_name": "update_loyalty",
+          "from_action_id": 3,
+          "to_action_id": 4,
+          "event_name": "SatisfactionEvaluatedEvent",
+          "event_info": "Customer satisfaction calculated based on perceived quality and product experience",
+          "fields": [
+            {
+              "name": "satisfaction_score",
+              "type": "float",
+              "default_value": "0.0",
+              "description": "Calculated satisfaction score of the customer"
+            }
+          ]
+        }
+      },
+      "4": {
+        "code": "class LoyaltyUpdatedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        loyalty_score: float = 0.0,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.loyalty_score = loyalty_score",
+        "metadata": {
+          "id": 4,
+          "from_agent_type": "CustomerAgent",
+          "from_action_name": "update_loyalty",
+          "to_agent_type": "CustomerAgent",
+          "to_action_name": "make_purchase_decision",
+          "from_action_id": 4,
+          "to_action_id": 5,
+          "event_name": "LoyaltyUpdatedEvent",
+          "event_info": "Customer loyalty adjusted based on historical satisfaction trends",
+          "fields": [
+            {
+              "name": "loyalty_score",
+              "type": "float",
+              "default_value": "0.0",
+              "description": "Updated loyalty score of the customer"
+            }
+          ]
+        }
+      },
+      "5": {
+        "code": "class PurchaseDecisionEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        purchase_decision: bool = False,\n        purchase_probability: float = 0.0,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.purchase_decision = purchase_decision\n        self.purchase_probability = purchase_probability",
+        "metadata": {
+          "id": 5,
+          "from_agent_type": "CustomerAgent",
+          "from_action_name": "make_purchase_decision",
+          "to_agent_type": "MerchantAgent",
+          "to_action_name": "collect_feedback",
+          "from_action_id": 5,
+          "to_action_id": 7,
+          "event_name": "PurchaseDecisionEvent",
+          "event_info": "Customer makes a purchasing decision based on satisfaction and loyalty",
+          "fields": [
+            {
+              "name": "purchase_decision",
+              "type": "bool",
+              "default_value": "false",
+              "description": "Indicates whether the customer made a purchase"
+            },
+            {
+              "name": "purchase_probability",
+              "type": "float",
+              "default_value": "0.0",
+              "description": "Probability of the customer making a purchase"
+            }
+          ]
+        }
+      },
+      "6": {
+        "code": "class EndEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        completion_status: str = \"Completed\",\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.completion_status = completion_status",
+        "metadata": {
+          "id": 6,
+          "from_agent_type": "CustomerAgent",
+          "from_action_name": "make_purchase_decision",
+          "to_agent_type": "EnvAgent",
+          "to_action_name": "terminate",
+          "from_action_id": 5,
+          "to_action_id": -1,
+          "event_name": "EndEvent",
+          "event_info": "Customer's purchasing decision completes their workflow branch",
+          "fields": [
+            {
+              "name": "completion_status",
+              "type": "str",
+              "default_value": "Completed",
+              "description": "Status indicating the completion of the merchant's workflow"
+            }
+          ]
+        }
+      },
+      "7": {
+        "code": "class MerchantInitializedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        merchant_id: str = None,\n        baseline_service_quality: float = 0.0,\n        baseline_product_quality: float = 0.0,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.merchant_id = merchant_id\n        self.baseline_service_quality = baseline_service_quality\n        self.baseline_product_quality = baseline_product_quality",
+        "metadata": {
+          "id": 7,
+          "from_agent_type": "MerchantAgent",
+          "from_action_name": "initialize_merchant",
+          "to_agent_type": "CustomerAgent",
+          "to_action_name": "perceive_quality",
+          "from_action_id": 6,
+          "to_action_id": 2,
+          "event_name": "MerchantInitializedEvent",
+          "event_info": "Signals merchant initialization and readiness for customer interaction",
+          "fields": [
+            {
+              "name": "merchant_id",
+              "type": "str",
+              "default_value": "None",
+              "description": "Unique identifier for the merchant"
+            },
+            {
+              "name": "baseline_service_quality",
+              "type": "float",
+              "default_value": "0.0",
+              "description": "Initial baseline service quality level"
+            },
+            {
+              "name": "baseline_product_quality",
+              "type": "float",
+              "default_value": "0.0",
+              "description": "Initial baseline product quality level"
+            }
+          ]
+        }
+      },
+      "8": {
+        "code": "class FeedbackCollectedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        average_feedback_score: float = 0.0,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.average_feedback_score = average_feedback_score",
+        "metadata": {
+          "id": 8,
+          "from_agent_type": "MerchantAgent",
+          "from_action_name": "collect_feedback",
+          "to_agent_type": "MerchantAgent",
+          "to_action_name": "adjust_quality",
+          "from_action_id": 7,
+          "to_action_id": 8,
+          "event_name": "FeedbackCollectedEvent",
+          "event_info": "Merchant collects feedback from customer purchasing decisions",
+          "fields": [
+            {
+              "name": "average_feedback_score",
+              "type": "float",
+              "default_value": "0.0",
+              "description": "Average feedback score collected from customers"
+            }
+          ]
+        }
+      },
+      "9": {
+        "code": "class QualityAdjustedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        new_service_quality: float = 0.0,\n        new_product_quality: float = 0.0,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.new_service_quality = new_service_quality\n        self.new_product_quality = new_product_quality",
+        "metadata": {
+          "id": 9,
+          "from_agent_type": "MerchantAgent",
+          "from_action_name": "adjust_quality",
+          "to_agent_type": "CustomerAgent",
+          "to_action_name": "perceive_quality",
+          "from_action_id": 8,
+          "to_action_id": 2,
+          "event_name": "QualityAdjustedEvent",
+          "event_info": "Merchant adjusts service and product quality based on average customer feedback",
+          "fields": [
+            {
+              "name": "new_service_quality",
+              "type": "float",
+              "default_value": "0.0",
+              "description": "Adjusted service quality level"
+            },
+            {
+              "name": "new_product_quality",
+              "type": "float",
+              "default_value": "0.0",
+              "description": "Adjusted product quality level"
+            }
+          ]
+        }
+      },
+      "10": {
+        "code": "class EndEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        completion_status: str = \"Completed\",\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.completion_status = completion_status",
+        "metadata": {
+          "id": 10,
+          "from_agent_type": "MerchantAgent",
+          "from_action_name": "adjust_quality",
+          "to_agent_type": "EnvAgent",
+          "to_action_name": "terminate",
+          "from_action_id": 8,
+          "to_action_id": -1,
+          "event_name": "EndEvent",
+          "event_info": "Merchant's quality adjustment completes their workflow branch",
+          "fields": [
+            {
+              "name": "completion_status",
+              "type": "str",
+              "default_value": "Completed",
+              "description": "Status indicating the completion of the merchant's workflow"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

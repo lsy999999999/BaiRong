@@ -1,0 +1,107 @@
+{
+  "domain": "Demographics",
+  "scene_name": "life_course_theory",
+  "odd_protocol": {
+    "overview": {
+      "system_goal": "Simulate individual behaviors and decisions across different life stages to analyze the impact of various social, economic, and environmental factors on health and social behavior.",
+      "agent_types": "Individual agents representing different life stages, family agents, education system agents, government agents, healthcare system agents.",
+      "environment_description": "The environment includes socioeconomic conditions, educational systems, healthcare systems, and government policies affecting individuals throughout their life course.",
+      "life_course_impact": "Explore how early education, nutrition, family structure, and other factors influence health, educational achievements, social adaptability, and adult behavior and health.",
+      "comprehensive_evaluation": "Assess the impact of early life experiences on later development by integrating health, education, social support, and career choices."
+    },
+    "design_concepts": {
+      "interaction_patterns": "Agents interact based on life stage, socioeconomic background, health status, and environmental factors, influencing decisions and behaviors.",
+      "communication_protocols": "Agents communicate through simulated interactions reflecting real-world social, educational, and healthcare systems.",
+      "decision_mechanisms": "Decisions are influenced by life stage, health status, socioeconomic background, and interactions with other agents.",
+      "key_variables": "Early health effects, education level, socioeconomic status, health behaviors, family structure.",
+      "life_stage_design": "Infancy and childhood, adolescence, adulthood, and old age stages each have distinct influences on health and social adaptation."
+    },
+    "details": {
+      "agent_behaviors": "Individual agents progress through life stages with changing health, education, and career choices; family agents influence children's health and education; education agents affect academic and future adaptability; government agents impact through policies; healthcare agents provide critical health services.",
+      "decision_algorithms": "Algorithms consider initial conditions, life stage transitions, and cumulative effects of socioeconomic and health factors.",
+      "specific_constraints": "Constraints include socioeconomic disparities, educational resource availability, healthcare accessibility, and policy impacts.",
+      "simulation_steps": "Initialize agents with initial conditions, simulate health changes across life stages, model social interactions, analyze policy impacts.",
+      "agent_quantities": "Thousands to millions of individual agents; matching family agents; multiple education, government, and healthcare agents."
+    }
+  },
+  "agent_types": {
+    "IndividualAgent": "Represents individuals at various life stages, making decisions influenced by health, education, and socioeconomic factors.",
+    "FamilyAgent": "Influences the health and educational outcomes of children within the family unit through support and resources.",
+    "EducationSystemAgent": "Affects individual academic progress and adaptability through the provision of educational resources and opportunities.",
+    "GovernmentAgent": "Implements policies that impact socioeconomic conditions, healthcare access, and education systems within the society.",
+    "HealthcareSystemAgent": "Provides essential health services and influences individual health outcomes through accessibility and quality of care."
+  },
+  "portrait": {
+    "IndividualAgent": 5,
+    "FamilyAgent": 5,
+    "EducationSystemAgent": 2,
+    "GovernmentAgent": 1,
+    "HealthcareSystemAgent": 1
+  },
+  "metrics": [
+    {
+      "id": "Average_Educational_Resources_Utilization",
+      "name": "Average Educational Resources Utilization",
+      "description": "Measures the average utilization of educational resources across the system.",
+      "visualization_type": "bar",
+      "update_frequency": 5,
+      "variables": [
+        {
+          "name": "educational_resources",
+          "source_type": "env",
+          "path": "educational_resources",
+          "required": true,
+          "is_list": false
+        },
+        {
+          "name": "education_impact_assessed",
+          "source_type": "agent",
+          "agent_type": "EducationSystemAgent",
+          "path": "education_impact_assessed",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Calculate the proportion of educational resources utilized by counting the number of EducationSystemAgents where education_impact_assessed is True, divided by the total number of EducationSystemAgents. Handle None values and empty lists by treating them as False, ensuring the denominator is never zero.",
+      "function_name": "Average_Educational_Resources_Utilization"
+    },
+    {
+      "id": "Healthcare_Service_Evaluation_Rate",
+      "name": "Healthcare Service Evaluation Rate",
+      "description": "Tracks the rate at which healthcare services are evaluated by HealthcareSystemAgents.",
+      "visualization_type": "line",
+      "update_frequency": 5,
+      "variables": [
+        {
+          "name": "health_services_evaluated",
+          "source_type": "agent",
+          "agent_type": "HealthcareSystemAgent",
+          "path": "health_services_evaluated",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Determine the percentage of HealthcareSystemAgents that have evaluated health services by summing the True values in health_services_evaluated, then dividing by the total number of agents. Handle None values and empty lists by treating them as False, ensuring the denominator is never zero. Form multiple series for different time intervals if applicable.",
+      "function_name": "Healthcare_Service_Evaluation_Rate"
+    },
+    {
+      "id": "Policy_Implementation_Success_Rate",
+      "name": "Policy Implementation Success Rate",
+      "description": "Represents the proportion of policies successfully implemented by GovernmentAgents.",
+      "visualization_type": "pie",
+      "update_frequency": 5,
+      "variables": [
+        {
+          "name": "policy_implemented",
+          "source_type": "agent",
+          "agent_type": "GovernmentAgent",
+          "path": "policy_implemented",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Calculate the proportion of GovernmentAgents where policy_implemented is True, divided by the total number of GovernmentAgents. Handle None values and empty lists by treating them as False, ensuring the denominator is never zero. Represent proportions as slices in a pie chart.",
+      "function_name": "Policy_Implementation_Success_Rate"
+    }
+  ]
+}

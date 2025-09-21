@@ -1,0 +1,142 @@
+[
+    {
+        "name": "Alice Johnson",
+        "execution_status": "pending",
+        "adjusted_strategy": "none",
+        "department": "Operations",
+        "experience_years": 7,
+        "current_task": "reviewing_feedback",
+        "communication_style": "collaborative",
+        "meeting_schedule": [
+            "2023-10-12 10:00:00",
+            "2023-10-12 14:00:00"
+        ],
+        "adaptation_score": 75.0,
+        "change_type_focus": "rapid",
+        "agent_type": "ManagerAgent",
+        "stress_level": 0.3,
+        "feedback_received": [
+            {
+                "employee_id": "E1",
+                "feedback": "positive"
+            },
+            {
+                "employee_id": "E2",
+                "feedback": "neutral"
+            }
+        ],
+        "id": "10"
+    },
+    {
+        "name": "Michael Smith",
+        "execution_status": "pending",
+        "adjusted_strategy": "none",
+        "department": "Human Resources",
+        "experience_years": 7,
+        "current_task": "reviewing_feedback",
+        "communication_style": "directive",
+        "meeting_schedule": [
+            "2023-10-12 10:00:00",
+            "2023-10-12 14:00:00"
+        ],
+        "adaptation_score": 75.0,
+        "change_type_focus": "strategic",
+        "agent_type": "ManagerAgent",
+        "stress_level": 0.3,
+        "feedback_received": [
+            {
+                "employee_id": "E1",
+                "feedback": "positive"
+            },
+            {
+                "employee_id": "E2",
+                "feedback": "neutral"
+            }
+        ],
+        "id": "11"
+    },
+    {
+        "name": "Sophia Martinez",
+        "execution_status": "pending",
+        "adjusted_strategy": "none",
+        "department": "Marketing",
+        "experience_years": 11,
+        "current_task": "reviewing_feedback",
+        "communication_style": "collaborative",
+        "meeting_schedule": [
+            "2023-10-12 10:00:00",
+            "2023-10-12 14:00:00"
+        ],
+        "adaptation_score": 75.0,
+        "change_type_focus": "incremental",
+        "agent_type": "ManagerAgent",
+        "stress_level": 0.3,
+        "feedback_received": [
+            {
+                "employee_id": "E1",
+                "feedback": "positive"
+            },
+            {
+                "employee_id": "E2",
+                "feedback": "neutral"
+            }
+        ],
+        "id": "12"
+    },
+    {
+        "name": "James Lee",
+        "execution_status": "pending",
+        "adjusted_strategy": "none",
+        "department": "Finance",
+        "experience_years": 24,
+        "current_task": "reviewing_feedback",
+        "communication_style": "collaborative",
+        "meeting_schedule": [
+            "2023-10-12 10:00:00",
+            "2023-10-12 14:00:00"
+        ],
+        "adaptation_score": 75.0,
+        "change_type_focus": "incremental",
+        "agent_type": "ManagerAgent",
+        "stress_level": 0.3,
+        "feedback_received": [
+            {
+                "employee_id": "E1",
+                "feedback": "positive"
+            },
+            {
+                "employee_id": "E2",
+                "feedback": "neutral"
+            }
+        ],
+        "id": "13"
+    },
+    {
+        "name": "Emily Davis",
+        "execution_status": "pending",
+        "adjusted_strategy": "none",
+        "department": "Research and Development",
+        "experience_years": 25,
+        "current_task": "reviewing_feedback",
+        "communication_style": "collaborative",
+        "meeting_schedule": [
+            "2023-10-12 10:00:00",
+            "2023-10-12 14:00:00"
+        ],
+        "adaptation_score": 75.0,
+        "change_type_focus": "strategic",
+        "agent_type": "ManagerAgent",
+        "stress_level": 0.3,
+        "feedback_received": [
+            {
+                "employee_id": "E1",
+                "feedback": "positive"
+            },
+            {
+                "employee_id": "E2",
+                "feedback": "neutral"
+            }
+        ],
+        "id": "14"
+    }
+]

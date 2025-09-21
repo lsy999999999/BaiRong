@@ -1,0 +1,122 @@
+[
+    {
+        "name": "Alexandra Johnson",
+        "age": 39,
+        "perceived_threat_level": 0.5,
+        "perceived_susceptibility": 0.3,
+        "perceived_severity": 0.4,
+        "perceived_benefits": 0.6,
+        "perceived_barriers": 0.2,
+        "self_efficacy": 0.7,
+        "adopted_behavior": "not_started",
+        "adoption_success": false,
+        "media_influence": 0.7398968321941822,
+        "health_education_level": "advanced",
+        "available_resources": null,
+        "interaction_frequency": 3,
+        "agent_type": "IndividualAgent",
+        "personal_health_data": {
+            "blood_pressure": 120,
+            "cholesterol_level": 180
+        },
+        "social_support_network": null,
+        "emotional_burden": 0.3,
+        "id": "0"
+    },
+    {
+        "name": "Michael Thompson",
+        "age": 34,
+        "perceived_threat_level": 0.5,
+        "perceived_susceptibility": 0.3,
+        "perceived_severity": 0.4,
+        "perceived_benefits": 0.6,
+        "perceived_barriers": 0.2,
+        "self_efficacy": 0.7,
+        "adopted_behavior": "not_started",
+        "adoption_success": false,
+        "media_influence": 0.5170300947892984,
+        "health_education_level": "intermediate",
+        "available_resources": null,
+        "interaction_frequency": 10,
+        "agent_type": "IndividualAgent",
+        "personal_health_data": {
+            "blood_pressure": 120,
+            "cholesterol_level": 180
+        },
+        "social_support_network": null,
+        "emotional_burden": 0.3,
+        "id": "1"
+    },
+    {
+        "name": "Sophia Martinez",
+        "age": 58,
+        "perceived_threat_level": 0.5,
+        "perceived_susceptibility": 0.3,
+        "perceived_severity": 0.4,
+        "perceived_benefits": 0.6,
+        "perceived_barriers": 0.2,
+        "self_efficacy": 0.7,
+        "adopted_behavior": "not_started",
+        "adoption_success": false,
+        "media_influence": 0.30131054048479555,
+        "health_education_level": "basic",
+        "available_resources": null,
+        "interaction_frequency": 3,
+        "agent_type": "IndividualAgent",
+        "personal_health_data": {
+            "blood_pressure": 120,
+            "cholesterol_level": 180
+        },
+        "social_support_network": null,
+        "emotional_burden": 0.3,
+        "id": "2"
+    },
+    {
+        "name": "James Lee",
+        "age": 52,
+        "perceived_threat_level": 0.5,
+        "perceived_susceptibility": 0.3,
+        "perceived_severity": 0.4,
+        "perceived_benefits": 0.6,
+        "perceived_barriers": 0.2,
+        "self_efficacy": 0.7,
+        "adopted_behavior": "not_started",
+        "adoption_success": false,
+        "media_influence": 0.2224586644503901,
+        "health_education_level": "advanced",
+        "available_resources": null,
+        "interaction_frequency": 7,
+        "agent_type": "IndividualAgent",
+        "personal_health_data": {
+            "blood_pressure": 120,
+            "cholesterol_level": 180
+        },
+        "social_support_network": null,
+        "emotional_burden": 0.3,
+        "id": "3"
+    },
+    {
+        "name": "Emily Davis",
+        "age": 29,
+        "perceived_threat_level": 0.5,
+        "perceived_susceptibility": 0.3,
+        "perceived_severity": 0.4,
+        "perceived_benefits": 0.6,
+        "perceived_barriers": 0.2,
+        "self_efficacy": 0.7,
+        "adopted_behavior": "not_started",
+        "adoption_success": false,
+        "media_influence": 0.18796505327907853,
+        "health_education_level": "intermediate",
+        "available_resources": null,
+        "interaction_frequency": 7,
+        "agent_type": "IndividualAgent",
+        "personal_health_data": {
+            "blood_pressure": 120,
+            "cholesterol_level": 180
+        },
+        "social_support_network": null,
+        "emotional_burden": 0.3,
+        "id": "4"
+    }
+]

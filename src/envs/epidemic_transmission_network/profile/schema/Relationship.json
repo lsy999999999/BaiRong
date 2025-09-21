@@ -1,0 +1,32 @@
+[
+    {
+        "source_agent": "Individual",
+        "target_agent": "Individual",
+        "direction": "unidirectional"
+    },
+    {
+        "source_agent": "Individual",
+        "target_agent": "HealthcareFacility",
+        "direction": "unidirectional"
+    },
+    {
+        "source_agent": "Individual",
+        "target_agent": "Household",
+        "direction": "unidirectional"
+    },
+    {
+        "source_agent": "PublicHealthAuthority",
+        "target_agent": "PublicHealthAuthority",
+        "direction": "unidirectional"
+    },
+    {
+        "source_agent": "PublicHealthAuthority",
+        "target_agent": "Individual",
+        "direction": "unidirectional"
+    },
+    {
+        "source_agent": "PublicHealthAuthority",
+        "target_agent": "HealthcareFacility",
+        "direction": "unidirectional"
+    }
+]

@@ -1,0 +1,82 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Defendant Name",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's full name representing the defendant in the tort case"
+    },
+    "liability_reduction_argument": {
+        "type": "str",
+        "default": "awaiting_input",
+        "private": true,
+        "sampling": "default"
+    },
+    "counter_evidence_list": {
+        "type": "list",
+        "default": [
+            {
+                "evidence_type": "document",
+                "details": "Initial evidence details"
+            }
+        ],
+        "private": true,
+        "sampling": "default"
+    },
+    "defense_prepared": {
+        "type": "bool",
+        "default": false,
+        "private": true,
+        "sampling": "default"
+    },
+    "legal_knowledge_level": {
+        "type": "int",
+        "default": 50,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0,
+            100
+        ]
+    },
+    "communication_style": {
+        "type": "str",
+        "default": "formal",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "formal",
+            "informal",
+            "aggressive",
+            "conciliatory"
+        ]
+    },
+    "strategy_type": {
+        "type": "str",
+        "default": "defensive",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "defensive",
+            "aggressive",
+            "negotiative"
+        ]
+    },
+    "reputation_score": {
+        "type": "float",
+        "default": 75.0,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            100.0
+        ]
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

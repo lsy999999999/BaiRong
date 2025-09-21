@@ -1,0 +1,165 @@
+{
+    "DecisionMakerAgent": [
+        {
+            "id": 1,
+            "name": "gather_information",
+            "condition": "null",
+            "description": "The Decision Maker Agent collects relevant information from the Environment Agent to understand the external factors affecting the decision-making process.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "source",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Source of the information gathered by the Decision Maker"
+                },
+                {
+                    "name": "information_content",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Details of the information gathered from the environment"
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "collected_information",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Information collected from the environment for decision-making"
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "name": "evaluate_options",
+            "condition": "InformationGatheredEvent received",
+            "description": "The Decision Maker Agent evaluates the presented options based on the gathered information, considering criteria such as cost, utility, and risk.",
+            "type": "AND",
+            "required_variables": [
+                {
+                    "name": "collected_information",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Information previously collected from the environment"
+                },
+                {
+                    "name": "option_id",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Identifier for the option being evaluated"
+                },
+                {
+                    "name": "evaluation_criteria",
+                    "type": "object",
+                    "context": "event",
+                    "description": "Criteria used to evaluate the option, including cost, utility, and risk"
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "evaluation_result",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Result of the evaluation process"
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "name": "make_decision",
+            "condition": "OptionsEvaluatedEvent received",
+            "description": "The Decision Maker Agent makes a final decision based on the evaluation of options and completes the decision-making process.",
+            "type": "AND",
+            "required_variables": [
+                {
+                    "name": "evaluation_result",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Result of the evaluation process"
+                },
+                {
+                    "name": "alternative_details",
+                    "type": "object",
+                    "context": "event",
+                    "description": "Details of the alternative including cost, utility, and risk"
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "decision_id",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Unique identifier for the decision made"
+                },
+                {
+                    "name": "decision_result",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Outcome of the decision-making process"
+                }
+            ]
+        }
+    ],
+    "EnvironmentAgent": [
+        {
+            "id": 4,
+            "name": "simulate_external_factors",
+            "condition": "InformationGatheredEvent received",
+            "description": "The Environment Agent simulates external factors that impact the decision-making process, providing necessary information for the Decision Maker Agent.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "factor_type",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Type of external factor being simulated"
+                },
+                {
+                    "name": "impact_level",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Level of impact the external factor has on decision-making"
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "simulated_factors",
+                    "type": "object",
+                    "context": "env",
+                    "description": "Details of the simulated external factors affecting decision-making"
+                }
+            ]
+        }
+    ],
+    "AlternativeOptionsAgent": [
+        {
+            "id": 5,
+            "name": "present_alternatives",
+            "condition": "OptionsEvaluatedEvent received",
+            "description": "The Alternative Options Agent presents different choices to the Decision Maker Agent, each with distinct costs, utilities, and risks.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "alternative_id",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Identifier for the alternative option presented"
+                },
+                {
+                    "name": "alternative_details",
+                    "type": "object",
+                    "context": "event",
+                    "description": "Details of the alternative including cost, utility, and risk"
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "presented_alternatives",
+                    "type": "object",
+                    "context": "agent",
+                    "description": "Information about the presented alternatives"
+                }
+            ]
+        }
+    ]
+}

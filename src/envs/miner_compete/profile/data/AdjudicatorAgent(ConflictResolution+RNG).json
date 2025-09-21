@@ -1,0 +1,512 @@
+[
+    {
+        "name": "AdjudicatorAgent001",
+        "energyLevel": 118,
+        "currentStatus": "Active",
+        "conflictResolutionStrategy": "Negotiation",
+        "lastDecision": "awaitingDecision",
+        "gridPosition": null,
+        "landOwnershipStatus": "unoccupied",
+        "lastConflictOutcome": "none",
+        "energyMaintenanceCost": 5,
+        "resourceExploitationRate": 78,
+        "agent_type": "AdjudicatorAgent(ConflictResolution+RNG)",
+        "decisionHistory": [
+            "ResolveConflict",
+            "StudyPatterns",
+            "AllocateResources"
+        ],
+        "randomSeed": 42,
+        "resourceExploitationHistory": [
+            "initialExploitation"
+        ],
+        "energyInvestmentHistory": [
+            "initialInvestment"
+        ],
+        "id": "176"
+    },
+    {
+        "name": "AdjudicatorAgent002",
+        "energyLevel": 105,
+        "currentStatus": "Idle",
+        "conflictResolutionStrategy": "Mediation",
+        "lastDecision": "awaitingDecision",
+        "gridPosition": null,
+        "landOwnershipStatus": "unoccupied",
+        "lastConflictOutcome": "none",
+        "energyMaintenanceCost": 5,
+        "resourceExploitationRate": 65,
+        "agent_type": "AdjudicatorAgent(ConflictResolution+RNG)",
+        "decisionHistory": [
+            "AnalyzeData",
+            "AssignRoles",
+            "MonitorProgress"
+        ],
+        "randomSeed": 42,
+        "resourceExploitationHistory": [
+            "initialExploitation"
+        ],
+        "energyInvestmentHistory": [
+            "initialInvestment"
+        ],
+        "id": "177"
+    },
+    {
+        "name": "AdjudicatorAgent003",
+        "energyLevel": 79,
+        "currentStatus": "Suspended",
+        "conflictResolutionStrategy": "Arbitration",
+        "lastDecision": "awaitingDecision",
+        "gridPosition": null,
+        "landOwnershipStatus": "unoccupied",
+        "lastConflictOutcome": "none",
+        "energyMaintenanceCost": 5,
+        "resourceExploitationRate": 50,
+        "agent_type": "AdjudicatorAgent(ConflictResolution+RNG)",
+        "decisionHistory": [
+            "DevelopSolutions",
+            "ConductMeetings",
+            "ReviewFeedback"
+        ],
+        "randomSeed": 42,
+        "resourceExploitationHistory": [
+            "initialExploitation"
+        ],
+        "energyInvestmentHistory": [
+            "initialInvestment"
+        ],
+        "id": "178"
+    },
+    {
+        "name": "AdjudicatorAgent004",
+        "energyLevel": 161,
+        "currentStatus": "Active",
+        "conflictResolutionStrategy": "Collaboration",
+        "lastDecision": "awaitingDecision",
+        "gridPosition": null,
+        "landOwnershipStatus": "unoccupied",
+        "lastConflictOutcome": "none",
+        "energyMaintenanceCost": 5,
+        "resourceExploitationRate": 85,
+        "agent_type": "AdjudicatorAgent(ConflictResolution+RNG)",
+        "decisionHistory": [
+            "IdentifyResources",
+            "OptimizeFlow",
+            "EvaluateImpact"
+        ],
+        "randomSeed": 42,
+        "resourceExploitationHistory": [
+            "initialExploitation"
+        ],
+        "energyInvestmentHistory": [
+            "initialInvestment"
+        ],
+        "id": "179"
+    },
+    {
+        "name": "AdjudicatorAgent005",
+        "energyLevel": 154,
+        "currentStatus": "Unavailable",
+        "conflictResolutionStrategy": "Conciliation",
+        "lastDecision": "awaitingDecision",
+        "gridPosition": null,
+        "landOwnershipStatus": "unoccupied",
+        "lastConflictOutcome": "none",
+        "energyMaintenanceCost": 5,
+        "resourceExploitationRate": 72,
+        "agent_type": "AdjudicatorAgent(ConflictResolution+RNG)",
+        "decisionHistory": [
+            "AssessRisk",
+            "ClarifyObjectives",
+            "NegotiateTerms"
+        ],
+        "randomSeed": 42,
+        "resourceExploitationHistory": [
+            "initialExploitation"
+        ],
+        "energyInvestmentHistory": [
+            "initialInvestment"
+        ],
+        "id": "180"
+    },
+    {
+        "name": "AdjudicatorAgent006",
+        "energyLevel": 137,
+        "currentStatus": "Active",
+        "conflictResolutionStrategy": "Negotiation",
+        "lastDecision": "awaitingDecision",
+        "gridPosition": null,
+        "landOwnershipStatus": "unoccupied",
+        "lastConflictOutcome": "none",
+        "energyMaintenanceCost": 5,
+        "resourceExploitationRate": 90,
+        "agent_type": "AdjudicatorAgent(ConflictResolution+RNG)",
+        "decisionHistory": [
+            "GatherIntel",
+            "FacilitateDialogue",
+            "ImplementChanges"
+        ],
+        "randomSeed": 42,
+        "resourceExploitationHistory": [
+            "initialExploitation"
+        ],
+        "energyInvestmentHistory": [
+            "initialInvestment"
+        ],
+        "id": "181"
+    },
+    {
+        "name": "AdjudicatorAgent007",
+        "energyLevel": 57,
+        "currentStatus": "Retired",
+        "conflictResolutionStrategy": "Mediation",
+        "lastDecision": "awaitingDecision",
+        "gridPosition": null,
+        "landOwnershipStatus": "unoccupied",
+        "lastConflictOutcome": "none",
+        "energyMaintenanceCost": 5,
+        "resourceExploitationRate": 60,
+        "agent_type": "AdjudicatorAgent(ConflictResolution+RNG)",
+        "decisionHistory": [
+            "ReviewCases",
+            "DraftAgreements",
+            "MonitorPerformance"
+        ],
+        "randomSeed": 42,
+        "resourceExploitationHistory": [
+            "initialExploitation"
+        ],
+        "energyInvestmentHistory": [
+            "initialInvestment"
+        ],
+        "id": "182"
+    },
+    {
+        "name": "AdjudicatorAgent008",
+        "energyLevel": 128,
+        "currentStatus": "Active",
+        "conflictResolutionStrategy": "Arbitration",
+        "lastDecision": "awaitingDecision",
+        "gridPosition": null,
+        "landOwnershipStatus": "unoccupied",
+        "lastConflictOutcome": "none",
+        "energyMaintenanceCost": 5,
+        "resourceExploitationRate": 88,
+        "agent_type": "AdjudicatorAgent(ConflictResolution+RNG)",
+        "decisionHistory": [
+            "CollectData",
+            "DefineBoundaries",
+            "AdjudicateClaims"
+        ],
+        "randomSeed": 42,
+        "resourceExploitationHistory": [
+            "initialExploitation"
+        ],
+        "energyInvestmentHistory": [
+            "initialInvestment"
+        ],
+        "id": "183"
+    },
+    {
+        "name": "AdjudicatorAgent009",
+        "energyLevel": 138,
+        "currentStatus": "Idle",
+        "conflictResolutionStrategy": "Collaboration",
+        "lastDecision": "awaitingDecision",
+        "gridPosition": null,
+        "landOwnershipStatus": "unoccupied",
+        "lastConflictOutcome": "none",
+        "energyMaintenanceCost": 5,
+        "resourceExploitationRate": 58,
+        "agent_type": "AdjudicatorAgent(ConflictResolution+RNG)",
+        "decisionHistory": [
+            "AnalyzeTrends",
+            "HostWorkshops",
+            "AssessOutcomes"
+        ],
+        "randomSeed": 42,
+        "resourceExploitationHistory": [
+            "initialExploitation"
+        ],
+        "energyInvestmentHistory": [
+            "initialInvestment"
+        ],
+        "id": "184"
+    },
+    {
+        "name": "AdjudicatorAgent010",
+        "energyLevel": 116,
+        "currentStatus": "Suspended",
+        "conflictResolutionStrategy": "Conciliation",
+        "lastDecision": "awaitingDecision",
+        "gridPosition": null,
+        "landOwnershipStatus": "unoccupied",
+        "lastConflictOutcome": "none",
+        "energyMaintenanceCost": 5,
+        "resourceExploitationRate": 62,
+        "agent_type": "AdjudicatorAgent(ConflictResolution+RNG)",
+        "decisionHistory": [
+            "ResolveDisputes",
+            "BuildConsensus",
+            "VerifyResults"
+        ],
+        "randomSeed": 42,
+        "resourceExploitationHistory": [
+            "initialExploitation"
+        ],
+        "energyInvestmentHistory": [
+            "initialInvestment"
+        ],
+        "id": "185"
+    },
+    {
+        "name": "Aria",
+        "energyLevel": 92,
+        "currentStatus": "Active",
+        "conflictResolutionStrategy": "Mediation",
+        "lastDecision": "awaitingDecision",
+        "gridPosition": null,
+        "landOwnershipStatus": "unoccupied",
+        "lastConflictOutcome": "none",
+        "energyMaintenanceCost": 5,
+        "resourceExploitationRate": 75,
+        "agent_type": "AdjudicatorAgent(ConflictResolution+RNG)",
+        "decisionHistory": [
+            "Resolved dispute between teams Alpha and Beta",
+            "Facilitated agreement in project Gamma"
+        ],
+        "randomSeed": 42,
+        "resourceExploitationHistory": [
+            "initialExploitation"
+        ],
+        "energyInvestmentHistory": [
+            "initialInvestment"
+        ],
+        "id": "186"
+    },
+    {
+        "name": "Bryce",
+        "energyLevel": 172,
+        "currentStatus": "Inactive",
+        "conflictResolutionStrategy": "Negotiation",
+        "lastDecision": "awaitingDecision",
+        "gridPosition": null,
+        "landOwnershipStatus": "unoccupied",
+        "lastConflictOutcome": "none",
+        "energyMaintenanceCost": 5,
+        "resourceExploitationRate": 60,
+        "agent_type": "AdjudicatorAgent(ConflictResolution+RNG)",
+        "decisionHistory": [
+            "Helped resolve a resource allocation issue",
+            "Settled a disagreement over project priorities"
+        ],
+        "randomSeed": 42,
+        "resourceExploitationHistory": [
+            "initialExploitation"
+        ],
+        "energyInvestmentHistory": [
+            "initialInvestment"
+        ],
+        "id": "187"
+    },
+    {
+        "name": "Cara",
+        "energyLevel": 161,
+        "currentStatus": "Active",
+        "conflictResolutionStrategy": "Collaboration",
+        "lastDecision": "awaitingDecision",
+        "gridPosition": null,
+        "landOwnershipStatus": "occupied",
+        "lastConflictOutcome": "none",
+        "energyMaintenanceCost": 5,
+        "resourceExploitationRate": 85,
+        "agent_type": "AdjudicatorAgent(ConflictResolution+RNG)",
+        "decisionHistory": [
+            "Led a successful team-building workshop",
+            "Helped integrate new team members"
+        ],
+        "randomSeed": 42,
+        "resourceExploitationHistory": [
+            "initialExploitation"
+        ],
+        "energyInvestmentHistory": [
+            "initialInvestment"
+        ],
+        "id": "188"
+    },
+    {
+        "name": "Derek",
+        "energyLevel": 119,
+        "currentStatus": "Active",
+        "conflictResolutionStrategy": "RNG",
+        "lastDecision": "awaitingDecision",
+        "gridPosition": null,
+        "landOwnershipStatus": "occupied",
+        "lastConflictOutcome": "none",
+        "energyMaintenanceCost": 5,
+        "resourceExploitationRate": 55,
+        "agent_type": "AdjudicatorAgent(ConflictResolution+RNG)",
+        "decisionHistory": [
+            "Used random number generation to resolve a tie in a competition",
+            "Implemented RNG for fair distribution of tasks"
+        ],
+        "randomSeed": 42,
+        "resourceExploitationHistory": [
+            "initialExploitation"
+        ],
+        "energyInvestmentHistory": [
+            "initialInvestment"
+        ],
+        "id": "189"
+    },
+    {
+        "name": "Ella",
+        "energyLevel": 111,
+        "currentStatus": "Inactive",
+        "conflictResolutionStrategy": "Mediation",
+        "lastDecision": "awaitingDecision",
+        "gridPosition": null,
+        "landOwnershipStatus": "occupied",
+        "lastConflictOutcome": "none",
+        "energyMaintenanceCost": 5,
+        "resourceExploitationRate": 70,
+        "agent_type": "AdjudicatorAgent(ConflictResolution+RNG)",
+        "decisionHistory": [
+            "Mediated a conflict between departments",
+            "Helped in the resolution of a long-standing issue"
+        ],
+        "randomSeed": 42,
+        "resourceExploitationHistory": [
+            "initialExploitation"
+        ],
+        "energyInvestmentHistory": [
+            "initialInvestment"
+        ],
+        "id": "190"
+    },
+    {
+        "name": "Finn",
+        "energyLevel": 115,
+        "currentStatus": "Active",
+        "conflictResolutionStrategy": "Negotiation",
+        "lastDecision": "awaitingDecision",
+        "gridPosition": null,
+        "landOwnershipStatus": "unoccupied",
+        "lastConflictOutcome": "none",
+        "energyMaintenanceCost": 5,
+        "resourceExploitationRate": 65,
+        "agent_type": "AdjudicatorAgent(ConflictResolution+RNG)",
+        "decisionHistory": [
+            "Negotiated a contract extension with a key supplier",
+            "Resolved a pricing dispute with a vendor"
+        ],
+        "randomSeed": 42,
+        "resourceExploitationHistory": [
+            "initialExploitation"
+        ],
+        "energyInvestmentHistory": [
+            "initialInvestment"
+        ],
+        "id": "191"
+    },
+    {
+        "name": "Gina",
+        "energyLevel": 69,
+        "currentStatus": "Active",
+        "conflictResolutionStrategy": "Collaboration",
+        "lastDecision": "awaitingDecision",
+        "gridPosition": null,
+        "landOwnershipStatus": "unoccupied",
+        "lastConflictOutcome": "none",
+        "energyMaintenanceCost": 5,
+        "resourceExploitationRate": 80,
+        "agent_type": "AdjudicatorAgent(ConflictResolution+RNG)",
+        "decisionHistory": [
+            "Facilitated a brainstorming session",
+            "Coordinated a cross-departmental project"
+        ],
+        "randomSeed": 42,
+        "resourceExploitationHistory": [
+            "initialExploitation"
+        ],
+        "energyInvestmentHistory": [
+            "initialInvestment"
+        ],
+        "id": "192"
+    },
+    {
+        "name": "Hank",
+        "energyLevel": 177,
+        "currentStatus": "Inactive",
+        "conflictResolutionStrategy": "RNG",
+        "lastDecision": "awaitingDecision",
+        "gridPosition": null,
+        "landOwnershipStatus": "occupied",
+        "lastConflictOutcome": "none",
+        "energyMaintenanceCost": 5,
+        "resourceExploitationRate": 50,
+        "agent_type": "AdjudicatorAgent(ConflictResolution+RNG)",
+        "decisionHistory": [
+            "Used RNG to decide on a winner in a company event",
+            "Implemented RNG for a fair lottery system"
+        ],
+        "randomSeed": 42,
+        "resourceExploitationHistory": [
+            "initialExploitation"
+        ],
+        "energyInvestmentHistory": [
+            "initialInvestment"
+        ],
+        "id": "193"
+    },
+    {
+        "name": "Ivy",
+        "energyLevel": 90,
+        "currentStatus": "Active",
+        "conflictResolutionStrategy": "Mediation",
+        "lastDecision": "awaitingDecision",
+        "gridPosition": null,
+        "landOwnershipStatus": "occupied",
+        "lastConflictOutcome": "none",
+        "energyMaintenanceCost": 5,
+        "resourceExploitationRate": 72,
+        "agent_type": "AdjudicatorAgent(ConflictResolution+RNG)",
+        "decisionHistory": [
+            "Mediated a conflict between two employees",
+            "Helped in the resolution of a workplace dispute"
+        ],
+        "randomSeed": 42,
+        "resourceExploitationHistory": [
+            "initialExploitation"
+        ],
+        "energyInvestmentHistory": [
+            "initialInvestment"
+        ],
+        "id": "194"
+    },
+    {
+        "name": "Jack",
+        "energyLevel": 95,
+        "currentStatus": "Active",
+        "conflictResolutionStrategy": "Negotiation",
+        "lastDecision": "awaitingDecision",
+        "gridPosition": null,
+        "landOwnershipStatus": "occupied",
+        "lastConflictOutcome": "none",
+        "energyMaintenanceCost": 5,
+        "resourceExploitationRate": 68,
+        "agent_type": "AdjudicatorAgent(ConflictResolution+RNG)",
+        "decisionHistory": [
+            "Negotiated a new contract with a client",
+            "Resolved a dispute over project scope"
+        ],
+        "randomSeed": 42,
+        "resourceExploitationHistory": [
+            "initialExploitation"
+        ],
+        "energyInvestmentHistory": [
+            "initialInvestment"
+        ],
+        "id": "195"
+    }
+]

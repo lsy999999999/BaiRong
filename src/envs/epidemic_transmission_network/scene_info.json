@@ -1,0 +1,81 @@
+{
+  "domain": "Demographics",
+  "scene_name": "disease_spread_simulation",
+  "odd_protocol": {
+    "overview": {
+      "system_goal": "Simulate the spread of disease within a population to study how individual behavior, demographic characteristics, interventions, and information dissemination affect epidemic dynamics, as well as evaluate the effectiveness of healthcare resource allocation and public health policies.",
+      "agent_types": "Individuals with attributes such as id, age, health_status, infection_time, symptoms_severity, vaccination_status, risk_perception, compliance_tendency, mobility_pattern, social_contacts, demographic_group, information_sources, trust_in_authorities; Households with attributes like id, members, location, size, quarantine_status, infection_risk; Public Health Authorities with attributes including testing_capacity, contact_tracing_efficiency, policy_options, communication_strategy, credibility, resource_allocation; Healthcare Facilities with attributes such as location, capacity, current_occupancy, staff_level, treatment_effectiveness, resource_level.",
+      "environment_description": "Includes disease_parameters like basic reproduction number R0, incubation period, infectious period; information_environment with accuracy and coverage; economic_pressure affecting policy implementation and individual behavior; vaccination_availability; and population_density distribution."
+    },
+    "design_concepts": {
+      "interaction_patterns": "Contact networks formed based on individual mobility patterns, with high-frequency interactions within households and varied interactions in workplaces, schools, and social venues. Transmission dynamics influenced by vaccination status and protective measures.",
+      "communication_protocols": "Information dissemination through various channels affecting individuals' risk perception, including media reports and social influences.",
+      "decision_mechanisms": "Individuals update risk perception based on personal experiences, information sources, and social influences. Public health authorities determine intervention strategies based on epidemiological indicators and available resources."
+    },
+    "details": {
+      "agent_behaviors": "Individuals adjust behaviors such as voluntary isolation and social distancing based on perceived risk, seek testing and healthcare services, and adapt activity patterns. Public health authorities deploy testing and tracing, implement restrictions, initiate vaccination plans, and optimize resource allocation.",
+      "decision_algorithms": "Algorithms calculate transmission probability based on contact type, infection time, symptom severity, age, vaccination status, and protective measures. Disease state updates involve transitions between susceptible, latent, infected, recovered, immune, and deceased states based on infection status and progression probabilities.",
+      "specific_constraints": "Constraints include testing capacity, contact tracing efficiency, healthcare facility capacity, and resource availability. Behavioral decisions influenced by compliance tendency and risk perception thresholds."
+    }
+  },
+  "agent_types": {
+    "Individual": "Represents a person in the population with attributes like age, health status, and vaccination status, whose behavior affects and is affected by disease spread.",
+    "Household": "A group of individuals living together, characterized by attributes such as size and location, influencing infection risk and quarantine dynamics.",
+    "PublicHealthAuthority": "Responsible for managing public health interventions, including testing, contact tracing, and policy implementation to control the epidemic.",
+    "HealthcareFacility": "Provides medical care to individuals, with attributes like capacity and treatment effectiveness, crucial for managing healthcare resources during the epidemic."
+  },
+  "metrics": [
+    {
+      "id": "Infection_Rate_Over_Time",
+      "name": "Infection Rate Over Time",
+      "description": "Measures the percentage of the population that is infected over time, providing insights into the spread of the disease and the effectiveness of interventions.",
+      "visualization_type": "line",
+      "update_interval": 5,
+      "variables": [
+        {
+          "name": "health_status",
+          "source_type": "agent",
+          "agent_type": "Individual",
+          "path": "health_status",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Calculate the percentage of infected individuals over time. The health_status variable is a list of strings for each individual, indicating their current health state (e.g., 'susceptible', 'infected', 'recovered'). To handle edge cases, if the list is empty or None, return 0. If any individual's health_status is None, skip that individual. The infection rate is calculated as follows:\n\ninfection_rate = (number_of_infected_individuals / total_number_of_individuals) * 100\n\nWhere number_of_infected_individuals is the count of individuals with 'infected' health_status.",
+      "function_name": "Infection_Rate_Over_Time"
+    },
+    {
+      "id": "Resource_Utilization_by_Healthcare_Facilities",
+      "name": "Resource Utilization by Healthcare Facilities",
+      "description": "Measures the utilization of healthcare facilities in terms of occupancy and staff levels, providing insights into the strain on the healthcare system.",
+      "visualization_type": "bar",
+      "update_interval": 5,
+      "variables": [
+        {
+          "name": "current_occupancy",
+          "source_type": "agent",
+          "agent_type": "HealthcareFacility",
+          "path": "current_occupancy",
+          "required": true,
+          "is_list": true
+        },
+        {
+          "name": "staff_level",
+          "source_type": "agent",
+          "agent_type": "HealthcareFacility",
+          "path": "staff_level",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Calculate the average occupancy across all healthcare facilities by summing current_occupancy values and dividing by the number of facilities. Skip None values and handle empty lists by returning a default occupancy of 0.",
+      "function_name": "Healthcare_Facility_Occupancy_Rate"
+    }
+  ],
+  "portrait": {
+    "Individual": 5,
+    "Household": 5,
+    "PublicHealthAuthority": 1,
+    "HealthcareFacility": 2
+  }
+}

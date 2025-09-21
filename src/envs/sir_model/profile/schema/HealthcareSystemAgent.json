@@ -1,0 +1,84 @@
+{
+    "name": {
+        "type": "str",
+        "default": "HealthcareSystemAgent",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's designated name within the simulation"
+    },
+    "treatment_status": {
+        "type": "str",
+        "default": "pending",
+        "private": false,
+        "sampling": "default"
+    },
+    "recovery_status": {
+        "type": "str",
+        "default": "not_recovered",
+        "private": false,
+        "sampling": "default"
+    },
+    "capacity": {
+        "type": "int",
+        "default": 1000,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            500,
+            1500
+        ]
+    },
+    "resource_distribution": {
+        "type": "list",
+        "default": [
+            {
+                "resource": "ventilators",
+                "quantity": 50
+            }
+        ],
+        "private": true,
+        "sampling": "default"
+    },
+    "policy_compliance": {
+        "type": "float",
+        "default": 0.8,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.5,
+            1.0
+        ]
+    },
+    "treatment_efficiency": {
+        "type": "float",
+        "default": 0.75,
+        "private": false,
+        "sampling": "default"
+    },
+    "interaction_rate": {
+        "type": "float",
+        "default": 0.2,
+        "private": false,
+        "sampling": "default"
+    },
+    "feedback_on_treatment": {
+        "type": "str",
+        "default": "positive",
+        "private": true,
+        "sampling": "llm",
+        "description": "Feedback from healthcare system on treatment effectiveness"
+    },
+    "current_load": {
+        "type": "int",
+        "default": 800,
+        "private": false,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

@@ -1,0 +1,84 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Dr. Jane Doe",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's full name as a public health expert"
+    },
+    "guidance_status": {
+        "type": "str",
+        "default": "active",
+        "private": false,
+        "sampling": "default"
+    },
+    "expertise_level": {
+        "type": "int",
+        "default": 85,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            50,
+            100
+        ]
+    },
+    "communication_channels": {
+        "type": "list",
+        "default": [
+            "social_media",
+            "community_meetings"
+        ],
+        "private": false,
+        "sampling": "default"
+    },
+    "resource_allocation": {
+        "type": "float",
+        "default": 75.0,
+        "private": true,
+        "sampling": "default"
+    },
+    "policy_influence": {
+        "type": "int",
+        "default": 60,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0,
+            100
+        ]
+    },
+    "cultural_awareness": {
+        "type": "int",
+        "default": 70,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            50,
+            100
+        ]
+    },
+    "interaction_effectiveness": {
+        "type": "int",
+        "default": 75,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            50,
+            100
+        ]
+    },
+    "mobilization_strategy": {
+        "type": "str",
+        "default": "collaborative",
+        "private": false,
+        "sampling": "llm",
+        "description": "Strategy used by the agent to drive community health mobilization"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

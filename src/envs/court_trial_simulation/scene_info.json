@@ -1,0 +1,77 @@
+{
+  "domain": "Law",
+  "scene_name": "court_trial_simulation",
+  "odd_protocol": {
+    "overview": {
+      "system_goal": "Simulate decision-making and interactions in court trials to explore how evidence presentation, persuasion strategies, cognitive biases, and procedural factors affect judicial outcomes, while assessing fairness and efficiency across different legal systems. Achieve quantifiable analysis of judicial processes through standardized models of judicial procedures and agent behaviors.",
+      "agent_types": "Defendant, Prosecutor, Defense Lawyer, Judge, Jury, Witness. Each agent type has specific state variables and behavioral capabilities that influence their role in the trial process.",
+      "environment_description": "Includes legal system type (common law with jury/civil law with judge ruling), court backlog affecting trial time and resource allocation, public attention impacting behavior pressure and media coverage, strength of relevant precedents affecting legal arguments and judgment basis, and procedural rule strictness influencing evidence admission standards and trial flow."
+    },
+    "design_concepts": {
+      "interaction_patterns": "Sequential and conditional interactions between agents during trial phases: case initiation, pre-trial preparation, plea bargaining, trial proceedings, and sentencing. Interaction influenced by agent state variables and external environment factors.",
+      "communication_protocols": "Formalized communication during plea negotiations, evidence presentation, and courtroom discussions. Protocols dictate how agents propose, negotiate, and respond to decisions and evidence.",
+      "decision_mechanisms": "Prosecutor's decision to prosecute based on evidence quality and conviction likelihood. Plea bargain decisions based on calculated acceptable conditions. Defendant's decision to testify based on risk-benefit analysis. Jury's verdict formation influenced by evidence credibility and collective discussion."
+    },
+    "details": {
+      "agent_behaviors": "Defendant: plea bargaining, testifying. Prosecutor: evidence collection, prosecution strategy. Defense Lawyer: case evaluation, defense strategy. Judge: evidence ruling, trial management. Jury: evidence evaluation, verdict formation. Witness: testimony preparation, cross-examination response.",
+      "decision_algorithms": "Prosecutor's prosecution decision based on 'evidence quality × conviction likelihood' exceeding threshold. Plea bargain decisions based on minimum/maximum acceptable conditions. Defendant's testifying decision based on expected gains outweighing risks. Jury's verdict formed through individual judgment and collective discussion.",
+      "specific_constraints": "Constraints include legal system type, court backlog, public attention, precedent strength, procedural rule strictness. These factors impact agent decisions and trial outcomes, creating variability in judicial fairness and efficiency."
+    }
+  },
+  "agent_types": {
+    "Defendant": "The Defendant is the individual accused in a court trial, responsible for plea bargaining and deciding whether to testify based on a risk-benefit analysis.",
+    "Prosecutor": "The Prosecutor is responsible for collecting evidence and developing prosecution strategies, deciding to prosecute based on evidence quality and conviction likelihood.",
+    "DefenseLawyer": "The Defense Lawyer evaluates the case and formulates defense strategies to represent the Defendant's interests in court.",
+    "Judge": "The Judge manages the trial, rules on evidence admissibility, and ensures procedural fairness throughout the judicial process.",
+    "Jury": "The Jury evaluates evidence and forms a verdict through individual judgment and collective discussion, influenced by evidence credibility.",
+    "Witness": "The Witness provides testimony and responds to cross-examination, contributing personal knowledge relevant to the case."
+  },
+  "portrait": {
+    "Defendant": 5,
+    "Prosecutor": 1,
+    "DefenseLawyer": 2,
+    "Judge": 1,
+    "Jury": 5,
+    "Witness": 5
+  },
+  "metrics": [
+    {
+      "id": "Prosecution_Decision_Rate",
+      "name": "Prosecution Decision Rate",
+      "description": "Measures the proportion of prosecution decisions made by prosecutors, indicating the level of activity and decision-making within the prosecution process.",
+      "visualization_type": "pie",
+      "update_interval": 5,
+      "variables": [
+        {
+          "name": "prosecution_decision",
+          "source_type": "agent",
+          "agent_type": "Prosecutor",
+          "path": "profile.prosecution_decision",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Count the number of 'prosecute' decisions in the list of prosecution decisions. Handle None values by treating them as 'undecided'. Calculate the proportion of 'prosecute' decisions to the total number of decisions made (excluding 'undecided'). If the list is empty or contains only None values, return a default rate of 0.",
+      "function_name": "Prosecution_Decision_Rate"
+    },
+    {
+      "id": "Jury_Verdict_Distribution",
+      "name": "Jury Verdict Distribution",
+      "description": "Shows the distribution of verdicts made by juries, providing insight into the outcomes of trials and the decision-making tendencies of juries.",
+      "visualization_type": "bar",
+      "update_interval": 5,
+      "variables": [
+        {
+          "name": "verdict",
+          "source_type": "agent",
+          "agent_type": "Jury",
+          "path": "profile.verdict",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Count the occurrences of each distinct verdict (e.g., 'guilty', 'not guilty') in the list of jury verdicts. Handle None values by excluding them from the count. If the list is empty or contains only None values, return a distribution with zero counts for all verdict types.",
+      "function_name": "Jury_Verdict_Distribution"
+    }
+  ]
+}

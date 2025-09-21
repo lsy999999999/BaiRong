@@ -1,0 +1,123 @@
+{
+    "Employee": [
+        {
+            "id": 1,
+            "name": "request_overtime_pay",
+            "condition": null,
+            "description": "The Employee initiates a request for overtime pay by submitting details of the overtime hours worked and the reason for the overtime.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "employee_id",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Unique identifier of the employee making the request."
+                },
+                {
+                    "name": "overtime_hours",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Number of overtime hours the employee claims to have worked."
+                },
+                {
+                    "name": "overtime_reason",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Reason provided by the employee for the overtime work."
+                }
+            ],
+            "output_updates": []
+        }
+    ],
+    "Employer": [
+        {
+            "id": 2,
+            "name": "defend_overtime_claim",
+            "condition": null,
+            "description": "The Employer responds to the overtime pay request by providing a defense, which includes arguments and evidence against the claim.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "employer_id",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Unique identifier of the employer submitting the defense."
+                },
+                {
+                    "name": "defense_arguments",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Arguments provided by the employer against the overtime pay claim."
+                },
+                {
+                    "name": "evidence_documents",
+                    "type": "list",
+                    "context": "agent",
+                    "description": "List of document identifiers submitted as evidence by the employer."
+                }
+            ],
+            "output_updates": []
+        }
+    ],
+    "Judge": [
+        {
+            "id": 3,
+            "name": "evaluate_overtime_claim",
+            "condition": "Receipt of both OvertimeRequestEvent and DefenseSubmissionEvent",
+            "description": "The Judge evaluates the overtime pay dispute by reviewing the arguments and evidence from both the Employee and the Employer, and delivers a ruling based on labor law.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "judge_id",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Unique identifier of the judge evaluating the claim."
+                },
+                {
+                    "name": "defense_arguments",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Arguments provided by the employer against the overtime pay claim."
+                },
+                {
+                    "name": "evidence_documents",
+                    "type": "list",
+                    "context": "event",
+                    "description": "List of document identifiers submitted as evidence by the employer."
+                },
+                {
+                    "name": "overtime_hours",
+                    "type": "float",
+                    "context": "event",
+                    "description": "Number of overtime hours the employee claims to have worked."
+                },
+                {
+                    "name": "overtime_reason",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Reason provided by the employee for the overtime work."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "ruling",
+                    "type": "str",
+                    "context": "env",
+                    "description": "The decision made by the judge regarding the overtime pay dispute."
+                },
+                {
+                    "name": "legal_references",
+                    "type": "list",
+                    "context": "env",
+                    "description": "List of legal references or statutes cited in the ruling."
+                },
+                {
+                    "name": "completion_status",
+                    "type": "str",
+                    "context": "env",
+                    "description": "Current status of the judgment process."
+                }
+            ]
+        }
+    ]
+}

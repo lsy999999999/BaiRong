@@ -1,0 +1,114 @@
+{
+    "environment": {
+        "variables": [
+            {
+                "name": "environmental_cues",
+                "type": "list",
+                "default_value": null
+            },
+            {
+                "name": "resource_availability",
+                "type": "float",
+                "default_value": null
+            }
+        ]
+    },
+    "agents": {
+        "IndividualAgent": {
+            "variables": [
+                {
+                    "name": "personal_health_data",
+                    "type": "object",
+                    "default_value": null
+                },
+                {
+                    "name": "perceived_threat_level",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "perceived_susceptibility",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "perceived_severity",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "perceived_benefits",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "perceived_barriers",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "self_efficacy",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "adopted_behavior",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "adoption_success",
+                    "type": "bool",
+                    "default_value": null
+                }
+            ]
+        },
+        "FamilyAgent": {
+            "variables": [
+                {
+                    "name": "family_health_priorities",
+                    "type": "list",
+                    "default_value": null
+                },
+                {
+                    "name": "support_provided",
+                    "type": "string",
+                    "default_value": null
+                }
+            ]
+        },
+        "CommunityAgent": {
+            "variables": [
+                {
+                    "name": "community_health_data",
+                    "type": "object",
+                    "default_value": null
+                },
+                {
+                    "name": "community_norms",
+                    "type": "list",
+                    "default_value": null
+                }
+            ]
+        },
+        "GovernmentAgent": {
+            "variables": [
+                {
+                    "name": "policy_goals",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "implemented_policy",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "policy_impact",
+                    "type": "float",
+                    "default_value": null
+                }
+            ]
+        }
+    }
+}

@@ -1,0 +1,85 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Alex Doe",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's full name representing an individual in the emotional contagion model"
+    },
+    "emotional_state": {
+        "type": "str",
+        "default": "neutral",
+        "private": false,
+        "sampling": "default"
+    },
+    "sensitivity_to_emotional_contagion": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.1,
+            1.0
+        ]
+    },
+    "interaction_frequency": {
+        "type": "int",
+        "default": 5,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            1,
+            10
+        ]
+    },
+    "communication_methods": {
+        "type": "list",
+        "default": [
+            "face-to-face",
+            "social media"
+        ],
+        "private": false,
+        "sampling": "default",
+        "sample_size": 2
+    },
+    "emotional_intensity": {
+        "type": "float",
+        "default": 0.7,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "initial_emotional_state": {
+        "type": "str",
+        "default": "joy",
+        "private": true,
+        "sampling": "random",
+        "choices": [
+            "joy",
+            "sadness",
+            "anger",
+            "neutral"
+        ]
+    },
+    "social_network_position": {
+        "type": "str",
+        "default": "central",
+        "private": true,
+        "sampling": "random",
+        "choices": [
+            "central",
+            "peripheral",
+            "isolated"
+        ]
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

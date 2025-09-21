@@ -1,0 +1,67 @@
+[
+    {
+        "name": "Agent Smith",
+        "rebellion_level": 0.0,
+        "repression_strategy": "moderate",
+        "effectiveness": 75.0,
+        "political_stability": 50.0,
+        "interaction_pattern": "Periodic Consultative Engagement",
+        "resource_allocation": null,
+        "agent_type": "Government",
+        "communication_protocol": "Secure Quantum Channel",
+        "decision_algorithm": "Adaptive Repression Model",
+        "id": "5"
+    },
+    {
+        "name": "Agent Johnson",
+        "rebellion_level": 0.0,
+        "repression_strategy": "moderate",
+        "effectiveness": 75.0,
+        "political_stability": 50.0,
+        "interaction_pattern": "Responsive Feedback Loop",
+        "resource_allocation": null,
+        "agent_type": "Government",
+        "communication_protocol": "Encrypted Satellite Network",
+        "decision_algorithm": "Dynamic Threat Analysis",
+        "id": "6"
+    },
+    {
+        "name": "Agent Lee",
+        "rebellion_level": 0.0,
+        "repression_strategy": "moderate",
+        "effectiveness": 75.0,
+        "political_stability": 50.0,
+        "interaction_pattern": "Collaborative Governance Framework",
+        "resource_allocation": null,
+        "agent_type": "Government",
+        "communication_protocol": "Blockchain Communication System",
+        "decision_algorithm": "Predictive Risk Assessment",
+        "id": "7"
+    },
+    {
+        "name": "Agent Garcia",
+        "rebellion_level": 0.0,
+        "repression_strategy": "moderate",
+        "effectiveness": 75.0,
+        "political_stability": 50.0,
+        "interaction_pattern": "Participatory Decision-Making Process",
+        "resource_allocation": null,
+        "agent_type": "Government",
+        "communication_protocol": "AI-Powered Secure Messaging",
+        "decision_algorithm": "Proactive Security Strategy",
+        "id": "8"
+    },
+    {
+        "name": "Agent Patel",
+        "rebellion_level": 0.0,
+        "repression_strategy": "moderate",
+        "effectiveness": 75.0,
+        "political_stability": 50.0,
+        "interaction_pattern": "Transparent Interaction Model",
+        "resource_allocation": null,
+        "agent_type": "Government",
+        "communication_protocol": "Quantum Encrypted Network",
+        "decision_algorithm": "Sentiment Analysis-Based Control",
+        "id": "9"
+    }
+]

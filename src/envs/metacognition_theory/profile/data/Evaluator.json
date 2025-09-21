@@ -1,0 +1,117 @@
+[
+    {
+        "name": "Evaluator Alpha",
+        "performance_summary": "Initial evaluation pending",
+        "completion_status": "not_started",
+        "evaluation_criteria": null,
+        "feedback_quality": 97,
+        "strategy_effectiveness": 0.75,
+        "task_difficulty_assessment": "hard",
+        "agent_type": "Evaluator",
+        "observation_notes": [
+            {
+                "note": "Initial observation",
+                "timestamp": "2023-10-01T10:00:00Z"
+            }
+        ],
+        "communication_log": [
+            {
+                "message": "Awaiting task completion",
+                "timestamp": "2023-10-01T10:05:00Z"
+            }
+        ],
+        "id": "10"
+    },
+    {
+        "name": "Evaluator Beta",
+        "performance_summary": "Initial evaluation pending",
+        "completion_status": "not_started",
+        "evaluation_criteria": null,
+        "feedback_quality": 52,
+        "strategy_effectiveness": 0.75,
+        "task_difficulty_assessment": "hard",
+        "agent_type": "Evaluator",
+        "observation_notes": [
+            {
+                "note": "Initial observation",
+                "timestamp": "2023-10-01T10:00:00Z"
+            }
+        ],
+        "communication_log": [
+            {
+                "message": "Awaiting task completion",
+                "timestamp": "2023-10-01T10:05:00Z"
+            }
+        ],
+        "id": "11"
+    },
+    {
+        "name": "Evaluator Gamma",
+        "performance_summary": "Initial evaluation pending",
+        "completion_status": "not_started",
+        "evaluation_criteria": null,
+        "feedback_quality": 70,
+        "strategy_effectiveness": 0.75,
+        "task_difficulty_assessment": "hard",
+        "agent_type": "Evaluator",
+        "observation_notes": [
+            {
+                "note": "Initial observation",
+                "timestamp": "2023-10-01T10:00:00Z"
+            }
+        ],
+        "communication_log": [
+            {
+                "message": "Awaiting task completion",
+                "timestamp": "2023-10-01T10:05:00Z"
+            }
+        ],
+        "id": "12"
+    },
+    {
+        "name": "Evaluator Delta",
+        "performance_summary": "Initial evaluation pending",
+        "completion_status": "not_started",
+        "evaluation_criteria": null,
+        "feedback_quality": 71,
+        "strategy_effectiveness": 0.75,
+        "task_difficulty_assessment": "hard",
+        "agent_type": "Evaluator",
+        "observation_notes": [
+            {
+                "note": "Initial observation",
+                "timestamp": "2023-10-01T10:00:00Z"
+            }
+        ],
+        "communication_log": [
+            {
+                "message": "Awaiting task completion",
+                "timestamp": "2023-10-01T10:05:00Z"
+            }
+        ],
+        "id": "13"
+    },
+    {
+        "name": "Evaluator Epsilon",
+        "performance_summary": "Initial evaluation pending",
+        "completion_status": "not_started",
+        "evaluation_criteria": null,
+        "feedback_quality": 76,
+        "strategy_effectiveness": 0.75,
+        "task_difficulty_assessment": "medium",
+        "agent_type": "Evaluator",
+        "observation_notes": [
+            {
+                "note": "Initial observation",
+                "timestamp": "2023-10-01T10:00:00Z"
+            }
+        ],
+        "communication_log": [
+            {
+                "message": "Awaiting task completion",
+                "timestamp": "2023-10-01T10:05:00Z"
+            }
+        ],
+        "id": "14"
+    }
+]

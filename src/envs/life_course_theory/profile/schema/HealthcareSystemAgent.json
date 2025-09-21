@@ -1,0 +1,88 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Healthcare System Agent",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's designated name within the simulation"
+    },
+    "health_services_evaluated": {
+        "type": "boolean",
+        "default": false,
+        "private": true,
+        "sampling": "default"
+    },
+    "current_health_policy_effectiveness": {
+        "type": "float",
+        "default": 75.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "available_resources": {
+        "type": "list",
+        "default": [
+            "doctors",
+            "nurses",
+            "medications"
+        ],
+        "private": false,
+        "sampling": "default"
+    },
+    "policy_influence": {
+        "type": "int",
+        "default": 50,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0,
+            100
+        ]
+    },
+    "communication_status": {
+        "type": "str",
+        "default": "active",
+        "private": false,
+        "sampling": "default"
+    },
+    "budget_allocation": {
+        "type": "float",
+        "default": 1000000.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "service_coverage_area": {
+        "type": "list",
+        "default": [
+            "urban",
+            "rural"
+        ],
+        "private": false,
+        "sampling": "default"
+    },
+    "emergency_response_time": {
+        "type": "int",
+        "default": 15,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            5,
+            30
+        ]
+    },
+    "public_health_campaigns": {
+        "type": "list",
+        "default": [
+            "vaccination",
+            "nutrition"
+        ],
+        "private": false,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

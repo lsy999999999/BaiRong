@@ -1,0 +1,107 @@
+[
+    {
+        "name": "EcoPolicyPro",
+        "analysis_status": "awaiting_review",
+        "policy_focus_area": "Environmental Sustainability",
+        "current_strategy": "implement_regulations",
+        "public_support_level": 54,
+        "agent_type": "PublicPolicyAgent",
+        "impact_analysis_results": {
+            "policy_effectiveness": 80,
+            "public_approval": 75
+        },
+        "historical_data_reference": [
+            {
+                "year": 2020,
+                "policy": "carbon_tax",
+                "outcome": "positive"
+            }
+        ],
+        "decision_algorithm": "GreenLogic AI",
+        "id": "20"
+    },
+    {
+        "name": "HealthCareAdvocate",
+        "analysis_status": "awaiting_review",
+        "policy_focus_area": "Public Health",
+        "current_strategy": "implement_regulations",
+        "public_support_level": 74,
+        "agent_type": "PublicPolicyAgent",
+        "impact_analysis_results": {
+            "policy_effectiveness": 80,
+            "public_approval": 75
+        },
+        "historical_data_reference": [
+            {
+                "year": 2020,
+                "policy": "carbon_tax",
+                "outcome": "positive"
+            }
+        ],
+        "decision_algorithm": "HealthDecisionNet",
+        "id": "21"
+    },
+    {
+        "name": "EduFuturePlanner",
+        "analysis_status": "awaiting_review",
+        "policy_focus_area": "Education Reform",
+        "current_strategy": "implement_regulations",
+        "public_support_level": 12,
+        "agent_type": "PublicPolicyAgent",
+        "impact_analysis_results": {
+            "policy_effectiveness": 80,
+            "public_approval": 75
+        },
+        "historical_data_reference": [
+            {
+                "year": 2020,
+                "policy": "carbon_tax",
+                "outcome": "positive"
+            }
+        ],
+        "decision_algorithm": "LearnOpt AI",
+        "id": "22"
+    },
+    {
+        "name": "TransportInnovator",
+        "analysis_status": "awaiting_review",
+        "policy_focus_area": "Urban Transportation",
+        "current_strategy": "implement_regulations",
+        "public_support_level": 50,
+        "agent_type": "PublicPolicyAgent",
+        "impact_analysis_results": {
+            "policy_effectiveness": 80,
+            "public_approval": 75
+        },
+        "historical_data_reference": [
+            {
+                "year": 2020,
+                "policy": "carbon_tax",
+                "outcome": "positive"
+            }
+        ],
+        "decision_algorithm": "TransFlow AI",
+        "id": "23"
+    },
+    {
+        "name": "EconomicBalancer",
+        "analysis_status": "awaiting_review",
+        "policy_focus_area": "Economic Policy",
+        "current_strategy": "implement_regulations",
+        "public_support_level": 44,
+        "agent_type": "PublicPolicyAgent",
+        "impact_analysis_results": {
+            "policy_effectiveness": 80,
+            "public_approval": 75
+        },
+        "historical_data_reference": [
+            {
+                "year": 2020,
+                "policy": "carbon_tax",
+                "outcome": "positive"
+            }
+        ],
+        "decision_algorithm": "EconoBalance System",
+        "id": "24"
+    }
+]

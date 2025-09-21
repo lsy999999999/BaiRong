@@ -1,0 +1,82 @@
+[
+    {
+        "name": "ParticipantA_001",
+        "behavior_description": "observing_behavior",
+        "observation_context": "initial_context",
+        "attribution_type": "undetermined",
+        "reasoning": "awaiting_analysis",
+        "interaction_count": 0,
+        "task_difficulty_level": 6,
+        "decision_confidence": 50.0,
+        "agent_type": "ParticipantA",
+        "bias_detection_score": 0.0,
+        "feedback_received": [
+            "awaiting_feedback"
+        ],
+        "id": "0"
+    },
+    {
+        "name": "ParticipantA_002",
+        "behavior_description": "observing_behavior",
+        "observation_context": "initial_context",
+        "attribution_type": "undetermined",
+        "reasoning": "awaiting_analysis",
+        "interaction_count": 0,
+        "task_difficulty_level": 10,
+        "decision_confidence": 50.0,
+        "agent_type": "ParticipantA",
+        "bias_detection_score": 0.0,
+        "feedback_received": [
+            "awaiting_feedback"
+        ],
+        "id": "1"
+    },
+    {
+        "name": "ParticipantA_003",
+        "behavior_description": "observing_behavior",
+        "observation_context": "initial_context",
+        "attribution_type": "undetermined",
+        "reasoning": "awaiting_analysis",
+        "interaction_count": 0,
+        "task_difficulty_level": 7,
+        "decision_confidence": 50.0,
+        "agent_type": "ParticipantA",
+        "bias_detection_score": 0.0,
+        "feedback_received": [
+            "awaiting_feedback"
+        ],
+        "id": "2"
+    },
+    {
+        "name": "ParticipantA_004",
+        "behavior_description": "observing_behavior",
+        "observation_context": "initial_context",
+        "attribution_type": "undetermined",
+        "reasoning": "awaiting_analysis",
+        "interaction_count": 0,
+        "task_difficulty_level": 1,
+        "decision_confidence": 50.0,
+        "agent_type": "ParticipantA",
+        "bias_detection_score": 0.0,
+        "feedback_received": [
+            "awaiting_feedback"
+        ],
+        "id": "3"
+    },
+    {
+        "name": "ParticipantA_005",
+        "behavior_description": "observing_behavior",
+        "observation_context": "initial_context",
+        "attribution_type": "undetermined",
+        "reasoning": "awaiting_analysis",
+        "interaction_count": 0,
+        "task_difficulty_level": 5,
+        "decision_confidence": 50.0,
+        "agent_type": "ParticipantA",
+        "bias_detection_score": 0.0,
+        "feedback_received": [
+            "awaiting_feedback"
+        ],
+        "id": "4"
+    }
+]

@@ -1,0 +1,41 @@
+{
+    "environment": {
+        "variables": [
+            {
+                "name": "available_media_sources",
+                "type": "list",
+                "default_value": null
+            }
+        ]
+    },
+    "agents": {
+        "VoterAgent": {
+            "variables": [
+                {
+                    "name": "current_political_preference",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "selected_media_id",
+                    "type": "int",
+                    "default_value": null
+                },
+                {
+                    "name": "adjusted_political_preference",
+                    "type": "float",
+                    "default_value": null
+                }
+            ]
+        },
+        "MediaAgent": {
+            "variables": [
+                {
+                    "name": "media_bias_score",
+                    "type": "float",
+                    "default_value": null
+                }
+            ]
+        }
+    }
+}

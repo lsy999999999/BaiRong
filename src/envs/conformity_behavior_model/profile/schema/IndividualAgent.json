@@ -1,0 +1,117 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Jane Doe",
+        "private": false,
+        "sampling": "llm",
+        "description": "A realistic name suitable for an individual agent in a psychology simulation."
+    },
+    "conformity_tendency": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "self_confidence": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "opinion_visibility": {
+        "type": "bool",
+        "default": false,
+        "private": true,
+        "sampling": "random",
+        "choices": [
+            true,
+            false
+        ]
+    },
+    "initial_judgment": {
+        "type": "str",
+        "default": "",
+        "private": false,
+        "sampling": "default"
+    },
+    "conformity_threshold": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "conformity_decision": {
+        "type": "bool",
+        "default": false,
+        "private": true,
+        "sampling": "default"
+    },
+    "belief_certainty": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "updated_belief": {
+        "type": "str",
+        "default": "",
+        "private": false,
+        "sampling": "default"
+    },
+    "decision_history": {
+        "type": "list",
+        "default": [],
+        "private": true,
+        "sampling": "default"
+    },
+    "social_ties": {
+        "type": "list",
+        "default": [],
+        "private": true,
+        "sampling": "default"
+    },
+    "openness": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "status": {
+        "type": "str",
+        "default": "neutral",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "neutral",
+            "leader",
+            "follower"
+        ]
+    },
+    "id": {
+        "type": "int",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

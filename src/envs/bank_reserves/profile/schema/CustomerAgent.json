@@ -1,0 +1,71 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Jane Doe",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's full name"
+    },
+    "loan_amount": {
+        "type": "float",
+        "default": 5000.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "financial_status": {
+        "type": "str",
+        "default": "stable",
+        "private": false,
+        "sampling": "llm",
+        "description": "The financial condition of the customer, e.g., 'stable', 'in debt', 'wealthy'"
+    },
+    "economic_conditions": {
+        "type": "str",
+        "default": "growth",
+        "private": false,
+        "sampling": "llm",
+        "description": "Current economic conditions affecting loan demand, e.g., 'recession', 'growth'"
+    },
+    "loan_request_status": {
+        "type": "str",
+        "default": "pending",
+        "private": false,
+        "sampling": "default"
+    },
+    "loan_history": {
+        "type": "list",
+        "default": [
+            {
+                "date": "2025-04-01",
+                "amount": 10000.0,
+                "status": "approved"
+            }
+        ],
+        "private": true,
+        "sampling": "default"
+    },
+    "credit_score": {
+        "type": "int",
+        "default": 700,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            300,
+            850
+        ]
+    },
+    "risk_tolerance": {
+        "type": "str",
+        "default": "medium",
+        "private": true,
+        "sampling": "llm",
+        "description": "The level of risk the customer is willing to take, e.g., 'low', 'medium', 'high'"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

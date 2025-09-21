@@ -1,0 +1,113 @@
+{
+    "-1": {
+        "id": -1,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "Employee",
+        "to_action_name": "request_overtime_pay",
+        "from_action_id": 0,
+        "to_action_id": 1,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for the workflow: Employee initiates an overtime pay request",
+        "fields": []
+    },
+    "1": {
+        "id": 1,
+        "from_agent_type": "Employee",
+        "from_action_name": "request_overtime_pay",
+        "to_agent_type": "Employer",
+        "to_action_name": "defend_overtime_claim",
+        "from_action_id": 1,
+        "to_action_id": 2,
+        "event_name": "OvertimeRequestEvent",
+        "event_info": "Employee requests payment for overtime hours worked",
+        "fields": [
+            {
+                "name": "employee_id",
+                "type": "str",
+                "default_value": "",
+                "description": "Unique identifier of the employee making the request"
+            },
+            {
+                "name": "overtime_hours",
+                "type": "float",
+                "default_value": 0.0,
+                "description": "Number of overtime hours the employee claims to have worked"
+            },
+            {
+                "name": "overtime_reason",
+                "type": "str",
+                "default_value": "",
+                "description": "Reason provided by the employee for the overtime work"
+            }
+        ]
+    },
+    "2": {
+        "id": 2,
+        "from_agent_type": "Employer",
+        "from_action_name": "defend_overtime_claim",
+        "to_agent_type": "Judge",
+        "to_action_name": "evaluate_overtime_claim",
+        "from_action_id": 2,
+        "to_action_id": 3,
+        "event_name": "DefenseSubmissionEvent",
+        "event_info": "Employer submits defense against the overtime pay claim",
+        "fields": [
+            {
+                "name": "employer_id",
+                "type": "str",
+                "default_value": "",
+                "description": "Unique identifier of the employer submitting the defense"
+            },
+            {
+                "name": "defense_arguments",
+                "type": "str",
+                "default_value": "",
+                "description": "Arguments provided by the employer against the overtime pay claim"
+            },
+            {
+                "name": "evidence_documents",
+                "type": "list",
+                "default_value": [],
+                "description": "List of document identifiers submitted as evidence by the employer"
+            }
+        ]
+    },
+    "3": {
+        "id": 3,
+        "from_agent_type": "Judge",
+        "from_action_name": "evaluate_overtime_claim",
+        "to_agent_type": "EnvAgent",
+        "to_action_name": "terminate",
+        "from_action_id": 3,
+        "to_action_id": -1,
+        "event_name": "JudgmentEvent",
+        "event_info": "Judge delivers a ruling on the overtime pay dispute based on labor law",
+        "fields": [
+            {
+                "name": "judge_id",
+                "type": "str",
+                "default_value": "",
+                "description": "Unique identifier of the judge delivering the ruling"
+            },
+            {
+                "name": "ruling",
+                "type": "str",
+                "default_value": "",
+                "description": "The decision made by the judge regarding the overtime pay dispute"
+            },
+            {
+                "name": "legal_references",
+                "type": "list",
+                "default_value": [],
+                "description": "List of legal references or statutes cited in the ruling"
+            },
+            {
+                "name": "completion_status",
+                "type": "str",
+                "default_value": "Pending",
+                "description": "Current status of the judgment process"
+            }
+        ]
+    }
+}

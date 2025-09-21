@@ -1,0 +1,77 @@
+[
+    {
+        "name": "John Doe",
+        "broad_acceptance_evaluation": true,
+        "social_influence": 0.20740268705748854,
+        "innovation_adoption_status": "not_adopted",
+        "decision_threshold": 0.8005328098101891,
+        "trust_in_innovation": 0.6206648776094855,
+        "communication_frequency": 1,
+        "agent_type": "LateMajority",
+        "network_connections": [
+            "agent_1",
+            "agent_2"
+        ],
+        "id": "15"
+    },
+    {
+        "name": "Jane Smith",
+        "broad_acceptance_evaluation": true,
+        "social_influence": 0.5354983323629928,
+        "innovation_adoption_status": "not_adopted",
+        "decision_threshold": 0.9486789081871748,
+        "trust_in_innovation": 0.9797847386100382,
+        "communication_frequency": 2,
+        "agent_type": "LateMajority",
+        "network_connections": [
+            "agent_1",
+            "agent_2"
+        ],
+        "id": "16"
+    },
+    {
+        "name": "Michael Johnson",
+        "broad_acceptance_evaluation": true,
+        "social_influence": 0.02650117796656326,
+        "innovation_adoption_status": "not_adopted",
+        "decision_threshold": 0.7495018676669374,
+        "trust_in_innovation": 0.9315165209448831,
+        "communication_frequency": 6,
+        "agent_type": "LateMajority",
+        "network_connections": [
+            "agent_1",
+            "agent_2"
+        ],
+        "id": "17"
+    },
+    {
+        "name": "Emily Davis",
+        "broad_acceptance_evaluation": true,
+        "social_influence": 0.7143062148793675,
+        "innovation_adoption_status": "not_adopted",
+        "decision_threshold": 0.8642094298426695,
+        "trust_in_innovation": 0.9712850349989652,
+        "communication_frequency": 6,
+        "agent_type": "LateMajority",
+        "network_connections": [
+            "agent_1",
+            "agent_2"
+        ],
+        "id": "18"
+    },
+    {
+        "name": "William Brown",
+        "broad_acceptance_evaluation": true,
+        "social_influence": 0.7045540093196817,
+        "innovation_adoption_status": "not_adopted",
+        "decision_threshold": 0.9105272205279369,
+        "trust_in_innovation": 0.4163047021650811,
+        "communication_frequency": 6,
+        "agent_type": "LateMajority",
+        "network_connections": [
+            "agent_1",
+            "agent_2"
+        ],
+        "id": "19"
+    }
+]

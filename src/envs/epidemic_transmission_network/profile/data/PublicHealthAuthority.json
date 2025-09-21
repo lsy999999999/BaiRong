@@ -1,0 +1,67 @@
+[
+    {
+        "name": "Dr. Emily Carter",
+        "testing_capacity": 2985,
+        "contact_tracing_efficiency": 0.6580847669767781,
+        "policy_options": [],
+        "communication_strategy": "community_engagement",
+        "credibility": 0.448165258141921,
+        "resource_allocation": [],
+        "agent_type": "PublicHealthAuthority",
+        "intervention_strategies": [],
+        "active_interventions": [],
+        "id": "10"
+    },
+    {
+        "name": "Mr. John Smith",
+        "testing_capacity": 2360,
+        "contact_tracing_efficiency": 0.28349030709896994,
+        "policy_options": [],
+        "communication_strategy": "community_engagement",
+        "credibility": 0.7100090250370574,
+        "resource_allocation": [],
+        "agent_type": "PublicHealthAuthority",
+        "intervention_strategies": [],
+        "active_interventions": [],
+        "id": "11"
+    },
+    {
+        "name": "Dr. Aisha Patel",
+        "testing_capacity": 925,
+        "contact_tracing_efficiency": 0.1979814692234495,
+        "policy_options": [],
+        "communication_strategy": "media_campaign",
+        "credibility": 0.798243977016762,
+        "resource_allocation": [],
+        "agent_type": "PublicHealthAuthority",
+        "intervention_strategies": [],
+        "active_interventions": [],
+        "id": "12"
+    },
+    {
+        "name": "Ms. Laura Nguyen",
+        "testing_capacity": 1174,
+        "contact_tracing_efficiency": 0.7081311937086583,
+        "policy_options": [],
+        "communication_strategy": "digital_platforms",
+        "credibility": 0.7645359335922635,
+        "resource_allocation": [],
+        "agent_type": "PublicHealthAuthority",
+        "intervention_strategies": [],
+        "active_interventions": [],
+        "id": "13"
+    },
+    {
+        "name": "Dr. Michael Johnson",
+        "testing_capacity": 2392,
+        "contact_tracing_efficiency": 0.8902065482635155,
+        "policy_options": [],
+        "communication_strategy": "media_campaign",
+        "credibility": 0.3558045681852815,
+        "resource_allocation": [],
+        "agent_type": "PublicHealthAuthority",
+        "intervention_strategies": [],
+        "active_interventions": [],
+        "id": "14"
+    }
+]

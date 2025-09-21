@@ -1,0 +1,195 @@
+{
+    "Plaintiff": [
+        {
+            "id": 1,
+            "name": "submit_evidence",
+            "condition": null,
+            "description": "The Plaintiff submits evidence to support their claim of unjust enrichment, aiming to prove that the Defendant has unfairly benefited without a contractual agreement.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "evidence_details",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Detailed description of the evidence that the Plaintiff submits to support their claim."
+                },
+                {
+                    "name": "plaintiff_id",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Unique identifier for the Plaintiff submitting the evidence."
+                },
+                {
+                    "name": "case_id",
+                    "type": "string",
+                    "context": "env",
+                    "description": "Unique identifier for the legal case."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "evidence_submitted",
+                    "type": "boolean",
+                    "context": "agent",
+                    "description": "Flag indicating that the Plaintiff has submitted the evidence."
+                }
+            ]
+        }
+    ],
+    "Defendant": [
+        {
+            "id": 2,
+            "name": "prepare_defense",
+            "condition": null,
+            "description": "The Defendant prepares their defense against the Plaintiff's claims, providing arguments and evidence to counter the allegations of unjust enrichment.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "defense_arguments",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Arguments prepared by the Defendant to counter the Plaintiff's claims."
+                },
+                {
+                    "name": "defendant_id",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Unique identifier for the Defendant preparing the defense."
+                },
+                {
+                    "name": "case_id",
+                    "type": "string",
+                    "context": "env",
+                    "description": "Unique identifier for the legal case."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "defense_prepared",
+                    "type": "boolean",
+                    "context": "agent",
+                    "description": "Flag indicating that the Defendant has prepared their defense."
+                }
+            ]
+        }
+    ],
+    "Judge": [
+        {
+            "id": 3,
+            "name": "evaluate_evidence",
+            "condition": "EvidenceSubmittedEvent received",
+            "description": "The Judge evaluates the evidence submitted by the Plaintiff to determine its validity and relevance to the claim of unjust enrichment.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "evidence_details",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Detailed description of the evidence submitted by the Plaintiff."
+                },
+                {
+                    "name": "plaintiff_id",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Unique identifier for the Plaintiff submitting the evidence."
+                },
+                {
+                    "name": "case_id",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Unique identifier for the legal case."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "evidence_evaluation_result",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Result of the Judge's evaluation of the Plaintiff's evidence."
+                }
+            ]
+        },
+        {
+            "id": 4,
+            "name": "evaluate_defense",
+            "condition": "DefensePreparedEvent received",
+            "description": "The Judge evaluates the defense arguments presented by the Defendant to assess their validity and relevance in response to the Plaintiff's claims.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "defense_arguments",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Arguments prepared by the Defendant in response to the Plaintiff's claims."
+                },
+                {
+                    "name": "defendant_id",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Unique identifier for the Defendant preparing the defense."
+                },
+                {
+                    "name": "case_id",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Unique identifier for the legal case."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "defense_evaluation_result",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Result of the Judge's evaluation of the Defendant's defense arguments."
+                }
+            ]
+        },
+        {
+            "id": 5,
+            "name": "make_decision",
+            "condition": "EvidenceEvaluationEvent and DefenseEvaluationEvent received",
+            "description": "The Judge makes a final decision on the case, determining whether unjust enrichment occurred and deciding on restitution or compensation.",
+            "type": "AND",
+            "required_variables": [
+                {
+                    "name": "evidence_evaluation_result",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Result of the Judge's evaluation of the Plaintiff's evidence."
+                },
+                {
+                    "name": "defense_evaluation_result",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Result of the Judge's evaluation of the Defendant's defense."
+                },
+                {
+                    "name": "judge_id",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Unique identifier for the Judge making the decision."
+                },
+                {
+                    "name": "case_id",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Unique identifier for the legal case."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "judgment_result",
+                    "type": "string",
+                    "context": "env",
+                    "description": "Final decision made by the Judge on the case."
+                },
+                {
+                    "name": "completion_status",
+                    "type": "string",
+                    "context": "env",
+                    "description": "Status indicating whether the simulation has concluded."
+                }
+            ]
+        }
+    ]
+}

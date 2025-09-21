@@ -1,0 +1,52 @@
+{
+    "variables": [
+        {
+            "name": "individual_agent_motivation",
+            "type": "str",
+            "value": "Seeking personal liberty while balancing societal obligations"
+        },
+        {
+            "name": "government_agent_legitimacy",
+            "type": "float",
+            "value": 0.87
+        },
+        {
+            "name": "social_group_agent_interests",
+            "type": "list",
+            "value": [
+                "Equal representation",
+                "Economic stability",
+                "Cultural preservation"
+            ]
+        },
+        {
+            "name": "contract_breakdown_conflict_intensity",
+            "type": "int",
+            "value": 4
+        },
+        {
+            "name": "public_policy_agent_effectiveness",
+            "type": "bool",
+            "value": true
+        },
+        {
+            "name": "historical_case_relevance",
+            "type": "str",
+            "value": "Influence of Enlightenment thinkers on modern governance structures"
+        },
+        {
+            "name": "social_contract_adaptability",
+            "type": "float",
+            "value": 0.65
+        },
+        {
+            "name": "initial_natural_state_conditions",
+            "type": "list",
+            "value": [
+                "Resource scarcity",
+                "High population density",
+                "Technological advancement"
+            ]
+        }
+    ]
+}

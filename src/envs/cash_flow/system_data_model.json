@@ -1,0 +1,79 @@
+{
+    "environment": {
+        "variables": []
+    },
+    "agents": {
+        "CompanyAgent": {
+            "variables": [
+                {
+                    "name": "cash_reserves",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "debt_levels",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "credit_rating",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "cash_flow_status",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "loan_amount",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "loan_application_status",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "total_expenses",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "completion_status",
+                    "type": "str",
+                    "default_value": null
+                }
+            ]
+        },
+        "BankAgent": {
+            "variables": [
+                {
+                    "name": "loan_decision",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "approved_loan_amount",
+                    "type": "float",
+                    "default_value": null
+                }
+            ]
+        },
+        "ConsumerAgent": {
+            "variables": [
+                {
+                    "name": "consumer_id",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "spending_amount",
+                    "type": "float",
+                    "default_value": null
+                }
+            ]
+        }
+    }
+}

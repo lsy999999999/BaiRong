@@ -1,0 +1,97 @@
+[
+    {
+        "name": "Conflict Resolver",
+        "conflict_status": "awaiting_resolution",
+        "interaction_pattern": "contract_negotiation",
+        "initial_natural_state": "state_of_nature",
+        "government_legitimacy": 75.0,
+        "social_contract_adaptability": 50,
+        "agent_type": "ContractBreakdownAgent",
+        "conflict_details": "Initial conflict scenario description",
+        "historical_case_analysis": [
+            {
+                "case_id": "001",
+                "outcome": "successful resolution",
+                "impact": "high"
+            }
+        ],
+        "decision_algorithm": "Hobbesian Analysis",
+        "id": "15"
+    },
+    {
+        "name": "Equilibrium Enforcer",
+        "conflict_status": "awaiting_resolution",
+        "interaction_pattern": "conflict_resolution",
+        "initial_natural_state": "state_of_nature",
+        "government_legitimacy": 75.0,
+        "social_contract_adaptability": 50,
+        "agent_type": "ContractBreakdownAgent",
+        "conflict_details": "Initial conflict scenario description",
+        "historical_case_analysis": [
+            {
+                "case_id": "001",
+                "outcome": "successful resolution",
+                "impact": "high"
+            }
+        ],
+        "decision_algorithm": "Rawlsian Fairness Model",
+        "id": "16"
+    },
+    {
+        "name": "Liberty Defender",
+        "conflict_status": "awaiting_resolution",
+        "interaction_pattern": "conflict_resolution",
+        "initial_natural_state": "state_of_nature",
+        "government_legitimacy": 75.0,
+        "social_contract_adaptability": 50,
+        "agent_type": "ContractBreakdownAgent",
+        "conflict_details": "Initial conflict scenario description",
+        "historical_case_analysis": [
+            {
+                "case_id": "001",
+                "outcome": "successful resolution",
+                "impact": "high"
+            }
+        ],
+        "decision_algorithm": "Lockean Consent Mechanism",
+        "id": "17"
+    },
+    {
+        "name": "Justice Arbitrator",
+        "conflict_status": "awaiting_resolution",
+        "interaction_pattern": "contract_negotiation",
+        "initial_natural_state": "state_of_nature",
+        "government_legitimacy": 75.0,
+        "social_contract_adaptability": 50,
+        "agent_type": "ContractBreakdownAgent",
+        "conflict_details": "Initial conflict scenario description",
+        "historical_case_analysis": [
+            {
+                "case_id": "001",
+                "outcome": "successful resolution",
+                "impact": "high"
+            }
+        ],
+        "decision_algorithm": "Rousseau Social Contract Simulation",
+        "id": "18"
+    },
+    {
+        "name": "Harmony Facilitator",
+        "conflict_status": "awaiting_resolution",
+        "interaction_pattern": "conflict_resolution",
+        "initial_natural_state": "state_of_nature",
+        "government_legitimacy": 75.0,
+        "social_contract_adaptability": 50,
+        "agent_type": "ContractBreakdownAgent",
+        "conflict_details": "Initial conflict scenario description",
+        "historical_case_analysis": [
+            {
+                "case_id": "001",
+                "outcome": "successful resolution",
+                "impact": "high"
+            }
+        ],
+        "decision_algorithm": "Kantian Ethical Framework",
+        "id": "19"
+    }
+]

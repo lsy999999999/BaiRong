@@ -1,0 +1,72 @@
+[
+    {
+        "name": "ClimateChangeImpact",
+        "uncertainty_level": 0.8466718687990489,
+        "risk_factor": 0.2392889362077476,
+        "resource_constraints": [
+            "limited_budget",
+            "time_pressure"
+        ],
+        "information_availability": "partial",
+        "variables": [],
+        "agent_type": "EnvironmentAgent",
+        "external_conditions": "stable",
+        "id": "5"
+    },
+    {
+        "name": "UrbanDevelopmentPressure",
+        "uncertainty_level": 0.2995358553471731,
+        "risk_factor": 0.43023745291865556,
+        "resource_constraints": [
+            "limited_budget",
+            "time_pressure"
+        ],
+        "information_availability": "partial",
+        "variables": [],
+        "agent_type": "EnvironmentAgent",
+        "external_conditions": "stable",
+        "id": "6"
+    },
+    {
+        "name": "RenewableEnergyShift",
+        "uncertainty_level": 0.36148199966047245,
+        "risk_factor": 0.420856223358538,
+        "resource_constraints": [
+            "limited_budget",
+            "time_pressure"
+        ],
+        "information_availability": "partial",
+        "variables": [],
+        "agent_type": "EnvironmentAgent",
+        "external_conditions": "stable",
+        "id": "7"
+    },
+    {
+        "name": "BiodiversityConservation",
+        "uncertainty_level": 0.9223028390972869,
+        "risk_factor": 0.42206542593861773,
+        "resource_constraints": [
+            "limited_budget",
+            "time_pressure"
+        ],
+        "information_availability": "partial",
+        "variables": [],
+        "agent_type": "EnvironmentAgent",
+        "external_conditions": "stable",
+        "id": "8"
+    },
+    {
+        "name": "WaterResourceManagement",
+        "uncertainty_level": 0.6814731706098874,
+        "risk_factor": 0.4759900767911772,
+        "resource_constraints": [
+            "limited_budget",
+            "time_pressure"
+        ],
+        "information_availability": "partial",
+        "variables": [],
+        "agent_type": "EnvironmentAgent",
+        "external_conditions": "stable",
+        "id": "9"
+    }
+]

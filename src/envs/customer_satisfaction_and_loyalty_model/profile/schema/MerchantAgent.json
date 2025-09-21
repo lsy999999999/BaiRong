@@ -1,0 +1,99 @@
+{
+    "name": {
+        "type": "str",
+        "default": "MerchantAgent",
+        "private": false,
+        "sampling": "llm",
+        "description": "The name of the merchant agent"
+    },
+    "service_quality": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.3,
+            0.7
+        ]
+    },
+    "product_quality": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.3,
+            0.7
+        ]
+    },
+    "average_feedback_score": {
+        "type": "float",
+        "default": 0.5,
+        "private": true,
+        "sampling": "default"
+    },
+    "baseline_service_level": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.3,
+            0.7
+        ]
+    },
+    "baseline_product_quality": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.3,
+            0.7
+        ]
+    },
+    "adjustment_cycle": {
+        "type": "int",
+        "default": 3,
+        "private": false,
+        "sampling": "default"
+    },
+    "customer_feedback": {
+        "type": "list",
+        "default": [
+            {
+                "time_step": 1,
+                "feedback_score": 0.5
+            }
+        ],
+        "private": true,
+        "sampling": "default"
+    },
+    "service_sensitivity_coefficient": {
+        "type": "float",
+        "default": 1.0,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.8,
+            1.2
+        ]
+    },
+    "product_sensitivity_coefficient": {
+        "type": "float",
+        "default": 1.0,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.8,
+            1.2
+        ]
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

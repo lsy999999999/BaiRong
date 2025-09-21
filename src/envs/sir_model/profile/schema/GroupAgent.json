@@ -1,0 +1,97 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Community Group",
+        "private": false,
+        "sampling": "llm",
+        "description": "The name of the social group or community represented by the agent"
+    },
+    "contact_pattern": {
+        "type": "str",
+        "default": "standard_interaction",
+        "private": true,
+        "sampling": "default"
+    },
+    "updated_contact_pattern": {
+        "type": "str",
+        "default": "standard_interaction",
+        "private": true,
+        "sampling": "default"
+    },
+    "social_influence": {
+        "type": "int",
+        "default": 50,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0,
+            100
+        ]
+    },
+    "policy_adherence": {
+        "type": "float",
+        "default": 0.75,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "interaction_frequency": {
+        "type": "int",
+        "default": 10,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            1,
+            20
+        ]
+    },
+    "health_state_distribution": {
+        "type": "list",
+        "default": [
+            {
+                "state": "S",
+                "percentage": 70
+            },
+            {
+                "state": "I",
+                "percentage": 20
+            },
+            {
+                "state": "R",
+                "percentage": 10
+            }
+        ],
+        "private": false,
+        "sampling": "default"
+    },
+    "resource_allocation_efficiency": {
+        "type": "float",
+        "default": 0.8,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.5,
+            1.0
+        ]
+    },
+    "communication_effectiveness": {
+        "type": "float",
+        "default": 0.9,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.5,
+            1.0
+        ]
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

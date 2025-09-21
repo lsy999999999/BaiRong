@@ -1,0 +1,363 @@
+{
+  "agents": {
+    "DecisionMakerAgent": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "1": {
+          "code": "async def gather_information(self, event: Event) -> List[Event]:\n        # Since the condition is 'null', proceed without condition check\n\n        # Access event data\n        source = event.fields.get('source', 'EnvironmentAgent')\n        information_content = event.fields.get('information_content', \"\")\n\n        # Update agent's profile with collected information\n        collected_information = f\"Source: {source}, Content: {information_content}\"\n        self.profile.update_data(\"collected_information\", collected_information)\n        self.profile.update_data(\"InformationGatheredEvent_received\", True)\n\n        # Prepare instruction for LLM to generate reaction\n        observation = f\"Collected Information: {collected_information}\"\n        instruction = \"\"\"\n        Please process the collected information and decide on the target agents to communicate this information to. \n        Your response should be in the following JSON format:\n\n        {\n        \"processed_information\": \"<Processed information content>\",\n        \"target_ids\": [\"<The string ID(s) of the target agents>\"]\n        }\n        \"\"\"\n\n        # Generate reaction using LLM\n        result = await self.generate_reaction(instruction, observation)\n\n        # Parse LLM response\n        processed_information = result.get('processed_information', \"\")\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Create and send InformationGatheredEvent to each target\n        events = []\n        for target_id in target_ids:\n            information_event = InformationGatheredEvent(\n                from_agent_id=self.profile_id,\n                to_agent_id=target_id,\n                source=source,\n                information_content=processed_information,\n                collected_information=collected_information\n            )\n            events.append(information_event)\n\n        return events",
+          "metadata": {
+            "id": 1,
+            "name": "gather_information",
+            "condition": "null",
+            "description": "The Decision Maker Agent collects relevant information from the Environment Agent to understand the external factors affecting the decision-making process.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "source",
+                "type": "string",
+                "context": "event",
+                "description": "Source of the information gathered by the Decision Maker"
+              },
+              {
+                "name": "information_content",
+                "type": "string",
+                "context": "event",
+                "description": "Details of the information gathered from the environment"
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "collected_information",
+                "type": "string",
+                "context": "agent",
+                "description": "Information collected from the environment for decision-making"
+              }
+            ]
+          }
+        },
+        "2": {
+          "code": "async def evaluate_options(self, event: Event) -> List[Event]:\n        # Check if the InformationGatheredEvent has been received\n        if not self.profile.get_data(\"InformationGatheredEvent_received\", False):\n            return []\n\n        # Retrieve necessary data from the agent and event\n        collected_information = self.profile.get_data(\"collected_information\", \"\")\n        option_id = event.fields.get('option_id', \"\")\n        evaluation_criteria = event.fields.get('evaluation_criteria', {})\n        evaluation_result = event.fields.get('evaluation_result', \"pending\")\n\n        # Craft the instruction for the LLM\n        instruction = f\"\"\"\n        Evaluate the options based on the following criteria: cost, utility, and risk. \n        Use the collected information: '{collected_information}' to inform your decision. \n        Please return the results in the following JSON format:\n\n        {{\n            \"evaluation_result\": \"<Result of the evaluation process>\",\n            \"target_ids\": [\"<The string ID(s) of the AlternativeOptionsAgent(s)>\"]\n        }}\n        \"\"\"\n\n        # Generate reaction using LLM\n        observation = f\"Option ID: {option_id}, Evaluation Criteria: {evaluation_criteria}\"\n        result = await self.generate_reaction(instruction, observation)\n\n        # Extract the evaluation result and target_ids from the LLM response\n        evaluation_result = result.get('evaluation_result', \"pending\")\n        target_ids = result.get('target_ids', [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Update the agent's profile with the evaluation result\n        self.profile.update_data(\"evaluation_result\", evaluation_result)\n        self.profile.update_data(\"OptionsEvaluatedEvent_received\", True)\n\n        # Prepare and send OptionsEvaluatedEvent to the appropriate AlternativeOptionsAgent(s)\n        events = []\n        for target_id in target_ids:\n            options_evaluated_event = OptionsEvaluatedEvent(\n                from_agent_id=self.profile_id, \n                to_agent_id=target_id, \n                option_id=option_id, \n                evaluation_criteria=evaluation_criteria, \n                evaluation_result=evaluation_result\n            )\n            events.append(options_evaluated_event)\n\n        return events",
+          "metadata": {
+            "id": 2,
+            "name": "evaluate_options",
+            "condition": "InformationGatheredEvent received",
+            "description": "The Decision Maker Agent evaluates the presented options based on the gathered information, considering criteria such as cost, utility, and risk.",
+            "type": "AND",
+            "required_variables": [
+              {
+                "name": "collected_information",
+                "type": "string",
+                "context": "agent",
+                "description": "Information previously collected from the environment"
+              },
+              {
+                "name": "option_id",
+                "type": "string",
+                "context": "event",
+                "description": "Identifier for the option being evaluated"
+              },
+              {
+                "name": "evaluation_criteria",
+                "type": "object",
+                "context": "event",
+                "description": "Criteria used to evaluate the option, including cost, utility, and risk"
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "evaluation_result",
+                "type": "string",
+                "context": "agent",
+                "description": "Result of the evaluation process"
+              }
+            ]
+          }
+        },
+        "3": {
+          "code": "async def make_decision(self, event: Event) -> List[Event]:\n        # Ensure all required events have been received\n        if not self.profile.get_data(\"OptionsEvaluatedEvent_received\", False):\n            return []\n\n        # Access required data\n        evaluation_result = self.profile.get_data(\"evaluation_result\", \"default\")\n        alternative_id = event.fields.get('alternative_id', \"\")\n        alternative_details = event.fields.get('alternative_details', {})\n\n        # Generate decision using LLM\n        instruction = \"\"\"\n        The Decision Maker Agent is making a final decision based on the evaluation of options.\n        Consider the costs, utilities, and risks associated with each alternative. \n        Please provide the decision outcome and specify target_ids for the next action. \n        Return the information in the following JSON format:\n\n        {\n        \"decision_id\": \"<Unique identifier for the decision made>\",\n        \"decision_result\": \"<Outcome of the decision-making process>\",\n        \"target_ids\": [\"<The string ID of the target agent(s)>\"]\n        }\n        \"\"\"\n        observation = f\"Evaluation result: {evaluation_result}, Alternative ID: {alternative_id}, Alternative details: {alternative_details}\"\n        result = await self.generate_reaction(instruction, observation)\n\n        # Extract results from LLM response\n        decision_id = result.get('decision_id', None)\n        decision_result = result.get('decision_result', None)\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Update agent profile with decision details\n        self.profile.update_data(\"decision_id\", decision_id)\n        self.profile.update_data(\"decision_result\", decision_result)\n\n        # Prepare and send DecisionMadeEvent\n        events = []\n        for target_id in target_ids:\n            decision_event = DecisionMadeEvent(self.profile_id, target_id, decision_id, decision_result)\n            events.append(decision_event)\n\n        return events",
+          "metadata": {
+            "id": 3,
+            "name": "make_decision",
+            "condition": "OptionsEvaluatedEvent received",
+            "description": "The Decision Maker Agent makes a final decision based on the evaluation of options and completes the decision-making process.",
+            "type": "AND",
+            "required_variables": [
+              {
+                "name": "evaluation_result",
+                "type": "string",
+                "context": "agent",
+                "description": "Result of the evaluation process"
+              },
+              {
+                "name": "alternative_details",
+                "type": "object",
+                "context": "event",
+                "description": "Details of the alternative including cost, utility, and risk"
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "decision_id",
+                "type": "string",
+                "context": "agent",
+                "description": "Unique identifier for the decision made"
+              },
+              {
+                "name": "decision_result",
+                "type": "string",
+                "context": "agent",
+                "description": "Outcome of the decision-making process"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "EnvironmentAgent": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "4": {
+          "code": "async def simulate_external_factors(self, event: Event) -> List[Event]:\n        if event.__class__.__name__ != \"InformationGatheredEvent\":\n            return []\n\n        # Extract necessary information from InformationGatheredEvent\n        information_content = event.information_content\n\n        instruction = f\"\"\"Simulate external factors impacting decision-making based on the gathered information.\n        The factors should be derived from the information content. Please provide the simulated factors details and return the information in the following JSON format:\n\n        {{\n            \"simulated_factors\": {{\n                \"factor_type\": \"<Derived Factor Type>\",\n                \"impact_level\": \"<Derived Impact Level>\"\n            }},\n            \"target_ids\": [\"<The string ID of the Decision Maker agent>\"]\n        }}\n        \"\"\"\n\n        observation = f\"Information content: {information_content}\"\n        result = await self.generate_reaction(instruction, observation)\n\n        simulated_factors = result.get('simulated_factors', {})\n        factor_type = simulated_factors.get('factor_type', \"\")\n        impact_level = simulated_factors.get('impact_level', \"0\")\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        events = []\n        for target_id in target_ids:\n            external_factors_event = ExternalFactorsSimulatedEvent(self.profile_id, target_id, factor_type, impact_level)\n            events.append(external_factors_event)\n\n        return events",
+          "metadata": {
+            "id": 4,
+            "name": "simulate_external_factors",
+            "condition": "InformationGatheredEvent received",
+            "description": "The Environment Agent simulates external factors that impact the decision-making process, providing necessary information for the Decision Maker Agent.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "factor_type",
+                "type": "string",
+                "context": "event",
+                "description": "Type of external factor being simulated"
+              },
+              {
+                "name": "impact_level",
+                "type": "string",
+                "context": "event",
+                "description": "Level of impact the external factor has on decision-making"
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "simulated_factors",
+                "type": "object",
+                "context": "env",
+                "description": "Details of the simulated external factors affecting decision-making"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "AlternativeOptionsAgent": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "5": {
+          "code": "async def present_alternatives(self, event: Event) -> List[Event]:\n        # Check if the event is an OptionsEvaluatedEvent\n        if event.__class__.__name__ != \"OptionsEvaluatedEvent\":\n            return []\n\n        # Access the required variables from the event\n        alternative_id = event.fields.get('option_id', \"\")\n        alternative_details = event.fields.get('evaluation_criteria', \"{}\")\n\n        # Prepare the instruction for the LLM to generate a reaction\n        instruction = \"\"\"\n        The Alternative Options Agent needs to present alternatives to the Decision Maker Agent. \n        Each alternative has distinct costs, utilities, and risks. \n        Please provide the target_ids of the Decision Maker Agents who should receive the alternatives. \n        Return the response in the following JSON format:\n\n        {\n            \"target_ids\": [\"<List of Decision Maker Agent IDs>\"]\n        }\n        \"\"\"\n    \n        # Observation context for the LLM\n        observation = f\"Alternative ID: {alternative_id}, Details: {alternative_details}\"\n    \n        # Generate reaction using LLM\n        result = await self.generate_reaction(instruction, observation)\n    \n        # Parse the LLM response\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Prepare and send the AlternativesPresentedEvent to the Decision Maker Agents\n        events = []\n        for target_id in target_ids:\n            alternatives_event = AlternativesPresentedEvent(self.profile_id, target_id, alternative_id, alternative_details)\n            events.append(alternatives_event)\n    \n        return events",
+          "metadata": {
+            "id": 5,
+            "name": "present_alternatives",
+            "condition": "OptionsEvaluatedEvent received",
+            "description": "The Alternative Options Agent presents different choices to the Decision Maker Agent, each with distinct costs, utilities, and risks.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "alternative_id",
+                "type": "string",
+                "context": "event",
+                "description": "Identifier for the alternative option presented"
+              },
+              {
+                "name": "alternative_details",
+                "type": "object",
+                "context": "event",
+                "description": "Details of the alternative including cost, utility, and risk"
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "presented_alternatives",
+                "type": "object",
+                "context": "agent",
+                "description": "Information about the presented alternatives"
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "events": {
+    "imports": "from onesim.events import Event\nfrom typing import Any",
+    "definitions": {
+      "-1": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": -1,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "DecisionMakerAgent",
+          "to_action_name": "gather_information",
+          "from_action_id": 0,
+          "to_action_id": 1,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for this branch of workflow",
+          "fields": []
+        }
+      },
+      "1": {
+        "code": "class InformationGatheredEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        source: str = 'EnvironmentAgent',\n        information_content: str = \"\",\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.source = source\n        self.information_content = information_content",
+        "metadata": {
+          "id": 1,
+          "from_agent_type": "DecisionMakerAgent",
+          "from_action_name": "gather_information",
+          "to_agent_type": "EnvironmentAgent",
+          "to_action_name": "simulate_external_factors",
+          "from_action_id": 1,
+          "to_action_id": 4,
+          "event_name": "InformationGatheredEvent",
+          "event_info": "Decision Maker gathers information from the environment",
+          "fields": [
+            {
+              "name": "source",
+              "type": "string",
+              "default_value": "EnvironmentAgent",
+              "description": "Source of the information gathered by the Decision Maker"
+            },
+            {
+              "name": "information_content",
+              "type": "string",
+              "default_value": "",
+              "description": "Details of the information gathered from the environment"
+            },
+            {
+              "name": "collected_information",
+              "type": "string",
+              "default_value": "",
+              "description": "Information collected from the environment for decision-making"
+            }
+          ]
+        }
+      },
+      "2": {
+        "code": "class OptionsEvaluatedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        option_id: str = \"\",\n        evaluation_criteria: object = {},\n        evaluation_result: str = 'pending',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.option_id = option_id\n        self.evaluation_criteria = evaluation_criteria\n        self.evaluation_result = evaluation_result",
+        "metadata": {
+          "id": 2,
+          "from_agent_type": "DecisionMakerAgent",
+          "from_action_name": "evaluate_options",
+          "to_agent_type": "AlternativeOptionsAgent",
+          "to_action_name": "present_alternatives",
+          "from_action_id": 2,
+          "to_action_id": 5,
+          "event_name": "OptionsEvaluatedEvent",
+          "event_info": "Decision Maker evaluates options based on gathered information",
+          "fields": [
+            {
+              "name": "option_id",
+              "type": "string",
+              "default_value": "",
+              "description": "Identifier for the option being evaluated"
+            },
+            {
+              "name": "evaluation_criteria",
+              "type": "object",
+              "default_value": "{}",
+              "description": "Criteria used to evaluate the option, including cost, utility, and risk"
+            },
+            {
+              "name": "evaluation_result",
+              "type": "string",
+              "default_value": "pending",
+              "description": "Result of the evaluation process"
+            }
+          ]
+        }
+      },
+      "3": {
+        "code": "class DecisionMadeEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        decision_id: str = \"\",\n        decision_result: str = 'success',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.decision_id = decision_id\n        self.decision_result = decision_result",
+        "metadata": {
+          "id": 3,
+          "from_agent_type": "DecisionMakerAgent",
+          "from_action_name": "make_decision",
+          "to_agent_type": "EnvAgent",
+          "to_action_name": "terminate",
+          "from_action_id": 3,
+          "to_action_id": -1,
+          "event_name": "DecisionMadeEvent",
+          "event_info": "Decision Maker makes a final decision and completes the process",
+          "fields": [
+            {
+              "name": "decision_id",
+              "type": "string",
+              "default_value": "",
+              "description": "Unique identifier for the decision made"
+            },
+            {
+              "name": "decision_result",
+              "type": "string",
+              "default_value": "success",
+              "description": "Outcome of the decision-making process"
+            }
+          ]
+        }
+      },
+      "4": {
+        "code": "class ExternalFactorsSimulatedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        factor_type: str = \"\",\n        impact_level: str = '0',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.factor_type = factor_type\n        self.impact_level = impact_level",
+        "metadata": {
+          "id": 4,
+          "from_agent_type": "EnvironmentAgent",
+          "from_action_name": "simulate_external_factors",
+          "to_agent_type": "DecisionMakerAgent",
+          "to_action_name": "evaluate_options",
+          "from_action_id": 4,
+          "to_action_id": 2,
+          "event_name": "ExternalFactorsSimulatedEvent",
+          "event_info": "Environment simulates external factors impacting decision-making",
+          "fields": [
+            {
+              "name": "factor_type",
+              "type": "string",
+              "default_value": "",
+              "description": "Type of external factor being simulated"
+            },
+            {
+              "name": "impact_level",
+              "type": "string",
+              "default_value": "0",
+              "description": "Level of impact the external factor has on decision-making"
+            }
+          ]
+        }
+      },
+      "5": {
+        "code": "class AlternativesPresentedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        alternative_id: str = \"\",\n        alternative_details: object = {},\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.alternative_id = alternative_id\n        self.alternative_details = alternative_details",
+        "metadata": {
+          "id": 5,
+          "from_agent_type": "AlternativeOptionsAgent",
+          "from_action_name": "present_alternatives",
+          "to_agent_type": "DecisionMakerAgent",
+          "to_action_name": "make_decision",
+          "from_action_id": 5,
+          "to_action_id": 3,
+          "event_name": "AlternativesPresentedEvent",
+          "event_info": "Alternative Options are presented to the Decision Maker",
+          "fields": [
+            {
+              "name": "alternative_id",
+              "type": "string",
+              "default_value": "",
+              "description": "Identifier for the alternative option presented"
+            },
+            {
+              "name": "alternative_details",
+              "type": "object",
+              "default_value": "{}",
+              "description": "Details of the alternative including cost, utility, and risk"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

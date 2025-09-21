@@ -1,0 +1,22 @@
+[
+    {
+        "source_agent": "Innovators",
+        "target_agent": "EarlyAdopters",
+        "direction": "unidirectional"
+    },
+    {
+        "source_agent": "EarlyAdopters",
+        "target_agent": "EarlyMajority",
+        "direction": "unidirectional"
+    },
+    {
+        "source_agent": "EarlyMajority",
+        "target_agent": "LateMajority",
+        "direction": "unidirectional"
+    },
+    {
+        "source_agent": "LateMajority",
+        "target_agent": "Laggards",
+        "direction": "unidirectional"
+    }
+]

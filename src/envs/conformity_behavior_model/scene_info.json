@@ -1,0 +1,85 @@
+{
+  "domain": "Psychology",
+  "scene_name": "social_influence_and_conformity_simulation",
+  "odd_protocol": {
+    "overview": {
+      "system_goal": "Simulate conformity behavior and social influence processes in group environments, studying information cascades, collective decision biases, minority influence mechanisms, and how individual traits and environmental factors modulate the degree of conformity.",
+      "agent_types": "Includes Individuals with attributes like id, conformity tendency, self-confidence, status, belief certainty, opinion visibility, decision history, social ties, openness, and threshold; Groups with attributes such as id, members, cohesion, norms, majority threshold, communication structure, homogeneity, and decision method; Opinion Leaders characterized by charisma, credibility, visibility, consistency, strategic thinking, and followers; Decision Contexts encompassing type, ambiguity, stakes, time pressure, feedback immediacy, and objective truth.",
+      "environment_description": "Encompasses social pressure, information availability, uncertainty level, cultural setting, and anonymity level, providing a comprehensive backdrop for agent interactions and decision-making."
+    },
+    "design_concepts": {
+      "interaction_patterns": "Includes opinion expression, social comparison, behavior adjustment, information cascade, and system evolution, capturing the dynamics of social influence and conformity.",
+      "communication_protocols": "Detailed mechanisms for information presentation, opinion expression order, leader prioritization, and silent behavior, ensuring a structured flow of information and influence.",
+      "decision_mechanisms": "Comprehensive logic for initial judgment formation, conformity decision-making, belief update, group opinion dynamics, information cascade simulation, and minority influence strategy."
+    },
+    "details": {
+      "agent_behaviors": "Individual behaviors include forming initial judgments, deciding on conformity based on perceived social pressure and leader influence, and updating internal beliefs; Group behaviors involve tracking opinion distribution and achieving stability; Opinion Leader behaviors focus on influence exertion and follower network maintenance; Decision Context behaviors involve task type consideration and ambiguity handling.",
+      "decision_algorithms": "Detailed algorithms for initial judgment formation based on task-related abilities and decision context type, conformity decision-making influenced by social pressure, leader impact, conformity threshold, and stakes, internal belief update reflecting perceived pressure and belief certainty, and group opinion dynamics through structured communication.",
+      "specific_constraints": "Constraints include conformity thresholds, social pressure levels, leader influence factors, decision stakes adjustments, and cultural settings impacting conformity patterns and decision accuracy."
+    }
+  },
+  "agent_types": {
+    "IndividualAgent": "Represents a single person with attributes such as conformity tendency, self-confidence, and decision history, responsible for forming judgments and deciding on conformity based on social pressure.",
+    "GroupAgent": "Consists of multiple individuals with attributes like cohesion and norms, responsible for tracking opinion distribution and achieving stability within the group.",
+    "OpinionLeaderAgent": "Characterized by charisma and credibility, responsible for exerting influence on followers and maintaining a network of influence.",
+    "DecisionContextAgent": "Encompasses the environment of decision-making with attributes like ambiguity and stakes, responsible for influencing how tasks are approached and handled."
+  },
+  "metrics": [
+    {
+      "id": "Average_Conformity_Tendency",
+      "name": "Average Conformity Tendency",
+      "description": "Measures the average tendency of individual agents to conform within the system, providing insight into overall conformity behavior.",
+      "visualization_type": "line",
+      "update_frequency": 5,
+      "variables": [
+        {
+          "name": "conformity_tendency",
+          "source_type": "agent",
+          "agent_type": "IndividualAgent",
+          "path": "profile.conformity_tendency",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Calculate the average of all conformity tendency values from IndividualAgent data. Handle None values by treating them as zero, and skip empty lists by returning zero as the average.",
+      "function_name": "Average_Conformity_Tendency"
+    },
+    {
+      "id": "System_Social_Pressure",
+      "name": "System Social Pressure",
+      "description": "Tracks the level of social pressure in the environment, which influences agent decision-making and conformity.",
+      "visualization_type": "line",
+      "update_frequency": 5,
+      "variables": [
+        {
+          "name": "social_pressure",
+          "source_type": "env",
+          "path": "data.social_pressure",
+          "required": true,
+          "is_list": false
+        }
+      ],
+      "calculation_logic": "Use the current value of social pressure from the environment data. If the value is None, default to zero to ensure consistent tracking over time.",
+      "function_name": "System_Social_Pressure"
+    },
+    {
+      "id": "Opinion_Leader_Influence_Strength_Distribution",
+      "name": "Opinion Leader Influence Strength Distribution",
+      "description": "Analyzes the distribution of influence strength among opinion leaders, indicating their potential impact on group dynamics.",
+      "visualization_type": "pie",
+      "update_frequency": 5,
+      "variables": [
+        {
+          "name": "influence_strength",
+          "source_type": "agent",
+          "agent_type": "OpinionLeaderAgent",
+          "path": "profile.influence_strength",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Aggregate influence strength values from OpinionLeaderAgent data. Handle None values by excluding them from the calculation, and skip empty lists by returning an empty distribution.",
+      "function_name": "Opinion_Leader_Influence_Strength_Distribution"
+    }
+  ]
+}

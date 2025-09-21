@@ -1,0 +1,326 @@
+{
+  "agents": {
+    "Aggressor": {
+      "imports": "from typing import Any, List, Optional\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "1": {
+          "code": "async def initiate_threat(self, event: Event) -> List[Event]:\n        # Access the required data from the agent's profile\n        aggressor_id = self.profile.get_data(\"aggressor_id\", \"\")\n        defender_id = self.profile.get_data(\"defender_id\", \"\")\n        \n        # Prepare the instruction for generate_reaction\n        instruction = \"\"\"The aggressor is initiating a threat towards the defender. \n        Please determine the level of threat and ensure to specify the target_ids for the event. \n        Return the information in the following JSON format:\n        {\n            \"threat_level\": \"<The severity level of the threat>\",\n            \"target_ids\": [\"<The string ID of the Defender agent>\"]\n        }\n        \"\"\"\n        \n        # Generate the reaction based on the current context\n        observation = f\"Aggressor ID: {aggressor_id}, Defender ID: {defender_id}\"\n        result = await self.generate_reaction(instruction, observation)\n        \n        # Extract the threat level and target_ids from the result\n        threat_level = result.get('threat_level', self.profile.get_data(\"default_threat_level\", 1))\n        target_ids = result.get('target_ids', [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids] if isinstance(target_ids, str) else []\n\n        # Update the agent's data with the new threat level\n        self.profile.update_data(\"threat_level\", threat_level)\n        \n        # Create and send the ThreatEvent to each target_id\n        events = []\n        for target_id in target_ids:\n            threat_event = ThreatEvent(self.profile_id, target_id, threat_level=threat_level, aggressor_id=aggressor_id, defender_id=defender_id)\n            events.append(threat_event)\n        \n        return events",
+          "metadata": {
+            "id": 1,
+            "name": "initiate_threat",
+            "condition": null,
+            "description": "The aggressor begins a threatening action towards the defender, setting the stage for the conflict scenario.",
+            "type": "OR",
+            "required_variables": [],
+            "output_updates": [
+              {
+                "name": "threat_level",
+                "type": "int",
+                "context": "agent",
+                "description": "The severity of the threat posed by the aggressor."
+              },
+              {
+                "name": "aggressor_id",
+                "type": "str",
+                "context": "agent",
+                "description": "Unique identifier for the aggressor agent."
+              },
+              {
+                "name": "defender_id",
+                "type": "str",
+                "context": "agent",
+                "description": "Unique identifier for the defender agent."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "Defender": {
+      "imports": "from typing import Any, List\nimport asyncio\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "2": {
+          "code": "async def react_to_threat(self, event: Event) -> List[Event]:\n        # Condition Check Implementation\n        threat_level = event.threat_level\n        if threat_level <= 0:\n            return []  # Condition not met, return empty list\n    \n        # Extract required variables from the event\n        aggressor_id = event.aggressor_id\n        defender_id = event.defender_id\n    \n        # Decision Making using generate_reaction\n        instruction = \"\"\"You are tasked with determining an appropriate defensive action in response to a threat.\n        Consider the 'threat_level' and decide on the type and intensity of the defensive action.\n        Please return the information in the following JSON format:\n        {\n          \"defensive_action_type\": \"<Type of defensive action>\",\n          \"defense_intensity\": <Intensity of the action>,\n          \"target_ids\": [\"<The string ID of the judge agent>\"]\n        }\n        \"\"\"\n        observation = f\"Threat Level: {threat_level}, Aggressor ID: {aggressor_id}, Defender ID: {defender_id}\"\n        result = await self.generate_reaction(instruction, observation)\n    \n        # Parse the LLM's JSON response\n        defensive_action_type = result.get('defensive_action_type', 'basic')\n        defense_intensity = result.get('defense_intensity', 1)\n        target_ids = result.get('target_ids', [])\n        if not isinstance(target_ids, list) or not target_ids:\n            target_ids = []  # Ensure target_ids is a list, may need actual logic to determine judge_id\n    \n        # Update agent profile with the defensive action details\n        self.profile.update_data(\"defensive_action_type\", defensive_action_type)\n        self.profile.update_data(\"defense_intensity\", defense_intensity)\n        self.profile.update_data(\"evidence_collected\", event.evidence_collected if event.evidence_collected else [])\n    \n        # Prepare and send DefenseActionEvent to the Judge\n        events = []\n        for target_id in target_ids:\n            defense_action_event = DefenseActionEvent(\n                self.profile_id, target_id,\n                defensive_action_type=defensive_action_type,\n                defense_intensity=defense_intensity,\n                evidence_collected=self.profile.get_data(\"evidence_collected\"),\n                defender_id=defender_id,\n                judge_id=target_id  # Assuming target_id is judge_id\n            )\n            events.append(defense_action_event)\n    \n        return events",
+          "metadata": {
+            "id": 2,
+            "name": "react_to_threat",
+            "condition": "Threat level assessed",
+            "description": "The defender responds to the aggressor's threat with appropriate defensive measures.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "threat_level",
+                "type": "int",
+                "context": "event",
+                "description": "Severity of the threat as communicated by the aggressor."
+              },
+              {
+                "name": "aggressor_id",
+                "type": "str",
+                "context": "event",
+                "description": "Identifier for the aggressor agent."
+              },
+              {
+                "name": "defender_id",
+                "type": "str",
+                "context": "event",
+                "description": "Identifier for the defender agent."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "defensive_action_type",
+                "type": "str",
+                "context": "agent",
+                "description": "Type of defensive action taken by the defender."
+              },
+              {
+                "name": "defense_intensity",
+                "type": "int",
+                "context": "agent",
+                "description": "Intensity level of the defense action."
+              },
+              {
+                "name": "evidence_collected",
+                "type": "list",
+                "context": "agent",
+                "description": "Evidence collected during the defensive action."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "Judge": {
+      "imports": "from typing import Any, List\nimport asyncio\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "3": {
+          "code": "async def evaluate_defense(self, event: Event) -> List[Event]:\n        # Condition Check: Ensure defense action and threat level data are available\n        if not event.defensive_action_type or not event.defense_intensity:\n            return []\n    \n        # Access event data\n        defensive_action_type = event.defensive_action_type\n        defense_intensity = event.defense_intensity\n        evidence_collected = event.evidence_collected\n        defender_id = event.defender_id\n        judge_id = self.profile.id\n    \n        # Construct observation and instruction for decision making\n        observation = f\"Defensive action: {defensive_action_type}, Intensity: {defense_intensity}, Evidence: {evidence_collected}\"\n        instruction = \"\"\"Evaluate the defense based on legal standards, considering proportionality and necessity. \n        Determine if the defense is justified or excessive. Return the following JSON format:\n    \n        {\n            \"judgment_result\": \"<justified/excessive/unjustified>\",\n            \"legal_reasons\": \"<Explanation of the legal rationale>\",\n            \"threat_assessment\": <Integer threat level assessment>,\n            \"defense_assessment\": <Integer defense action assessment>,\n            \"completion_status\": \"<completed/pending>\",\n            \"target_ids\": [\"ENV\"]\n        }\n        \"\"\"\n    \n        # Generate reaction using LLM\n        result = await self.generate_reaction(instruction, observation)\n    \n        # Extract results from LLM output\n        judgment_result = result.get('judgment_result', 'undecided')\n        legal_reasons = result.get('legal_reasons', '')\n        threat_assessment = result.get('threat_assessment', 0)\n        defense_assessment = result.get('defense_assessment', 0)\n        completion_status = result.get('completion_status', 'pending')\n        target_ids = result.get('target_ids', ['ENV'])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n    \n        # Update agent's state with LLM's returned results\n        self.profile.update_data(\"judgment_result\", judgment_result)\n        self.profile.update_data(\"legal_reasons\", legal_reasons)\n        self.profile.update_data(\"threat_assessment\", threat_assessment)\n        self.profile.update_data(\"defense_assessment\", defense_assessment)\n        self.profile.update_data(\"completion_status\", completion_status)\n    \n        # Prepare and send the JudgmentEvent to the EnvAgent\n        events = []\n        for target_id in target_ids:\n            judgment_event = JudgmentEvent(\n                from_agent_id=self.profile.id,\n                to_agent_id=target_id,\n                judgment_result=judgment_result,\n                legal_reasons=legal_reasons,\n                threat_assessment=threat_assessment,\n                defense_assessment=defense_assessment,\n                judge_id=judge_id,\n                completion_status=completion_status\n            )\n            events.append(judgment_event)\n    \n        return events",
+          "metadata": {
+            "id": 3,
+            "name": "evaluate_defense",
+            "condition": "Defense action and threat level data available",
+            "description": "The judge evaluates the defender's actions against the aggressor's threat to determine if the defense was justified or excessive.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "defensive_action_type",
+                "type": "str",
+                "context": "event",
+                "description": "Type of defensive action taken by the defender."
+              },
+              {
+                "name": "defense_intensity",
+                "type": "int",
+                "context": "event",
+                "description": "Intensity level of the defense action."
+              },
+              {
+                "name": "evidence_collected",
+                "type": "list",
+                "context": "event",
+                "description": "Evidence gathered during the defense."
+              },
+              {
+                "name": "defender_id",
+                "type": "str",
+                "context": "event",
+                "description": "Identifier for the defender agent."
+              },
+              {
+                "name": "judge_id",
+                "type": "str",
+                "context": "event",
+                "description": "Identifier for the judge agent."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "judgment_result",
+                "type": "str",
+                "context": "agent",
+                "description": "Outcome of the judge's decision on the defense."
+              },
+              {
+                "name": "legal_reasons",
+                "type": "str",
+                "context": "agent",
+                "description": "Legal rationale for the judge's decision."
+              },
+              {
+                "name": "threat_assessment",
+                "type": "int",
+                "context": "agent",
+                "description": "Judge's assessment of the initial threat level."
+              },
+              {
+                "name": "defense_assessment",
+                "type": "int",
+                "context": "agent",
+                "description": "Judge's assessment of the defense action's proportionality and necessity."
+              },
+              {
+                "name": "completion_status",
+                "type": "str",
+                "context": "agent",
+                "description": "Status of the judgment process."
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "events": {
+    "imports": "from onesim.events import Event\nfrom typing import Any, List",
+    "definitions": {
+      "-1": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": -1,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "Aggressor",
+          "to_action_name": "initiate_threat",
+          "from_action_id": 0,
+          "to_action_id": 1,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for aggressor to start threatening",
+          "fields": []
+        }
+      },
+      "1": {
+        "code": "class ThreatEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        threat_level: int = 1,\n        aggressor_id: str = \"\",\n        defender_id: str = \"\",\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.threat_level = threat_level\n        self.aggressor_id = aggressor_id\n        self.defender_id = defender_id",
+        "metadata": {
+          "id": 1,
+          "from_agent_type": "Aggressor",
+          "from_action_name": "initiate_threat",
+          "to_agent_type": "Defender",
+          "to_action_name": "react_to_threat",
+          "from_action_id": 1,
+          "to_action_id": 2,
+          "event_name": "ThreatEvent",
+          "event_info": "Aggressor threatens defender",
+          "fields": [
+            {
+              "name": "threat_level",
+              "type": "int",
+              "default_value": "1",
+              "description": "Indicates the severity of the threat posed by the aggressor, with higher values indicating more severe threats."
+            },
+            {
+              "name": "aggressor_id",
+              "type": "str",
+              "default_value": "",
+              "description": "Unique identifier for the aggressor agent."
+            },
+            {
+              "name": "defender_id",
+              "type": "str",
+              "default_value": "",
+              "description": "Unique identifier for the defender agent."
+            }
+          ]
+        }
+      },
+      "2": {
+        "code": "class DefenseActionEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        defensive_action_type: str = 'basic',\n        defense_intensity: int = 1,\n        evidence_collected: List[Any] = None,\n        defender_id: str = \"\",\n        judge_id: str = \"\",\n        **kwargs: Any\n    ) -> None:\n        if evidence_collected is None:\n            evidence_collected = []\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.defensive_action_type = defensive_action_type\n        self.defense_intensity = defense_intensity\n        self.evidence_collected = evidence_collected\n        self.defender_id = defender_id\n        self.judge_id = judge_id",
+        "metadata": {
+          "id": 2,
+          "from_agent_type": "Defender",
+          "from_action_name": "react_to_threat",
+          "to_agent_type": "Judge",
+          "to_action_name": "evaluate_defense",
+          "from_action_id": 2,
+          "to_action_id": 3,
+          "event_name": "DefenseActionEvent",
+          "event_info": "Defender takes defensive action",
+          "fields": [
+            {
+              "name": "defensive_action_type",
+              "type": "str",
+              "default_value": "basic",
+              "description": "Type of defensive action taken by the defender, e.g., 'block', 'retreat', 'counterattack'."
+            },
+            {
+              "name": "defense_intensity",
+              "type": "int",
+              "default_value": "1",
+              "description": "Intensity level of the defense action, with higher numbers indicating more forceful actions."
+            },
+            {
+              "name": "evidence_collected",
+              "type": "list",
+              "default_value": "[]",
+              "description": "List of evidence items collected during the defense action."
+            },
+            {
+              "name": "defender_id",
+              "type": "str",
+              "default_value": "",
+              "description": "Unique identifier for the defender agent."
+            },
+            {
+              "name": "judge_id",
+              "type": "str",
+              "default_value": "",
+              "description": "Unique identifier for the judge agent."
+            }
+          ]
+        }
+      },
+      "3": {
+        "code": "class JudgmentEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        judgment_result: str = 'undecided',\n        legal_reasons: str = \"\",\n        threat_assessment: int = 0,\n        defense_assessment: int = 0,\n        judge_id: str = \"\",\n        completion_status: str = 'pending',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.judgment_result = judgment_result\n        self.legal_reasons = legal_reasons\n        self.threat_assessment = threat_assessment\n        self.defense_assessment = defense_assessment\n        self.judge_id = judge_id\n        self.completion_status = completion_status",
+        "metadata": {
+          "id": 3,
+          "from_agent_type": "Judge",
+          "from_action_name": "evaluate_defense",
+          "to_agent_type": "EnvAgent",
+          "to_action_name": "terminate",
+          "from_action_id": 3,
+          "to_action_id": -1,
+          "event_name": "JudgmentEvent",
+          "event_info": "Judge renders decision on defense justification",
+          "fields": [
+            {
+              "name": "judgment_result",
+              "type": "str",
+              "default_value": "undecided",
+              "description": "Outcome of the judge's decision, e.g., 'justified', 'excessive', 'unjustified'."
+            },
+            {
+              "name": "legal_reasons",
+              "type": "str",
+              "default_value": "",
+              "description": "Legal rationale provided by the judge for the decision."
+            },
+            {
+              "name": "threat_assessment",
+              "type": "int",
+              "default_value": "0",
+              "description": "Judge's assessment of the initial threat level."
+            },
+            {
+              "name": "defense_assessment",
+              "type": "int",
+              "default_value": "0",
+              "description": "Judge's assessment of the defense action's proportionality and necessity."
+            },
+            {
+              "name": "judge_id",
+              "type": "str",
+              "default_value": "",
+              "description": "Unique identifier for the judge agent."
+            },
+            {
+              "name": "completion_status",
+              "type": "str",
+              "default_value": "pending",
+              "description": "Status of the judgment process, e.g., 'completed', 'pending'."
+            }
+          ]
+        }
+      }
+    }
+  }
+}

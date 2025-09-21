@@ -1,0 +1,107 @@
+[
+    {
+        "name": "AgentAlpha",
+        "resource_level": 187,
+        "decision_strategy": "HeuristicAnalysis",
+        "current_goal": "wealth_maximization",
+        "risk_tolerance": 0.4551573596838372,
+        "experience_level": 4,
+        "agent_type": "SocialNetworkInteractor",
+        "adjustment_status": "ready",
+        "interaction_pattern": "social_network",
+        "utility_function": "U = f(收益, 成本, 风险)",
+        "communication_protocol": "MQTT",
+        "decision_history": [
+            {
+                "option": "initial",
+                "utility": 50,
+                "outcome": "neutral"
+            }
+        ],
+        "id": "10"
+    },
+    {
+        "name": "AgentBeta",
+        "resource_level": 104,
+        "decision_strategy": "NeuralNetwork",
+        "current_goal": "happiness_enhancement",
+        "risk_tolerance": 0.8878113125759713,
+        "experience_level": 5,
+        "agent_type": "SocialNetworkInteractor",
+        "adjustment_status": "ready",
+        "interaction_pattern": "market_exchange",
+        "utility_function": "U = f(收益, 成本, 风险)",
+        "communication_protocol": "HTTP",
+        "decision_history": [
+            {
+                "option": "initial",
+                "utility": 50,
+                "outcome": "neutral"
+            }
+        ],
+        "id": "11"
+    },
+    {
+        "name": "AgentGamma",
+        "resource_level": 94,
+        "decision_strategy": "RuleBased",
+        "current_goal": "risk_minimization",
+        "risk_tolerance": 0.18671300148760828,
+        "experience_level": 8,
+        "agent_type": "SocialNetworkInteractor",
+        "adjustment_status": "ready",
+        "interaction_pattern": "social_network",
+        "utility_function": "U = f(收益, 成本, 风险)",
+        "communication_protocol": "WebSocket",
+        "decision_history": [
+            {
+                "option": "initial",
+                "utility": 50,
+                "outcome": "neutral"
+            }
+        ],
+        "id": "12"
+    },
+    {
+        "name": "AgentDelta",
+        "resource_level": 70,
+        "decision_strategy": "ReinforcementLearning",
+        "current_goal": "happiness_enhancement",
+        "risk_tolerance": 0.632288069008727,
+        "experience_level": 7,
+        "agent_type": "SocialNetworkInteractor",
+        "adjustment_status": "ready",
+        "interaction_pattern": "individual_analysis",
+        "utility_function": "U = f(收益, 成本, 风险)",
+        "communication_protocol": "CoAP",
+        "decision_history": [
+            {
+                "option": "initial",
+                "utility": 50,
+                "outcome": "neutral"
+            }
+        ],
+        "id": "13"
+    },
+    {
+        "name": "AgentEpsilon",
+        "resource_level": 54,
+        "decision_strategy": "GeneticAlgorithm",
+        "current_goal": "risk_minimization",
+        "risk_tolerance": 0.2980723363373118,
+        "experience_level": 8,
+        "agent_type": "SocialNetworkInteractor",
+        "adjustment_status": "ready",
+        "interaction_pattern": "social_network",
+        "utility_function": "U = f(收益, 成本, 风险)",
+        "communication_protocol": "XMPP",
+        "decision_history": [
+            {
+                "option": "initial",
+                "utility": 50,
+                "outcome": "neutral"
+            }
+        ],
+        "id": "14"
+    }
+]

@@ -1,0 +1,133 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Jane Doe",
+        "private": false,
+        "sampling": "llm",
+        "description": "A typical name representing an individual in the simulation."
+    },
+    "age": {
+        "type": "int",
+        "range": [
+            0,
+            100
+        ],
+        "default": 30,
+        "private": false,
+        "sampling": "random"
+    },
+    "health_status": {
+        "type": "str",
+        "choices": [
+            "healthy",
+            "infected",
+            "immune",
+            "deceased"
+        ],
+        "default": "healthy",
+        "private": false,
+        "sampling": "random"
+    },
+    "infection_time": {
+        "type": "int",
+        "default": -1,
+        "private": false,
+        "sampling": "default"
+    },
+    "symptoms_severity": {
+        "type": "float",
+        "default": 0.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "vaccination_status": {
+        "type": "str",
+        "choices": [
+            "none",
+            "partial",
+            "full"
+        ],
+        "default": "none",
+        "private": false,
+        "sampling": "random"
+    },
+    "risk_perception": {
+        "type": "float",
+        "default": 0.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "compliance_tendency": {
+        "type": "float",
+        "range": [
+            0.0,
+            1.0
+        ],
+        "default": 0.5,
+        "private": false,
+        "sampling": "random"
+    },
+    "mobility_pattern": {
+        "type": "str",
+        "choices": [
+            "homebound",
+            "active",
+            "nomadic"
+        ],
+        "default": "active",
+        "private": false,
+        "sampling": "random"
+    },
+    "social_contacts": {
+        "type": "list",
+        "default": [],
+        "private": false,
+        "sampling": "default"
+    },
+    "demographic_group": {
+        "type": "str",
+        "choices": [
+            "youth",
+            "adult",
+            "senior"
+        ],
+        "default": "adult",
+        "private": false,
+        "sampling": "random"
+    },
+    "information_sources": {
+        "type": "list",
+        "default": [],
+        "private": false,
+        "sampling": "default"
+    },
+    "trust_in_authorities": {
+        "type": "float",
+        "range": [
+            0.0,
+            1.0
+        ],
+        "default": 0.5,
+        "private": false,
+        "sampling": "random"
+    },
+    "personal_experiences": {
+        "type": "dict",
+        "default": {},
+        "private": false,
+        "sampling": "default"
+    },
+    "behavior_changes": {
+        "type": "list",
+        "default": [],
+        "private": false,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "int",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

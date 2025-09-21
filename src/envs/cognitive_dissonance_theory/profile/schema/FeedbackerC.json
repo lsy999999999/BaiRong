@@ -1,0 +1,71 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Feedbacker C",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's role in the cognitive dissonance simulation"
+    },
+    "evaluation_result": {
+        "type": "str",
+        "default": "pending_evaluation",
+        "private": true,
+        "sampling": "default"
+    },
+    "completion_status": {
+        "type": "str",
+        "default": "not_started",
+        "private": false,
+        "sampling": "default"
+    },
+    "feedback_quality": {
+        "type": "int",
+        "default": 70,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            50,
+            100
+        ]
+    },
+    "suggestion_list": {
+        "type": "list",
+        "default": [
+            {
+                "suggestion": "Consider alternative perspectives",
+                "impact": "medium"
+            }
+        ],
+        "private": true,
+        "sampling": "default",
+        "sample_size": 3
+    },
+    "interaction_frequency": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.1,
+            1.0
+        ]
+    },
+    "feedback_history": {
+        "type": "list",
+        "default": [
+            {
+                "timestamp": "2023-10-01T10:00:00Z",
+                "feedback": "Initial assessment"
+            }
+        ],
+        "private": true,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

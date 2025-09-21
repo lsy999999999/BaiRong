@@ -1,0 +1,79 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Smith Family",
+        "private": false,
+        "sampling": "llm",
+        "description": "The family name represented by the agent"
+    },
+    "family_income": {
+        "type": "float",
+        "default": 50000.0,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            20000.0,
+            150000.0
+        ]
+    },
+    "nutrition_quality": {
+        "type": "str",
+        "default": "balanced",
+        "private": false,
+        "sampling": "llm",
+        "description": "The quality of nutrition the family maintains"
+    },
+    "education_investment": {
+        "type": "float",
+        "default": 1000.0,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            500.0,
+            5000.0
+        ]
+    },
+    "family_health_status": {
+        "type": "str",
+        "default": "stable",
+        "private": true,
+        "sampling": "default"
+    },
+    "children_count": {
+        "type": "int",
+        "default": 2,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0,
+            5
+        ]
+    },
+    "health_behavior_score": {
+        "type": "int",
+        "default": 70,
+        "private": false,
+        "sampling": "default"
+    },
+    "social_support_level": {
+        "type": "str",
+        "default": "moderate",
+        "private": false,
+        "sampling": "llm",
+        "description": "The level of social support the family has access to"
+    },
+    "community_involvement": {
+        "type": "str",
+        "default": "active",
+        "private": false,
+        "sampling": "llm",
+        "description": "The degree of involvement the family has in community activities"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

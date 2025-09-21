@@ -1,0 +1,120 @@
+{
+  "name": {
+    "type": "str",
+    "default": "ResourceMiner1",
+    "private": false,
+    "sampling": "llm",
+    "description": "The agent's name"
+  },
+  "miner_id": {
+    "type": "str",
+    "default": "miner_001",
+    "private": false,
+    "sampling": "default"
+  },
+  "current_state": {
+    "type": "str",
+    "default": "idle",
+    "private": false,
+    "sampling": "default"
+  },
+  "observed_state": {
+    "type": "object",
+    "default": {
+      "grid_position": [
+        0,
+        0
+      ],
+      "resources": 0,
+      "energy": 100
+    },
+    "private": false,
+    "sampling": "default"
+  },
+  "investment_strategy": {
+    "type": "object",
+    "default": {
+      "base_investment": 50,
+      "increment_per_round": 10
+    },
+    "private": false,
+    "sampling": "default"
+  },
+  "energy_reserve": {
+    "type": "int",
+    "default": 100,
+    "private": false,
+    "sampling": "default"
+  },
+  "grid_position": {
+    "type": "list",
+    "default": [
+      0,
+      0
+    ],
+    "private": false,
+    "sampling": "default",
+    "sample_size": 2
+  },
+  "resources_collected": {
+    "type": "int",
+    "default": 0,
+    "private": false,
+    "sampling": "default"
+  },
+  "last_action": {
+    "type": "str",
+    "default": "idle",
+    "private": false,
+    "sampling": "default"
+  },
+  "action_history": {
+    "type": "list",
+    "default": [
+      "idle"
+    ],
+    "private": false,
+    "sampling": "default"
+  },
+  "competitor_ids": {
+    "type": "list",
+    "default": [
+      "miner_002",
+      "miner_003"
+    ],
+    "private": false,
+    "sampling": "default",
+    "sample_size": 2
+  },
+  "contest_outcome": {
+    "type": "str",
+    "default": "lost",
+    "private": false,
+    "sampling": "default"
+  },
+  "exploitation_status": {
+    "type": "str",
+    "default": "inactive",
+    "private": false,
+    "sampling": "default"
+  },
+  "maintenance_energy": {
+    "type": "int",
+    "default": 20,
+    "private": false,
+    "sampling": "default"
+  },
+  "resource_extraction_rate": {
+    "type": "float",
+    "default": 0.5,
+    "private": false,
+    "sampling": "default"
+  },
+  "id": {
+    "type": "str",
+    "default": "0",
+    "private": true,
+    "sampling": "default",
+    "description": "Unique id of agent"
+  }
+}

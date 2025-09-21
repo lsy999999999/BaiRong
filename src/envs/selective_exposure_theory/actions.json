@@ -1,0 +1,93 @@
+{
+    "VoterAgent": [
+        {
+            "id": 1,
+            "name": "select_media_source",
+            "condition": "Voter's current political leaning and available media biases",
+            "description": "The voter selects a media source to consume based on alignment with their political preferences.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "current_political_preference",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "The current political preference score of the voter."
+                },
+                {
+                    "name": "available_media_sources",
+                    "type": "list",
+                    "context": "env",
+                    "description": "List of available media sources with associated bias scores."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "selected_media_id",
+                    "type": "int",
+                    "context": "agent",
+                    "description": "The identifier of the media source selected by the voter."
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "name": "adjust_political_preference",
+            "condition": "Reception of media content",
+            "description": "The voter adjusts their political preference after consuming media content.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "media_content_bias_score",
+                    "type": "float",
+                    "context": "event",
+                    "description": "The bias score of the media content consumed by the voter."
+                },
+                {
+                    "name": "current_political_preference",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "The current political preference score of the voter before adjustment."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "adjusted_political_preference",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "The updated political preference score of the voter after adjustment."
+                }
+            ]
+        }
+    ],
+    "MediaAgent": [
+        {
+            "id": 3,
+            "name": "provide_content",
+            "condition": "Receipt of MediaSelectionEvent",
+            "description": "The media entity provides political content to the voter based on the voter's media selection.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "selected_media_id",
+                    "type": "int",
+                    "context": "event",
+                    "description": "The identifier of the media source selected by the voter."
+                },
+                {
+                    "name": "media_bias_score",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "The bias score associated with the media content being provided."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "media_content_bias_score",
+                    "type": "float",
+                    "context": "event",
+                    "description": "The bias score of the media content delivered to the voter."
+                }
+            ]
+        }
+    ]
+}

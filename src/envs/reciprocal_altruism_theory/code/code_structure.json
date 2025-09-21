@@ -1,0 +1,279 @@
+{
+  "agents": {
+    "HealthBehaviorAdvocate": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "1": {
+          "code": "async def initiate_health_behavior_change(self, event: Event) -> List[Event]:\n        # Condition check: the condition is 'null', proceed directly\n        # Access required variables from agent profile\n        advocate_id = self.profile.get_data(\"advocate_id\", \"\")\n        behavior_type = self.profile.get_data(\"behavior_type\", \"generic_behavior\")\n        intensity = self.profile.get_data(\"intensity\", 1)\n    \n        # Generate reaction to determine recipient_id(s)\n        instruction = \"\"\"You are tasked with initiating a health behavior change. \n        Utilize the advocate's details and community network context to determine which recipient(s) should be targeted.\n        Please return the information in the following JSON format:\n    \n        {\n        \"recipient_id\": [\"<The string ID of the recipient agent(s)>\"],\n        \"advocate_id\": \"<The string ID of the health behavior advocate>\",\n        \"behavior_type\": \"<Type of health behavior being initiated>\",\n        \"intensity\": <Intensity level of the behavior change initiation>\n        }\n        \"\"\"\n        \n        observation = f\"Advocate ID: {advocate_id}, Behavior Type: {behavior_type}, Intensity: {intensity}\"\n        result = await self.generate_reaction(instruction, observation)\n        \n        recipient_ids = result.get('recipient_id', [])\n        if not isinstance(recipient_ids, list):\n            recipient_ids = [recipient_ids]\n    \n        # Prepare and send the BehaviorChangeInitiatedEvent to each recipient\n        events = []\n        for recipient_id in recipient_ids:\n            behavior_change_event = BehaviorChangeInitiatedEvent(\n                from_agent_id=self.profile_id,\n                to_agent_id=recipient_id,\n                advocate_id=advocate_id,\n                recipient_id=recipient_id,\n                behavior_type=behavior_type,\n                intensity=intensity\n            )\n            events.append(behavior_change_event)\n        \n        return events",
+          "metadata": {
+            "id": 1,
+            "name": "initiate_health_behavior_change",
+            "condition": "null",
+            "description": "The HealthBehaviorAdvocate initiates a change in health behavior for the recipient, setting the stage for reciprocal altruism and promoting healthy behaviors within the community.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "advocate_id",
+                "type": "string",
+                "context": "agent",
+                "description": "Identifier of the health behavior advocate initiating the change."
+              },
+              {
+                "name": "behavior_type",
+                "type": "string",
+                "context": "agent",
+                "description": "Type of health behavior being initiated."
+              },
+              {
+                "name": "intensity",
+                "type": "integer",
+                "context": "agent",
+                "description": "Intensity level of the behavior change initiation."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "recipient_id",
+                "type": "string",
+                "context": "agent",
+                "description": "Identifier of the recipient of the health behavior change."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "BehaviorChangeRecipient": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "2": {
+          "code": "async def receive_and_commit_to_change(self, event: Event) -> List[Event]:\n        # Access required event data\n        advocate_id = event.advocate_id\n        recipient_id = event.recipient_id\n        behavior_type = event.behavior_type\n        intensity = event.intensity\n\n        # Create observation string\n        observation = f\"Advocate ID: {advocate_id}, Recipient ID: {recipient_id}, Behavior Type: {behavior_type}, Intensity: {intensity}\"\n\n        # Generate instruction for the LLM\n        instruction = \"\"\"The BehaviorChangeRecipient receives the health behavior change and commits to spreading it further, thereby contributing to the chain of reciprocal altruism. \n        Please provide the commitment level and spread target. Return the information in the following JSON format:\n        \n        {\n        \"commitment_level\": \"<integer representing the level of commitment>\",\n        \"spread_target\": \"<string representing the target group or entity>\",\n        \"target_ids\": [\"<The string ID(s) of the target agent(s) or entity for behavior spread>\"]\n        }\n        \"\"\"\n\n        # Generate reaction using LLM\n        result = await self.generate_reaction(instruction, observation)\n\n        # Extract response data\n        commitment_level = result.get('commitment_level', 1)\n        spread_target = result.get('spread_target', \"community\")\n        target_ids = result.get('target_ids', [])\n\n        # Ensure target_ids is a list\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Update agent's state\n        self.profile.update_data(\"commitment_level\", commitment_level)\n        self.profile.update_data(\"spread_target\", spread_target)\n\n        # Prepare and send the CommitToSpreadEvent to the CommunityNetworkFacilitator\n        events = []\n        for target_id in target_ids:\n            commit_event = CommitToSpreadEvent(self.profile_id, target_id, recipient_id=recipient_id, commitment_level=commitment_level, spread_target=spread_target)\n            events.append(commit_event)\n\n        return events",
+          "metadata": {
+            "id": 2,
+            "name": "receive_and_commit_to_change",
+            "condition": "null",
+            "description": "The BehaviorChangeRecipient receives the health behavior change and commits to spreading it further, thereby contributing to the chain of reciprocal altruism.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "recipient_id",
+                "type": "string",
+                "context": "event",
+                "description": "Identifier of the recipient of the health behavior change."
+              },
+              {
+                "name": "behavior_type",
+                "type": "string",
+                "context": "event",
+                "description": "Type of health behavior being received."
+              },
+              {
+                "name": "intensity",
+                "type": "integer",
+                "context": "event",
+                "description": "Intensity level of the behavior change received."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "commitment_level",
+                "type": "integer",
+                "context": "agent",
+                "description": "Level of commitment to spreading the health behavior."
+              },
+              {
+                "name": "spread_target",
+                "type": "string",
+                "context": "agent",
+                "description": "Target group or entity for behavior spread."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "CommunityNetworkFacilitator": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "3": {
+          "code": "async def facilitate_behavior_spread(self, event: Event) -> List[Event]:\n        # Since the condition is \"null\", proceed directly with the handler logic\n\n        # Access event data\n        recipient_id = event.recipient_id\n        commitment_level = event.commitment_level\n        spread_target = event.spread_target\n\n        # Prepare instruction for generate_reaction\n        instruction = f\"\"\"\n        The CommunityNetworkFacilitator is tasked with supporting the recipient's commitment to spreading health behavior.\n        Use the recipient_id '{recipient_id}', commitment_level '{commitment_level}', and spread_target '{spread_target}' \n        to determine the appropriate target_ids for facilitating behavior spread. \n        Please return the information in the following JSON format:\n    \n        {{\n        \"target_ids\": [\"<A list of string IDs of the target agents>\"],\n        \"spread_result\": \"<Indicate 'success' or 'failure' of the spread>\"\n        }}\n        \"\"\"\n\n        # Generate reaction based on instruction\n        result = await self.generate_reaction(instruction, observation=f\"Recipient ID: {recipient_id}, Commitment Level: {commitment_level}, Spread Target: {spread_target}\")\n\n        # Parse LLM's JSON response\n        target_ids = result.get('target_ids', [])\n        spread_result = result.get('spread_result', \"failure\")\n\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Retrieve environment data\n        network_id = await self.get_env_data(\"network_id\", \"\")\n\n        # Prepare outgoing events\n        events = []\n        for target_id in target_ids:\n            completion_status = (spread_result == \"success\")\n            behavior_spread_event = BehaviorSpreadEvent(\n                from_agent_id=self.profile_id,\n                to_agent_id=target_id,\n                network_id=network_id,\n                spread_result=spread_result,\n                completion_status=completion_status\n            )\n            events.append(behavior_spread_event)\n\n        return events",
+          "metadata": {
+            "id": 3,
+            "name": "facilitate_behavior_spread",
+            "condition": "null",
+            "description": "The CommunityNetworkFacilitator supports the recipient's commitment to spreading health behavior and ensures the dissemination throughout the community network.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "recipient_id",
+                "type": "string",
+                "context": "event",
+                "description": "Identifier of the recipient committing to spread the behavior."
+              },
+              {
+                "name": "commitment_level",
+                "type": "integer",
+                "context": "event",
+                "description": "Level of commitment to spreading the health behavior."
+              },
+              {
+                "name": "spread_target",
+                "type": "string",
+                "context": "event",
+                "description": "Target group or entity for behavior spread."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "network_id",
+                "type": "string",
+                "context": "env",
+                "description": "Identifier of the community network facilitating the spread."
+              },
+              {
+                "name": "spread_result",
+                "type": "string",
+                "context": "env",
+                "description": "Result of the behavior spread process."
+              },
+              {
+                "name": "completion_status",
+                "type": "boolean",
+                "context": "env",
+                "description": "Indicates whether the spread process is completed."
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "events": {
+    "imports": "from onesim.events import Event\nfrom typing import Any",
+    "definitions": {
+      "-1": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": -1,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "HealthBehaviorAdvocate",
+          "to_action_name": "initiate_health_behavior_change",
+          "from_action_id": 0,
+          "to_action_id": 1,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for health behavior advocacy",
+          "fields": []
+        }
+      },
+      "1": {
+        "code": "class BehaviorChangeInitiatedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        advocate_id: str = \"\",\n        recipient_id: str = \"\",\n        behavior_type: str = 'generic_behavior',\n        intensity: int = 1,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.advocate_id = advocate_id\n        self.recipient_id = recipient_id\n        self.behavior_type = behavior_type\n        self.intensity = intensity",
+        "metadata": {
+          "id": 1,
+          "from_agent_type": "HealthBehaviorAdvocate",
+          "from_action_name": "initiate_health_behavior_change",
+          "to_agent_type": "BehaviorChangeRecipient",
+          "to_action_name": "receive_and_commit_to_change",
+          "from_action_id": 1,
+          "to_action_id": 2,
+          "event_name": "BehaviorChangeInitiatedEvent",
+          "event_info": "Advocate initiates change in recipient",
+          "fields": [
+            {
+              "name": "advocate_id",
+              "type": "string",
+              "default_value": "",
+              "description": "Identifier of the health behavior advocate initiating the change."
+            },
+            {
+              "name": "recipient_id",
+              "type": "string",
+              "default_value": "",
+              "description": "Identifier of the recipient of the health behavior change."
+            },
+            {
+              "name": "behavior_type",
+              "type": "string",
+              "default_value": "generic_behavior",
+              "description": "Type of health behavior being initiated."
+            },
+            {
+              "name": "intensity",
+              "type": "integer",
+              "default_value": 1,
+              "description": "Intensity level of the behavior change initiation."
+            }
+          ]
+        }
+      },
+      "2": {
+        "code": "class CommitToSpreadEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        recipient_id: str = \"\",\n        commitment_level: int = 1,\n        spread_target: str = 'community',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.recipient_id = recipient_id\n        self.commitment_level = commitment_level\n        self.spread_target = spread_target",
+        "metadata": {
+          "id": 2,
+          "from_agent_type": "BehaviorChangeRecipient",
+          "from_action_name": "receive_and_commit_to_change",
+          "to_agent_type": "CommunityNetworkFacilitator",
+          "to_action_name": "facilitate_behavior_spread",
+          "from_action_id": 2,
+          "to_action_id": 3,
+          "event_name": "CommitToSpreadEvent",
+          "event_info": "Recipient commits to spreading health behavior",
+          "fields": [
+            {
+              "name": "recipient_id",
+              "type": "string",
+              "default_value": "",
+              "description": "Identifier of the recipient committing to spread the behavior."
+            },
+            {
+              "name": "commitment_level",
+              "type": "integer",
+              "default_value": 1,
+              "description": "Level of commitment to spreading the health behavior."
+            },
+            {
+              "name": "spread_target",
+              "type": "string",
+              "default_value": "community",
+              "description": "Target group or entity for behavior spread."
+            }
+          ]
+        }
+      },
+      "3": {
+        "code": "class BehaviorSpreadEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        network_id: str = \"\",\n        spread_result: str = 'success',\n        completion_status: bool = False,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.network_id = network_id\n        self.spread_result = spread_result\n        self.completion_status = completion_status",
+        "metadata": {
+          "id": 3,
+          "from_agent_type": "CommunityNetworkFacilitator",
+          "from_action_name": "facilitate_behavior_spread",
+          "to_agent_type": "EnvAgent",
+          "to_action_name": "terminate",
+          "from_action_id": 3,
+          "to_action_id": -1,
+          "event_name": "BehaviorSpreadEvent",
+          "event_info": "Community network facilitates spread and terminates process",
+          "fields": [
+            {
+              "name": "network_id",
+              "type": "string",
+              "default_value": "",
+              "description": "Identifier of the community network facilitating the spread."
+            },
+            {
+              "name": "spread_result",
+              "type": "string",
+              "default_value": "success",
+              "description": "Result of the behavior spread process."
+            },
+            {
+              "name": "completion_status",
+              "type": "boolean",
+              "default_value": false,
+              "description": "Indicates whether the spread process is completed."
+            }
+          ]
+        }
+      }
+    }
+  }
+}

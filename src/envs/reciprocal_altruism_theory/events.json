@@ -1,0 +1,113 @@
+{
+    "-1": {
+        "id": -1,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "HealthBehaviorAdvocate",
+        "to_action_name": "initiate_health_behavior_change",
+        "from_action_id": 0,
+        "to_action_id": 1,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for health behavior advocacy",
+        "fields": []
+    },
+    "1": {
+        "id": 1,
+        "from_agent_type": "HealthBehaviorAdvocate",
+        "from_action_name": "initiate_health_behavior_change",
+        "to_agent_type": "BehaviorChangeRecipient",
+        "to_action_name": "receive_and_commit_to_change",
+        "from_action_id": 1,
+        "to_action_id": 2,
+        "event_name": "BehaviorChangeInitiatedEvent",
+        "event_info": "Advocate initiates change in recipient",
+        "fields": [
+            {
+                "name": "advocate_id",
+                "type": "string",
+                "default_value": "",
+                "description": "Identifier of the health behavior advocate initiating the change."
+            },
+            {
+                "name": "recipient_id",
+                "type": "string",
+                "default_value": "",
+                "description": "Identifier of the recipient of the health behavior change."
+            },
+            {
+                "name": "behavior_type",
+                "type": "string",
+                "default_value": "generic_behavior",
+                "description": "Type of health behavior being initiated."
+            },
+            {
+                "name": "intensity",
+                "type": "integer",
+                "default_value": 1,
+                "description": "Intensity level of the behavior change initiation."
+            }
+        ]
+    },
+    "2": {
+        "id": 2,
+        "from_agent_type": "BehaviorChangeRecipient",
+        "from_action_name": "receive_and_commit_to_change",
+        "to_agent_type": "CommunityNetworkFacilitator",
+        "to_action_name": "facilitate_behavior_spread",
+        "from_action_id": 2,
+        "to_action_id": 3,
+        "event_name": "CommitToSpreadEvent",
+        "event_info": "Recipient commits to spreading health behavior",
+        "fields": [
+            {
+                "name": "recipient_id",
+                "type": "string",
+                "default_value": "",
+                "description": "Identifier of the recipient committing to spread the behavior."
+            },
+            {
+                "name": "commitment_level",
+                "type": "integer",
+                "default_value": 1,
+                "description": "Level of commitment to spreading the health behavior."
+            },
+            {
+                "name": "spread_target",
+                "type": "string",
+                "default_value": "community",
+                "description": "Target group or entity for behavior spread."
+            }
+        ]
+    },
+    "3": {
+        "id": 3,
+        "from_agent_type": "CommunityNetworkFacilitator",
+        "from_action_name": "facilitate_behavior_spread",
+        "to_agent_type": "EnvAgent",
+        "to_action_name": "terminate",
+        "from_action_id": 3,
+        "to_action_id": -1,
+        "event_name": "BehaviorSpreadEvent",
+        "event_info": "Community network facilitates spread and terminates process",
+        "fields": [
+            {
+                "name": "network_id",
+                "type": "string",
+                "default_value": "",
+                "description": "Identifier of the community network facilitating the spread."
+            },
+            {
+                "name": "spread_result",
+                "type": "string",
+                "default_value": "success",
+                "description": "Result of the behavior spread process."
+            },
+            {
+                "name": "completion_status",
+                "type": "boolean",
+                "default_value": false,
+                "description": "Indicates whether the spread process is completed."
+            }
+        ]
+    }
+}

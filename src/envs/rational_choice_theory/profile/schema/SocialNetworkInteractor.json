@@ -1,0 +1,106 @@
+{
+    "name": {
+        "type": "str",
+        "default": "SocialNetworkInteractor",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's designated name within the simulation"
+    },
+    "adjustment_status": {
+        "type": "str",
+        "default": "ready",
+        "private": true,
+        "sampling": "default"
+    },
+    "resource_level": {
+        "type": "int",
+        "default": 100,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            50,
+            200
+        ]
+    },
+    "decision_strategy": {
+        "type": "str",
+        "default": "utility_maximization",
+        "private": false,
+        "sampling": "llm",
+        "description": "The method used by the agent to make decisions"
+    },
+    "interaction_pattern": {
+        "type": "str",
+        "default": "market_exchange",
+        "private": true,
+        "sampling": "random",
+        "choices": [
+            "social_network",
+            "market_exchange",
+            "individual_analysis"
+        ]
+    },
+    "utility_function": {
+        "type": "str",
+        "default": "U = f(收益, 成本, 风险)",
+        "private": true,
+        "sampling": "default"
+    },
+    "current_goal": {
+        "type": "str",
+        "default": "wealth_maximization",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "wealth_maximization",
+            "happiness_enhancement",
+            "risk_minimization"
+        ]
+    },
+    "risk_tolerance": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.1,
+            1.0
+        ]
+    },
+    "communication_protocol": {
+        "type": "str",
+        "default": "observed_behavior_adjustment",
+        "private": true,
+        "sampling": "llm",
+        "description": "The protocol used for agent communication"
+    },
+    "experience_level": {
+        "type": "int",
+        "default": 1,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            1,
+            10
+        ]
+    },
+    "decision_history": {
+        "type": "list",
+        "default": [
+            {
+                "option": "initial",
+                "utility": 50,
+                "outcome": "neutral"
+            }
+        ],
+        "private": true,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

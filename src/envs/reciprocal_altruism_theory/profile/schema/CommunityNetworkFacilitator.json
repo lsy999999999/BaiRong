@@ -1,0 +1,87 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Community Network Facilitator",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's role within the social network"
+    },
+    "interaction_frequency": {
+        "type": "int",
+        "default": 10,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            5,
+            20
+        ]
+    },
+    "communication_channels": {
+        "type": "list",
+        "default": [
+            "email",
+            "social media",
+            "community meetings"
+        ],
+        "private": false,
+        "sampling": "llm",
+        "description": "The methods used for facilitating reciprocal interactions"
+    },
+    "support_level": {
+        "type": "int",
+        "default": 75,
+        "private": false,
+        "sampling": "default"
+    },
+    "behavior_spread_rate": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "default"
+    },
+    "network_size": {
+        "type": "int",
+        "default": 100,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            50,
+            200
+        ]
+    },
+    "reciprocal_promise_strength": {
+        "type": "float",
+        "default": 0.8,
+        "private": false,
+        "sampling": "default"
+    },
+    "initial_health_behaviors": {
+        "type": "list",
+        "default": [
+            "exercise",
+            "healthy eating",
+            "regular check-ups"
+        ],
+        "private": true,
+        "sampling": "llm",
+        "description": "Initial health behaviors promoted by the network"
+    },
+    "social_support_availability": {
+        "type": "str",
+        "default": "high",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "low",
+            "medium",
+            "high"
+        ]
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

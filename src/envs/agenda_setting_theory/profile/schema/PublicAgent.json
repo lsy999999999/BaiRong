@@ -1,0 +1,61 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Public Agent",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's role or identifier within the simulation"
+    },
+    "focus_value": {
+        "type": "float",
+        "default": 50.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "initial_topic_interest": {
+        "type": "str",
+        "default": "political events",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "social problems",
+            "political events",
+            "economic phenomena"
+        ]
+    },
+    "social_influence_factor": {
+        "type": "float",
+        "default": 1.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "media_exposure": {
+        "type": "list",
+        "default": [
+            "news websites",
+            "social media platforms"
+        ],
+        "private": false,
+        "sampling": "random",
+        "sample_size": 2,
+        "choices": [
+            "news websites",
+            "social media platforms",
+            "television",
+            "radio"
+        ]
+    },
+    "emotional_response": {
+        "type": "str",
+        "default": "neutral",
+        "private": true,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

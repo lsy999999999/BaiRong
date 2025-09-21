@@ -1,0 +1,151 @@
+{
+    "-1": {
+        "id": -1,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "DecisionMakerAgent",
+        "to_action_name": "gather_information",
+        "from_action_id": 0,
+        "to_action_id": 1,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for this branch of workflow",
+        "fields": []
+    },
+    "1": {
+        "id": 1,
+        "from_agent_type": "DecisionMakerAgent",
+        "from_action_name": "gather_information",
+        "to_agent_type": "EnvironmentAgent",
+        "to_action_name": "simulate_external_factors",
+        "from_action_id": 1,
+        "to_action_id": 4,
+        "event_name": "InformationGatheredEvent",
+        "event_info": "Decision Maker gathers information from the environment",
+        "fields": [
+            {
+                "name": "source",
+                "type": "string",
+                "default_value": "EnvironmentAgent",
+                "description": "Source of the information gathered by the Decision Maker"
+            },
+            {
+                "name": "information_content",
+                "type": "string",
+                "default_value": "",
+                "description": "Details of the information gathered from the environment"
+            },
+            {
+                "name": "collected_information",
+                "type": "string",
+                "default_value": "",
+                "description": "Information collected from the environment for decision-making"
+            }
+        ]
+    },
+    "2": {
+        "id": 2,
+        "from_agent_type": "DecisionMakerAgent",
+        "from_action_name": "evaluate_options",
+        "to_agent_type": "AlternativeOptionsAgent",
+        "to_action_name": "present_alternatives",
+        "from_action_id": 2,
+        "to_action_id": 5,
+        "event_name": "OptionsEvaluatedEvent",
+        "event_info": "Decision Maker evaluates options based on gathered information",
+        "fields": [
+            {
+                "name": "option_id",
+                "type": "string",
+                "default_value": "",
+                "description": "Identifier for the option being evaluated"
+            },
+            {
+                "name": "evaluation_criteria",
+                "type": "object",
+                "default_value": "{}",
+                "description": "Criteria used to evaluate the option, including cost, utility, and risk"
+            },
+            {
+                "name": "evaluation_result",
+                "type": "string",
+                "default_value": "pending",
+                "description": "Result of the evaluation process"
+            }
+        ]
+    },
+    "3": {
+        "id": 3,
+        "from_agent_type": "DecisionMakerAgent",
+        "from_action_name": "make_decision",
+        "to_agent_type": "EnvAgent",
+        "to_action_name": "terminate",
+        "from_action_id": 3,
+        "to_action_id": -1,
+        "event_name": "DecisionMadeEvent",
+        "event_info": "Decision Maker makes a final decision and completes the process",
+        "fields": [
+            {
+                "name": "decision_id",
+                "type": "string",
+                "default_value": "",
+                "description": "Unique identifier for the decision made"
+            },
+            {
+                "name": "decision_result",
+                "type": "string",
+                "default_value": "success",
+                "description": "Outcome of the decision-making process"
+            }
+        ]
+    },
+    "4": {
+        "id": 4,
+        "from_agent_type": "EnvironmentAgent",
+        "from_action_name": "simulate_external_factors",
+        "to_agent_type": "DecisionMakerAgent",
+        "to_action_name": "evaluate_options",
+        "from_action_id": 4,
+        "to_action_id": 2,
+        "event_name": "ExternalFactorsSimulatedEvent",
+        "event_info": "Environment simulates external factors impacting decision-making",
+        "fields": [
+            {
+                "name": "factor_type",
+                "type": "string",
+                "default_value": "",
+                "description": "Type of external factor being simulated"
+            },
+            {
+                "name": "impact_level",
+                "type": "string",
+                "default_value": "0",
+                "description": "Level of impact the external factor has on decision-making"
+            }
+        ]
+    },
+    "5": {
+        "id": 5,
+        "from_agent_type": "AlternativeOptionsAgent",
+        "from_action_name": "present_alternatives",
+        "to_agent_type": "DecisionMakerAgent",
+        "to_action_name": "make_decision",
+        "from_action_id": 5,
+        "to_action_id": 3,
+        "event_name": "AlternativesPresentedEvent",
+        "event_info": "Alternative Options are presented to the Decision Maker",
+        "fields": [
+            {
+                "name": "alternative_id",
+                "type": "string",
+                "default_value": "",
+                "description": "Identifier for the alternative option presented"
+            },
+            {
+                "name": "alternative_details",
+                "type": "object",
+                "default_value": "{}",
+                "description": "Details of the alternative including cost, utility, and risk"
+            }
+        ]
+    }
+}

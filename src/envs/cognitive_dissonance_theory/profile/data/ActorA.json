@@ -1,0 +1,82 @@
+[
+    {
+        "name": "ActorA",
+        "strategy_type": "awaiting_decision",
+        "expected_outcome": "reduce_dissonance",
+        "interaction_pattern": "Confrontational",
+        "communication_feedback": [
+            "Observer B feedback",
+            "Feedbacker C evaluation"
+        ],
+        "environment_description": "A bustling urban setting with diverse cultural influences and frequent social interactions.",
+        "agent_type": "ActorA",
+        "dissonance_level": 50.0,
+        "dissonance_cause": "conflicting_belief",
+        "decision_mechanism": "behavior_change",
+        "id": "0"
+    },
+    {
+        "name": "ActorA",
+        "strategy_type": "awaiting_decision",
+        "expected_outcome": "reduce_dissonance",
+        "interaction_pattern": "Collaborative",
+        "communication_feedback": [
+            "Observer B feedback",
+            "Feedbacker C evaluation"
+        ],
+        "environment_description": "A corporate office environment with hierarchical structures and team-based projects.",
+        "agent_type": "ActorA",
+        "dissonance_level": 50.0,
+        "dissonance_cause": "conflicting_belief",
+        "decision_mechanism": "belief_change",
+        "id": "1"
+    },
+    {
+        "name": "ActorA",
+        "strategy_type": "awaiting_decision",
+        "expected_outcome": "reduce_dissonance",
+        "interaction_pattern": "Avoidant",
+        "communication_feedback": [
+            "Observer B feedback",
+            "Feedbacker C evaluation"
+        ],
+        "environment_description": "A quiet suburban neighborhood with limited social engagements and a focus on individual activities.",
+        "agent_type": "ActorA",
+        "dissonance_level": 50.0,
+        "dissonance_cause": "conflicting_belief",
+        "decision_mechanism": "belief_change",
+        "id": "2"
+    },
+    {
+        "name": "ActorA",
+        "strategy_type": "awaiting_decision",
+        "expected_outcome": "reduce_dissonance",
+        "interaction_pattern": "Persuasive",
+        "communication_feedback": [
+            "Observer B feedback",
+            "Feedbacker C evaluation"
+        ],
+        "environment_description": "A political campaign setting with high-stakes negotiations and public speaking events.",
+        "agent_type": "ActorA",
+        "dissonance_level": 50.0,
+        "dissonance_cause": "conflicting_belief",
+        "decision_mechanism": "rationalization",
+        "id": "3"
+    },
+    {
+        "name": "ActorA",
+        "strategy_type": "awaiting_decision",
+        "expected_outcome": "reduce_dissonance",
+        "interaction_pattern": "Reflective",
+        "communication_feedback": [
+            "Observer B feedback",
+            "Feedbacker C evaluation"
+        ],
+        "environment_description": "An academic institution with intellectual discourse and opportunities for self-examination and growth.",
+        "agent_type": "ActorA",
+        "dissonance_level": 50.0,
+        "dissonance_cause": "conflicting_belief",
+        "decision_mechanism": "rationalization",
+        "id": "4"
+    }
+]

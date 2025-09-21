@@ -1,0 +1,68 @@
+{
+    "name": {
+        "type": "str",
+        "default": "VoterAgent",
+        "private": false,
+        "sampling": "llm",
+        "description": "The name of the agent representing a voter in the system"
+    },
+    "personal_preferences": {
+        "type": "list",
+        "default": [
+            "policy_1",
+            "policy_2"
+        ],
+        "private": true,
+        "sampling": "default",
+        "sample_size": 2
+    },
+    "participation_decision": {
+        "type": "boolean",
+        "default": true,
+        "private": false,
+        "sampling": "default"
+    },
+    "selected_candidate": {
+        "type": "str",
+        "default": "candidate_1",
+        "private": false,
+        "sampling": "default"
+    },
+    "preference_score": {
+        "type": "float",
+        "default": 0.75,
+        "private": true,
+        "sampling": "default"
+    },
+    "voting_time_limit": {
+        "type": "int",
+        "default": 60,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            30,
+            120
+        ]
+    },
+    "interaction_pattern": {
+        "type": "str",
+        "default": "active_participation",
+        "private": false,
+        "sampling": "llm",
+        "description": "Describes the pattern of interaction the voter engages in during the voting process"
+    },
+    "communication_protocol": {
+        "type": "str",
+        "default": "implicit_voting",
+        "private": false,
+        "sampling": "llm",
+        "description": "Protocol used by the voter for communicating preferences"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

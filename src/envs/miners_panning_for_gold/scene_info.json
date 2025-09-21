@@ -1,0 +1,38 @@
+{
+    "domain": "Economics",
+    "scene_name": "miners_panning_for_gold",
+    "odd_protocol": {
+        "overview": {
+            "system_goal": "Study decentralized property-rights formation and efficiency when agents maximize personal cumulative gold under incomplete information and no authority.",
+            "agent_types": "N homogeneous miners, identical stamina budget, no communication or authority.",
+            "environment_description": "A 10×10 grid of homogeneous plots, initially unowned, with a fixed number of rounds.",
+            "evaluation_criteria": "Global output is recorded for evaluation but not in the agent reward."
+        },
+        "design_concepts": {
+            "interaction_patterns": "Agents submit action bundles each round, including claims, raids, defense, and mining, subject to legality and budget constraints.",
+            "communication_protocols": "No direct communication; agents receive public observables and maintain private state.",
+            "decision_mechanisms": "Agents allocate stamina to actions each round, with deterministic clipping applied if over budget.",
+            "round_resolution_order": "Claims resolved first, followed by raids, then mining, with public logs published after each round."
+        },
+        "details": {
+            "agent_behaviors": "Agents aim to maximize cumulative gold, choosing combinations of expansion, predation, protection, and extraction.",
+            "decision_algorithms": "Agents may use heuristics, forward lookahead, opponent modeling, or rule-based systems, respecting constraints.",
+            "specific_constraints": "Integer stamina per agent per round, mining cap per plot, costs for actions, and deterministic RNG for conflict resolution.",
+            "rng_and_reproducibility": "Fixed integer run_seed for each simulation, SHA-256 hash for tie-breakers, deterministic ordering for reproducibility."
+        }
+    },
+    "agent_types": {
+        "MinerAgent": "Responsible for maximizing personal cumulative gold by engaging in actions such as mining, claiming plots, and defending resources within budget constraints.",
+        "ClaimAgent": "Focuses on expanding territory by claiming unowned plots, ensuring strategic control over valuable resources.",
+        "RaiderAgent": "Specializes in predation by raiding other agents' plots to acquire resources, balancing aggression with stamina budget.",
+        "DefenderAgent": "Prioritizes protection of owned plots from raids, allocating stamina to defensive actions to secure resources.",
+        "StrategistAgent": "Utilizes decision algorithms such as heuristics and opponent modeling to optimize action selection and resource allocation."
+    },
+    "portrait": {
+        "MinerAgent": 3,
+        "ClaimAgent": 4,
+        "RaiderAgent": 5,
+        "DefenderAgent": 1,
+        "StrategistAgent": 2
+    }
+}

@@ -1,0 +1,179 @@
+{
+    "IndividualAgent": [
+        {
+            "id": 1,
+            "name": "assess_risk",
+            "condition": "null",
+            "description": "Evaluate the risk of infection based on current health state, social contact patterns, and government policies.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "current_health_state",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Current health state of the individual (S, I, R)."
+                },
+                {
+                    "name": "social_contact_pattern",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Current social contact pattern status."
+                },
+                {
+                    "name": "policy_effect",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Description of the policy effect on individual behavior."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "risk_level",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Updated calculated risk level of the individual agent."
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "name": "change_health_state",
+            "condition": "Contact with infected agent and probability threshold met",
+            "description": "Transition the individual's health state based on infection risk and current state.",
+            "type": "AND",
+            "required_variables": [
+                {
+                    "name": "current_health_state",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Current health state of the individual (S, I, R)."
+                },
+                {
+                    "name": "risk_level",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Calculated risk level of the individual agent."
+                },
+                {
+                    "name": "contact_pattern",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Updated social contact pattern."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "previous_health_state",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Previous health state of the individual agent."
+                },
+                {
+                    "name": "current_health_state",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Updated health state of the individual agent."
+                }
+            ]
+        }
+    ],
+    "GroupAgent": [
+        {
+            "id": 3,
+            "name": "update_social_contact_pattern",
+            "condition": "null",
+            "description": "Modify the social contact pattern within the group based on external influences like policies.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "contact_pattern",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Current social contact pattern within the group."
+                },
+                {
+                    "name": "impact_level",
+                    "type": "float",
+                    "context": "event",
+                    "description": "Quantitative measure of policy impact on group dynamics."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "updated_contact_pattern",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Updated social contact pattern within the group."
+                }
+            ]
+        }
+    ],
+    "GovernmentAgent": [
+        {
+            "id": 4,
+            "name": "implement_policy",
+            "condition": "null",
+            "description": "Enact policies to influence social behaviors and control disease spread.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "policy_id",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Unique identifier for the government policy."
+                },
+                {
+                    "name": "policy_effect",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Description of the policy effect on social behaviors."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "policy_status",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Current implementation status of the policy."
+                }
+            ]
+        }
+    ],
+    "HealthcareSystemAgent": [
+        {
+            "id": 5,
+            "name": "manage_treatment",
+            "condition": "null",
+            "description": "Oversee treatment and recovery processes for individuals who have changed health states.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "individual_id",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Unique identifier for the individual agent."
+                },
+                {
+                    "name": "requires_treatment",
+                    "type": "boolean",
+                    "context": "event",
+                    "description": "Indicator if treatment is required."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "treatment_status",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Current status of treatment outcome."
+                },
+                {
+                    "name": "recovery_status",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Final recovery status of the individual."
+                }
+            ]
+        }
+    ]
+}

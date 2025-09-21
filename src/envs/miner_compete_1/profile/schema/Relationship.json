@@ -1,0 +1,13 @@
+[
+    {
+        "source_agent": "ResourceMiner",
+        "target_agent": "ResourceMiner",
+        "relationship_type": "workflow_interaction",
+        "direction": "unidirectional",
+        "required": true,
+        "constraints": {
+            "min_connections": 1,
+            "max_connections": null
+        }
+    }
+]

@@ -1,0 +1,122 @@
+{
+    "environment": {
+        "variables": [
+            {
+                "name": "evidence_quality",
+                "type": "float",
+                "default_value": 0.0
+            },
+            {
+                "name": "conviction_likelihood",
+                "type": "float",
+                "default_value": 0.0
+            }
+        ]
+    },
+    "agents": {
+        "Prosecutor": {
+            "variables": [
+                {
+                    "name": "evidence_quality",
+                    "type": "float",
+                    "default_value": 0.0
+                },
+                {
+                    "name": "conviction_likelihood",
+                    "type": "float",
+                    "default_value": 0.0
+                },
+                {
+                    "name": "prosecution_decision",
+                    "type": "string",
+                    "default_value": "undecided"
+                }
+            ]
+        },
+        "DefenseLawyer": {
+            "variables": [
+                {
+                    "name": "defense_strategy",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "prepared_defense",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "plea_terms",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "negotiated_plea",
+                    "type": "string",
+                    "default_value": null
+                }
+            ]
+        },
+        "Judge": {
+            "variables": [
+                {
+                    "name": "evidence_admissibility",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "trial_phase",
+                    "type": "string",
+                    "default_value": "ongoing"
+                },
+                {
+                    "name": "trial_status",
+                    "type": "string",
+                    "default_value": null
+                }
+            ]
+        },
+        "Defendant": {
+            "variables": [
+                {
+                    "name": "plea_acceptance",
+                    "type": "string",
+                    "default_value": "undecided"
+                }
+            ]
+        },
+        "Jury": {
+            "variables": [
+                {
+                    "name": "evidence_evaluation",
+                    "type": "list",
+                    "default_value": null
+                },
+                {
+                    "name": "verdict",
+                    "type": "string",
+                    "default_value": "undecided"
+                }
+            ]
+        },
+        "Witness": {
+            "variables": [
+                {
+                    "name": "testimony_content",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "prepared_testimony",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "testimony_given",
+                    "type": "string",
+                    "default_value": null
+                }
+            ]
+        }
+    }
+}

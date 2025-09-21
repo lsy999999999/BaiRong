@@ -1,0 +1,244 @@
+{
+    "-1": {
+        "id": -1,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "IndividualAgent",
+        "to_action_name": "assess_risk",
+        "from_action_id": 0,
+        "to_action_id": 1,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for individual agents to evaluate health risk and decide on behaviors",
+        "fields": [
+            {
+                "name": "social_contact_pattern",
+                "type": "string",
+                "default_value": "normal",
+                "description": "Current social contact pattern status."
+            },
+            {
+                "name": "policy_effect",
+                "type": "string",
+                "default_value": "none",
+                "description": "Description of the policy effect on individual behavior."
+            }
+        ]
+    },
+    "-2": {
+        "id": -2,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "GovernmentAgent",
+        "to_action_name": "implement_policy",
+        "from_action_id": 0,
+        "to_action_id": 4,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for government agents to implement policies affecting social behaviors",
+        "fields": [
+            {
+                "name": "policy_id",
+                "type": "string",
+                "default_value": "none",
+                "description": "Unique identifier for the government policy."
+            },
+            {
+                "name": "policy_effect",
+                "type": "string",
+                "default_value": "none",
+                "description": "Description of the policy effect on social behaviors."
+            }
+        ]
+    },
+    "1": {
+        "id": 1,
+        "from_agent_type": "IndividualAgent",
+        "from_action_name": "assess_risk",
+        "to_agent_type": "GroupAgent",
+        "to_action_name": "update_social_contact_pattern",
+        "from_action_id": 1,
+        "to_action_id": 3,
+        "event_name": "RiskAssessmentEvent",
+        "event_info": "Assessment of individual risk influencing social contact patterns within groups",
+        "fields": [
+            {
+                "name": "individual_id",
+                "type": "string",
+                "default_value": "",
+                "description": "Unique identifier for the individual agent"
+            },
+            {
+                "name": "risk_level",
+                "type": "float",
+                "default_value": 0.0,
+                "description": "Calculated risk level of the individual agent"
+            },
+            {
+                "name": "social_contact_pattern",
+                "type": "string",
+                "default_value": "normal",
+                "description": "Current social contact pattern status"
+            }
+        ]
+    },
+    "2": {
+        "id": 2,
+        "from_agent_type": "IndividualAgent",
+        "from_action_name": "change_health_state",
+        "to_agent_type": "HealthcareSystemAgent",
+        "to_action_name": "manage_treatment",
+        "from_action_id": 2,
+        "to_action_id": 5,
+        "event_name": "HealthStateChangeEvent",
+        "event_info": "Notification of health state change requiring treatment management",
+        "fields": [
+            {
+                "name": "individual_id",
+                "type": "string",
+                "default_value": "",
+                "description": "Unique identifier for the individual agent"
+            },
+            {
+                "name": "previous_health_state",
+                "type": "string",
+                "default_value": "S",
+                "description": "Previous health state of the individual agent"
+            },
+            {
+                "name": "current_health_state",
+                "type": "string",
+                "default_value": "S",
+                "description": "Current health state of the individual agent"
+            },
+            {
+                "name": "requires_treatment",
+                "type": "boolean",
+                "default_value": false,
+                "description": "Indicator if treatment is required"
+            }
+        ]
+    },
+    "3": {
+        "id": 3,
+        "from_agent_type": "GroupAgent",
+        "from_action_name": "update_social_contact_pattern",
+        "to_agent_type": "IndividualAgent",
+        "to_action_name": "change_health_state",
+        "from_action_id": 3,
+        "to_action_id": 2,
+        "event_name": "SocialContactPatternEvent",
+        "event_info": "Updated contact patterns influencing individual health state transitions",
+        "fields": [
+            {
+                "name": "group_id",
+                "type": "string",
+                "default_value": "",
+                "description": "Unique identifier for the group agent"
+            },
+            {
+                "name": "contact_pattern",
+                "type": "string",
+                "default_value": "normal",
+                "description": "Updated social contact pattern"
+            },
+            {
+                "name": "risk_level",
+                "type": "float",
+                "default_value": 0.0,
+                "description": "Calculated risk level of the individual agent"
+            }
+        ]
+    },
+    "4": {
+        "id": 4,
+        "from_agent_type": "GovernmentAgent",
+        "from_action_name": "implement_policy",
+        "to_agent_type": "IndividualAgent",
+        "to_action_name": "assess_risk",
+        "from_action_id": 4,
+        "to_action_id": 1,
+        "event_name": "PolicyImplementationEvent",
+        "event_info": "Government policy affecting individual risk assessment and behavior decisions",
+        "fields": [
+            {
+                "name": "policy_id",
+                "type": "string",
+                "default_value": "",
+                "description": "Unique identifier for the government policy"
+            },
+            {
+                "name": "individual_id",
+                "type": "string",
+                "default_value": "",
+                "description": "Unique identifier for the individual agent"
+            },
+            {
+                "name": "policy_effect",
+                "type": "string",
+                "default_value": "none",
+                "description": "Description of the policy effect on individual behavior"
+            }
+        ]
+    },
+    "5": {
+        "id": 5,
+        "from_agent_type": "GovernmentAgent",
+        "from_action_name": "implement_policy",
+        "to_agent_type": "GroupAgent",
+        "to_action_name": "update_social_contact_pattern",
+        "from_action_id": 4,
+        "to_action_id": 3,
+        "event_name": "PolicyImpactEvent",
+        "event_info": "Government policy impacting group social contact dynamics",
+        "fields": [
+            {
+                "name": "policy_id",
+                "type": "string",
+                "default_value": "",
+                "description": "Unique identifier for the government policy"
+            },
+            {
+                "name": "group_id",
+                "type": "string",
+                "default_value": "",
+                "description": "Unique identifier for the group agent"
+            },
+            {
+                "name": "impact_level",
+                "type": "float",
+                "default_value": 0.0,
+                "description": "Quantitative measure of policy impact on group dynamics"
+            }
+        ]
+    },
+    "6": {
+        "id": 6,
+        "from_agent_type": "HealthcareSystemAgent",
+        "from_action_name": "manage_treatment",
+        "to_agent_type": "EnvAgent",
+        "to_action_name": "terminate",
+        "from_action_id": 5,
+        "to_action_id": -1,
+        "event_name": "TreatmentOutcomeEvent",
+        "event_info": "Final treatment outcome indicating recovery or further intervention required",
+        "fields": [
+            {
+                "name": "individual_id",
+                "type": "string",
+                "default_value": "",
+                "description": "Unique identifier for the individual agent"
+            },
+            {
+                "name": "treatment_status",
+                "type": "string",
+                "default_value": "pending",
+                "description": "Current status of treatment outcome"
+            },
+            {
+                "name": "recovery_status",
+                "type": "string",
+                "default_value": "not_recovered",
+                "description": "Final recovery status of the individual"
+            }
+        ]
+    }
+}

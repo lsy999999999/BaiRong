@@ -1,0 +1,88 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Alex Johnson",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's full name"
+    },
+    "social_needs_status": {
+        "type": "str",
+        "default": "active",
+        "private": false,
+        "sampling": "default"
+    },
+    "social_interactions_needed": {
+        "type": "list",
+        "default": [
+            "team_meeting",
+            "casual_chat"
+        ],
+        "private": false,
+        "sampling": "default"
+    },
+    "current_need_level": {
+        "type": "int",
+        "default": 1,
+        "private": false,
+        "sampling": "default"
+    },
+    "motivation_focus": {
+        "type": "str",
+        "default": "physiological",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "physiological",
+            "safety",
+            "social",
+            "esteem",
+            "self-actualization"
+        ]
+    },
+    "emotional_state": {
+        "type": "str",
+        "default": "neutral",
+        "private": true,
+        "sampling": "default"
+    },
+    "interaction_count": {
+        "type": "int",
+        "default": 0,
+        "private": true,
+        "sampling": "default"
+    },
+    "leadership_influence": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "work_performance": {
+        "type": "int",
+        "default": 70,
+        "private": false,
+        "sampling": "default"
+    },
+    "cultural_adaptation": {
+        "type": "float",
+        "default": 0.7,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

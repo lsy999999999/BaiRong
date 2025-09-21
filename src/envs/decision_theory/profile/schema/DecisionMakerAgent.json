@@ -1,0 +1,102 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Decision Maker",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's role in the simulation"
+    },
+    "collected_information": {
+        "type": "str",
+        "default": "awaiting_input",
+        "private": true,
+        "sampling": "default"
+    },
+    "evaluation_result": {
+        "type": "str",
+        "default": "pending_evaluation",
+        "private": true,
+        "sampling": "default"
+    },
+    "decision_result": {
+        "type": "str",
+        "default": "undecided",
+        "private": true,
+        "sampling": "default"
+    },
+    "risk_preference": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "utility_function": {
+        "type": "str",
+        "default": "linear",
+        "private": false,
+        "sampling": "llm",
+        "description": "The type of utility function used by the agent"
+    },
+    "decision_strategy": {
+        "type": "str",
+        "default": "expected_utility",
+        "private": false,
+        "sampling": "llm",
+        "description": "The decision-making strategy employed by the agent"
+    },
+    "available_resources": {
+        "type": "int",
+        "default": 100,
+        "private": false,
+        "sampling": "default"
+    },
+    "information_sources": {
+        "type": "list",
+        "default": [
+            "source_1",
+            "source_2"
+        ],
+        "private": true,
+        "sampling": "default",
+        "sample_size": 2
+    },
+    "interaction_history": {
+        "type": "list",
+        "default": [
+            {
+                "timestamp": "2023-10-01T00:00:00Z",
+                "interaction_type": "initial"
+            }
+        ],
+        "private": true,
+        "sampling": "default"
+    },
+    "emotional_state": {
+        "type": "str",
+        "default": "neutral",
+        "private": false,
+        "sampling": "llm",
+        "description": "The current emotional state of the agent"
+    },
+    "goal_priority": {
+        "type": "list",
+        "default": [
+            "maximize_utility",
+            "minimize_risk"
+        ],
+        "private": false,
+        "sampling": "default",
+        "sample_size": 2
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

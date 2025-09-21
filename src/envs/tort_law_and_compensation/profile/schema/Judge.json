@@ -1,0 +1,82 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Judge Judy",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's full name, representing the judicial role in the tort case."
+    },
+    "evaluation_status": {
+        "type": "str",
+        "default": "awaiting_evidence",
+        "private": false,
+        "sampling": "default"
+    },
+    "evaluation_notes": {
+        "type": "str",
+        "default": "Initial notes on case setup",
+        "private": true,
+        "sampling": "default"
+    },
+    "evaluation_status_request": {
+        "type": "str",
+        "default": "pending_review",
+        "private": false,
+        "sampling": "default"
+    },
+    "evaluation_status_defense": {
+        "type": "str",
+        "default": "awaiting_response",
+        "private": false,
+        "sampling": "default"
+    },
+    "legal_knowledge_base": {
+        "type": "list",
+        "default": [
+            "precedents",
+            "legal texts",
+            "case studies"
+        ],
+        "private": true,
+        "sampling": "default"
+    },
+    "decision_algorithm": {
+        "type": "str",
+        "default": "evidence_based",
+        "private": true,
+        "sampling": "default"
+    },
+    "judgment_accuracy": {
+        "type": "float",
+        "default": 85.0,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            70.0,
+            95.0
+        ]
+    },
+    "communication_protocol": {
+        "type": "str",
+        "default": "standard_legal",
+        "private": false,
+        "sampling": "default"
+    },
+    "case_complexity": {
+        "type": "int",
+        "default": 3,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            1,
+            5
+        ]
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

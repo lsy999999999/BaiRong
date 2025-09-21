@@ -1,0 +1,5 @@
+SFT_FILE_PATH = "datasets/sft_data"
+PPO_FILE_PATH = "datasets/ppo_data"
+TMP_SAVE_DIR = "tmp_saves"
+SAVE_DIR = "saves"
+ADAPTER_CONFIG_FILE_NAME = "adapter_config.json"

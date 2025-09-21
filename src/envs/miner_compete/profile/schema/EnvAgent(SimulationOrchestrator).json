@@ -1,0 +1,125 @@
+{
+  "name": {
+    "type": "str",
+    "default": "MinerAgent",
+    "private": false,
+    "sampling": "llm",
+    "description": "The agent's name"
+  },
+  "energyLevel": {
+    "type": "int",
+    "default": 50,
+    "private": false,
+    "sampling": "preset",
+    "range": [
+      50,
+      200
+    ]
+  },
+  "currentLocation": {
+    "type": "list",
+    "default": [
+      5,
+      5
+    ],
+    "private": false,
+    "sampling": "default",
+    "sample_size": 2
+  },
+  "landOwnership": {
+    "type": "list",
+    "default": [
+      [
+        5,
+        5
+      ]
+    ],
+    "private": false,
+    "sampling": "default",
+    "sample_size": 1
+  },
+  "resourceExploitationHistory": {
+    "type": "list",
+    "default": [
+      {
+        "date": "2023-01-01",
+        "location": [
+          5,
+          5
+        ],
+        "amount": 3
+      }
+    ],
+    "private": false,
+    "sampling": "default",
+    "sample_size": 1
+  },
+  "energyInvestmentHistory": {
+    "type": "list",
+    "default": [
+      {
+        "date": "2023-01-01",
+        "location": [
+          5,
+          5
+        ],
+        "investment": 50
+      }
+    ],
+    "private": false,
+    "sampling": "default",
+    "sample_size": 1
+  },
+  "currentStatus": {
+    "type": "str",
+    "default": "idle",
+    "private": false,
+    "sampling": "default"
+  },
+  "strategy": {
+    "type": "str",
+    "default": "balanced",
+    "private": false,
+    "sampling": "preset",
+    "choices": [
+      "aggressive",
+      "defensive",
+      "balanced"
+    ]
+  },
+  "lastAction": {
+    "type": "str",
+    "default": "maintain",
+    "private": false,
+    "sampling": "llm"
+  },
+  "nextAction": {
+    "type": "str",
+    "default": "explore",
+    "private": false,
+    "sampling": "llm"
+  },
+  "gridSize": {
+    "type": "list",
+    "default": [
+      "50",
+      "50"
+    ],
+    "private": false,
+    "sampling": "preset",
+    "sample_size": 2
+  },
+  "resourceCap": {
+    "type": "int",
+    "default": 3,
+    "private": false,
+    "sampling": "preset"
+  },
+  "id": {
+    "type": "str",
+    "default": "0",
+    "private": true,
+    "sampling": "default",
+    "description": "Unique id of agent"
+  }
+}

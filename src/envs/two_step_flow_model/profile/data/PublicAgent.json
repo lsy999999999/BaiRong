@@ -1,0 +1,92 @@
+[
+    {
+        "name": "AgentX",
+        "received_information": "awaiting_input",
+        "public_agent_reaction": "neutral",
+        "completion_status": "incomplete",
+        "belief_strength": 96,
+        "information_delay": 1.704501580027007,
+        "communication_frequency": 7,
+        "opinion_change_rate": 0.6124392782899818,
+        "agent_type": "PublicAgent",
+        "social_connections": [
+            {
+                "name": "OpinionLeader1",
+                "relationship_strength": 30
+            }
+        ],
+        "id": "10"
+    },
+    {
+        "name": "AgentY",
+        "received_information": "awaiting_input",
+        "public_agent_reaction": "neutral",
+        "completion_status": "incomplete",
+        "belief_strength": 90,
+        "information_delay": 2.6994409037675826,
+        "communication_frequency": 7,
+        "opinion_change_rate": 0.949215908305964,
+        "agent_type": "PublicAgent",
+        "social_connections": [
+            {
+                "name": "OpinionLeader1",
+                "relationship_strength": 30
+            }
+        ],
+        "id": "11"
+    },
+    {
+        "name": "AgentZ",
+        "received_information": "awaiting_input",
+        "public_agent_reaction": "neutral",
+        "completion_status": "incomplete",
+        "belief_strength": 81,
+        "information_delay": 2.1958929467178216,
+        "communication_frequency": 15,
+        "opinion_change_rate": 0.8626322065061349,
+        "agent_type": "PublicAgent",
+        "social_connections": [
+            {
+                "name": "OpinionLeader1",
+                "relationship_strength": 30
+            }
+        ],
+        "id": "12"
+    },
+    {
+        "name": "AgentAlpha",
+        "received_information": "awaiting_input",
+        "public_agent_reaction": "neutral",
+        "completion_status": "incomplete",
+        "belief_strength": 84,
+        "information_delay": 1.7352788035339668,
+        "communication_frequency": 11,
+        "opinion_change_rate": 0.20534690929722554,
+        "agent_type": "PublicAgent",
+        "social_connections": [
+            {
+                "name": "OpinionLeader1",
+                "relationship_strength": 30
+            }
+        ],
+        "id": "13"
+    },
+    {
+        "name": "AgentOmega",
+        "received_information": "awaiting_input",
+        "public_agent_reaction": "neutral",
+        "completion_status": "incomplete",
+        "belief_strength": 49,
+        "information_delay": 1.4118579961316768,
+        "communication_frequency": 12,
+        "opinion_change_rate": 0.7065459098507132,
+        "agent_type": "PublicAgent",
+        "social_connections": [
+            {
+                "name": "OpinionLeader1",
+                "relationship_strength": 30
+            }
+        ],
+        "id": "14"
+    }
+]

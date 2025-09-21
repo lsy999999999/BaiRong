@@ -1,0 +1,143 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Jane Doe",
+        "private": false,
+        "sampling": "llm",
+        "description": "A realistic name for a voter in an election simulation."
+    },
+    "ideology": {
+        "type": "str",
+        "choices": [
+            "conservative",
+            "liberal",
+            "moderate",
+            "libertarian",
+            "progressive"
+        ],
+        "default": "moderate",
+        "private": false,
+        "sampling": "random"
+    },
+    "party_identification": {
+        "type": "str",
+        "choices": [
+            "party_a",
+            "party_b",
+            "independent",
+            "undecided"
+        ],
+        "default": "undecided",
+        "private": false,
+        "sampling": "random"
+    },
+    "issue_positions": {
+        "type": "dict",
+        "default": {},
+        "private": false,
+        "sampling": "default"
+    },
+    "issue_importance": {
+        "type": "dict",
+        "default": {},
+        "private": false,
+        "sampling": "default"
+    },
+    "information_level": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "media_consumption": {
+        "type": "list",
+        "default": [],
+        "private": false,
+        "sampling": "default"
+    },
+    "social_network": {
+        "type": "list",
+        "default": [],
+        "private": false,
+        "sampling": "default"
+    },
+    "voting_history": {
+        "type": "list",
+        "default": [],
+        "private": true,
+        "sampling": "default"
+    },
+    "susceptibility": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "economic_status": {
+        "type": "str",
+        "choices": [
+            "low",
+            "middle",
+            "high"
+        ],
+        "default": "middle",
+        "private": false,
+        "sampling": "random"
+    },
+    "demographic_group": {
+        "type": "str",
+        "choices": [
+            "youth",
+            "adult",
+            "senior"
+        ],
+        "default": "adult",
+        "private": false,
+        "sampling": "random"
+    },
+    "voter_information_level": {
+        "type": "float",
+        "default": 0,
+        "private": true,
+        "sampling": "default"
+    },
+    "attitude_change": {
+        "type": "float",
+        "default": 0,
+        "private": true,
+        "sampling": "default"
+    },
+    "evaluation_results": {
+        "type": "dict",
+        "default": {},
+        "private": true,
+        "sampling": "default"
+    },
+    "current_attitudes": {
+        "type": "dict",
+        "default": {},
+        "private": true,
+        "sampling": "default"
+    },
+    "updated_attitudes": {
+        "type": "dict",
+        "default": {},
+        "private": true,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "int",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

@@ -1,0 +1,505 @@
+{
+  "agents": {
+    "IndividualAgent": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "1": {
+          "code": "async def evaluate_health_threat(self, event: Event) -> List[Event]:\n        personal_health_data = self.profile.get_data(\"personal_health_data\", {})\n        environmental_cues = await self.get_env_data(\"environmental_cues\", [])\n        \n        observation = f\"Personal health data: {personal_health_data}, Environmental cues: {environmental_cues}\"\n        instruction = \"\"\"\n        Assess the perceived threat of a health issue based on personal health data and environmental cues.\n        Return the perceived threat level, susceptibility, severity, and target_ids for event recipients.\n        Use the following JSON format:\n        {\n            \"perceived_threat_level\": <float>,\n            \"perceived_susceptibility\": <float>,\n            \"perceived_severity\": <float>,\n            \"target_ids\": [\"<target_id_1>\", \"<target_id_2>\", ...]\n        }\n        \"\"\"\n        \n        result = await self.generate_reaction(instruction, observation)\n        \n        perceived_threat_level = result.get('perceived_threat_level', 0.0)\n        perceived_susceptibility = result.get('perceived_susceptibility', 0.0)\n        perceived_severity = result.get('perceived_severity', 0.0)\n        target_ids = result.get('target_ids', [])\n        \n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n        \n        self.profile.update_data(\"perceived_threat_level\", perceived_threat_level)\n        self.profile.update_data(\"perceived_susceptibility\", perceived_susceptibility)\n        self.profile.update_data(\"perceived_severity\", perceived_severity)\n        \n        events = []\n        for target_id in target_ids:\n            health_threat_event = HealthThreatEvaluatedEvent(\n                self.profile_id,\n                target_id,\n                threat_level=perceived_threat_level,\n                susceptibility=perceived_susceptibility,\n                severity=perceived_severity\n            )\n            events.append(health_threat_event)\n        \n        received_events = set(self.profile.get_data(\"received_events\", []))\n        received_events.add(\"HealthThreatEvaluatedEvent\")\n        self.profile.update_data(\"received_events\", list(received_events))\n        \n        return events",
+          "metadata": {
+            "id": 1,
+            "name": "evaluate_health_threat",
+            "condition": null,
+            "description": "Assess the perceived threat of a health issue based on personal beliefs and information.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "personal_health_data",
+                "type": "object",
+                "context": "agent",
+                "description": "Individual's personal health data and history"
+              },
+              {
+                "name": "environmental_cues",
+                "type": "list",
+                "context": "env",
+                "description": "External cues from the environment that may influence health threat perception"
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "perceived_threat_level",
+                "type": "float",
+                "context": "agent",
+                "description": "Updated perception of the health threat level"
+              },
+              {
+                "name": "perceived_susceptibility",
+                "type": "float",
+                "context": "agent",
+                "description": "Updated perception of susceptibility to the health threat"
+              },
+              {
+                "name": "perceived_severity",
+                "type": "float",
+                "context": "agent",
+                "description": "Updated perception of severity of the health threat"
+              }
+            ]
+          }
+        },
+        "2": {
+          "code": "async def adopt_health_behavior(self, event: Event) -> List[Event]:\n        event_classes = {\"SupportProvidedEvent\", \"NormsEstablishedEvent\", \"PolicyImplementedEvent\"}\n        received_events = set(self.profile.get_data(\"received_events\", []))\n        \n        if not event_classes.issubset(received_events):\n            return []\n\n        perceived_benefits = self.profile.get_data(\"perceived_benefits\", 0.0)\n        perceived_barriers = self.profile.get_data(\"perceived_barriers\", 0.0)\n        self_efficacy = self.profile.get_data(\"self_efficacy\", 0.0)\n        \n        if not (perceived_benefits > perceived_barriers and self_efficacy > 0.5):\n            return []\n        \n        observation = f\"Perceived benefits: {perceived_benefits}, Perceived barriers: {perceived_barriers}, Self-efficacy: {self_efficacy}, Received events: {received_events}\"\n        instruction = \"\"\"Based on the current health belief model context, decide whether to adopt a health behavior. \n        Consider perceived benefits, barriers, self-efficacy, and received events. \n        Please return the information in the following JSON format:\n        {\n            \"adopted_behavior\": \"<Type of health behavior adopted>\",\n            \"adoption_success\": <True/False>,\n            \"target_ids\": [\"<The string ID(s) of the target agent(s)>\"]\n        }\n        \"\"\"\n        \n        result = await self.generate_reaction(instruction, observation)\n        \n        adopted_behavior = result.get('adopted_behavior', \"unknown\")\n        adoption_success = result.get('adoption_success', False)\n        target_ids = result.get('target_ids', [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n        \n        self.profile.update_data(\"adopted_behavior\", adopted_behavior)\n        self.profile.update_data(\"adoption_success\", adoption_success)\n        \n        events = []\n        for target_id in target_ids:\n            behavior_event = HealthBehaviorAdoptedEvent(\n                self.profile_id, target_id, adopted_behavior, adoption_success, []\n            )\n            events.append(behavior_event)\n        \n        return events",
+          "metadata": {
+            "id": 2,
+            "name": "adopt_health_behavior",
+            "condition": "Requires perception of threat, benefits, barriers, and self-efficacy",
+            "description": "Decide to adopt a specific health behavior based on perceived benefits, barriers, and self-efficacy.",
+            "type": "AND",
+            "required_variables": [
+              {
+                "name": "perceived_benefits",
+                "type": "float",
+                "context": "agent",
+                "description": "Perceived benefits of adopting the health behavior"
+              },
+              {
+                "name": "perceived_barriers",
+                "type": "float",
+                "context": "agent",
+                "description": "Perceived barriers to adopting the health behavior"
+              },
+              {
+                "name": "self_efficacy",
+                "type": "float",
+                "context": "agent",
+                "description": "Individual's confidence in successfully adopting the health behavior"
+              },
+              {
+                "name": "support_type",
+                "type": "string",
+                "context": "event",
+                "description": "Type of support received from family"
+              },
+              {
+                "name": "norm_description",
+                "type": "string",
+                "context": "event",
+                "description": "Community norms supporting the health behavior"
+              },
+              {
+                "name": "policy_name",
+                "type": "string",
+                "context": "event",
+                "description": "Government policy supporting health behavior adoption"
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "adopted_behavior",
+                "type": "string",
+                "context": "agent",
+                "description": "Type of health behavior adopted"
+              },
+              {
+                "name": "adoption_success",
+                "type": "bool",
+                "context": "agent",
+                "description": "Indicates if the adoption of the health behavior was successful"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "FamilyAgent": {
+      "imports": "from typing import Any, List,Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "3": {
+          "code": "async def provide_support(self, event: Event) -> List[Event]:\n        # Access family health priorities\n        family_health_priorities = self.profile.get_data(\"family_health_priorities\", [])\n    \n        # Generate reaction to decide on support type and intensity\n        instruction = \"\"\"You are a FamilyAgent tasked with providing support to family members for adopting health behaviors. \n        Consider the family's health priorities: {family_health_priorities}. \n        Determine the type of support and its intensity to be provided. \n        Ensure to specify 'target_ids' which can be a single ID or a list of IDs. \n        The response should be in the following JSON format:\n    \n        {\n        \"support_type\": \"<Type of support provided>\",\n        \"intensity\": <Intensity level of support>,\n        \"target_ids\": [\"<ID of family member(s) receiving support>\"]\n        }\n        \"\"\"\n        observation = f\"Event received: {event.__class__.__name__}\"\n        result = await self.generate_reaction(instruction.format(family_health_priorities=family_health_priorities), observation)\n    \n        support_type = result.get('support_type', \"emotional\")\n        intensity = result.get('intensity', 1)\n        target_ids = result.get('target_ids', [])\n    \n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n    \n        # Update agent's state with support provided\n        self.profile.update_data(\"support_provided\", support_type)\n    \n        # Prepare and send SupportProvidedEvent to target individual(s)\n        events = []\n        for target_id in target_ids:\n            support_event = SupportProvidedEvent(self.profile_id, target_id, support_type=support_type, intensity=intensity)\n            events.append(support_event)\n    \n        return events",
+          "metadata": {
+            "id": 3,
+            "name": "provide_support",
+            "condition": null,
+            "description": "Offer support to family members to encourage the adoption of health behaviors.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "family_health_priorities",
+                "type": "list",
+                "context": "agent",
+                "description": "Health priorities and concerns within the family"
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "support_provided",
+                "type": "string",
+                "context": "agent",
+                "description": "Type of support provided to family members"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "CommunityAgent": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "4": {
+          "code": "async def establish_norms(self, event: Event) -> List[Event]:\n        # Check if all required events have been received\n        required_events = {\"HealthThreatEvaluatedEvent\", \"PolicyImplementedEvent\"}\n        event_received = event.__class__.__name__\n        self.profile.update_data(f\"{event_received}_received\", True)\n\n        # Check if all events have been received\n        all_events_received = all(self.profile.get_data(f\"{e}_received\", False) for e in required_events)\n        if not all_events_received:\n            return []\n\n        # Access necessary data from agent profile and event\n        community_health_data = self.profile.get_data(\"community_health_data\", {})\n        threat_level = getattr(event, \"threat_level\", 0.0)\n        susceptibility = getattr(event, \"susceptibility\", 0.0)\n        severity = getattr(event, \"severity\", 0.0)\n        government_policy = getattr(event, \"policy_name\", \"unknown\")\n\n        # Prepare observation and instruction for LLM\n        observation = f\"Community health data: {community_health_data}, Threat level: {threat_level}, Susceptibility: {susceptibility}, Severity: {severity}, Government policy: {government_policy}\"\n        instruction = \"\"\"Based on the community health data, threat level, susceptibility, severity, and the government policy, \n        generate a list of community norms that support health behaviors. \n        Please return the information in the following JSON format:\n\n        {\n        \"community_norms\": [\"<List of norms established by the community>\"],\n        \"target_ids\": [\"<List of IDs of IndividualAgents that should be notified>\"]\n        }\n        \"\"\"\n\n        # Generate reaction using LLM\n        result = await self.generate_reaction(instruction, observation)\n\n        # Update agent's state with new community norms\n        community_norms = result.get(\"community_norms\", [])\n        self.profile.update_data(\"community_norms\", community_norms)\n\n        # Prepare outgoing events\n        target_ids = result.get(\"target_ids\", [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        events = []\n        for target_id in target_ids:\n            norm_description = \", \".join(community_norms)\n            norms_event = NormsEstablishedEvent(self.profile_id, target_id, norm_description=norm_description, acceptance_level=1.0)\n            events.append(norms_event)\n\n        return events",
+          "metadata": {
+            "id": 4,
+            "name": "establish_norms",
+            "condition": null,
+            "description": "Create and promote community norms that support health behaviors.",
+            "type": "AND",
+            "required_variables": [
+              {
+                "name": "community_health_data",
+                "type": "object",
+                "context": "agent",
+                "description": "Health data and statistics relevant to the community"
+              },
+              {
+                "name": "government_policy",
+                "type": "string",
+                "context": "event",
+                "description": "Policy implemented by the government affecting community norms"
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "community_norms",
+                "type": "list",
+                "context": "agent",
+                "description": "List of norms established by the community to support health behaviors"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "GovernmentAgent": {
+      "imports": "from typing import Any, List,Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "5": {
+          "code": "async def implement_policy(self, event: Event) -> List[Event]:\n        # No condition to check as the condition is None\n    \n        # Retrieve required variables\n        policy_goals = self.profile.get_data(\"policy_goals\", \"default\")\n        resource_availability = await self.get_env_data(\"resource_availability\", 0.0)\n    \n        # Instruction for LLM to generate implemented_policy and policy_impact\n        instruction = \"\"\"You are a GovernmentAgent implementing a health policy. \n        Use the provided policy goals and resource availability to determine the policy to implement and its expected impact.\n        Please return the information in the following JSON format:\n    \n        {\n            \"implemented_policy\": \"<Details of the policy implemented>\",\n            \"policy_impact\": <Expected impact level of the policy on health behaviors>,\n            \"target_ids\": [\"<The string ID(s) of the target agents>\"]\n        }\n        \"\"\"\n        observation = f\"Policy Goals: {policy_goals}, Resource Availability: {resource_availability}\"\n        \n        result = await self.generate_reaction(instruction, observation)\n        \n        implemented_policy = result.get('implemented_policy', None)\n        policy_impact = result.get('policy_impact', 0.0)\n        target_ids = result.get('target_ids', None)\n        \n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n    \n        # Update agent's profile with implemented_policy and policy_impact\n        self.profile.update_data(\"implemented_policy\", implemented_policy)\n        self.profile.update_data(\"policy_impact\", policy_impact)\n    \n        # Create and send PolicyImplementedEvent to each target\n        events = []\n        for target_id in target_ids:\n            policy_event = PolicyImplementedEvent(self.profile_id, target_id, policy_name=implemented_policy, impact_level=policy_impact)\n            events.append(policy_event)\n    \n        return events",
+          "metadata": {
+            "id": 5,
+            "name": "implement_policy",
+            "condition": null,
+            "description": "Develop and enforce policies to promote public health and influence community and individual behaviors.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "policy_goals",
+                "type": "string",
+                "context": "agent",
+                "description": "Goals and objectives of the health policy"
+              },
+              {
+                "name": "resource_availability",
+                "type": "float",
+                "context": "env",
+                "description": "Availability of resources to support policy implementation"
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "implemented_policy",
+                "type": "string",
+                "context": "agent",
+                "description": "Details of the policy implemented"
+              },
+              {
+                "name": "policy_impact",
+                "type": "float",
+                "context": "agent",
+                "description": "Expected impact level of the policy on health behaviors"
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "events": {
+    "imports": "from onesim.events import Event\nfrom typing import Any, List, Optional",
+    "definitions": {
+      "-1": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": -1,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "IndividualAgent",
+          "to_action_name": "evaluate_health_threat",
+          "from_action_id": 0,
+          "to_action_id": 1,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for individual decision-making process",
+          "fields": []
+        }
+      },
+      "-2": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": -2,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "FamilyAgent",
+          "to_action_name": "provide_support",
+          "from_action_id": 0,
+          "to_action_id": 3,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for family support process",
+          "fields": []
+        }
+      },
+      "-3": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": -3,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "CommunityAgent",
+          "to_action_name": "establish_norms",
+          "from_action_id": 0,
+          "to_action_id": 4,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for community norms establishment",
+          "fields": []
+        }
+      },
+      "-4": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": -4,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "GovernmentAgent",
+          "to_action_name": "implement_policy",
+          "from_action_id": 0,
+          "to_action_id": 5,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for government policy implementation",
+          "fields": []
+        }
+      },
+      "1": {
+        "code": "class HealthThreatEvaluatedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        threat_level: float = 0.0,\n        susceptibility: float = 0.0,\n        severity: float = 0.0,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.threat_level = threat_level\n        self.susceptibility = susceptibility\n        self.severity = severity",
+        "metadata": {
+          "id": 1,
+          "from_agent_type": "IndividualAgent",
+          "from_action_name": "evaluate_health_threat",
+          "to_agent_type": "FamilyAgent",
+          "to_action_name": "provide_support",
+          "from_action_id": 1,
+          "to_action_id": 3,
+          "event_name": "HealthThreatEvaluatedEvent",
+          "event_info": "Individual's perception of health threat evaluated",
+          "fields": [
+            {
+              "name": "threat_level",
+              "type": "float",
+              "default_value": 0.0,
+              "description": "The perceived level of health threat by the individual"
+            },
+            {
+              "name": "susceptibility",
+              "type": "float",
+              "default_value": 0.0,
+              "description": "Perceived susceptibility to the health threat"
+            },
+            {
+              "name": "severity",
+              "type": "float",
+              "default_value": 0.0,
+              "description": "Perceived severity of the health threat"
+            }
+          ]
+        }
+      },
+      "2": {
+        "code": "class HealthThreatEvaluatedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        threat_level: float = 0.0,\n        susceptibility: float = 0.0,\n        severity: float = 0.0,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.threat_level = threat_level\n        self.susceptibility = susceptibility\n        self.severity = severity",
+        "metadata": {
+          "id": 2,
+          "from_agent_type": "IndividualAgent",
+          "from_action_name": "evaluate_health_threat",
+          "to_agent_type": "CommunityAgent",
+          "to_action_name": "establish_norms",
+          "from_action_id": 1,
+          "to_action_id": 4,
+          "event_name": "HealthThreatEvaluatedEvent",
+          "event_info": "Individual's perception of health threat shared with community",
+          "fields": [
+            {
+              "name": "threat_level",
+              "type": "float",
+              "default_value": 0.0,
+              "description": "The perceived level of health threat by the individual"
+            },
+            {
+              "name": "susceptibility",
+              "type": "float",
+              "default_value": 0.0,
+              "description": "Perceived susceptibility to the health threat"
+            },
+            {
+              "name": "severity",
+              "type": "float",
+              "default_value": 0.0,
+              "description": "Perceived severity of the health threat"
+            }
+          ]
+        }
+      },
+      "3": {
+        "code": "class HealthBehaviorAdoptedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        behavior_type: str = 'unknown',\n        success: bool = False,\n        barriers_overcome: Optional[List[Any]] = None,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.behavior_type = behavior_type\n        self.success = success\n        self.barriers_overcome = barriers_overcome if barriers_overcome is not None else []",
+        "metadata": {
+          "id": 3,
+          "from_agent_type": "IndividualAgent",
+          "from_action_name": "adopt_health_behavior",
+          "to_agent_type": "EnvAgent",
+          "to_action_name": "terminate",
+          "from_action_id": 2,
+          "to_action_id": -1,
+          "event_name": "HealthBehaviorAdoptedEvent",
+          "event_info": "Individual adopts a health behavior",
+          "fields": [
+            {
+              "name": "behavior_type",
+              "type": "string",
+              "default_value": "unknown",
+              "description": "Type of health behavior adopted by the individual"
+            },
+            {
+              "name": "success",
+              "type": "bool",
+              "default_value": false,
+              "description": "Indicates if the behavior adoption was successful"
+            },
+            {
+              "name": "barriers_overcome",
+              "type": "list",
+              "default_value": [],
+              "description": "List of barriers that were overcome to adopt the behavior"
+            }
+          ]
+        }
+      },
+      "4": {
+        "code": "class SupportProvidedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        support_type: str = 'emotional',\n        intensity: int = 1,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.support_type = support_type\n        self.intensity = intensity",
+        "metadata": {
+          "id": 4,
+          "from_agent_type": "FamilyAgent",
+          "from_action_name": "provide_support",
+          "to_agent_type": "IndividualAgent",
+          "to_action_name": "adopt_health_behavior",
+          "from_action_id": 3,
+          "to_action_id": 2,
+          "event_name": "SupportProvidedEvent",
+          "event_info": "Family provides support for health behavior adoption",
+          "fields": [
+            {
+              "name": "support_type",
+              "type": "string",
+              "default_value": "emotional",
+              "description": "Type of support provided by the family"
+            },
+            {
+              "name": "intensity",
+              "type": "int",
+              "default_value": 1,
+              "description": "Intensity level of the support provided"
+            }
+          ]
+        }
+      },
+      "5": {
+        "code": "class NormsEstablishedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        norm_description: str = 'undefined',\n        acceptance_level: float = 0.0,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.norm_description = norm_description\n        self.acceptance_level = acceptance_level",
+        "metadata": {
+          "id": 5,
+          "from_agent_type": "CommunityAgent",
+          "from_action_name": "establish_norms",
+          "to_agent_type": "IndividualAgent",
+          "to_action_name": "adopt_health_behavior",
+          "from_action_id": 4,
+          "to_action_id": 2,
+          "event_name": "NormsEstablishedEvent",
+          "event_info": "Community establishes norms supporting health behavior",
+          "fields": [
+            {
+              "name": "norm_description",
+              "type": "string",
+              "default_value": "undefined",
+              "description": "Description of the norm established by the community"
+            },
+            {
+              "name": "acceptance_level",
+              "type": "float",
+              "default_value": 0.0,
+              "description": "Level of acceptance of the norm within the community"
+            }
+          ]
+        }
+      },
+      "6": {
+        "code": "class PolicyImplementedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        policy_name: str = 'unknown',\n        impact_level: float = 0.0,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.policy_name = policy_name\n        self.impact_level = impact_level",
+        "metadata": {
+          "id": 6,
+          "from_agent_type": "GovernmentAgent",
+          "from_action_name": "implement_policy",
+          "to_agent_type": "CommunityAgent",
+          "to_action_name": "establish_norms",
+          "from_action_id": 5,
+          "to_action_id": 4,
+          "event_name": "PolicyImplementedEvent",
+          "event_info": "Government policy influences community norms",
+          "fields": [
+            {
+              "name": "policy_name",
+              "type": "string",
+              "default_value": "unknown",
+              "description": "Name of the policy implemented by the government"
+            },
+            {
+              "name": "impact_level",
+              "type": "float",
+              "default_value": 0.0,
+              "description": "Expected impact level of the policy on the community or individual"
+            }
+          ]
+        }
+      },
+      "7": {
+        "code": "class PolicyImplementedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        policy_name: str = 'unknown',\n        impact_level: float = 0.0,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.policy_name = policy_name\n        self.impact_level = impact_level",
+        "metadata": {
+          "id": 7,
+          "from_agent_type": "GovernmentAgent",
+          "from_action_name": "implement_policy",
+          "to_agent_type": "IndividualAgent",
+          "to_action_name": "adopt_health_behavior",
+          "from_action_id": 5,
+          "to_action_id": 2,
+          "event_name": "PolicyImplementedEvent",
+          "event_info": "Government policy supports individual health behavior adoption",
+          "fields": [
+            {
+              "name": "policy_name",
+              "type": "string",
+              "default_value": "unknown",
+              "description": "Name of the policy implemented by the government"
+            },
+            {
+              "name": "impact_level",
+              "type": "float",
+              "default_value": 0.0,
+              "description": "Expected impact level of the policy on the community or individual"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

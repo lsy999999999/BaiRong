@@ -1,0 +1,378 @@
+{
+    "AuctionPlatform": [
+        {
+            "id": 1,
+            "name": "initialize_auction",
+            "condition": null,
+            "description": "Set up and configure a new auction based on predefined settings and environmental factors.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "mechanism_type",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Type of auction mechanism to be used."
+                },
+                {
+                    "name": "fee_structure",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Fee structure applicable for the auction."
+                },
+                {
+                    "name": "transparency_level",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Level of transparency for the auction."
+                },
+                {
+                    "name": "market_conditions",
+                    "type": "dict",
+                    "context": "env",
+                    "description": "Current market conditions including liquidity, volatility, and asymmetry."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "active_auctions",
+                    "type": "list",
+                    "context": "agent",
+                    "description": "List of currently active auctions, updated with the new auction."
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "name": "receive_bid",
+            "condition": null,
+            "description": "Receive a bid from a buyer and prepare it for processing.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "bid_id",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Unique identifier for the bid."
+                },
+                {
+                    "name": "bid_amount",
+                    "type": "float",
+                    "context": "event",
+                    "description": "Amount of the bid placed."
+                },
+                {
+                    "name": "buyer_id",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Identifier for the buyer placing the bid."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "bids",
+                    "type": "list",
+                    "context": "agent",
+                    "description": "List of bids received, updated with the new bid."
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "name": "set_reserve_price",
+            "condition": null,
+            "description": "Set the reserve price for an auction based on seller input.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "reserve_price",
+                    "type": "float",
+                    "context": "event",
+                    "description": "Reserve price set for the auction."
+                },
+                {
+                    "name": "auction_id",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Unique identifier for the auction."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "auction_details",
+                    "type": "dict",
+                    "context": "agent",
+                    "description": "Details of the auction, updated with the reserve price."
+                }
+            ]
+        },
+        {
+            "id": 4,
+            "name": "influence_market_conditions",
+            "condition": null,
+            "description": "Adjust market conditions based on speculator actions to influence auction dynamics.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "market_volatility",
+                    "type": "float",
+                    "context": "event",
+                    "description": "Current market volatility affecting the auction."
+                },
+                {
+                    "name": "information_asymmetry",
+                    "type": "float",
+                    "context": "event",
+                    "description": "Level of information asymmetry in the market."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "market_conditions",
+                    "type": "dict",
+                    "context": "env",
+                    "description": "Current market conditions, updated with new volatility and asymmetry levels."
+                }
+            ]
+        },
+        {
+            "id": 5,
+            "name": "process_bid",
+            "condition": "BidReceivedEvent and ReservePriceSetEvent",
+            "description": "Process received bids and determine their eligibility based on auction rules.",
+            "type": "AND",
+            "required_variables": [
+                {
+                    "name": "bid_id",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Unique identifier for the bid."
+                },
+                {
+                    "name": "bid_amount",
+                    "type": "float",
+                    "context": "event",
+                    "description": "Amount of the bid placed."
+                },
+                {
+                    "name": "reserve_price",
+                    "type": "float",
+                    "context": "event",
+                    "description": "Reserve price set for the auction."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "eligible_bids",
+                    "type": "list",
+                    "context": "agent",
+                    "description": "List of bids that meet auction criteria."
+                }
+            ]
+        },
+        {
+            "id": 6,
+            "name": "adjust_bidding_process",
+            "condition": null,
+            "description": "Adjust the bidding process based on changes in market conditions.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "market_volatility",
+                    "type": "float",
+                    "context": "event",
+                    "description": "Current market volatility affecting the auction."
+                },
+                {
+                    "name": "information_asymmetry",
+                    "type": "float",
+                    "context": "event",
+                    "description": "Level of information asymmetry in the market."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "bidding_rules",
+                    "type": "dict",
+                    "context": "agent",
+                    "description": "Rules governing the bidding process, adjusted for current conditions."
+                }
+            ]
+        },
+        {
+            "id": 7,
+            "name": "finalize_auction",
+            "condition": "All bids processed and bidding process adjusted",
+            "description": "Finalize the auction and determine the outcome based on processed bids.",
+            "type": "AND",
+            "required_variables": [
+                {
+                    "name": "eligible_bids",
+                    "type": "list",
+                    "context": "agent",
+                    "description": "List of bids that meet auction criteria."
+                },
+                {
+                    "name": "auction_id",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Unique identifier for the auction."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "auction_outcome",
+                    "type": "dict",
+                    "context": "agent",
+                    "description": "Outcome of the auction, including winner and final price."
+                }
+            ]
+        }
+    ],
+    "Buyer": [
+        {
+            "id": 8,
+            "name": "evaluate_auction",
+            "condition": null,
+            "description": "Evaluate auction details and decide whether to place a bid.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "auction_id",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Unique identifier for the auction."
+                },
+                {
+                    "name": "mechanism_type",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Type of auction mechanism being used."
+                },
+                {
+                    "name": "fee_structure",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Fee structure applicable for the auction."
+                },
+                {
+                    "name": "transparency_level",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Level of transparency for the auction."
+                },
+                {
+                    "name": "private_value",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Buyer's private valuation of the auction item."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "bidding_decision",
+                    "type": "bool",
+                    "context": "agent",
+                    "description": "Decision on whether to place a bid."
+                }
+            ]
+        }
+    ],
+    "Seller": [
+        {
+            "id": 9,
+            "name": "evaluate_auction",
+            "condition": null,
+            "description": "Evaluate auction details to set appropriate reserve price.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "auction_id",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Unique identifier for the auction."
+                },
+                {
+                    "name": "mechanism_type",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Type of auction mechanism being used."
+                },
+                {
+                    "name": "fee_structure",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Fee structure applicable for the auction."
+                },
+                {
+                    "name": "transparency_level",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Level of transparency for the auction."
+                },
+                {
+                    "name": "production_cost",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Cost of producing the item being auctioned."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "reserve_price_decision",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Decided reserve price for the auction."
+                }
+            ]
+        }
+    ],
+    "Speculator": [
+        {
+            "id": 10,
+            "name": "evaluate_auction",
+            "condition": null,
+            "description": "Evaluate auction details to decide on market influence strategy.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "auction_id",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Unique identifier for the auction."
+                },
+                {
+                    "name": "mechanism_type",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Type of auction mechanism being used."
+                },
+                {
+                    "name": "fee_structure",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Fee structure applicable for the auction."
+                },
+                {
+                    "name": "transparency_level",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Level of transparency for the auction."
+                },
+                {
+                    "name": "capital",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Speculator's available capital for market influence."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "influence_strategy",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Chosen strategy for influencing the market."
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,77 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Opinion Leader",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's role as an opinion leader in the network"
+    },
+    "original_information": {
+        "type": "str",
+        "default": "awaiting_input",
+        "private": true,
+        "sampling": "default"
+    },
+    "modified_information": {
+        "type": "str",
+        "default": "ready",
+        "private": false,
+        "sampling": "default"
+    },
+    "target_public_agents": {
+        "type": "list",
+        "default": [
+            "Agent_001"
+        ],
+        "private": false,
+        "sampling": "default",
+        "sample_size": 5
+    },
+    "belief_strength": {
+        "type": "int",
+        "default": 50,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0,
+            100
+        ]
+    },
+    "communication_delay": {
+        "type": "float",
+        "default": 1.5,
+        "private": true,
+        "sampling": "random",
+        "range": [
+            0.5,
+            3.0
+        ]
+    },
+    "information_credibility": {
+        "type": "int",
+        "default": 75,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0,
+            100
+        ]
+    },
+    "interaction_frequency": {
+        "type": "int",
+        "default": 10,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            5,
+            20
+        ]
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

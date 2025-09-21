@@ -1,0 +1,99 @@
+{
+    "MediaAgent": [
+        {
+            "id": 1,
+            "name": "select_topic",
+            "condition": "Access to topic library",
+            "description": "The MediaAgent selects a topic from the topic library to report on, initiating the process of influencing public agenda.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "topic_library",
+                    "type": "list",
+                    "context": "env",
+                    "description": "A collection of topics available for selection by the MediaAgent."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "selected_topic",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "The topic that has been selected by the MediaAgent for reporting."
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "name": "emphasize_topic",
+            "condition": "Topic selected for reporting",
+            "description": "The MediaAgent emphasizes the selected topic through increased reporting frequency and emotional language to influence public perception and attention.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "selected_topic",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "The topic selected by the MediaAgent to be emphasized."
+                },
+                {
+                    "name": "reporting_frequency",
+                    "type": "int",
+                    "context": "agent",
+                    "description": "The frequency at which the MediaAgent reports on the selected topic."
+                },
+                {
+                    "name": "emotional_tone",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "The emotional tone used by the MediaAgent in reporting, which can affect public perception."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "emphasized_topic",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "The topic that has been emphasized by the MediaAgent."
+                }
+            ]
+        }
+    ],
+    "PublicAgent": [
+        {
+            "id": 3,
+            "name": "adjust_focus",
+            "condition": "Receive emphasized topic report",
+            "description": "The PublicAgent adjusts its focus based on the reporting frequency and emotional presentation of the topic by the MediaAgent.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "emphasized_topic",
+                    "type": "string",
+                    "context": "event",
+                    "description": "The topic that has been emphasized by the MediaAgent."
+                },
+                {
+                    "name": "reporting_frequency",
+                    "type": "int",
+                    "context": "event",
+                    "description": "The frequency of reports made about the topic."
+                },
+                {
+                    "name": "emotional_tone",
+                    "type": "string",
+                    "context": "event",
+                    "description": "The emotional tone used in the reporting."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "focus_value",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "The updated focus value of the PublicAgent on the emphasized topic."
+                }
+            ]
+        }
+    ]
+}

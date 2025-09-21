@@ -1,0 +1,228 @@
+{
+    "LLMDecisionAgent": [
+        {
+            "id": 1,
+            "name": "initialize_round",
+            "condition": null,
+            "description": "Resets the stamina of each agent to the default value and prepares the environment for the next round of actions.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "stamina_reset_value",
+                    "type": "int",
+                    "context": "env",
+                    "description": "The default stamina value to which each agent's stamina is reset at the start of each round."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "current_stamina",
+                    "type": "int",
+                    "context": "agent",
+                    "description": "The stamina of the agent is reset to the default value."
+                }
+            ],
+            "code": ""
+        }
+    ],
+    "ClaimAgent": [
+        {
+            "id": 2,
+            "name": "process_claims",
+            "condition": null,
+            "description": "Processes the claims made by agents on unowned plots, resolving any contention through a seeded random number generator.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "unowned_plots",
+                    "type": "list",
+                    "context": "env",
+                    "description": "A list of plots that are currently unowned."
+                },
+                {
+                    "name": "claim_actions",
+                    "type": "list",
+                    "context": "agent",
+                    "description": "A list of actions submitted by agents to claim unowned plots."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "successful_claims",
+                    "type": "int",
+                    "context": "env",
+                    "description": "The number of successful claims processed in the round."
+                },
+                {
+                    "name": "failed_claims",
+                    "type": "int",
+                    "context": "env",
+                    "description": "The number of failed claims due to contention or other issues."
+                },
+                {
+                    "name": "new_owners",
+                    "type": "list",
+                    "context": "env",
+                    "description": "List of agent IDs who have become new plot owners."
+                },
+                {
+                    "name": "truce_windows",
+                    "type": "list",
+                    "context": "env",
+                    "description": "List of plots with active truce windows."
+                }
+            ],
+            "code": ""
+        }
+    ],
+    "RaidAgent": [
+        {
+            "id": 3,
+            "name": "process_raids",
+            "condition": null,
+            "description": "Processes the raids made by agents on owned plots, resolving any defense or contention through a seeded random number generator.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "owned_plots",
+                    "type": "list",
+                    "context": "env",
+                    "description": "A list of plots that are currently owned."
+                },
+                {
+                    "name": "raid_actions",
+                    "type": "list",
+                    "context": "agent",
+                    "description": "A list of actions submitted by agents to raid owned plots."
+                },
+                {
+                    "name": "defense_actions",
+                    "type": "list",
+                    "context": "agent",
+                    "description": "A list of actions submitted by agents to defend owned plots."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "successful_raids",
+                    "type": "int",
+                    "context": "env",
+                    "description": "The number of successful raids carried out in the round."
+                },
+                {
+                    "name": "failed_raids",
+                    "type": "int",
+                    "context": "env",
+                    "description": "The number of raids that were blocked by defense."
+                }
+            ],
+            "code": ""
+        }
+    ],
+    "DefendAgent": [
+        {
+            "id": 4,
+            "name": "setup_defenses",
+            "condition": null,
+            "description": "Sets up defenses on plots to prevent raids or influence mining outcomes.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "owned_plots",
+                    "type": "list",
+                    "context": "env",
+                    "description": "A list of plots that are currently owned."
+                },
+                {
+                    "name": "defense_actions",
+                    "type": "list",
+                    "context": "agent",
+                    "description": "A list of actions submitted by agents to defend owned plots."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "defended_plots",
+                    "type": "list",
+                    "context": "env",
+                    "description": "List of plots that have been marked as defended."
+                }
+            ],
+            "code": ""
+        }
+    ],
+    "MineAgent": [
+        {
+            "id": 5,
+            "name": "perform_mining",
+            "condition": null,
+            "description": "Performs mining on plots based on the predeclared mining allocations, respecting the per-plot cap and ownership status.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "owned_plots",
+                    "type": "list",
+                    "context": "env",
+                    "description": "A list of plots that are currently owned."
+                },
+                {
+                    "name": "mine_actions",
+                    "type": "list",
+                    "context": "agent",
+                    "description": "A list of actions submitted by agents to mine owned plots."
+                },
+                {
+                    "name": "defended_plots",
+                    "type": "list",
+                    "context": "env",
+                    "description": "List of plots that have been marked as defended."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "total_gold_mined",
+                    "type": "int",
+                    "context": "env",
+                    "description": "Total amount of gold mined in the round."
+                },
+                {
+                    "name": "idle_plots",
+                    "type": "int",
+                    "context": "env",
+                    "description": "Number of plots where mining did not occur."
+                }
+            ],
+            "code": ""
+        },
+        {
+            "id": 6,
+            "name": "update_defended_status",
+            "condition": null,
+            "description": "Updates the status of defended plots' mining outcomes and logs the results.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "defended_plots",
+                    "type": "list",
+                    "context": "env",
+                    "description": "List of plots that have been marked as defended."
+                },
+                {
+                    "name": "mine_actions",
+                    "type": "list",
+                    "context": "agent",
+                    "description": "A list of actions submitted by agents to mine owned plots."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "defended_mining_results",
+                    "type": "list",
+                    "context": "env",
+                    "description": "List containing details of mining results for defended plots."
+                }
+            ],
+            "code": ""
+        }
+    ]
+}

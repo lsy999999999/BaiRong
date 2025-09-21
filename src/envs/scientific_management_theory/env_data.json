@@ -1,0 +1,57 @@
+{
+    "variables": [
+        {
+            "name": "worker_efficiency",
+            "type": "float",
+            "value": 0.87
+        },
+        {
+            "name": "manager_experience_years",
+            "type": "int",
+            "value": 15
+        },
+        {
+            "name": "task_allocation_method",
+            "type": "str",
+            "value": "Skill-Based Allocation"
+        },
+        {
+            "name": "incentive_types",
+            "type": "list",
+            "value": [
+                "Performance Bonus",
+                "Extra Vacation Days",
+                "Recognition Awards"
+            ]
+        },
+        {
+            "name": "standardized_workflow_steps",
+            "type": "list",
+            "value": [
+                "Initial Task Briefing",
+                "Resource Allocation",
+                "Execution Monitoring",
+                "Feedback Session"
+            ]
+        },
+        {
+            "name": "manager_feedback_frequency",
+            "type": "int",
+            "value": 5
+        },
+        {
+            "name": "use_time_motion_studies",
+            "type": "bool",
+            "value": true
+        },
+        {
+            "name": "worker_skill_levels",
+            "type": "list",
+            "value": [
+                "Novice",
+                "Intermediate",
+                "Advanced"
+            ]
+        }
+    ]
+}

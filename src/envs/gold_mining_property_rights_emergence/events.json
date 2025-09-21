@@ -1,0 +1,172 @@
+{
+    "-1": {
+        "id": -1,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "LLMDecisionAgent",
+        "to_action_name": "initialize_round",
+        "from_action_id": 0,
+        "to_action_id": 1,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for the workflow, starting a new round",
+        "fields": [],
+        "code": ""
+    },
+    "1": {
+        "id": 1,
+        "from_agent_type": "LLMDecisionAgent",
+        "from_action_name": "initialize_round",
+        "to_agent_type": "ClaimAgent",
+        "to_action_name": "process_claims",
+        "from_action_id": 1,
+        "to_action_id": 2,
+        "event_name": "RoundInitializedEvent",
+        "event_info": "Round has been initialized and agents can now take actions",
+        "fields": [],
+        "code": ""
+    },
+    "2": {
+        "id": 2,
+        "from_agent_type": "ClaimAgent",
+        "from_action_name": "process_claims",
+        "to_agent_type": "RaidAgent",
+        "to_action_name": "process_raids",
+        "from_action_id": 2,
+        "to_action_id": 3,
+        "event_name": "ClaimProcessedEvent",
+        "event_info": "Claims have been processed, and raiding actions can proceed",
+        "fields": [
+            {
+                "name": "successful_claims",
+                "type": "int",
+                "default_value": 0,
+                "description": "The number of successful claims processed in the round"
+            },
+            {
+                "name": "failed_claims",
+                "type": "int",
+                "default_value": 0,
+                "description": "The number of failed claims due to contention or other issues"
+            }
+        ],
+        "code": ""
+    },
+    "3": {
+        "id": 3,
+        "from_agent_type": "ClaimAgent",
+        "from_action_name": "process_claims",
+        "to_agent_type": "DefendAgent",
+        "to_action_name": "setup_defenses",
+        "from_action_id": 2,
+        "to_action_id": 4,
+        "event_name": "OwnershipEstablishedEvent",
+        "event_info": "Ownership established with a truce window, leading to potential defense setups",
+        "fields": [
+            {
+                "name": "new_owners",
+                "type": "list",
+                "default_value": [],
+                "description": "List of agent IDs who have become new plot owners"
+            },
+            {
+                "name": "truce_windows",
+                "type": "list",
+                "default_value": [],
+                "description": "List of plots with active truce windows"
+            }
+        ],
+        "code": ""
+    },
+    "4": {
+        "id": 4,
+        "from_agent_type": "RaidAgent",
+        "from_action_name": "process_raids",
+        "to_agent_type": "MineAgent",
+        "to_action_name": "perform_mining",
+        "from_action_id": 3,
+        "to_action_id": 5,
+        "event_name": "RaidOutcomeEvent",
+        "event_info": "Raiding results computed, mining actions can now take place",
+        "fields": [
+            {
+                "name": "successful_raids",
+                "type": "int",
+                "default_value": 0,
+                "description": "The number of successful raids carried out in the round"
+            },
+            {
+                "name": "failed_raids",
+                "type": "int",
+                "default_value": 0,
+                "description": "The number of raids that were blocked by defense"
+            }
+        ],
+        "code": ""
+    },
+    "5": {
+        "id": 5,
+        "from_agent_type": "DefendAgent",
+        "from_action_name": "setup_defenses",
+        "to_agent_type": "MineAgent",
+        "to_action_name": "update_defended_status",
+        "from_action_id": 4,
+        "to_action_id": 6,
+        "event_name": "DefenseReadyEvent",
+        "event_info": "Defenses prepared on plots to either prevent raids or influence mining outcomes",
+        "fields": [
+            {
+                "name": "defended_plots",
+                "type": "list",
+                "default_value": [],
+                "description": "List of plots that have been marked as defended"
+            }
+        ],
+        "code": ""
+    },
+    "6": {
+        "id": 6,
+        "from_agent_type": "MineAgent",
+        "from_action_name": "perform_mining",
+        "to_agent_type": "EnvAgent",
+        "to_action_name": "terminate",
+        "from_action_id": 5,
+        "to_action_id": -1,
+        "event_name": "MiningCompletedEvent",
+        "event_info": "Mining completed, and results are logged",
+        "fields": [
+            {
+                "name": "total_gold_mined",
+                "type": "int",
+                "default_value": 0,
+                "description": "Total amount of gold mined in the round"
+            },
+            {
+                "name": "idle_plots",
+                "type": "int",
+                "default_value": 0,
+                "description": "Number of plots where mining did not occur"
+            }
+        ],
+        "code": ""
+    },
+    "7": {
+        "id": 7,
+        "from_agent_type": "MineAgent",
+        "from_action_name": "update_defended_status",
+        "to_agent_type": "EnvAgent",
+        "to_action_name": "terminate",
+        "from_action_id": 6,
+        "to_action_id": -1,
+        "event_name": "DefendedMiningEvent",
+        "event_info": "Defended plots' mining evaluated and results logged",
+        "fields": [
+            {
+                "name": "defended_mining_results",
+                "type": "list",
+                "default_value": [],
+                "description": "List containing details of mining results for defended plots"
+            }
+        ],
+        "code": ""
+    }
+}

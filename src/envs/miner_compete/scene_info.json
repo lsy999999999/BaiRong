@@ -1,0 +1,124 @@
+{
+  "domain": "Organization",
+  "scene_name": "resource_management_in_grid_with_competitive_agents",
+  "odd_protocol": {
+    "overview": {
+      "system_goal": "To manage resource allocation and land ownership among miners on a grid structure.",
+      "agent_types": "Miners who can maintain or contest land ownership and exploit resources.",
+      "environment_description": "A 10x10 grid where each cell has infinite resources but limited productivity per round.",
+      "grid_resource_mechanism": "Each grid cell has unlimited resources with a cap of 3 units visible to all miners per round."
+    },
+    "design_concepts": {
+      "interaction_patterns": "Miners contend for grid cells via energy investment and can subsequently exploit these cells for resources.",
+      "communication_protocols": "Resource availability and allocation are visible to all miners, allowing for strategic planning and interaction.",
+      "decision_mechanisms": "Energy investment determines contest outcomes; highest investment wins, ties resolved randomly. The landholder can maintain control by investing a minimum energy."
+    },
+    "details": {
+      "agent_behaviors": "Agents observe global map state, decide actions (occupy, maintain, or compete for land), and execute based on prior status and strategic goals.",
+      "decision_algorithms": "Energy investment decisions are strategic, with success in claiming a cell requiring waiting until the subsequent round to exploit resources.",
+      "specific_constraints": "Only the current landholder may exploit resources immediately following successful maintenance or acquisition of a cell."
+    }
+  },
+  "agent_types": {
+    "EnvAgent(SimulationOrchestrator)": "Role: Runs the world. Collects actions, enforces rules/budgets, resolves conflicts, updates ownership, computes mining, publishes logs, and ends the run.\nInputs: All agents’ action submissions for the round; global RNG seed; current world state.\nOutputs: Round outcome, updated state, public logs, termination events.\nWorkflow (per round):\n\nCollectDrafts → BudgetCheck/Clip → Ack: Receive each Miner’s draft action vector; run validation + stamina budget enforcement (see “Budget Enforcement”). If over-budget, return a BudgetViolationNotice once; accept corrected resubmission (one retry). If still invalid, deterministically clip and proceed.\n\nLock Submissions: Freeze all per-agent final actions for the round.\n\nAdjudication: Call AdjudicatorAgent to resolve claims/raids via deterministic RNG; apply results to ownership.\n\nMining: Process mining yields on plots owned after adjudication and subject to per-plot mining caps.\n\nPublish Logs: Emit PublicLogPublishedEvent with canonical, reproducible round logs.\n\nClose Round / Terminate: Emit RoundClosedEvent. If stop condition met (max rounds or other experiment rule), emit SimulationFinishedEvent and halt; else, advance to next round.",
+    "StrategistAgent(Per-Miner,OptionalAdvisor)": "Role: A local helper (no cross-miner coordination). Produces a ranked plan (e.g., prioritized buckets and per-plot order) to hand to MinerAgent.\nInputs: Same public info the MinerAgent has.\nOutput: Ranked allocations and tie-break ordering; MinerAgent may accept or override.\nWorkflow: Called by its MinerAgent before submission; no independent actions submitted to Env.",
+    "AdjudicatorAgent(ConflictResolution+RNG)": "Role: Deterministic, reproducible resolution of claim and raid contests using a SHA256-based RNG.\nInputs: Final, locked submissions from all miners; world state; global RNG seed.\nOutputs: Winners for each contested plot; updated owners.\nWorkflow:\n\nClaims (unowned plots): If multiple claimants, pick exactly one winner using RNG; losers get nothing.\n\nRaids (owned plots): If defender precommitted defend=1, the plot is shielded for this round (all raids fail). If no defense, and ≥1 raider, select exactly one attacker as the new owner using RNG.\n\nReturn ownership delta to EnvAgent.",
+    "ResourceMiner": "Role: Single point for all player decisions: allocate stamina across claim / raid / defend / mine to maximize personal cumulative gold (no global reward component).\nInformation State: Current ownership grid; previous round’s public log; their own stamina budget S; mining cap per owned plot; no knowledge of others’ current-round defense choices; no direct comms.\nAction Space (integers):\n\nclaim: set of unowned plot coordinates (1 stamina each).\n\nraid: set of owned-by-others plot coordinates (1 stamina each).\n\ndefend: {0 or 1} per currently owned plot (precommit; costs 1 if chosen, regardless of being attacked).\n\nmine: 0..s_max per owned plot (per-plot cap s_max, e.g., 3).\nConstraints: Sum of all costs ≤ S (enforced).\nWorkflow (per round):\n\nOptionally consult StrategistAgent (below) for a ranked draft plan.\n\nSubmit draft action vector (one shot); if BudgetViolationNotice returned, resubmit once with a corrected vector ≤ S.\n\nReceive public logs at end of round; adapt strategy next round."
+  },
+  "portrait": {
+    "EnvAgent": 1,
+    "StrategistAgent": 2,
+    "AdjudicatorAgent": 1,
+    "ResourceMiner": 5
+  },
+  "metrics": [
+    {
+      "id": "ResourceExploitationRate",
+      "name": "ResourceExploitationRate",
+      "description": "The rate at which resources are being exploited by miners over time.",
+      "visualization_type": "line",
+      "update_interval": 5,
+      "variables": [
+        {
+          "name": "global_map_state",
+          "source_type": "env",
+          "path": "global_map_state",
+          "required": true,
+          "is_list": false
+        },
+        {
+          "name": "miner_id",
+          "source_type": "agent",
+          "agent_type": "ResourceMiner",
+          "path": "miner_id",
+          "required": true,
+          "is_list": true
+        },
+        {
+          "name": "current_state",
+          "source_type": "agent",
+          "agent_type": "ResourceMiner",
+          "path": "current_state",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Calculate the number of cells being exploited by miners. Iterate over the global_map_state to count the number of cells with a current_state indicating exploitation. If global_map_state is None or empty, return 0. If current_state list is None or empty, return 0. If any value in current_state is None, skip that value. Return the count as a single data point for the line chart.",
+      "function_name": "ResourceExploitationRate"
+    },
+    {
+      "id": "EnergyInvestmentDistribution",
+      "name": "EnergyInvestmentDistribution",
+      "description": "The distribution of energy investments made by miners over time.",
+      "visualization_type": "bar",
+      "update_interval": 5,
+      "variables": [
+        {
+          "name": "miner_id",
+          "source_type": "agent",
+          "agent_type": "ResourceMiner",
+          "path": "miner_id",
+          "required": true,
+          "is_list": true
+        },
+        {
+          "name": "investment_strategy",
+          "source_type": "agent",
+          "agent_type": "ResourceMiner",
+          "path": "investment_strategy",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Calculate the total energy investment for each miner. Iterate over the investment_strategy list and sum the energy investments for each miner. If investment_strategy list is None or empty, return an empty dictionary. If any value in investment_strategy is None, skip that value. Return a dictionary where each key is a miner_id and the value is the total energy investment for that miner.",
+      "function_name": "EnergyInvestmentDistribution"
+    },
+    {
+      "id": "ResolutionOutcomeSuccessRate",
+      "name": "ResolutionOutcomeSuccessRate",
+      "description": "The success rate of resolution outcomes in land disputes over time.",
+      "visualization_type": "pie",
+      "update_interval": 5,
+      "variables": [
+        {
+          "name": "resolution_status",
+          "source_type": "agent",
+          "agent_type": "AdjudicatorAgent",
+          "path": "resolution_status",
+          "required": true,
+          "is_list": true
+        },
+        {
+          "name": "resolution_outcome",
+          "source_type": "agent",
+          "agent_type": "AdjudicatorAgent",
+          "path": "resolution_outcome",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Calculate the success rate of resolution outcomes. Iterate over the resolution_status list and count the number of successful and unsuccessful outcomes. If resolution_status list is None or empty, return an empty dictionary. If any value in resolution_status is None, skip that value. Return a dictionary where each key is 'Success' or 'Failure' and the value is the count of successful or unsuccessful outcomes respectively.",
+      "function_name": "ResolutionOutcomeSuccessRate"
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+[
+    {
+        "name": "EarlyMajority",
+        "consideration_status": false,
+        "social_influence": 0,
+        "innovation_exposure": 1,
+        "decision_algorithm": "WeightedCriteriaAnalysis",
+        "perceived_advantage": 0.2265451099334499,
+        "trust_in_innovation": 0.6563269205491569,
+        "agent_type": "EarlyMajority",
+        "adoption_likelihood": 0.1463364426132261,
+        "network_connections": [
+            "Innovator_1",
+            "EarlyAdopter_3"
+        ],
+        "id": "10"
+    },
+    {
+        "name": "EarlyMajority",
+        "consideration_status": false,
+        "social_influence": 30,
+        "innovation_exposure": 1,
+        "decision_algorithm": "Cost-Benefit Analysis",
+        "perceived_advantage": 0.21044476251488242,
+        "trust_in_innovation": 0.7817201124902649,
+        "agent_type": "EarlyMajority",
+        "adoption_likelihood": 0.9876819159524372,
+        "network_connections": [
+            "Innovator_1",
+            "EarlyAdopter_3"
+        ],
+        "id": "11"
+    },
+    {
+        "name": "EarlyMajority",
+        "consideration_status": false,
+        "social_influence": 56,
+        "innovation_exposure": 1,
+        "decision_algorithm": "Peer Influence Assessment",
+        "perceived_advantage": 0.2977948262808908,
+        "trust_in_innovation": 0.31327060301208554,
+        "agent_type": "EarlyMajority",
+        "adoption_likelihood": 0.47240655928686326,
+        "network_connections": [
+            "Innovator_1",
+            "EarlyAdopter_3"
+        ],
+        "id": "12"
+    },
+    {
+        "name": "EarlyMajority",
+        "consideration_status": false,
+        "social_influence": 45,
+        "innovation_exposure": 1,
+        "decision_algorithm": "Risk Evaluation Matrix",
+        "perceived_advantage": 0.9040934038582518,
+        "trust_in_innovation": 0.975900937130442,
+        "agent_type": "EarlyMajority",
+        "adoption_likelihood": 0.5128231558884904,
+        "network_connections": [
+            "Innovator_1",
+            "EarlyAdopter_3"
+        ],
+        "id": "13"
+    },
+    {
+        "name": "EarlyMajority",
+        "consideration_status": false,
+        "social_influence": 28,
+        "innovation_exposure": 1,
+        "decision_algorithm": "Trend Analysis Model",
+        "perceived_advantage": 0.4538251690838656,
+        "trust_in_innovation": 0.7569855571700289,
+        "agent_type": "EarlyMajority",
+        "adoption_likelihood": 0.2277750364302945,
+        "network_connections": [
+            "Innovator_1",
+            "EarlyAdopter_3"
+        ],
+        "id": "14"
+    }
+]

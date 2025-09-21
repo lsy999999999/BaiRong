@@ -1,0 +1,94 @@
+{
+  "domain": "Politics",
+  "scene_name": "election_process_simulation",
+  "odd_protocol": {
+    "overview": {
+      "system_goal": "Simulate the dynamics of party competition, media influence, and voter behavior during elections to understand the impact of different electoral systems, media environments, and social network structures on political polarization and stability.",
+      "agent_types": "1. Voter: Attributes include id, ideology, party_identification, issue_positions, issue_importance, information_level, media_consumption, social_network, voting_history, susceptibility, economic_status, demographic_group. 2. Party: Attributes include id, ideology, platform, resources, strategy, base_voters, target_voters, message_framing, leadership, history. 3. Media: Attributes include id, type, ideology_bias, audience_reach, credibility, framing_strategy, agenda_setting_power, content_selection_bias, audience_demographics. 4. Interest_Group: Attributes include id, interests, resources, influence_strategy, connections, public_support, lobbying_effectiveness.",
+      "environment_description": "Includes electoral_system, polarization_index, economic_conditions, salient_issues, media_environment_diversity, and external_shocks. The environment simulates the electoral system type, economic conditions, and external shocks impacting the political landscape."
+    },
+    "design_concepts": {
+      "interaction_patterns": "Interactions include voters receiving information from media and social networks, parties positioning themselves based on voter preferences and opponent strategies, and interest groups influencing media agendas.",
+      "communication_protocols": "Media sets agendas and frames issues, parties communicate tailored messages to target voters, and voters exchange information within social networks.",
+      "decision_mechanisms": "Voters assess candidates based on ideological proximity and party identification, parties optimize policy positions to maximize voter support, and media selects content based on ideological alignment and audience interest."
+    },
+    "details": {
+      "agent_behaviors": "Voters update attitudes based on media consumption and social interactions, parties adapt strategies to voter feedback and election results, and media adjusts content framing to maintain audience engagement.",
+      "decision_algorithms": "Voter decisions involve evaluating candidates' utility based on issue positions and party identification. Parties use algorithms to optimize policy positions and message strategies. Media employs algorithms to select and frame content.",
+      "specific_constraints": "Constraints include limited resources for parties, media's credibility affecting influence, and voters' susceptibility to persuasion. Electoral systems impose rules on vote aggregation and winner determination."
+    }
+  },
+  "agent_types": {
+    "Voter": "Represents individuals participating in elections, characterized by their ideology, party identification, and susceptibility to media influence and social interactions.",
+    "Party": "Political entities that compete in elections, defined by their ideology, platform, and strategies to attract base and target voters.",
+    "Media": "Organizations that disseminate information, influencing public opinion through agenda setting, framing strategies, and content selection biases.",
+    "InterestGroup": "Organizations that advocate for specific interests, utilizing resources and influence strategies to impact media agendas and policy decisions."
+  },
+  "metrics": [
+    {
+      "id": "Media_Ideology_Bias_Distribution",
+      "name": "Media Ideology Bias Distribution",
+      "description": "Proportion of media outlets with different ideological biases to understand the media landscape's diversity.",
+      "visualization_type": "pie",
+      "update_frequency": 5,
+      "variables": [
+        {
+          "name": "media_ideology_bias",
+          "source_type": "agent",
+          "agent_type": "Media",
+          "path": "profile.media_ideology_bias",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Count the occurrences of each unique ideology bias string in the media_ideology_bias list. Handle None values by treating them as 'Unknown'. If the list is empty or contains only None values, return an empty distribution.",
+      "function_name": "Media_Ideology_Bias_Distribution"
+    },
+    {
+      "id": "Average_Voter_Information_Level",
+      "name": "Average Voter Information Level",
+      "description": "Average level of information among voters, indicating how informed the electorate is.",
+      "visualization_type": "line",
+      "update_frequency": 5,
+      "variables": [
+        {
+          "name": "voter_information_level",
+          "source_type": "agent",
+          "agent_type": "Voter",
+          "path": "profile.voter_information_level",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Calculate the average of all non-None values in the voter_information_level list. If the list is empty or all values are None, default the average to 0. Handle type errors by skipping non-float entries.",
+      "function_name": "Average_Voter_Information_Level"
+    },
+    {
+      "id": "Party_Strategy_Change_Rate",
+      "name": "Party Strategy Change Rate",
+      "description": "Percentage of parties that have changed their strategy in the current cycle, indicating strategic shifts.",
+      "visualization_type": "line",
+      "update_frequency": 5,
+      "variables": [
+        {
+          "name": "current_strategy",
+          "source_type": "agent",
+          "agent_type": "Party",
+          "path": "profile.current_strategy",
+          "required": true,
+          "is_list": true
+        },
+        {
+          "name": "new_strategy",
+          "source_type": "agent",
+          "agent_type": "Party",
+          "path": "profile.new_strategy",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Compare current_strategy and new_strategy for each party. Count the number of parties where current_strategy differs from new_strategy, ignoring None values. Calculate the percentage of such changes over the total number of parties. If lists are empty or only contain None values, return 0% change rate.",
+      "function_name": "Party_Strategy_Change_Rate"
+    }
+  ]
+}

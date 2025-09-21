@@ -1,0 +1,12 @@
+[
+    {
+        "source_agent": "ResourceMiner",
+        "target_agent": "ResourceMiner",
+        "direction": "unidirectional"
+    },
+    {
+        "source_agent": "ResourceMiner",
+        "target_agent": "AdjudicatorAgent",
+        "direction": "bidirectional"
+    }
+]

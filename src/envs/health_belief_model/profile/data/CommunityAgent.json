@@ -1,0 +1,172 @@
+[
+    {
+        "name": "HealthOptimizer",
+        "community_norms": [
+            "no smoking in public areas",
+            "exercise encouraged"
+        ],
+        "perceived_susceptibility": 0.673585921156422,
+        "perceived_severity": 0.6522795204161503,
+        "perceived_benefits": 0.5642324655783156,
+        "perceived_barriers": 0.2714008735434016,
+        "self_efficacy": 0.5513235603735027,
+        "external_cues": [
+            "health campaign",
+            "community meeting"
+        ],
+        "interaction_patterns": [
+            "family_support",
+            "media_influence"
+        ],
+        "available_resources": [
+            "local clinic",
+            "community center"
+        ],
+        "agent_type": "CommunityAgent",
+        "community_health_data": {
+            "health_index": 75,
+            "resources": {
+                "clinics": 5,
+                "hospitals": 2
+            }
+        },
+        "decision_algorithm": "BayesianInference",
+        "id": "10"
+    },
+    {
+        "name": "WellnessStrategist",
+        "community_norms": [
+            "no smoking in public areas",
+            "exercise encouraged"
+        ],
+        "perceived_susceptibility": 0.25955728293913616,
+        "perceived_severity": 0.20940427410486973,
+        "perceived_benefits": 0.9280483594042662,
+        "perceived_barriers": 0.8220461276677521,
+        "self_efficacy": 0.75746620960596,
+        "external_cues": [
+            "health campaign",
+            "community meeting"
+        ],
+        "interaction_patterns": [
+            "family_support",
+            "media_influence"
+        ],
+        "available_resources": [
+            "local clinic",
+            "community center"
+        ],
+        "agent_type": "CommunityAgent",
+        "community_health_data": {
+            "health_index": 75,
+            "resources": {
+                "clinics": 5,
+                "hospitals": 2
+            }
+        },
+        "decision_algorithm": "ReinforcementLearning",
+        "id": "11"
+    },
+    {
+        "name": "VitalityPlanner",
+        "community_norms": [
+            "no smoking in public areas",
+            "exercise encouraged"
+        ],
+        "perceived_susceptibility": 0.4650608861356651,
+        "perceived_severity": 0.11851710597092013,
+        "perceived_benefits": 0.7595125504783182,
+        "perceived_barriers": 0.19653262413604233,
+        "self_efficacy": 0.32355206744851306,
+        "external_cues": [
+            "health campaign",
+            "community meeting"
+        ],
+        "interaction_patterns": [
+            "family_support",
+            "media_influence"
+        ],
+        "available_resources": [
+            "local clinic",
+            "community center"
+        ],
+        "agent_type": "CommunityAgent",
+        "community_health_data": {
+            "health_index": 75,
+            "resources": {
+                "clinics": 5,
+                "hospitals": 2
+            }
+        },
+        "decision_algorithm": "GeneticAlgorithm",
+        "id": "12"
+    },
+    {
+        "name": "FitnessGuardian",
+        "community_norms": [
+            "no smoking in public areas",
+            "exercise encouraged"
+        ],
+        "perceived_susceptibility": 0.38348026210926356,
+        "perceived_severity": 0.25929509906210824,
+        "perceived_benefits": 0.9753621988944056,
+        "perceived_barriers": 0.02774693240769266,
+        "self_efficacy": 0.09757936052228156,
+        "external_cues": [
+            "health campaign",
+            "community meeting"
+        ],
+        "interaction_patterns": [
+            "family_support",
+            "media_influence"
+        ],
+        "available_resources": [
+            "local clinic",
+            "community center"
+        ],
+        "agent_type": "CommunityAgent",
+        "community_health_data": {
+            "health_index": 75,
+            "resources": {
+                "clinics": 5,
+                "hospitals": 2
+            }
+        },
+        "decision_algorithm": "NeuralNetworks",
+        "id": "13"
+    },
+    {
+        "name": "LifestyleAdvisor",
+        "community_norms": [
+            "no smoking in public areas",
+            "exercise encouraged"
+        ],
+        "perceived_susceptibility": 0.29314908916228666,
+        "perceived_severity": 0.013969041029370799,
+        "perceived_benefits": 0.9005520308590375,
+        "perceived_barriers": 0.8262917217620019,
+        "self_efficacy": 0.4980339140986759,
+        "external_cues": [
+            "health campaign",
+            "community meeting"
+        ],
+        "interaction_patterns": [
+            "family_support",
+            "media_influence"
+        ],
+        "available_resources": [
+            "local clinic",
+            "community center"
+        ],
+        "agent_type": "CommunityAgent",
+        "community_health_data": {
+            "health_index": 75,
+            "resources": {
+                "clinics": 5,
+                "hospitals": 2
+            }
+        },
+        "decision_algorithm": "DecisionTreeAnalysis",
+        "id": "14"
+    }
+]

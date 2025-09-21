@@ -1,0 +1,92 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Jane Doe",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's full name"
+    },
+    "participation_status": {
+        "type": "str",
+        "default": "not_participating",
+        "private": false,
+        "sampling": "default"
+    },
+    "behavior_status": {
+        "type": "str",
+        "default": "inactive",
+        "private": false,
+        "sampling": "default"
+    },
+    "age": {
+        "type": "int",
+        "default": 30,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            18,
+            80
+        ]
+    },
+    "socioeconomic_status": {
+        "type": "str",
+        "default": "middle_class",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "low_income",
+            "middle_class",
+            "high_income"
+        ]
+    },
+    "cultural_background": {
+        "type": "str",
+        "default": "diverse",
+        "private": false,
+        "sampling": "llm",
+        "description": "The cultural context of the community member"
+    },
+    "health_issues": {
+        "type": "list",
+        "default": [
+            "hypertension"
+        ],
+        "private": false,
+        "sampling": "random",
+        "sample_size": 3
+    },
+    "communication_channels": {
+        "type": "list",
+        "default": [
+            "social_media",
+            "community_meetings"
+        ],
+        "private": false,
+        "sampling": "random",
+        "sample_size": 2
+    },
+    "interaction_influence": {
+        "type": "float",
+        "default": 0.5,
+        "private": true,
+        "sampling": "default"
+    },
+    "resource_access": {
+        "type": "str",
+        "default": "limited",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "limited",
+            "moderate",
+            "ample"
+        ]
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

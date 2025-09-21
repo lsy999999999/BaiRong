@@ -1,0 +1,17 @@
+[
+    {
+        "source_agent": "ParticipantA",
+        "target_agent": "ParticipantA",
+        "direction": "unidirectional"
+    },
+    {
+        "source_agent": "ParticipantA",
+        "target_agent": "FeedbackerC",
+        "direction": "unidirectional"
+    },
+    {
+        "source_agent": "ParticipantB",
+        "target_agent": "ParticipantA",
+        "direction": "unidirectional"
+    }
+]

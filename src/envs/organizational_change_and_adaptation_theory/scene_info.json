@@ -1,0 +1,106 @@
+{
+  "domain": "Organization",
+  "scene_name": "organizational_change_and_adaptation_theory",
+  "odd_protocol": {
+    "overview": {
+      "system_goal": "The goal of this simulation is to use large language models (LLMs) to simulate how organizations undergo change and adaptation in response to internal and external shifts. The simulation explores how employees, leaders, and managers within an organization respond to change, focusing on communication, feedback, and adjustment mechanisms during the change process. By simulating adaptation to various types of change, the LLM helps us understand how change implementation affects employee behavior, work performance, and organizational culture transformation.",
+      "agent_types": "Employee Agents: Represent employees within the organization, showing varied responses to change such as support, resistance, or adaptation. Their behavior and emotional responses are influenced by the type of change and leadership style. Leader Agents: Guide the change process, making crucial decisions, communicating, and providing feedback. They help employees adapt through encouragement, motivation, and coordination. Manager Agents: Oversee the specific execution of changes, ensuring the process proceeds as planned and assisting employees in overcoming resistance.",
+      "environment_description": "The environment includes a simulated organizational setting where different types of changes occur, such as incremental improvements, rapid adjustments due to market shifts, and strategic realignments. The environment is dynamic, with interactions among various agents representing different organizational roles and levels."
+    },
+    "design_concepts": {
+      "interaction_patterns": "Agents interact through meetings, training sessions, and feedback mechanisms. Employee agents may show support or resistance, while leaders and managers adjust strategies based on feedback.",
+      "communication_protocols": "Leaders communicate change goals and motivate employees through meetings and training. Managers adjust implementation plans based on feedback, ensuring effective communication across the organization.",
+      "decision_mechanisms": "Leaders and managers make decisions on change strategies and adjustments based on employee feedback and emotional responses. Employee agents decide on their level of support or resistance based on leadership communication and change type."
+    },
+    "details": {
+      "agent_behaviors": "Leaders plan and communicate change, motivate employees. Managers execute plans, coordinate departments. Employees either support or resist change, adapting through training and feedback.",
+      "decision_algorithms": "Leaders and managers use feedback loops to adjust change strategies. Employees' decisions to support or resist are influenced by communication and perceived impact on their roles.",
+      "specific_constraints": "Minimum of 4 agents: 1 leader, 1 manager, 2 employees. Recommended 10 agents for complex simulations. Initial states set for each agent role. Change types include incremental, rapid, and strategic, each with specific adaptation processes."
+    }
+  },
+  "agent_types": {
+    "EmployeeAgent": "Represents employees within the organization, showing varied responses to change such as support, resistance, or adaptation.",
+    "LeaderAgent": "Guides the change process, making crucial decisions, communicating, and providing feedback to help employees adapt.",
+    "ManagerAgent": "Oversees the execution of changes, ensuring the process proceeds as planned and assists employees in overcoming resistance."
+  },
+  "portrait": {
+    "EmployeeAgent": 3,
+    "LeaderAgent": 1,
+    "ManagerAgent": 4
+  },
+  "metrics": [
+    {
+      "id": "Employee_Feedback_Sentiment",
+      "name": "Employee Feedback Sentiment",
+      "description": "Measures the overall sentiment of employee feedback regarding organizational changes.",
+      "visualization_type": "pie",
+      "update_interval": 5,
+      "variables": [
+        {
+          "name": "feedback",
+          "source_type": "agent",
+          "agent_type": "EmployeeAgent",
+          "path": "profile.feedback",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Aggregate feedback from all EmployeeAgents. Handle edge cases by skipping None values or empty strings. Use sentiment analysis to categorize feedback into positive, neutral, or negative sentiments. Calculate the proportion of each sentiment category for visualization.",
+      "function_name": "Employee_Feedback_Sentiment"
+    },
+    {
+      "id": "Change_Goals_Completion_Rate",
+      "name": "Change Goals Completion Rate",
+      "description": "Tracks the percentage of change goals set by LeaderAgents that have been successfully reported as completed.",
+      "visualization_type": "line",
+      "update_interval": 5,
+      "variables": [
+        {
+          "name": "change_goals",
+          "source_type": "agent",
+          "agent_type": "LeaderAgent",
+          "path": "profile.change_goals",
+          "required": true,
+          "is_list": true
+        },
+        {
+          "name": "final_report",
+          "source_type": "agent",
+          "agent_type": "LeaderAgent",
+          "path": "profile.final_report",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Compare the list of change goals against final reports from LeaderAgents. Calculate the completion rate by dividing the number of goals mentioned in final reports by the total number of goals. Handle None values and empty lists by assuming zero completion. Present the completion rate as a percentage.",
+      "function_name": "Change_Goals_Completion_Rate"
+    },
+    {
+      "id": "Manager_Execution_Effectiveness",
+      "name": "Manager Execution Effectiveness",
+      "description": "Evaluates how effectively managers are executing change strategies by comparing planned strategies to execution status.",
+      "visualization_type": "line",
+      "update_interval": 5,
+      "variables": [
+        {
+          "name": "execution_status",
+          "source_type": "agent",
+          "agent_type": "ManagerAgent",
+          "path": "profile.execution_status",
+          "required": true,
+          "is_list": true
+        },
+        {
+          "name": "adjusted_strategy",
+          "source_type": "agent",
+          "agent_type": "ManagerAgent",
+          "path": "profile.adjusted_strategy",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "For each ManagerAgent, compare execution status against adjusted strategies. Calculate effectiveness by determining the match between planned and executed actions. Handle None values and empty lists by assuming no match. Aggregate results to show trends over time, useful for line visualization.",
+      "function_name": "Manager_Execution_Effectiveness"
+    }
+  ]
+}

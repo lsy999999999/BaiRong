@@ -1,0 +1,72 @@
+{
+    "name": {
+        "type": "str",
+        "default": "VoterAgent",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's designated name"
+    },
+    "current_political_preference": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "default"
+    },
+    "selected_media_id": {
+        "type": "int",
+        "default": -1,
+        "private": true,
+        "sampling": "default"
+    },
+    "adjusted_political_preference": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "default"
+    },
+    "initial_political_bias": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "media_consumption_pattern": {
+        "type": "list",
+        "default": [
+            "neutral",
+            "biased_left",
+            "biased_right"
+        ],
+        "private": false,
+        "sampling": "random",
+        "sample_size": 3
+    },
+    "decision_making_algorithm": {
+        "type": "str",
+        "default": "heuristic",
+        "private": false,
+        "sampling": "llm",
+        "description": "The algorithm used by the agent to decide on media consumption"
+    },
+    "exposure_to_opposing_views": {
+        "type": "float",
+        "default": 0.2,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

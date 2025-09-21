@@ -1,0 +1,87 @@
+[
+    {
+        "name": "Alex Johnson",
+        "completion_status": "pending",
+        "interaction_count": 0,
+        "trust_level": 50.0,
+        "polling_method": "open_discussion",
+        "experience_years": 7,
+        "agent_type": "Pollster",
+        "selected_voter": "awaiting_selection",
+        "opinion_data": [
+            {
+                "question": "Policy preference?",
+                "response": "undecided"
+            }
+        ],
+        "id": "5"
+    },
+    {
+        "name": "Morgan Lee",
+        "completion_status": "pending",
+        "interaction_count": 0,
+        "trust_level": 50.0,
+        "polling_method": "survey",
+        "experience_years": 9,
+        "agent_type": "Pollster",
+        "selected_voter": "awaiting_selection",
+        "opinion_data": [
+            {
+                "question": "Policy preference?",
+                "response": "undecided"
+            }
+        ],
+        "id": "6"
+    },
+    {
+        "name": "Jordan Smith",
+        "completion_status": "pending",
+        "interaction_count": 0,
+        "trust_level": 50.0,
+        "polling_method": "structured_questions",
+        "experience_years": 19,
+        "agent_type": "Pollster",
+        "selected_voter": "awaiting_selection",
+        "opinion_data": [
+            {
+                "question": "Policy preference?",
+                "response": "undecided"
+            }
+        ],
+        "id": "7"
+    },
+    {
+        "name": "Taylor Brown",
+        "completion_status": "pending",
+        "interaction_count": 0,
+        "trust_level": 50.0,
+        "polling_method": "open_discussion",
+        "experience_years": 1,
+        "agent_type": "Pollster",
+        "selected_voter": "awaiting_selection",
+        "opinion_data": [
+            {
+                "question": "Policy preference?",
+                "response": "undecided"
+            }
+        ],
+        "id": "8"
+    },
+    {
+        "name": "Casey Davis",
+        "completion_status": "pending",
+        "interaction_count": 0,
+        "trust_level": 50.0,
+        "polling_method": "structured_questions",
+        "experience_years": 20,
+        "agent_type": "Pollster",
+        "selected_voter": "awaiting_selection",
+        "opinion_data": [
+            {
+                "question": "Policy preference?",
+                "response": "undecided"
+            }
+        ],
+        "id": "9"
+    }
+]

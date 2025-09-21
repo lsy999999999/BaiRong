@@ -1,0 +1,150 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Jane Doe",
+        "private": false,
+        "sampling": "llm",
+        "description": "A realistic name suitable for a job seeker in the labor market."
+    },
+    "skills": {
+        "type": "list",
+        "default": [],
+        "private": false,
+        "sampling": "default"
+    },
+    "education": {
+        "type": "str",
+        "default": "Bachelor's Degree",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "High School",
+            "Associate's Degree",
+            "Bachelor's Degree",
+            "Master's Degree",
+            "PhD"
+        ]
+    },
+    "experience": {
+        "type": "int",
+        "default": 0,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0,
+            40
+        ]
+    },
+    "productivity": {
+        "type": "float",
+        "default": 1.0,
+        "private": true,
+        "sampling": "random",
+        "range": [
+            0.5,
+            1.5
+        ]
+    },
+    "salary_expectation": {
+        "type": "float",
+        "default": 50000.0,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            30000.0,
+            150000.0
+        ]
+    },
+    "job_preferences": {
+        "type": "list",
+        "default": [],
+        "private": true,
+        "sampling": "default"
+    },
+    "network": {
+        "type": "list",
+        "default": [],
+        "private": false,
+        "sampling": "default"
+    },
+    "risk_attitude": {
+        "type": "str",
+        "default": "moderate",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "risk-averse",
+            "moderate",
+            "risk-seeking"
+        ]
+    },
+    "job_search_strategy": {
+        "type": "str",
+        "default": "active",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "active",
+            "passive",
+            "networking"
+        ]
+    },
+    "negotiation_style": {
+        "type": "str",
+        "default": "collaborative",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "competitive",
+            "collaborative",
+            "compromising"
+        ]
+    },
+    "observable_traits": {
+        "type": "list",
+        "default": [],
+        "private": true,
+        "sampling": "default"
+    },
+    "reservation_wage": {
+        "type": "float",
+        "default": 40000.0,
+        "private": true,
+        "sampling": "random",
+        "range": [
+            25000.0,
+            100000.0
+        ]
+    },
+    "market_status": {
+        "type": "str",
+        "default": "",
+        "private": false,
+        "sampling": "default"
+    },
+    "applications_submitted": {
+        "type": "list",
+        "default": [],
+        "private": true,
+        "sampling": "default"
+    },
+    "negotiation_outcomes": {
+        "type": "list",
+        "default": [],
+        "private": true,
+        "sampling": "default"
+    },
+    "employment_status": {
+        "type": "str",
+        "default": "",
+        "private": false,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "int",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

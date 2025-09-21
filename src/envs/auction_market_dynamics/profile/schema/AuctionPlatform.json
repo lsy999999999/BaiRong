@@ -1,0 +1,92 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Auction Platform",
+        "private": false,
+        "sampling": "llm",
+        "description": "A descriptive name for the auction platform."
+    },
+    "mechanism_type": {
+        "type": "str",
+        "default": "English",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "English",
+            "Dutch",
+            "Sealed-bid",
+            "Vickrey"
+        ]
+    },
+    "fee_structure": {
+        "type": "str",
+        "default": "percentage",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "flat",
+            "percentage",
+            "tiered"
+        ]
+    },
+    "transparency_level": {
+        "type": "str",
+        "default": "high",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "low",
+            "medium",
+            "high"
+        ]
+    },
+    "history": {
+        "type": "list",
+        "default": [],
+        "private": true,
+        "sampling": "default"
+    },
+    "active_auctions": {
+        "type": "list",
+        "default": [],
+        "private": false,
+        "sampling": "default"
+    },
+    "bids": {
+        "type": "list",
+        "default": [],
+        "private": true,
+        "sampling": "default"
+    },
+    "auction_details": {
+        "type": "dict",
+        "default": {},
+        "private": true,
+        "sampling": "default"
+    },
+    "eligible_bids": {
+        "type": "list",
+        "default": [],
+        "private": true,
+        "sampling": "default"
+    },
+    "bidding_rules": {
+        "type": "dict",
+        "default": {},
+        "private": false,
+        "sampling": "default"
+    },
+    "auction_outcome": {
+        "type": "dict",
+        "default": {},
+        "private": false,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "int",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

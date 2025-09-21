@@ -1,0 +1,38 @@
+{
+    "social_classes": [
+        "Upper Class",
+        "Middle Class",
+        "Working Class",
+        "Lower Class"
+    ],
+    "cultural_capital_levels": [
+        2.3,
+        5.7,
+        1.8,
+        3.4
+    ],
+    "education_access": true,
+    "job_opportunities": [
+        "Software Engineer",
+        "Teacher",
+        "Retail Manager",
+        "Construction Worker"
+    ],
+    "social_mobility_index": 0.75,
+    "networking_opportunities": [
+        "Professional Meetup",
+        "Alumni Association",
+        "Community Workshop"
+    ],
+    "economic_capital": [
+        45000,
+        120000,
+        30000,
+        60000
+    ],
+    "individual_ambitions": [
+        "Advance in career",
+        "Gain higher education",
+        "Expand social network"
+    ]
+}

@@ -1,0 +1,75 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Default Seller",
+        "private": false,
+        "sampling": "llm",
+        "description": "A professional name suitable for a seller agent."
+    },
+    "reserve_price": {
+        "type": "float",
+        "default": 0.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "production_cost": {
+        "type": "float",
+        "default": 0.0,
+        "private": true,
+        "sampling": "default"
+    },
+    "auction_preference": {
+        "type": "str",
+        "choices": [
+            "first_price",
+            "second_price",
+            "sealed_bid",
+            "open_cry"
+        ],
+        "default": "first_price",
+        "private": false,
+        "sampling": "random"
+    },
+    "reputation": {
+        "type": "float",
+        "default": 0.0,
+        "private": true,
+        "sampling": "default"
+    },
+    "strategy": {
+        "type": "str",
+        "choices": [
+            "aggressive",
+            "conservative",
+            "balanced"
+        ],
+        "default": "balanced",
+        "private": false,
+        "sampling": "random"
+    },
+    "reserve_price_decision": {
+        "type": "float",
+        "default": 0.0,
+        "private": true,
+        "sampling": "default"
+    },
+    "market_analysis": {
+        "type": "list",
+        "default": [],
+        "private": true,
+        "sampling": "default"
+    },
+    "auction_history": {
+        "type": "list",
+        "default": [],
+        "private": true,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "int",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

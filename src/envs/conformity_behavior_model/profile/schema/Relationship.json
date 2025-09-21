@@ -1,0 +1,17 @@
+[
+    {
+        "source_agent": "IndividualAgent",
+        "target_agent": "GroupAgent",
+        "direction": "unidirectional"
+    },
+    {
+        "source_agent": "GroupAgent",
+        "target_agent": "DecisionContextAgent",
+        "direction": "unidirectional"
+    },
+    {
+        "source_agent": "OpinionLeaderAgent",
+        "target_agent": "IndividualAgent",
+        "direction": "unidirectional"
+    }
+]

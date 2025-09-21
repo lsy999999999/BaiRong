@@ -1,0 +1,92 @@
+[
+    {
+        "name": "Alex Thompson",
+        "change_goals": "Implement a sustainable energy policy across all departments to reduce carbon footprint by 30% over the next five years.",
+        "final_report": "Awaiting compilation",
+        "leadership_style": "transactional",
+        "communication_frequency": 7,
+        "motivation_level": 80,
+        "adaptation_strategy": "incremental",
+        "agent_type": "LeaderAgent",
+        "feedback_loop": [
+            {
+                "date": "2023-10-01",
+                "type": "initial",
+                "result": "positive"
+            }
+        ],
+        "id": "5"
+    },
+    {
+        "name": "Jordan Lee",
+        "change_goals": "Enhance digital transformation by integrating AI tools to improve decision-making processes and increase operational efficiency by 20% within two years.",
+        "final_report": "Awaiting compilation",
+        "leadership_style": "transformational",
+        "communication_frequency": 8,
+        "motivation_level": 80,
+        "adaptation_strategy": "rapid",
+        "agent_type": "LeaderAgent",
+        "feedback_loop": [
+            {
+                "date": "2023-10-01",
+                "type": "initial",
+                "result": "positive"
+            }
+        ],
+        "id": "6"
+    },
+    {
+        "name": "Morgan Patel",
+        "change_goals": "Foster a culture of continuous learning by establishing a comprehensive training program to upskill employees in emerging technologies.",
+        "final_report": "Awaiting compilation",
+        "leadership_style": "transactional",
+        "communication_frequency": 3,
+        "motivation_level": 80,
+        "adaptation_strategy": "incremental",
+        "agent_type": "LeaderAgent",
+        "feedback_loop": [
+            {
+                "date": "2023-10-01",
+                "type": "initial",
+                "result": "positive"
+            }
+        ],
+        "id": "7"
+    },
+    {
+        "name": "Taylor Kim",
+        "change_goals": "Strengthen diversity and inclusion by implementing initiatives that aim to increase representation of underrepresented groups in leadership roles by 25% in three years.",
+        "final_report": "Awaiting compilation",
+        "leadership_style": "laissez-faire",
+        "communication_frequency": 5,
+        "motivation_level": 80,
+        "adaptation_strategy": "incremental",
+        "agent_type": "LeaderAgent",
+        "feedback_loop": [
+            {
+                "date": "2023-10-01",
+                "type": "initial",
+                "result": "positive"
+            }
+        ],
+        "id": "8"
+    },
+    {
+        "name": "Casey Nguyen",
+        "change_goals": "Revamp customer engagement strategies to enhance customer satisfaction and retention rates by 15% through personalized service offerings and feedback loops.",
+        "final_report": "Awaiting compilation",
+        "leadership_style": "laissez-faire",
+        "communication_frequency": 5,
+        "motivation_level": 80,
+        "adaptation_strategy": "incremental",
+        "agent_type": "LeaderAgent",
+        "feedback_loop": [
+            {
+                "date": "2023-10-01",
+                "type": "initial",
+                "result": "positive"
+            }
+        ],
+        "id": "9"
+    }
+]

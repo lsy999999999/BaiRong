@@ -1,0 +1,164 @@
+{
+    "IndividualAgent": [
+        {
+            "id": 1,
+            "name": "evaluate_social_capital",
+            "condition": null,
+            "description": "Assess the social capital of the individual based on predefined criteria and calculate its value.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "individual_id",
+                    "type": "str",
+                    "context": "env",
+                    "description": "The unique identifier of the individual whose social capital is being evaluated."
+                },
+                {
+                    "name": "initial_social_capital",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "The initial social capital value assigned to the individual."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "social_capital_value",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Updated value of the individual's social capital after evaluation."
+                },
+                {
+                    "name": "cooperation_potential",
+                    "type": "bool",
+                    "context": "agent",
+                    "description": "Determines if the individual is likely to cooperate based on their evaluated social capital."
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "name": "decide_cooperation",
+            "condition": "Social capital and trust levels assessed",
+            "description": "Decide whether to cooperate with others based on the evaluated social capital and trust levels.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "individual_id",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Unique identifier for the individual making the cooperation decision."
+                },
+                {
+                    "name": "social_capital_value",
+                    "type": "float",
+                    "context": "event",
+                    "description": "The evaluated social capital value of the individual."
+                },
+                {
+                    "name": "cooperation_potential",
+                    "type": "bool",
+                    "context": "event",
+                    "description": "Indicates whether the individual is likely to cooperate based on social capital."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "decision",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "The decision made by the individual regarding cooperation ('cooperate' or 'not_cooperate')."
+                }
+            ]
+        }
+    ],
+    "SocialNetworkAgent": [
+        {
+            "id": 3,
+            "name": "analyze_relationships",
+            "condition": null,
+            "description": "Examine the relationships within the social network to identify potential connections and resource flow.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "network_id",
+                    "type": "str",
+                    "context": "env",
+                    "description": "Identifier for the social network being analyzed."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "analysis_summary",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Summary of the relationship analysis within the network."
+                },
+                {
+                    "name": "potential_updates",
+                    "type": "list",
+                    "context": "agent",
+                    "description": "List of potential updates to the network based on analysis."
+                }
+            ]
+        },
+        {
+            "id": 4,
+            "name": "update_network",
+            "condition": "Inputs from CooperationDecisionEvent and RelationshipsAnalyzedEvent",
+            "description": "Update the social network based on cooperation decisions and analyzed relationships.",
+            "type": "AND",
+            "required_variables": [
+                {
+                    "name": "individual_id",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Unique identifier for the individual making the cooperation decision."
+                },
+                {
+                    "name": "decision",
+                    "type": "str",
+                    "context": "event",
+                    "description": "The decision made by the individual regarding cooperation ('cooperate' or 'not_cooperate')."
+                },
+                {
+                    "name": "impact_on_network",
+                    "type": "str",
+                    "context": "event",
+                    "description": "The expected impact of the cooperation decision on the social network."
+                },
+                {
+                    "name": "network_id",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Identifier for the social network that was updated."
+                },
+                {
+                    "name": "analysis_summary",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Summary of the relationship analysis."
+                },
+                {
+                    "name": "potential_updates",
+                    "type": "list",
+                    "context": "event",
+                    "description": "List of potential updates to the network based on analysis."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "update_status",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Status of the network update process."
+                },
+                {
+                    "name": "changes_applied",
+                    "type": "list",
+                    "context": "agent",
+                    "description": "List of changes that were applied to the network."
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,78 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Jane Doe",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's full name"
+    },
+    "evidenceDetails": {
+        "type": "str",
+        "default": "awaiting_submission",
+        "private": true,
+        "sampling": "default"
+    },
+    "evidenceSubmitted": {
+        "type": "int",
+        "default": 0,
+        "private": false,
+        "sampling": "default"
+    },
+    "caseType": {
+        "type": "str",
+        "default": "unjust_enrichment",
+        "private": false,
+        "sampling": "llm",
+        "description": "Type of legal case the plaintiff is involved in"
+    },
+    "legalKnowledgeLevel": {
+        "type": "int",
+        "default": 50,
+        "private": true,
+        "sampling": "random",
+        "range": [
+            0,
+            100
+        ]
+    },
+    "currentStatus": {
+        "type": "str",
+        "default": "preparing_case",
+        "private": false,
+        "sampling": "default"
+    },
+    "evidenceList": {
+        "type": "list",
+        "default": [
+            {
+                "document": "contract_note",
+                "validity": "pending"
+            }
+        ],
+        "private": true,
+        "sampling": "default"
+    },
+    "communicationSkills": {
+        "type": "int",
+        "default": 70,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            30,
+            90
+        ]
+    },
+    "restitutionDemand": {
+        "type": "float",
+        "default": 10000.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

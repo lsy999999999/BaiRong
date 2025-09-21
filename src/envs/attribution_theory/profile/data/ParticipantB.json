@@ -1,0 +1,72 @@
+[
+    {
+        "name": "ParticipantB_001",
+        "behavior_type": "cooperative",
+        "intended_outcome": "successful collaboration",
+        "current_mood": "neutral",
+        "interaction_count": 0,
+        "performance_level": 50,
+        "communication_style": "Direct",
+        "task_complexity": 1,
+        "agent_type": "ParticipantB",
+        "feedback_received": [],
+        "attribution_decision": "undecided",
+        "id": "5"
+    },
+    {
+        "name": "ParticipantB_002",
+        "behavior_type": "cooperative",
+        "intended_outcome": "successful collaboration",
+        "current_mood": "neutral",
+        "interaction_count": 0,
+        "performance_level": 50,
+        "communication_style": "Persuasive",
+        "task_complexity": 5,
+        "agent_type": "ParticipantB",
+        "feedback_received": [],
+        "attribution_decision": "undecided",
+        "id": "6"
+    },
+    {
+        "name": "ParticipantB_003",
+        "behavior_type": "cooperative",
+        "intended_outcome": "successful collaboration",
+        "current_mood": "neutral",
+        "interaction_count": 0,
+        "performance_level": 50,
+        "communication_style": "Analytical",
+        "task_complexity": 2,
+        "agent_type": "ParticipantB",
+        "feedback_received": [],
+        "attribution_decision": "undecided",
+        "id": "7"
+    },
+    {
+        "name": "ParticipantB_004",
+        "behavior_type": "cooperative",
+        "intended_outcome": "successful collaboration",
+        "current_mood": "neutral",
+        "interaction_count": 0,
+        "performance_level": 50,
+        "communication_style": "Empathetic",
+        "task_complexity": 2,
+        "agent_type": "ParticipantB",
+        "feedback_received": [],
+        "attribution_decision": "undecided",
+        "id": "8"
+    },
+    {
+        "name": "ParticipantB_005",
+        "behavior_type": "cooperative",
+        "intended_outcome": "successful collaboration",
+        "current_mood": "neutral",
+        "interaction_count": 0,
+        "performance_level": 50,
+        "communication_style": "Assertive",
+        "task_complexity": 2,
+        "agent_type": "ParticipantB",
+        "feedback_received": [],
+        "attribution_decision": "undecided",
+        "id": "9"
+    }
+]

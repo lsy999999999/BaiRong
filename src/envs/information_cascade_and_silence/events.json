@@ -1,0 +1,368 @@
+{
+    "-1": {
+        "id": -1,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "OrdinaryUser",
+        "to_action_name": "receive_information",
+        "from_action_id": 0,
+        "to_action_id": 1,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for users to receive information from the environment",
+        "fields": []
+    },
+    "-2": {
+        "id": -2,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "OpinionLeader",
+        "to_action_name": "create_content",
+        "from_action_id": 0,
+        "to_action_id": 5,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for opinion leaders to create new content",
+        "fields": []
+    },
+    "-3": {
+        "id": -3,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "MediaOrganization",
+        "to_action_name": "select_content",
+        "from_action_id": 0,
+        "to_action_id": 7,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for media organizations to select and publish content",
+        "fields": []
+    },
+    "-4": {
+        "id": -4,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "FactCheckOrganization",
+        "to_action_name": "monitor_rumors",
+        "from_action_id": 0,
+        "to_action_id": 9,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for fact-check organizations to monitor rumors",
+        "fields": []
+    },
+    "-5": {
+        "id": -5,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "PlatformRegulator",
+        "to_action_name": "monitor_content",
+        "from_action_id": 0,
+        "to_action_id": 11,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for platform regulators to monitor content on social media",
+        "fields": []
+    },
+    "1": {
+        "id": 1,
+        "from_agent_type": "OrdinaryUser",
+        "from_action_name": "receive_information",
+        "to_agent_type": "OrdinaryUser",
+        "to_action_name": "evaluate_information",
+        "from_action_id": 1,
+        "to_action_id": 2,
+        "event_name": "InformationReceivedEvent",
+        "event_info": "User receives information and evaluates its credibility",
+        "fields": [
+            {
+                "name": "information_content",
+                "type": "str",
+                "default_value": "",
+                "description": "The content of the information being received by the user."
+            },
+            {
+                "name": "source_user_id",
+                "type": "str",
+                "default_value": "",
+                "description": "The ID of the user who shared the information."
+            },
+            {
+                "name": "credibility_score",
+                "type": "float",
+                "default_value": 0.0,
+                "description": "The perceived credibility score of the information."
+            }
+        ]
+    },
+    "2": {
+        "id": 2,
+        "from_agent_type": "OrdinaryUser",
+        "from_action_name": "evaluate_information",
+        "to_agent_type": "OrdinaryUser",
+        "to_action_name": "express_opinion",
+        "from_action_id": 2,
+        "to_action_id": 3,
+        "event_name": "EvaluationCompleteEvent",
+        "event_info": "User completes evaluation and decides whether to express an opinion",
+        "fields": [
+            {
+                "name": "evaluation_result",
+                "type": "str",
+                "default_value": "undecided",
+                "description": "The result of the user's evaluation, e.g., 'credible', 'not credible', or 'undecided'."
+            },
+            {
+                "name": "expression_willingness",
+                "type": "float",
+                "default_value": 0.0,
+                "description": "The willingness of the user to express their opinion publicly."
+            }
+        ]
+    },
+    "3": {
+        "id": 3,
+        "from_agent_type": "OrdinaryUser",
+        "from_action_name": "express_opinion",
+        "to_agent_type": "OrdinaryUser",
+        "to_action_name": "spread_information",
+        "from_action_id": 3,
+        "to_action_id": 4,
+        "event_name": "OpinionExpressedEvent",
+        "event_info": "User expresses an opinion and spreads information to their social network",
+        "fields": [
+            {
+                "name": "opinion_content",
+                "type": "str",
+                "default_value": "",
+                "description": "The content of the opinion expressed by the user."
+            },
+            {
+                "name": "target_audience",
+                "type": "list",
+                "default_value": [],
+                "description": "A list of user IDs representing the audience receiving the opinion."
+            }
+        ]
+    },
+    "4": {
+        "id": 4,
+        "from_agent_type": "OrdinaryUser",
+        "from_action_name": "spread_information",
+        "to_agent_type": "OpinionLeader",
+        "to_action_name": "amplify_information",
+        "from_action_id": 4,
+        "to_action_id": 6,
+        "event_name": "InformationSpreadEvent",
+        "event_info": "Information is spread to opinion leaders for amplification",
+        "fields": [
+            {
+                "name": "information_content",
+                "type": "str",
+                "default_value": "",
+                "description": "The content of the information being spread."
+            },
+            {
+                "name": "opinion_leader_id",
+                "type": "str",
+                "default_value": "",
+                "description": "The ID of the opinion leader receiving the information."
+            }
+        ]
+    },
+    "5": {
+        "id": 5,
+        "from_agent_type": "OpinionLeader",
+        "from_action_name": "create_content",
+        "to_agent_type": "MediaOrganization",
+        "to_action_name": "select_content",
+        "from_action_id": 5,
+        "to_action_id": 7,
+        "event_name": "ContentCreatedEvent",
+        "event_info": "Opinion leader creates content and sends it to media organizations for selection",
+        "fields": [
+            {
+                "name": "content",
+                "type": "str",
+                "default_value": "",
+                "description": "The content created by the opinion leader."
+            },
+            {
+                "name": "media_org_id",
+                "type": "str",
+                "default_value": "",
+                "description": "The ID of the media organization to which the content is sent."
+            }
+        ]
+    },
+    "6": {
+        "id": 6,
+        "from_agent_type": "OpinionLeader",
+        "from_action_name": "amplify_information",
+        "to_agent_type": "MediaOrganization",
+        "to_action_name": "select_content",
+        "from_action_id": 6,
+        "to_action_id": 7,
+        "event_name": "InformationAmplifiedEvent",
+        "event_info": "Opinion leader amplifies information and shares it with media organizations",
+        "fields": [
+            {
+                "name": "amplified_content",
+                "type": "str",
+                "default_value": "",
+                "description": "The content amplified by the opinion leader."
+            },
+            {
+                "name": "media_org_id",
+                "type": "str",
+                "default_value": "",
+                "description": "The ID of the media organization receiving the amplified content."
+            }
+        ]
+    },
+    "7": {
+        "id": 7,
+        "from_agent_type": "MediaOrganization",
+        "from_action_name": "select_content",
+        "to_agent_type": "MediaOrganization",
+        "to_action_name": "publish_content",
+        "from_action_id": 7,
+        "to_action_id": 8,
+        "event_name": "ContentSelectedEvent",
+        "event_info": "Media organization selects content based on editorial policy",
+        "fields": [
+            {
+                "name": "selected_content",
+                "type": "str",
+                "default_value": "",
+                "description": "The content selected by the media organization based on editorial policy."
+            },
+            {
+                "name": "selection_criteria",
+                "type": "str",
+                "default_value": "",
+                "description": "The criteria used by the media organization to select the content."
+            }
+        ]
+    },
+    "8": {
+        "id": 8,
+        "from_agent_type": "MediaOrganization",
+        "from_action_name": "publish_content",
+        "to_agent_type": "FactCheckOrganization",
+        "to_action_name": "verify_information",
+        "from_action_id": 8,
+        "to_action_id": 10,
+        "event_name": "ContentPublishedEvent",
+        "event_info": "Media organization publishes content for public consumption and fact-checking",
+        "fields": [
+            {
+                "name": "published_content",
+                "type": "str",
+                "default_value": "",
+                "description": "The content published by the media organization."
+            },
+            {
+                "name": "fact_check_org_id",
+                "type": "str",
+                "default_value": "",
+                "description": "The ID of the fact-check organization that receives the published content."
+            }
+        ]
+    },
+    "9": {
+        "id": 9,
+        "from_agent_type": "FactCheckOrganization",
+        "from_action_name": "monitor_rumors",
+        "to_agent_type": "FactCheckOrganization",
+        "to_action_name": "verify_information",
+        "from_action_id": 9,
+        "to_action_id": 10,
+        "event_name": "RumorDetectedEvent",
+        "event_info": "Fact-check organization detects rumors and initiates verification",
+        "fields": [
+            {
+                "name": "rumor_content",
+                "type": "str",
+                "default_value": "",
+                "description": "The content of the rumor detected by the fact-check organization."
+            },
+            {
+                "name": "detection_confidence",
+                "type": "float",
+                "default_value": 0.0,
+                "description": "The confidence level of the rumor detection."
+            }
+        ]
+    },
+    "10": {
+        "id": 10,
+        "from_agent_type": "FactCheckOrganization",
+        "from_action_name": "verify_information",
+        "to_agent_type": "PlatformRegulator",
+        "to_action_name": "intervene_content",
+        "from_action_id": 10,
+        "to_action_id": 12,
+        "event_name": "VerificationCompleteEvent",
+        "event_info": "Fact-check organization completes verification and sends results to platform regulators",
+        "fields": [
+            {
+                "name": "verification_result",
+                "type": "str",
+                "default_value": "unverified",
+                "description": "The result of the verification process, e.g., 'verified', 'false', or 'unverified'."
+            },
+            {
+                "name": "platform_regulator_id",
+                "type": "str",
+                "default_value": "",
+                "description": "The ID of the platform regulator receiving the verification results."
+            }
+        ]
+    },
+    "11": {
+        "id": 11,
+        "from_agent_type": "PlatformRegulator",
+        "from_action_name": "monitor_content",
+        "to_agent_type": "PlatformRegulator",
+        "to_action_name": "intervene_content",
+        "from_action_id": 11,
+        "to_action_id": 12,
+        "event_name": "ContentMonitoredEvent",
+        "event_info": "Platform regulator monitors content for potential intervention",
+        "fields": [
+            {
+                "name": "monitored_content",
+                "type": "str",
+                "default_value": "",
+                "description": "The content being monitored by the platform regulator."
+            },
+            {
+                "name": "risk_level",
+                "type": "str",
+                "default_value": "low",
+                "description": "The assessed risk level of the monitored content, e.g., 'low', 'medium', or 'high'."
+            }
+        ]
+    },
+    "12": {
+        "id": 12,
+        "from_agent_type": "PlatformRegulator",
+        "from_action_name": "intervene_content",
+        "to_agent_type": "EnvAgent",
+        "to_action_name": "terminate",
+        "from_action_id": 12,
+        "to_action_id": -1,
+        "event_name": "InterventionCompleteEvent",
+        "event_info": "Platform regulator completes intervention and sends final results to the environment",
+        "fields": [
+            {
+                "name": "intervention_status",
+                "type": "str",
+                "default_value": "pending",
+                "description": "The status of the intervention, e.g., 'completed', 'failed', or 'pending'."
+            },
+            {
+                "name": "environment_update",
+                "type": "str",
+                "default_value": "",
+                "description": "The updates made to the environment as a result of the intervention."
+            }
+        ]
+    }
+}

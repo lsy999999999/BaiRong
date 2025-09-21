@@ -1,0 +1,84 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Agent Smith",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's full name"
+    },
+    "social_norms_score": {
+        "type": "float",
+        "default": 0.5,
+        "private": true,
+        "sampling": "default"
+    },
+    "adjusted_subjective_norms": {
+        "type": "dict",
+        "default": {
+            "peer_pressure": 0.7,
+            "family_influence": 0.6
+        },
+        "private": true,
+        "sampling": "default"
+    },
+    "attitude_score": {
+        "type": "float",
+        "default": 0.6,
+        "private": false,
+        "sampling": "default"
+    },
+    "perceived_behavioral_control": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "default"
+    },
+    "behavioral_intention": {
+        "type": "float",
+        "default": 0.7,
+        "private": false,
+        "sampling": "default"
+    },
+    "actual_behavior": {
+        "type": "str",
+        "default": "pending",
+        "private": false,
+        "sampling": "default"
+    },
+    "communication_style": {
+        "type": "str",
+        "default": "formal",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "formal",
+            "informal",
+            "neutral"
+        ]
+    },
+    "resource_availability": {
+        "type": "float",
+        "default": 1.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "interaction_history": {
+        "type": "list",
+        "default": [
+            {
+                "date": "2023-10-01",
+                "interaction": "discussion",
+                "outcome": "positive"
+            }
+        ],
+        "private": true,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

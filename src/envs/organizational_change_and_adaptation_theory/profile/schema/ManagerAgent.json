@@ -1,0 +1,110 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Alex Manager",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's full name, representing a typical manager in the organization"
+    },
+    "execution_status": {
+        "type": "str",
+        "default": "pending",
+        "private": false,
+        "sampling": "default"
+    },
+    "adjusted_strategy": {
+        "type": "str",
+        "default": "none",
+        "private": false,
+        "sampling": "default"
+    },
+    "department": {
+        "type": "str",
+        "default": "Operations",
+        "private": false,
+        "sampling": "llm",
+        "description": "The department the manager oversees, such as Operations, HR, or Marketing"
+    },
+    "experience_years": {
+        "type": "int",
+        "default": 10,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            5,
+            30
+        ]
+    },
+    "current_task": {
+        "type": "str",
+        "default": "reviewing_feedback",
+        "private": false,
+        "sampling": "default"
+    },
+    "communication_style": {
+        "type": "str",
+        "default": "collaborative",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "collaborative",
+            "directive",
+            "delegative"
+        ]
+    },
+    "stress_level": {
+        "type": "float",
+        "default": 0.3,
+        "private": true,
+        "sampling": "default"
+    },
+    "meeting_schedule": {
+        "type": "list",
+        "default": [
+            "2023-10-12 10:00:00",
+            "2023-10-12 14:00:00"
+        ],
+        "private": false,
+        "sampling": "default",
+        "sample_size": 2
+    },
+    "feedback_received": {
+        "type": "list",
+        "default": [
+            {
+                "employee_id": "E1",
+                "feedback": "positive"
+            },
+            {
+                "employee_id": "E2",
+                "feedback": "neutral"
+            }
+        ],
+        "private": true,
+        "sampling": "default"
+    },
+    "adaptation_score": {
+        "type": "float",
+        "default": 75.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "change_type_focus": {
+        "type": "str",
+        "default": "incremental",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "incremental",
+            "rapid",
+            "strategic"
+        ]
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

@@ -1,0 +1,72 @@
+[
+    {
+        "name": "Ava Thornton",
+        "charisma": 0.03732761398899109,
+        "credibility": 0.29952921265779264,
+        "visibility": 0.19272551483894607,
+        "consistency": 0.6998587654508714,
+        "strategic_thinking": 0.8778842994657317,
+        "current_status": "",
+        "agent_type": "OpinionLeaderAgent",
+        "influence_strength": 0.0,
+        "followers": [],
+        "decision_history": [],
+        "id": "10"
+    },
+    {
+        "name": "Liam Kensington",
+        "charisma": 0.020280498218270382,
+        "credibility": 0.12428312733900304,
+        "visibility": 0.08494939017541792,
+        "consistency": 0.7720432613854006,
+        "strategic_thinking": 0.2026876804685085,
+        "current_status": "",
+        "agent_type": "OpinionLeaderAgent",
+        "influence_strength": 0.0,
+        "followers": [],
+        "decision_history": [],
+        "id": "11"
+    },
+    {
+        "name": "Sophia Caldwell",
+        "charisma": 0.48075941048692084,
+        "credibility": 0.07529055123121764,
+        "visibility": 0.8854251478849079,
+        "consistency": 0.6129078167197543,
+        "strategic_thinking": 0.028286615625348288,
+        "current_status": "",
+        "agent_type": "OpinionLeaderAgent",
+        "influence_strength": 0.0,
+        "followers": [],
+        "decision_history": [],
+        "id": "12"
+    },
+    {
+        "name": "Ethan Sinclair",
+        "charisma": 0.5830453560923631,
+        "credibility": 0.7775681760827011,
+        "visibility": 0.4045521296340454,
+        "consistency": 0.46180682664163664,
+        "strategic_thinking": 0.7772421434851736,
+        "current_status": "",
+        "agent_type": "OpinionLeaderAgent",
+        "influence_strength": 0.0,
+        "followers": [],
+        "decision_history": [],
+        "id": "13"
+    },
+    {
+        "name": "Olivia Harrington",
+        "charisma": 0.4648570398904952,
+        "credibility": 0.5822750735164778,
+        "visibility": 0.6064931783709592,
+        "consistency": 0.6917862823709318,
+        "strategic_thinking": 0.48507274022182323,
+        "current_status": "",
+        "agent_type": "OpinionLeaderAgent",
+        "influence_strength": 0.0,
+        "followers": [],
+        "decision_history": [],
+        "id": "14"
+    }
+]

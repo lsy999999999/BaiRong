@@ -1,0 +1,180 @@
+{
+    "IndividualAgent": [
+        {
+            "id": 1,
+            "name": "initiate_contract_negotiation",
+            "condition": "null",
+            "description": "This action initiates the process of negotiating a social contract based on individual interests and desired terms.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "individual_interests",
+                    "type": "list",
+                    "context": "agent",
+                    "description": "List of individual interests that drive the need for a contract negotiation."
+                },
+                {
+                    "name": "proposal_details",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Detailed description of the contract proposal to be negotiated."
+                },
+                {
+                    "name": "negotiation_terms",
+                    "type": "dict",
+                    "context": "agent",
+                    "description": "Terms proposed for negotiation in the contract."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "negotiation_status",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Current status of the negotiation process."
+                }
+            ]
+        }
+    ],
+    "SocialGroupAgent": [
+        {
+            "id": 2,
+            "name": "evaluate_collective_interests",
+            "condition": "Reception of ContractProposalEvent",
+            "description": "This action evaluates the collective interests of the social group to form or modify a social contract.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "collective_interests",
+                    "type": "list",
+                    "context": "event",
+                    "description": "List of collective interests presented by the individual agent."
+                },
+                {
+                    "name": "evaluation_criteria",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Criteria used for evaluating the collective interests."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "evaluation_status",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Status of the collective interest evaluation process."
+                }
+            ]
+        }
+    ],
+    "GovernmentAgent": [
+        {
+            "id": 3,
+            "name": "enforce_laws",
+            "condition": "null",
+            "description": "This action enforces the laws as per the social contract, potentially triggering conflicts.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "law_details",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Details of the law being enforced."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "enforcement_status",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Current status of law enforcement."
+                }
+            ]
+        },
+        {
+            "id": 4,
+            "name": "review_social_contract",
+            "condition": "Reception of CollectiveInterestEvent",
+            "description": "This action reviews the terms of the social contract for approval and potential policy implications.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "contract_terms",
+                    "type": "dict",
+                    "context": "event",
+                    "description": "Terms of the social contract being reviewed."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "review_status",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Current status of the social contract review process."
+                }
+            ]
+        }
+    ],
+    "ContractBreakdownAgent": [
+        {
+            "id": 5,
+            "name": "simulate_conflict",
+            "condition": "Reception of LawEnforcementEvent",
+            "description": "This action simulates conflicts that may arise from law enforcement or contract breakdown.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "conflict_trigger",
+                    "type": "boolean",
+                    "context": "event",
+                    "description": "Indicates if the law enforcement triggers a conflict."
+                },
+                {
+                    "name": "conflict_details",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Details of the conflict being simulated."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "conflict_status",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Current status of the conflict simulation process."
+                }
+            ]
+        }
+    ],
+    "PublicPolicyAgent": [
+        {
+            "id": 6,
+            "name": "evaluate_policy_impacts",
+            "condition": "Reception of SocialContractApprovalEvent",
+            "description": "This action evaluates the impacts of public policies following the approval of social contract terms.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "policy_details",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Details of the policy being analyzed."
+                },
+                {
+                    "name": "impact_analysis_results",
+                    "type": "dict",
+                    "context": "agent",
+                    "description": "Results of the policy impact analysis."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "analysis_status",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Status of the policy impact analysis."
+                }
+            ]
+        }
+    ]
+}

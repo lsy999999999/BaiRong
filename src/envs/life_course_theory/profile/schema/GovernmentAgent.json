@@ -1,0 +1,79 @@
+{
+    "name": {
+        "type": "str",
+        "default": "GovernmentPolicyAgent",
+        "private": false,
+        "sampling": "llm",
+        "description": "The name of the government agent responsible for implementing policies"
+    },
+    "policy_details": {
+        "type": "str",
+        "default": "Healthcare reform policy",
+        "private": false,
+        "sampling": "llm",
+        "description": "Details of the policy being implemented by the government agent"
+    },
+    "policy_implemented": {
+        "type": "boolean",
+        "default": true,
+        "private": false,
+        "sampling": "default"
+    },
+    "economic_influence": {
+        "type": "int",
+        "default": 50,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0,
+            100
+        ]
+    },
+    "healthcare_priority": {
+        "type": "str",
+        "default": "high",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "low",
+            "medium",
+            "high"
+        ]
+    },
+    "education_policy_focus": {
+        "type": "str",
+        "default": "STEM enhancement",
+        "private": false,
+        "sampling": "llm",
+        "description": "The focus area of the government's education policy"
+    },
+    "current_budget": {
+        "type": "float",
+        "default": 1000000.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "socioeconomic_policy_impact": {
+        "type": "list",
+        "default": [
+            "tax reform",
+            "welfare programs"
+        ],
+        "private": false,
+        "sampling": "random",
+        "sample_size": 2
+    },
+    "policy_effectiveness": {
+        "type": "int",
+        "default": 75,
+        "private": false,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

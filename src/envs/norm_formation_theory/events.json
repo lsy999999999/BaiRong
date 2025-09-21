@@ -1,0 +1,182 @@
+{
+    "-1": {
+        "id": -1,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "IndividualAgent",
+        "to_action_name": "initialize_behavior_tendencies",
+        "from_action_id": 0,
+        "to_action_id": 1,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for setting up individual behavior tendencies",
+        "fields": []
+    },
+    "-2": {
+        "id": -2,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "IndividualAgent",
+        "to_action_name": "assign_to_social_group",
+        "from_action_id": 0,
+        "to_action_id": 2,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for assigning individuals to social groups",
+        "fields": []
+    },
+    "1": {
+        "id": 1,
+        "from_agent_type": "IndividualAgent",
+        "from_action_name": "initialize_behavior_tendencies",
+        "to_agent_type": "IndividualAgent",
+        "to_action_name": "assign_to_social_group",
+        "from_action_id": 1,
+        "to_action_id": 2,
+        "event_name": "BehaviorTendenciesInitializedEvent",
+        "event_info": "Behavior tendencies initialized for the individual",
+        "fields": [
+            {
+                "name": "individual_id",
+                "type": "int",
+                "default_value": "0",
+                "description": "Unique identifier for the individual agent"
+            },
+            {
+                "name": "behavior_tendencies",
+                "type": "list",
+                "default_value": "[]",
+                "description": "Initial behavior tendencies of the individual"
+            }
+        ]
+    },
+    "2": {
+        "id": 2,
+        "from_agent_type": "IndividualAgent",
+        "from_action_name": "assign_to_social_group",
+        "to_agent_type": "SocialGroupAgent",
+        "to_action_name": "add_member",
+        "from_action_id": 2,
+        "to_action_id": 5,
+        "event_name": "AssignedToGroupEvent",
+        "event_info": "Individual assigned to a social group",
+        "fields": [
+            {
+                "name": "individual_id",
+                "type": "int",
+                "default_value": "0",
+                "description": "Unique identifier for the individual agent"
+            },
+            {
+                "name": "group_id",
+                "type": "int",
+                "default_value": "0",
+                "description": "Unique identifier for the social group"
+            }
+        ]
+    },
+    "3": {
+        "id": 3,
+        "from_agent_type": "IndividualAgent",
+        "from_action_name": "observe_and_interact",
+        "to_agent_type": "IndividualAgent",
+        "to_action_name": "adjust_behavior",
+        "from_action_id": 3,
+        "to_action_id": 4,
+        "event_name": "InteractionObservedEvent",
+        "event_info": "Individual observed interaction within the group",
+        "fields": [
+            {
+                "name": "observer_id",
+                "type": "int",
+                "default_value": "0",
+                "description": "Unique identifier for the observing individual agent"
+            },
+            {
+                "name": "interaction_details",
+                "type": "str",
+                "default_value": "",
+                "description": "Details of the observed interaction"
+            }
+        ]
+    },
+    "4": {
+        "id": 4,
+        "from_agent_type": "IndividualAgent",
+        "from_action_name": "adjust_behavior",
+        "to_agent_type": "SocialGroupAgent",
+        "to_action_name": "update_group_norms",
+        "from_action_id": 4,
+        "to_action_id": 6,
+        "event_name": "BehaviorAdjustedEvent",
+        "event_info": "Individual adjusted behavior based on group interaction",
+        "fields": [
+            {
+                "name": "individual_id",
+                "type": "int",
+                "default_value": "0",
+                "description": "Unique identifier for the individual agent"
+            },
+            {
+                "name": "adjusted_behavior_tendencies",
+                "type": "list",
+                "default_value": "[]",
+                "description": "Adjusted behavior tendencies of the individual"
+            }
+        ]
+    },
+    "5": {
+        "id": 5,
+        "from_agent_type": "SocialGroupAgent",
+        "from_action_name": "add_member",
+        "to_agent_type": "IndividualAgent",
+        "to_action_name": "observe_and_interact",
+        "from_action_id": 5,
+        "to_action_id": 3,
+        "event_name": "MemberAddedEvent",
+        "event_info": "Individual added to social group",
+        "fields": [
+            {
+                "name": "group_id",
+                "type": "int",
+                "default_value": "0",
+                "description": "Unique identifier for the social group"
+            },
+            {
+                "name": "individual_id",
+                "type": "int",
+                "default_value": "0",
+                "description": "Unique identifier for the individual agent"
+            }
+        ]
+    },
+    "6": {
+        "id": 6,
+        "from_agent_type": "SocialGroupAgent",
+        "from_action_name": "update_group_norms",
+        "to_agent_type": "EnvAgent",
+        "to_action_name": "terminate",
+        "from_action_id": 6,
+        "to_action_id": -1,
+        "event_name": "GroupNormsUpdatedEvent",
+        "event_info": "Group norms updated based on individual behavior adjustment",
+        "fields": [
+            {
+                "name": "group_id",
+                "type": "int",
+                "default_value": "0",
+                "description": "Unique identifier for the social group"
+            },
+            {
+                "name": "updated_norms",
+                "type": "list",
+                "default_value": "[]",
+                "description": "Updated norms of the social group"
+            },
+            {
+                "name": "status",
+                "type": "str",
+                "default_value": "success",
+                "description": "Status of the norm update process"
+            }
+        ]
+    }
+}

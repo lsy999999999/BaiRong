@@ -1,0 +1,140 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Jane Doe",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's full name"
+    },
+    "age": {
+        "type": "int",
+        "default": 30,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            18,
+            80
+        ]
+    },
+    "personal_health_data": {
+        "type": "object",
+        "default": {
+            "blood_pressure": 120,
+            "cholesterol_level": 180
+        },
+        "private": true,
+        "sampling": "default"
+    },
+    "perceived_threat_level": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "default"
+    },
+    "perceived_susceptibility": {
+        "type": "float",
+        "default": 0.3,
+        "private": false,
+        "sampling": "default"
+    },
+    "perceived_severity": {
+        "type": "float",
+        "default": 0.4,
+        "private": false,
+        "sampling": "default"
+    },
+    "perceived_benefits": {
+        "type": "float",
+        "default": 0.6,
+        "private": false,
+        "sampling": "default"
+    },
+    "perceived_barriers": {
+        "type": "float",
+        "default": 0.2,
+        "private": false,
+        "sampling": "default"
+    },
+    "self_efficacy": {
+        "type": "float",
+        "default": 0.7,
+        "private": false,
+        "sampling": "default"
+    },
+    "adopted_behavior": {
+        "type": "str",
+        "default": "not_started",
+        "private": false,
+        "sampling": "default"
+    },
+    "adoption_success": {
+        "type": "bool",
+        "default": false,
+        "private": false,
+        "sampling": "default"
+    },
+    "social_support_network": {
+        "type": "list",
+        "default": [
+            "family",
+            "friends"
+        ],
+        "private": true,
+        "sampling": "random",
+        "sample_size": 3
+    },
+    "media_influence": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "health_education_level": {
+        "type": "str",
+        "default": "basic",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "basic",
+            "intermediate",
+            "advanced"
+        ]
+    },
+    "emotional_burden": {
+        "type": "float",
+        "default": 0.3,
+        "private": true,
+        "sampling": "default"
+    },
+    "available_resources": {
+        "type": "list",
+        "default": [
+            "healthcare",
+            "gym membership"
+        ],
+        "private": false,
+        "sampling": "random",
+        "sample_size": 2
+    },
+    "interaction_frequency": {
+        "type": "int",
+        "default": 5,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0,
+            10
+        ]
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

@@ -1,0 +1,317 @@
+{
+    "1": {
+        "id": 1,
+        "from_agent_type": "Individual",
+        "from_action_name": "perceive_risk",
+        "to_agent_type": "Individual",
+        "to_action_name": "adjust_behavior",
+        "from_action_id": 1,
+        "to_action_id": 2,
+        "event_name": "RiskPerceptionUpdatedEvent",
+        "event_info": "Individual updates risk perception based on information sources and personal experiences",
+        "fields": [
+            {
+                "name": "individual_id",
+                "type": "int",
+                "default_value": "0",
+                "description": "Unique identifier for the individual whose risk perception is updated"
+            },
+            {
+                "name": "risk_perception",
+                "type": "float",
+                "default_value": "0.0",
+                "description": "Updated risk perception value for the individual"
+            },
+            {
+                "name": "information_sources",
+                "type": "list",
+                "default_value": "[]",
+                "description": "List of information sources that influenced the risk perception update"
+            }
+        ]
+    },
+    "2": {
+        "id": 2,
+        "from_agent_type": "Individual",
+        "from_action_name": "adjust_behavior",
+        "to_agent_type": "HealthcareFacility",
+        "to_action_name": "provide_healthcare_services",
+        "from_action_id": 2,
+        "to_action_id": 6,
+        "event_name": "BehaviorAdjustedEvent",
+        "event_info": "Individual adjusts behavior, seeks healthcare services if necessary",
+        "fields": [
+            {
+                "name": "individual_id",
+                "type": "int",
+                "default_value": "0",
+                "description": "Unique identifier for the individual adjusting behavior"
+            },
+            {
+                "name": "healthcare_facility_id",
+                "type": "int",
+                "default_value": "0",
+                "description": "Identifier for the healthcare facility, if healthcare services are sought"
+            },
+            {
+                "name": "household_id",
+                "type": "int",
+                "default_value": "0",
+                "description": "Identifier for the household affected by the individual's behavior adjustment"
+            },
+            {
+                "name": "behavior_changes",
+                "type": "list",
+                "default_value": "[]",
+                "description": "List of behavior changes made by the individual"
+            }
+        ]
+    },
+    "3": {
+        "id": 3,
+        "from_agent_type": "Individual",
+        "from_action_name": "adjust_behavior",
+        "to_agent_type": "Household",
+        "to_action_name": "update_quarantine_status",
+        "from_action_id": 2,
+        "to_action_id": 5,
+        "event_name": "BehaviorAdjustedEvent",
+        "event_info": "Individual's behavior adjustment affects household quarantine status",
+        "fields": [
+            {
+                "name": "individual_id",
+                "type": "int",
+                "default_value": "0",
+                "description": "Unique identifier for the individual adjusting behavior"
+            },
+            {
+                "name": "healthcare_facility_id",
+                "type": "int",
+                "default_value": "0",
+                "description": "Identifier for the healthcare facility, if healthcare services are sought"
+            },
+            {
+                "name": "household_id",
+                "type": "int",
+                "default_value": "0",
+                "description": "Identifier for the household affected by the individual's behavior adjustment"
+            },
+            {
+                "name": "behavior_changes",
+                "type": "list",
+                "default_value": "[]",
+                "description": "List of behavior changes made by the individual"
+            }
+        ]
+    },
+    "4": {
+        "id": 4,
+        "from_agent_type": "PublicHealthAuthority",
+        "from_action_name": "evaluate_epidemiological_data",
+        "to_agent_type": "PublicHealthAuthority",
+        "to_action_name": "deploy_interventions",
+        "from_action_id": 3,
+        "to_action_id": 4,
+        "event_name": "EpidemiologicalDataEvaluatedEvent",
+        "event_info": "Public health authority evaluates data to determine intervention strategies",
+        "fields": [
+            {
+                "name": "public_health_authority_id",
+                "type": "int",
+                "default_value": "0",
+                "description": "Identifier for the public health authority evaluating the data"
+            },
+            {
+                "name": "epidemiological_data",
+                "type": "dict",
+                "default_value": "{}",
+                "description": "Data evaluated to determine intervention strategies"
+            }
+        ]
+    },
+    "5": {
+        "id": 5,
+        "from_agent_type": "PublicHealthAuthority",
+        "from_action_name": "deploy_interventions",
+        "to_agent_type": "Individual",
+        "to_action_name": "perceive_risk",
+        "from_action_id": 4,
+        "to_action_id": 1,
+        "event_name": "InterventionDeployedEvent",
+        "event_info": "Public health interventions affect individual risk perception",
+        "fields": [
+            {
+                "name": "public_health_authority_id",
+                "type": "int",
+                "default_value": "0",
+                "description": "Identifier for the public health authority deploying the intervention"
+            },
+            {
+                "name": "intervention_type",
+                "type": "str",
+                "default_value": "",
+                "description": "Type of intervention deployed"
+            },
+            {
+                "name": "target_individual_id",
+                "type": "int",
+                "default_value": "0",
+                "description": "Identifier for the target individual affected by the intervention"
+            },
+            {
+                "name": "healthcare_facility_id",
+                "type": "int",
+                "default_value": "0",
+                "description": "Identifier for the healthcare facility affected by the intervention"
+            }
+        ]
+    },
+    "6": {
+        "id": 6,
+        "from_agent_type": "PublicHealthAuthority",
+        "from_action_name": "deploy_interventions",
+        "to_agent_type": "HealthcareFacility",
+        "to_action_name": "allocate_resources",
+        "from_action_id": 4,
+        "to_action_id": 7,
+        "event_name": "InterventionDeployedEvent",
+        "event_info": "Interventions require healthcare facilities to allocate resources",
+        "fields": [
+            {
+                "name": "public_health_authority_id",
+                "type": "int",
+                "default_value": "0",
+                "description": "Identifier for the public health authority deploying the intervention"
+            },
+            {
+                "name": "intervention_type",
+                "type": "str",
+                "default_value": "",
+                "description": "Type of intervention deployed"
+            },
+            {
+                "name": "target_individual_id",
+                "type": "int",
+                "default_value": "0",
+                "description": "Identifier for the target individual affected by the intervention"
+            },
+            {
+                "name": "healthcare_facility_id",
+                "type": "int",
+                "default_value": "0",
+                "description": "Identifier for the healthcare facility affected by the intervention"
+            }
+        ]
+    },
+    "7": {
+        "id": 7,
+        "from_agent_type": "Household",
+        "from_action_name": "update_quarantine_status",
+        "to_agent_type": "EnvAgent",
+        "to_action_name": "terminate",
+        "from_action_id": 5,
+        "to_action_id": -1,
+        "event_name": "QuarantineStatusUpdatedEvent",
+        "event_info": "Household updates quarantine status, completing workflow branch",
+        "fields": [
+            {
+                "name": "household_id",
+                "type": "int",
+                "default_value": "0",
+                "description": "Identifier for the household updating quarantine status"
+            },
+            {
+                "name": "quarantine_status",
+                "type": "str",
+                "default_value": "none",
+                "description": "Updated quarantine status of the household"
+            }
+        ]
+    },
+    "8": {
+        "id": 8,
+        "from_agent_type": "HealthcareFacility",
+        "from_action_name": "provide_healthcare_services",
+        "to_agent_type": "EnvAgent",
+        "to_action_name": "terminate",
+        "from_action_id": 6,
+        "to_action_id": -1,
+        "event_name": "HealthcareServiceProvidedEvent",
+        "event_info": "Healthcare services provided, completing workflow branch",
+        "fields": [
+            {
+                "name": "healthcare_facility_id",
+                "type": "int",
+                "default_value": "0",
+                "description": "Identifier for the healthcare facility providing services"
+            },
+            {
+                "name": "service_type",
+                "type": "str",
+                "default_value": "",
+                "description": "Type of healthcare service provided"
+            },
+            {
+                "name": "completion_status",
+                "type": "str",
+                "default_value": "completed",
+                "description": "Status of the healthcare service provision"
+            }
+        ]
+    },
+    "9": {
+        "id": 9,
+        "from_agent_type": "HealthcareFacility",
+        "from_action_name": "allocate_resources",
+        "to_agent_type": "EnvAgent",
+        "to_action_name": "terminate",
+        "from_action_id": 7,
+        "to_action_id": -1,
+        "event_name": "ResourcesAllocatedEvent",
+        "event_info": "Resources allocated in response to interventions, completing workflow branch",
+        "fields": [
+            {
+                "name": "healthcare_facility_id",
+                "type": "int",
+                "default_value": "0",
+                "description": "Identifier for the healthcare facility allocating resources"
+            },
+            {
+                "name": "resources_allocated",
+                "type": "dict",
+                "default_value": "{}",
+                "description": "Details of resources allocated in response to interventions"
+            },
+            {
+                "name": "completion_status",
+                "type": "str",
+                "default_value": "completed",
+                "description": "Status of the resource allocation process"
+            }
+        ]
+    },
+    "-1": {
+        "id": -1,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "Individual",
+        "to_action_name": "perceive_risk",
+        "from_action_id": 0,
+        "to_action_id": 1,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for individual risk perception update",
+        "fields": []
+    },
+    "-2": {
+        "id": -2,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "PublicHealthAuthority",
+        "to_action_name": "evaluate_epidemiological_data",
+        "from_action_id": 0,
+        "to_action_id": 3,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for public health authority's evaluation of epidemiological data",
+        "fields": []
+    }
+}

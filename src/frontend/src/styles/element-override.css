@@ -1,0 +1,47 @@
+/* 使用更高优先级的选择器来覆盖Element Plus样式 */
+
+/* 暗黑模式按钮样式覆盖 */
+html.dark-theme body .el-message-box .el-message-box__btns .el-button {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-color) !important;
+}
+
+html.dark-theme body .el-message-box .el-message-box__btns .el-button:hover {
+  background-color: rgba(255, 255, 255, 0.15) !important;
+  border-color: var(--border-color) !important;
+}
+
+html.dark-theme body .el-message-box .el-message-box__btns .el-button--primary {
+  background-color: var(--accent-color) !important;
+  border-color: transparent !important;
+  color: white !important;
+}
+
+html.dark-theme body .el-message-box .el-message-box__btns .el-button--primary:hover {
+  background-color: #4170f3 !important;
+  border-color: transparent !important;
+}
+
+/* 亮色模式按钮样式覆盖 */
+html.light-theme body .el-message-box .el-message-box__btns .el-button {
+  background-color: rgba(0, 0, 0, 0.05) !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-color) !important;
+}
+
+html.light-theme body .el-message-box .el-message-box__btns .el-button:hover {
+  background-color: rgba(0, 0, 0, 0.08) !important;
+  border-color: var(--border-color) !important;
+}
+
+html.light-theme body .el-message-box .el-message-box__btns .el-button--primary {
+  background-color: var(--accent-color) !important;
+  border-color: transparent !important;
+  color: white !important;
+}
+
+html.light-theme body .el-message-box .el-message-box__btns .el-button--primary:hover {
+  background-color: #4170f3 !important;
+  border-color: transparent !important;
+} 

@@ -1,0 +1,87 @@
+[
+    {
+        "name": "EcoWarriors",
+        "interests": [
+            "Climate Change",
+            "Sustainable Living",
+            "Recycling Initiatives",
+            "Wildlife Conservation"
+        ],
+        "resources": 852,
+        "influence_strategy": "",
+        "public_support": 0.0,
+        "lobbying_effectiveness": 0.0,
+        "agent_type": "InterestGroup",
+        "connections": [],
+        "media_influence_effect": {},
+        "id": "15"
+    },
+    {
+        "name": "Tech Innovators",
+        "interests": [
+            "Artificial Intelligence",
+            "Blockchain Technology",
+            "Cybersecurity",
+            "Augmented Reality"
+        ],
+        "resources": 4285,
+        "influence_strategy": "",
+        "public_support": 0.0,
+        "lobbying_effectiveness": 0.0,
+        "agent_type": "InterestGroup",
+        "connections": [],
+        "media_influence_effect": {},
+        "id": "16"
+    },
+    {
+        "name": "Culinary Explorers",
+        "interests": [
+            "World Cuisines",
+            "Cooking Techniques",
+            "Food Photography",
+            "Farm-to-Table Movement"
+        ],
+        "resources": 1513,
+        "influence_strategy": "",
+        "public_support": 0.0,
+        "lobbying_effectiveness": 0.0,
+        "agent_type": "InterestGroup",
+        "connections": [],
+        "media_influence_effect": {},
+        "id": "17"
+    },
+    {
+        "name": "Art Enthusiasts",
+        "interests": [
+            "Modern Art",
+            "Sculpture",
+            "Photography",
+            "Art History"
+        ],
+        "resources": 4158,
+        "influence_strategy": "",
+        "public_support": 0.0,
+        "lobbying_effectiveness": 0.0,
+        "agent_type": "InterestGroup",
+        "connections": [],
+        "media_influence_effect": {},
+        "id": "18"
+    },
+    {
+        "name": "Health Advocates",
+        "interests": [
+            "Mental Health Awareness",
+            "Fitness and Wellness",
+            "Nutrition",
+            "Public Health Policies"
+        ],
+        "resources": 3253,
+        "influence_strategy": "",
+        "public_support": 0.0,
+        "lobbying_effectiveness": 0.0,
+        "agent_type": "InterestGroup",
+        "connections": [],
+        "media_influence_effect": {},
+        "id": "19"
+    }
+]

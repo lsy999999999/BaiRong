@@ -1,0 +1,73 @@
+{
+    "environment": {
+        "variables": [
+            {
+                "name": "legal_context",
+                "type": "string",
+                "default_value": null
+            },
+            {
+                "name": "socio_political_data",
+                "type": "string",
+                "default_value": null
+            }
+        ]
+    },
+    "agents": {
+        "JudgeAgent": {
+            "variables": [
+                {
+                    "name": "interpreted_precedents",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "judgment_result",
+                    "type": "string",
+                    "default_value": null
+                }
+            ]
+        },
+        "CaseAgent": {
+            "variables": [
+                {
+                    "name": "case_context",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "applied_interpretation",
+                    "type": "string",
+                    "default_value": null
+                }
+            ]
+        },
+        "PrecedentAgent": {
+            "variables": [
+                {
+                    "name": "stored_principles",
+                    "type": "string",
+                    "default_value": null
+                }
+            ]
+        },
+        "SocioPoliticalAgent": {
+            "variables": [
+                {
+                    "name": "socio_political_influences",
+                    "type": "string",
+                    "default_value": null
+                }
+            ]
+        },
+        "LegalExpertAgent": {
+            "variables": [
+                {
+                    "name": "outcome_analysis",
+                    "type": "string",
+                    "default_value": null
+                }
+            ]
+        }
+    }
+}

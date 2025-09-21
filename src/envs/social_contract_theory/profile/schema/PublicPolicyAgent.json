@@ -1,0 +1,73 @@
+{
+    "name": {
+        "type": "str",
+        "default": "PublicPolicyAgent",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's name representing public policy interests"
+    },
+    "impact_analysis_results": {
+        "type": "dict",
+        "default": {
+            "policy_effectiveness": 80,
+            "public_approval": 75
+        },
+        "private": true,
+        "sampling": "default"
+    },
+    "analysis_status": {
+        "type": "str",
+        "default": "awaiting_review",
+        "private": false,
+        "sampling": "default"
+    },
+    "policy_focus_area": {
+        "type": "str",
+        "default": "environmental_policy",
+        "private": false,
+        "sampling": "llm",
+        "description": "The main area of policy focus for the agent"
+    },
+    "current_strategy": {
+        "type": "str",
+        "default": "implement_regulations",
+        "private": false,
+        "sampling": "default"
+    },
+    "historical_data_reference": {
+        "type": "list",
+        "default": [
+            {
+                "year": 2020,
+                "policy": "carbon_tax",
+                "outcome": "positive"
+            }
+        ],
+        "private": true,
+        "sampling": "default"
+    },
+    "public_support_level": {
+        "type": "int",
+        "default": 60,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0,
+            100
+        ]
+    },
+    "decision_algorithm": {
+        "type": "str",
+        "default": "contract_theory_based",
+        "private": true,
+        "sampling": "llm",
+        "description": "The algorithm used by the agent to make policy decisions"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

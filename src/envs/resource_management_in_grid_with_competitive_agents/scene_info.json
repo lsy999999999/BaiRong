@@ -1,0 +1,87 @@
+{
+  "domain": "Organization",
+  "scene_name": "resource_management_in_grid_with_competitive_agents",
+  "odd_protocol": {
+    "overview": {
+      "system_goal": "To manage resource allocation and land ownership among miners on a grid structure.",
+      "agent_types": "Miners who can maintain or contest land ownership and exploit resources.",
+      "environment_description": "A 10x10 grid where each cell has infinite resources but limited productivity per round.",
+      "grid_resource_mechanism": "Each grid cell has unlimited resources with a cap of 3 units visible to all miners per round."
+    },
+    "design_concepts": {
+      "interaction_patterns": "Miners contend for grid cells via energy investment and can subsequently exploit these cells for resources.",
+      "communication_protocols": "Resource availability and allocation are visible to all miners, allowing for strategic planning and interaction.",
+      "decision_mechanisms": "Energy investment determines contest outcomes; highest investment wins, ties resolved randomly. The landholder can maintain control by investing a minimum energy."
+    },
+    "details": {
+      "agent_behaviors": "Agents observe global map state, decide actions (occupy, maintain, or compete for land), and execute based on prior status and strategic goals.",
+      "decision_algorithms": "Energy investment decisions are strategic, with success in claiming a cell requiring waiting until the subsequent round to exploit resources.",
+      "specific_constraints": "Only the current landholder may exploit resources immediately following successful maintenance or acquisition of a cell."
+    }
+  },
+  "agent_types": {
+    "ResourceMiner": "Responsible for occupying grid cells, investing energy to maintain or contest ownership, and exploiting resources from controlled land."
+  },
+  "portrait": {
+    "ResourceMiner": 3
+  },
+  "metrics": [
+    {
+      "id": "Total_Resource_Exploitation",
+      "name": "Total Resource Exploitation",
+      "description": "Measures the total resources exploited by all miners each round, providing an overview of system-level resource utilization.",
+      "visualization_type": "line",
+      "update_interval": 5,
+      "variables": [
+        {
+          "name": "resources_exploited",
+          "source_type": "agent",
+          "agent_type": "ResourceMiner",
+          "path": "resources_exploited",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Sum all values from the 'resources_exploited' list for the 'ResourceMiner' agent type. Handle None values and empty lists by treating them as zero, ensuring the summation is robust against such edge cases. Series data points represent total exploited resources for each interval.",
+      "function_name": "Total_Resource_Exploitation"
+    },
+    {
+      "id": "Average_Energy_Investment",
+      "name": "Average Energy Investment",
+      "description": "Shows the average energy investment by miners to contest land ownership each round, highlighting strategic behavior patterns.",
+      "visualization_type": "line",
+      "update_interval": 5,
+      "variables": [
+        {
+          "name": "energy_investment",
+          "source_type": "agent",
+          "agent_type": "ResourceMiner",
+          "path": "energy_investment",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Calculate the average of non-None values from the 'energy_investment' list for the 'ResourceMiner' agents. Ignore None values and handle empty lists by returning zero for average energy investment. This metric trends over time, indicating strategic shift or uniformity in investments.",
+      "function_name": "Average_Energy_Investment"
+    },
+    {
+      "id": "Land_Ownership_Distribution",
+      "name": "Land Ownership Distribution",
+      "description": "Provides a breakdown of current land ownership among miners, indicating control distribution and dominance in grid cells.",
+      "visualization_type": "pie",
+      "update_interval": 5,
+      "variables": [
+        {
+          "name": "land_cells_owned",
+          "source_type": "agent",
+          "agent_type": "ResourceMiner",
+          "path": "land_cells_owned",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Count the number of land cells owned by each miner type and use these totals to form a pie chart. Handle None values and empty lists by considering them as zero ownership, ensuring accurate distribution representation. This metric captures spatial control dynamics and emergent property outcomes.",
+      "function_name": "Land_Ownership_Distribution"
+    }
+  ]
+}

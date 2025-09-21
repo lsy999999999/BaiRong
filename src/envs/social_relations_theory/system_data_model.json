@@ -1,0 +1,93 @@
+{
+    "environment": {
+        "variables": [
+            {
+                "name": "interaction_type",
+                "type": "string",
+                "default_value": null
+            }
+        ]
+    },
+    "agents": {
+        "NewEmployee": {
+            "variables": [
+                {
+                    "name": "initiator_emotion",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "interaction_status",
+                    "type": "string",
+                    "default_value": null
+                }
+            ]
+        },
+        "ExperiencedEmployee": {
+            "variables": [
+                {
+                    "name": "initiator_emotion",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "interaction_status",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "emotional_state",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "work_motivation",
+                    "type": "string",
+                    "default_value": null
+                }
+            ]
+        },
+        "NeutralMember": {
+            "variables": [
+                {
+                    "name": "initiator_emotion",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "interaction_status",
+                    "type": "string",
+                    "default_value": null
+                }
+            ]
+        },
+        "TeamLeader": {
+            "variables": [
+                {
+                    "name": "feedback_content",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "feedback_status",
+                    "type": "string",
+                    "default_value": null
+                }
+            ]
+        },
+        "EmotionalAnalyzer": {
+            "variables": [
+                {
+                    "name": "emotion_analysis_result",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "analysis_status",
+                    "type": "string",
+                    "default_value": null
+                }
+            ]
+        }
+    }
+}

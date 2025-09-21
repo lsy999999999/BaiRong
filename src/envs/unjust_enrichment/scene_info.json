@@ -1,0 +1,94 @@
+{
+  "domain": "Law",
+  "scene_name": "unjust_enrichment",
+  "odd_protocol": {
+    "overview": {
+      "system_goal": "To simulate scenarios of unjust enrichment and explore legal rules for resolution without contractual relationships.",
+      "agent_types": "Plaintiff (victim seeking return of unjust enrichment), Defendant (party benefiting from unjust enrichment), Judge (adjudicates the case).",
+      "environment_description": "A legal simulation environment involving cases of unjust enrichment without contractual agreements.",
+      "focus": "The simulation focuses on identifying unjust enrichment and the legal mechanisms for restitution.",
+      "case_scenario": "Involves a case where one party gains property or benefits through illegal means, requiring judicial decision on restitution."
+    },
+    "design_concepts": {
+      "interaction_patterns": "Plaintiff presents evidence of unjust enrichment; Defendant argues legality or lack of responsibility; Judge evaluates claims and evidence.",
+      "communication_protocols": "Evidence submission by Plaintiff, defense argument by Defendant, and judicial questioning and decision-making by Judge.",
+      "decision_mechanisms": "Judge applies legal rules to determine the existence of unjust enrichment and decides on restitution or compensation.",
+      "legal_rules_application": "Judge considers different legal standards from various jurisdictions to assess restitution obligations.",
+      "compensation_decision": "In cases where restitution is challenging, the judge may decide on compensation instead."
+    },
+    "details": {
+      "agent_behaviors": "Plaintiff seeks restitution and provides evidence; Defendant defends against claims; Judge assesses evidence and rules on restitution.",
+      "decision_algorithms": "The judge analyzes case facts and legal standards to determine unjust enrichment and restitution methods.",
+      "specific_constraints": "Cases involve no contractual relationship, focusing on evidence of unjust enrichment and applicable legal standards.",
+      "evidence_analysis": "Includes payment records, transaction evidence, and witness testimonies to determine unjust enrichment.",
+      "restitution_mechanism": "Judge decides on restitution methods such as returning original property or equivalent value."
+    }
+  },
+  "agent_types": {
+    "Plaintiff": "The Plaintiff is the agent seeking restitution by presenting evidence of unjust enrichment, aiming for the return of benefits obtained by the Defendant.",
+    "Defendant": "The Defendant is the agent who has allegedly benefited from unjust enrichment and is responsible for presenting arguments to refute claims or demonstrate lack of responsibility.",
+    "Judge": "The Judge is the adjudicating agent responsible for evaluating the evidence and arguments presented by both Plaintiff and Defendant, and making decisions based on legal standards."
+  },
+  "portrait": {
+    "Plaintiff": 5,
+    "Defendant": 4,
+    "Judge": 1
+  },
+  "metrics": [
+    {
+      "id": "Case_Completion_Status_Distribution",
+      "name": "Case Completion Status Distribution",
+      "description": "This metric shows the distribution of cases based on their completion status, providing insights into how many cases are completed, pending, or in other states.",
+      "visualization_type": "line",
+      "update_frequency": 5,
+      "variables": [
+        {
+          "name": "completion_status",
+          "source_type": "env",
+          "path": "completion_status",
+          "required": true,
+          "is_list": false
+        }
+      ],
+      "calculation_logic": "Count the occurrences of each unique completion status from the environment variable. Handle None values by categorizing them as 'Unknown'. The pie chart slices represent the proportion of each status.",
+      "function_name": "Case_Completion_Status_Distribution"
+    },
+    {
+      "id": "Evidence_Submission_Rate",
+      "name": "Evidence Submission Rate",
+      "description": "This metric tracks the rate of evidence submission by Plaintiffs, indicating how actively Plaintiffs are engaging in the process.",
+      "visualization_type": "bar",
+      "update_frequency": 5,
+      "variables": [
+        {
+          "name": "evidence_submitted",
+          "source_type": "agent",
+          "agent_type": "Plaintiff",
+          "path": "evidence_submitted",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Calculate the percentage of Plaintiffs who have submitted evidence. Handle None values and empty lists by treating them as 'False'. The bar chart shows the proportion of submitted vs. not submitted.",
+      "function_name": "Evidence_Submission_Rate"
+    },
+    {
+      "id": "Judgment_Result_Trends",
+      "name": "Judgment Result Trends",
+      "description": "This metric shows the trend of different judgment results over time, providing insights into the outcomes of cases.",
+      "visualization_type": "line",
+      "update_frequency": 5,
+      "variables": [
+        {
+          "name": "judgment_result",
+          "source_type": "env",
+          "path": "judgment_result",
+          "required": true,
+          "is_list": false
+        }
+      ],
+      "calculation_logic": "Track the count of each judgment result over time. Handle None values by categorizing them as 'Undecided'. The line chart has multiple series, each representing a different judgment outcome, showing their respective counts over time.",
+      "function_name": "Judgment_Result_Trends"
+    }
+  ]
+}

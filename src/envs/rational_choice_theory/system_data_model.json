@@ -1,0 +1,55 @@
+{
+    "environment": {
+        "variables": [
+            {
+                "name": "decision_options",
+                "type": "list",
+                "default_value": null
+            }
+        ]
+    },
+    "agents": {
+        "RationalDecisionMaker": {
+            "variables": [
+                {
+                    "name": "personal_goals",
+                    "type": "dict",
+                    "default_value": null
+                },
+                {
+                    "name": "resource_status",
+                    "type": "dict",
+                    "default_value": null
+                },
+                {
+                    "name": "evaluated_choices",
+                    "type": "list",
+                    "default_value": null
+                },
+                {
+                    "name": "selected_decision",
+                    "type": "str",
+                    "default_value": null
+                }
+            ]
+        },
+        "UtilityEvaluator": {
+            "variables": [
+                {
+                    "name": "utility_value",
+                    "type": "float",
+                    "default_value": null
+                }
+            ]
+        },
+        "SocialNetworkInteractor": {
+            "variables": [
+                {
+                    "name": "adjustment_status",
+                    "type": "str",
+                    "default_value": null
+                }
+            ]
+        }
+    }
+}

@@ -1,0 +1,107 @@
+[
+    {
+        "name": "John Doe",
+        "adoption_status": false,
+        "social_pressure": 30.0,
+        "network_influence": 20.0,
+        "trust_in_innovation": 10.0,
+        "innovation_advantages": [
+            "Cost savings after widespread adoption",
+            "Increased reliability due to extensive testing",
+            "Peer pressure from social circles"
+        ],
+        "agent_type": "Laggards",
+        "adoption_threshold": 70,
+        "communication_history": [
+            {
+                "date": "2025-01-01",
+                "interaction": "initial contact"
+            }
+        ],
+        "id": "20"
+    },
+    {
+        "name": "Mary Smith",
+        "adoption_status": false,
+        "social_pressure": 30.0,
+        "network_influence": 20.0,
+        "trust_in_innovation": 10.0,
+        "innovation_advantages": [
+            "Proven track record of success",
+            "Comprehensive user reviews",
+            "Improved compatibility with existing systems"
+        ],
+        "agent_type": "Laggards",
+        "adoption_threshold": 85,
+        "communication_history": [
+            {
+                "date": "2025-01-01",
+                "interaction": "initial contact"
+            }
+        ],
+        "id": "21"
+    },
+    {
+        "name": "Robert Johnson",
+        "adoption_status": false,
+        "social_pressure": 30.0,
+        "network_influence": 20.0,
+        "trust_in_innovation": 10.0,
+        "innovation_advantages": [
+            "Significant price drop",
+            "Availability of customer support",
+            "Integration with traditional methods"
+        ],
+        "agent_type": "Laggards",
+        "adoption_threshold": 83,
+        "communication_history": [
+            {
+                "date": "2025-01-01",
+                "interaction": "initial contact"
+            }
+        ],
+        "id": "22"
+    },
+    {
+        "name": "Patricia Brown",
+        "adoption_status": false,
+        "social_pressure": 30.0,
+        "network_influence": 20.0,
+        "trust_in_innovation": 10.0,
+        "innovation_advantages": [
+            "Established market presence",
+            "Recommendations from trusted sources",
+            "Enhanced security features"
+        ],
+        "agent_type": "Laggards",
+        "adoption_threshold": 84,
+        "communication_history": [
+            {
+                "date": "2025-01-01",
+                "interaction": "initial contact"
+            }
+        ],
+        "id": "23"
+    },
+    {
+        "name": "Michael Davis",
+        "adoption_status": false,
+        "social_pressure": 30.0,
+        "network_influence": 20.0,
+        "trust_in_innovation": 10.0,
+        "innovation_advantages": [
+            "Long-term performance data",
+            "Widespread user acceptance",
+            "Reduced risk of obsolescence"
+        ],
+        "agent_type": "Laggards",
+        "adoption_threshold": 82,
+        "communication_history": [
+            {
+                "date": "2025-01-01",
+                "interaction": "initial contact"
+            }
+        ],
+        "id": "24"
+    }
+]

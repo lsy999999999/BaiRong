@@ -1,0 +1,166 @@
+:root {
+  --bg-color: #030303;
+  --text-color: #f0f0f0;
+  --accent-color: #295AE3;
+  --secondary-color: #444444;
+  --input-bg: #1a1a1a;
+  --sidebar-bg: #0a0a0a;
+  --menu-hover: #1e1e1e;
+  --border-color: rgba(255, 255, 255, 0.1);
+  --box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 明亮主题变量 */
+.light-theme {
+  --bg-color: #f8f8f8;
+  --text-color: #333333;
+  --accent-color: #295AE3;
+  --secondary-color: #666666;
+  --input-bg: #ffffff;
+  --sidebar-bg: #f0f0f0;
+  --menu-hover: #e5e5e5;
+  --border-color: rgba(0, 0, 0, 0.1);
+  --box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  
+  /* 太极图颜色 */
+  --taiji-dark: #111111;
+  --taiji-light: #ffffff;
+  
+  /* 卡片样式变量 */
+  --card-bg-color: rgba(255, 255, 255, 0.9);
+  --card-text-color: #222;
+  --card-heading-color: #333;
+  
+  color: var(--text-color);
+  background-color: var(--bg-color);
+}
+
+.dark-theme {
+  --bg-color: #030303;
+  --text-color: #f0f0f0;
+  --accent-color: #295AE3;
+  --secondary-color: #444444;
+  --input-bg: #1a1a1a;
+  --sidebar-bg: #0a0a0a;
+  --menu-hover: #1e1e1e;
+  --border-color: rgba(255, 255, 255, 0.1);
+  --box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  
+  /* 太极图颜色 */
+  --taiji-dark: #000000;
+  --taiji-light: #f0f0f0;
+  
+  /* 卡片样式变量 */
+  --card-bg-color: rgba(30, 30, 30, 0.9);
+  --card-text-color: #e0e0e0;
+  --card-heading-color: #f0f0f0;
+  
+  color: var(--text-color);
+  background-color: var(--bg-color);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+}
+
+html, body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+#app {
+  width: 100%;
+  margin: 0 auto;
+  padding: 0;
+}
+
+a {
+  color: var(--accent-color);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  outline: none;
+}
+
+/* 动画 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.slide-enter-active,
+.slide-leave-active {
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.slide-enter-from,
+.slide-leave-to {
+  transform: translateY(20px);
+  opacity: 0;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}
+
+/* 删除Element Plus暗黑模式样式覆盖部分 */

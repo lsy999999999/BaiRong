@@ -1,0 +1,66 @@
+{
+    "environment": {
+        "variables": [
+            {
+                "name": "social_influence",
+                "type": "float",
+                "default_value": null
+            },
+            {
+                "name": "public_discontent",
+                "type": "float",
+                "default_value": null
+            },
+            {
+                "name": "reported_incidents",
+                "type": "int",
+                "default_value": null
+            },
+            {
+                "name": "available_resources",
+                "type": "float",
+                "default_value": null
+            }
+        ]
+    },
+    "agents": {
+        "Citizen": {
+            "variables": [
+                {
+                    "name": "personal_experience",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "grievance_level",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "rebellion_decision",
+                    "type": "bool",
+                    "default_value": null
+                }
+            ]
+        },
+        "Government": {
+            "variables": [
+                {
+                    "name": "rebellion_level",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "repression_strategy",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "effectiveness",
+                    "type": "float",
+                    "default_value": null
+                }
+            ]
+        }
+    }
+}

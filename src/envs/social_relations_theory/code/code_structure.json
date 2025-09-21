@@ -1,0 +1,533 @@
+{
+  "agents": {
+    "NewEmployee": {
+      "imports": "from typing import Any, List,Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "1": {
+          "code": "async def initiate_interaction(self, event: Event) -> List[Event]:\n        # Since the condition is 'None', we proceed directly with the handler logic\n    \n        # Retrieve required variables\n        interaction_type = await self.get_env_data(\"interaction_type\", \"dialogue\")\n        initiator_emotion = self.profile.get_data(\"initiator_emotion\", \"neutral\")\n        receiver_role = event.receiver_role\n    \n        # Prepare instruction for LLM\n        instruction = f\"\"\"\n        You are simulating an interaction where a new employee initiates a social interaction with a team leader to establish rapport and receive feedback.\n        Please generate the interaction outcome and specify the target_ids for the team leader(s) involved.\n        Return the information in the following JSON format:\n        {{\n            \"interaction_status\": \"<Status of the interaction>\",\n            \"initiator_emotion\": \"<Updated emotional state of the initiator>\",\n            \"target_ids\": [\"<The string ID(s) of the TeamLeader agent(s)>\"]\n        }}\n        \"\"\"\n    \n        # Generate reaction using LLM\n        result = await self.generate_reaction(instruction)\n    \n        # Parse LLM response\n        interaction_status = result.get('interaction_status', None)\n        updated_emotion = result.get('initiator_emotion', None)\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n    \n        # Update agent data\n        self.profile.update_data(\"interaction_status\", interaction_status)\n        self.profile.update_data(\"initiator_emotion\", updated_emotion)\n    \n        # Create and send InteractionEvent(s)\n        events = []\n        for target_id in target_ids:\n            interaction_event = InteractionEvent(self.profile_id, target_id)\n            interaction_event.interaction_type = interaction_type\n            interaction_event.initiator_emotion = updated_emotion\n            interaction_event.receiver_role = receiver_role\n            events.append(interaction_event)\n    \n        return events",
+          "metadata": {
+            "id": 1,
+            "name": "initiate_interaction",
+            "condition": null,
+            "description": "The action where a new employee initiates a social interaction with a team leader to establish rapport and receive feedback.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "interaction_type",
+                "type": "string",
+                "context": "env",
+                "description": "Defines the type of interaction initiated, such as dialogue or collaborative task."
+              },
+              {
+                "name": "initiator_emotion",
+                "type": "string",
+                "context": "agent",
+                "description": "Represents the emotional state of the new employee when initiating the interaction."
+              },
+              {
+                "name": "receiver_role",
+                "type": "string",
+                "context": "event",
+                "description": "Specifies the role of the agent receiving the interaction, typically a TeamLeader."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "interaction_status",
+                "type": "string",
+                "context": "agent",
+                "description": "Tracks whether the interaction was successfully initiated."
+              },
+              {
+                "name": "initiator_emotion",
+                "type": "string",
+                "context": "agent",
+                "description": "Updates the emotional state of the new employee based on the outcome of the interaction."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "ExperiencedEmployee": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "2": {
+          "code": "async def initiate_interaction(self, event: Event) -> List[Event]:\n        if event.__class__.__name__ != \"StartEvent\":\n            return []\n\n        interaction_type = await self.get_env_data(\"interaction_type\", \"dialogue\")\n        initiator_emotion = self.profile.get_data(\"initiator_emotion\", \"neutral\")\n        receiver_role = \"TeamLeader\"\n\n        instruction = \"\"\"\n        The experienced employee is initiating a social interaction with a team leader. \n        The interaction type is '{interaction_type}', and the initiator's emotional state is '{initiator_emotion}'. \n        Please determine the target(s) for this interaction and return the information in the following JSON format:\n\n        {{\n            \"interaction_type\": \"<Type of interaction, e.g., dialogue or task>\",\n            \"updated_emotion\": \"<New emotional state of the initiator after the interaction>\",\n            \"target_ids\": [\"<ID(s) of the target agent(s)>\"]\n        }}\n        \"\"\"\n        result = await self.generate_reaction(instruction.format(interaction_type=interaction_type, initiator_emotion=initiator_emotion))\n\n        interaction_type = result.get('interaction_type', interaction_type)\n        updated_emotion = result.get('updated_emotion', initiator_emotion)\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        self.profile.update_data(\"interaction_status\", \"success\")\n        self.profile.update_data(\"initiator_emotion\", updated_emotion)\n\n        events = []\n        for target_id in target_ids:\n            interaction_event = InteractionEvent(\n                from_agent_id=self.profile_id,\n                to_agent_id=target_id,\n                interaction_type=interaction_type,\n                initiator_emotion=updated_emotion,\n                receiver_role=receiver_role\n            )\n            events.append(interaction_event)\n\n        return events",
+          "metadata": {
+            "id": 2,
+            "name": "initiate_interaction",
+            "condition": null,
+            "description": "The action where an experienced employee initiates a social interaction with a team leader to maintain relationships and receive feedback.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "interaction_type",
+                "type": "string",
+                "context": "env",
+                "description": "Defines the type of interaction initiated, such as dialogue or collaborative task."
+              },
+              {
+                "name": "initiator_emotion",
+                "type": "string",
+                "context": "agent",
+                "description": "Represents the emotional state of the experienced employee when initiating the interaction."
+              },
+              {
+                "name": "receiver_role",
+                "type": "string",
+                "context": "event",
+                "description": "Specifies the role of the agent receiving the interaction, typically a TeamLeader."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "interaction_status",
+                "type": "string",
+                "context": "agent",
+                "description": "Tracks whether the interaction was successfully initiated."
+              },
+              {
+                "name": "initiator_emotion",
+                "type": "string",
+                "context": "agent",
+                "description": "Updates the emotional state of the experienced employee based on the outcome of the interaction."
+              }
+            ]
+          }
+        },
+        "3": {
+          "code": "async def receive_feedback(self, event: Event) -> List[Event]:\n        feedback_type = event.feedback_type\n        processing_status = event.processing_status\n\n        observation = f\"Feedback type: {feedback_type}, Processing status: {processing_status}\"\n\n        instruction = \"\"\"\n        The experienced employee has received feedback. Adjust their emotional state and work motivation based on the feedback type. \n        Positive feedback should enhance motivation and satisfaction, while constructive feedback should focus on improvement and resilience. \n        Return the results in the following JSON format:\n\n        {{\n        \"emotional_state\": \"<Updated emotional state>\",\n        \"work_motivation\": \"<Updated work motivation>\",\n        \"target_ids\": [\"<The string ID of the EnvAgent, 'ENV'>\"]\n        }}\n        \"\"\"\n\n        result = await self.generate_reaction(instruction, observation)\n\n        emotional_state = result.get('emotional_state', None)\n        work_motivation = result.get('work_motivation', None)\n        target_ids = result.get('target_ids', ['ENV'])\n\n        self.profile.update_data(\"emotional_state\", emotional_state)\n        self.profile.update_data(\"work_motivation\", work_motivation)\n\n        events = []\n        for target_id in target_ids:\n            feedback_event = FeedbackProcessedEvent(\n                from_agent_id=self.profile_id, to_agent_id=target_id, feedback_type=feedback_type, processing_status=processing_status\n            )\n            events.append(feedback_event)\n\n        return events",
+          "metadata": {
+            "id": 3,
+            "name": "receive_feedback",
+            "condition": null,
+            "description": "The action where an experienced employee receives feedback from the emotional analyzer, processing it to adjust their emotional state and work motivation.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "feedback_type",
+                "type": "string",
+                "context": "event",
+                "description": "Specifies the type of feedback received, such as positive or constructive."
+              },
+              {
+                "name": "processing_status",
+                "type": "string",
+                "context": "event",
+                "description": "Indicates the status of feedback processing, such as completed."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "emotional_state",
+                "type": "string",
+                "context": "agent",
+                "description": "Updates the emotional state of the experienced employee based on the feedback received."
+              },
+              {
+                "name": "work_motivation",
+                "type": "string",
+                "context": "agent",
+                "description": "Adjusts the work motivation level of the experienced employee based on the feedback received."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "NeutralMember": {
+      "imports": "from typing import Any, List,Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "4": {
+          "code": "async def initiate_interaction(self, event: Event) -> List[Event]:\n        # No condition check required as condition is None\n    \n        # Retrieve required variables\n        interaction_type = await self.get_env_data(\"interaction_type\", \"dialogue\")\n        initiator_emotion = self.profile.get_data(\"initiator_emotion\", \"neutral\")\n        receiver_role = \"TeamLeader\"  # Fixed value based on event description\n    \n        # Craft instruction for decision making\n        instruction = f\"\"\"\n        The neutral member is initiating a social interaction with a team leader. \n        Context:\n        - Interaction type: {interaction_type}\n        - Initiator emotion: {initiator_emotion}\n        - Receiver role: {receiver_role}\n    \n        Please analyze the current context and decide the target IDs for the interaction.\n        Return the result in the following JSON format:\n        {{\n            \"interaction_status\": \"<Indicates if the interaction was successful>\",\n            \"initiator_emotion\": \"<Updated emotional state of the initiator>\",\n            \"target_ids\": [\"<List of target agent IDs or a single ID>\"]\n        }}\n        \"\"\"\n    \n        # Generate reaction using LLM\n        result = await self.generate_reaction(instruction)\n    \n        # Parse the LLM response\n        interaction_status = result.get(\"interaction_status\", \"failed\")\n        updated_emotion = result.get(\"initiator_emotion\", initiator_emotion)\n        target_ids = result.get(\"target_ids\", [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n    \n        # Update agent's state\n        self.profile.update_data(\"interaction_status\", interaction_status)\n        self.profile.update_data(\"initiator_emotion\", updated_emotion)\n    \n        # Prepare outgoing events\n        events = []\n        for target_id in target_ids:\n            interaction_event = InteractionEvent(\n                self.profile_id, target_id, interaction_type, updated_emotion, receiver_role\n            )\n            events.append(interaction_event)\n    \n        return events",
+          "metadata": {
+            "id": 4,
+            "name": "initiate_interaction",
+            "condition": null,
+            "description": "The action where a neutral member initiates a social interaction with a team leader to participate in team dynamics and receive feedback.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "interaction_type",
+                "type": "string",
+                "context": "env",
+                "description": "Defines the type of interaction initiated, such as dialogue or collaborative task."
+              },
+              {
+                "name": "initiator_emotion",
+                "type": "string",
+                "context": "agent",
+                "description": "Represents the emotional state of the neutral member when initiating the interaction."
+              },
+              {
+                "name": "receiver_role",
+                "type": "string",
+                "context": "event",
+                "description": "Specifies the role of the agent receiving the interaction, typically a TeamLeader."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "interaction_status",
+                "type": "string",
+                "context": "agent",
+                "description": "Tracks whether the interaction was successfully initiated."
+              },
+              {
+                "name": "initiator_emotion",
+                "type": "string",
+                "context": "agent",
+                "description": "Updates the emotional state of the neutral member based on the outcome of the interaction."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "TeamLeader": {
+      "imports": "from typing import Any, List\nimport asyncio\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "5": {
+          "code": "async def provide_feedback(self, event: Event) -> List[Event]:\n        if event.__class__.__name__ != \"InteractionEvent\":\n            return []\n\n        interaction_type = event.interaction_type\n        initiator_emotion = event.initiator_emotion\n        receiver_role = event.receiver_role\n\n        feedback_content = self.profile.get_data(\"feedback_content\", \"general\")\n\n        instruction = f\"\"\"Based on the interaction type '{interaction_type}' and initiator's emotion '{initiator_emotion}', \ngenerate feedback that is contextually appropriate. Please return the feedback message and a list of target_ids \n(which can be a single string ID or a list of IDs) that the feedback is intended for. Ensure the feedback content \nis suitable for the receiver's role '{receiver_role}'. Return the information in the following JSON format:\n\n{{\n\"feedback_message\": \"<The feedback message tailored to the interaction>\",\n\"target_ids\": [\"<The string ID of the target agent(s)>\"]\n}}\n\"\"\"\n\n        observation = f\"Initiator emotion: {initiator_emotion}, Interaction type: {interaction_type}, Receiver role: {receiver_role}\"\n        result = await self.generate_reaction(instruction, observation)\n\n        feedback_message = result.get('feedback_message', None)\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        self.profile.update_data(\"feedback_status\", \"delivered\")\n\n        events = []\n        for target_id in target_ids:\n            feedback_event = FeedbackEvent(self.profile_id, target_id, feedback_message)\n            events.append(feedback_event)\n\n        return events",
+          "metadata": {
+            "id": 5,
+            "name": "provide_feedback",
+            "condition": "Reception of InteractionEvent from any employee",
+            "description": "The action where a team leader provides feedback to an employee or emotional analyzer to influence their emotional state and work behavior.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "feedback_content",
+                "type": "string",
+                "context": "agent",
+                "description": "Specifies the content of the feedback provided, such as general or specific remarks."
+              },
+              {
+                "name": "receiver_id",
+                "type": "string",
+                "context": "event",
+                "description": "Identifies the agent receiving the feedback, such as an EmotionalAnalyzer or employee."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "feedback_status",
+                "type": "string",
+                "context": "agent",
+                "description": "Tracks whether the feedback was successfully delivered."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "EmotionalAnalyzer": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "6": {
+          "code": "async def analyze_emotion(self, event: Event) -> List[Event]:\n        # Condition Check Implementation\n        if event.__class__.__name__ != \"FeedbackEvent\":\n            return []\n\n        # Data Access\n        feedback_content = event.feedback_content\n        receiver_id = event.receiver_id\n\n        # Decision Making using LLM\n        instruction = \"\"\"Analyze the feedback_content to determine the emotional state of the employee.\n        Include observation context for generate_reaction. Return the analysis result and status in the following JSON format:\n        {\n        \"emotion_analysis_result\": \"<Result of the emotional analysis>\",\n        \"analysis_status\": \"<Status of the analysis process>\",\n        \"target_ids\": [\"<The string ID of the ExperiencedEmployee or 'ENV' for terminal events>\"]\n        }\n        \"\"\"\n        observation = f\"Feedback Content: {feedback_content}, Receiver ID: {receiver_id}\"\n        result = await self.generate_reaction(instruction, observation)\n\n        # Response Processing\n        emotion_analysis_result = result.get('emotion_analysis_result', None)\n        analysis_status = result.get('analysis_status', None)\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Data Modification\n        self.profile.update_data(\"emotion_analysis_result\", emotion_analysis_result)\n        self.profile.update_data(\"analysis_status\", analysis_status)\n\n        # Prepare and send EmotionAnalyzedEvent(s)\n        events = []\n        for target_id in target_ids:\n            emotion_event = EmotionAnalyzedEvent(self.profile_id, target_id, emotion_analysis_result, analysis_status)\n            events.append(emotion_event)\n\n        return events",
+          "metadata": {
+            "id": 6,
+            "name": "analyze_emotion",
+            "condition": "Reception of FeedbackEvent",
+            "description": "The action where the emotional analyzer processes feedback received from a team leader to assess and update the emotional state of an employee.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "feedback_content",
+                "type": "string",
+                "context": "event",
+                "description": "Specifies the content of the feedback to be analyzed."
+              },
+              {
+                "name": "receiver_id",
+                "type": "string",
+                "context": "event",
+                "description": "Identifies the employee whose emotional state is to be updated."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "emotion_analysis_result",
+                "type": "string",
+                "context": "agent",
+                "description": "Provides the result of the emotional analysis, such as neutral or positive."
+              },
+              {
+                "name": "analysis_status",
+                "type": "string",
+                "context": "agent",
+                "description": "Indicates the completion status of the emotional analysis process."
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "events": {
+    "imports": "from onesim.events import Event\nfrom typing import Any",
+    "definitions": {
+      "-1": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": -1,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "NewEmployee",
+          "to_action_name": "initiate_interaction",
+          "from_action_id": 0,
+          "to_action_id": 1,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for new employee interaction",
+          "fields": []
+        }
+      },
+      "-2": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": -2,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "ExperiencedEmployee",
+          "to_action_name": "initiate_interaction",
+          "from_action_id": 0,
+          "to_action_id": 2,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for experienced employee interaction",
+          "fields": []
+        }
+      },
+      "-3": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": -3,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "NeutralMember",
+          "to_action_name": "initiate_interaction",
+          "from_action_id": 0,
+          "to_action_id": 4,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for neutral member interaction",
+          "fields": []
+        }
+      },
+      "1": {
+        "code": "class InteractionEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        interaction_type: str = 'dialogue',\n        initiator_emotion: str = 'neutral',\n        receiver_role: str = 'TeamLeader',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.interaction_type = interaction_type\n        self.initiator_emotion = initiator_emotion\n        self.receiver_role = receiver_role",
+        "metadata": {
+          "id": 1,
+          "from_agent_type": "NewEmployee",
+          "from_action_name": "initiate_interaction",
+          "to_agent_type": "TeamLeader",
+          "to_action_name": "provide_feedback",
+          "from_action_id": 1,
+          "to_action_id": 5,
+          "event_name": "InteractionEvent",
+          "event_info": "New employee interacts with team leader",
+          "fields": [
+            {
+              "name": "interaction_type",
+              "type": "string",
+              "default_value": "dialogue",
+              "description": "Type of interaction occurring between agents"
+            },
+            {
+              "name": "initiator_emotion",
+              "type": "string",
+              "default_value": "neutral",
+              "description": "Emotional state of the initiating agent"
+            },
+            {
+              "name": "receiver_role",
+              "type": "string",
+              "default_value": "TeamLeader",
+              "description": "Role of the receiving agent in the interaction"
+            }
+          ]
+        }
+      },
+      "2": {
+        "code": "class InteractionEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        interaction_type: str = 'dialogue',\n        initiator_emotion: str = 'neutral',\n        receiver_role: str = 'TeamLeader',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.interaction_type = interaction_type\n        self.initiator_emotion = initiator_emotion\n        self.receiver_role = receiver_role",
+        "metadata": {
+          "id": 2,
+          "from_agent_type": "ExperiencedEmployee",
+          "from_action_name": "initiate_interaction",
+          "to_agent_type": "TeamLeader",
+          "to_action_name": "provide_feedback",
+          "from_action_id": 2,
+          "to_action_id": 5,
+          "event_name": "InteractionEvent",
+          "event_info": "Experienced employee interacts with team leader",
+          "fields": [
+            {
+              "name": "interaction_type",
+              "type": "string",
+              "default_value": "dialogue",
+              "description": "Type of interaction occurring between agents"
+            },
+            {
+              "name": "initiator_emotion",
+              "type": "string",
+              "default_value": "neutral",
+              "description": "Emotional state of the initiating agent"
+            },
+            {
+              "name": "receiver_role",
+              "type": "string",
+              "default_value": "TeamLeader",
+              "description": "Role of the receiving agent in the interaction"
+            }
+          ]
+        }
+      },
+      "3": {
+        "code": "class FeedbackProcessedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        feedback_type: str = 'positive',\n        processing_status: str = 'completed',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.feedback_type = feedback_type\n        self.processing_status = processing_status",
+        "metadata": {
+          "id": 3,
+          "from_agent_type": "ExperiencedEmployee",
+          "from_action_name": "receive_feedback",
+          "to_agent_type": "EnvAgent",
+          "to_action_name": "terminate",
+          "from_action_id": 3,
+          "to_action_id": -1,
+          "event_name": "FeedbackProcessedEvent",
+          "event_info": "Experienced employee receives feedback and process completes",
+          "fields": [
+            {
+              "name": "feedback_type",
+              "type": "string",
+              "default_value": "positive",
+              "description": "Type of feedback processed"
+            },
+            {
+              "name": "processing_status",
+              "type": "string",
+              "default_value": "completed",
+              "description": "Status of feedback processing"
+            }
+          ]
+        }
+      },
+      "4": {
+        "code": "class InteractionEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        interaction_type: str = 'dialogue',\n        initiator_emotion: str = 'neutral',\n        receiver_role: str = 'TeamLeader',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.interaction_type = interaction_type\n        self.initiator_emotion = initiator_emotion\n        self.receiver_role = receiver_role",
+        "metadata": {
+          "id": 4,
+          "from_agent_type": "NeutralMember",
+          "from_action_name": "initiate_interaction",
+          "to_agent_type": "TeamLeader",
+          "to_action_name": "provide_feedback",
+          "from_action_id": 4,
+          "to_action_id": 5,
+          "event_name": "InteractionEvent",
+          "event_info": "Neutral member interacts with team leader",
+          "fields": [
+            {
+              "name": "interaction_type",
+              "type": "string",
+              "default_value": "dialogue",
+              "description": "Type of interaction occurring between agents"
+            },
+            {
+              "name": "initiator_emotion",
+              "type": "string",
+              "default_value": "neutral",
+              "description": "Emotional state of the initiating agent"
+            },
+            {
+              "name": "receiver_role",
+              "type": "string",
+              "default_value": "TeamLeader",
+              "description": "Role of the receiving agent in the interaction"
+            }
+          ]
+        }
+      },
+      "5": {
+        "code": "class FeedbackEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        feedback_content: str = 'general',\n        receiver_id: str = None,  # Corrected to be set during event creation\n        **kwargs: Any\n    ) -> None:\n        receiver_id = receiver_id or to_agent_id  # Ensure receiver_id matches the actual target agent\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.feedback_content = feedback_content\n        self.receiver_id = receiver_id",
+        "metadata": {
+          "id": 5,
+          "from_agent_type": "TeamLeader",
+          "from_action_name": "provide_feedback",
+          "to_agent_type": "EmotionalAnalyzer",
+          "to_action_name": "analyze_emotion",
+          "from_action_id": 5,
+          "to_action_id": 6,
+          "event_name": "FeedbackEvent",
+          "event_info": "Team leader provides feedback to emotional analyzer",
+          "fields": [
+            {
+              "name": "feedback_content",
+              "type": "string",
+              "default_value": "general",
+              "description": "Content of the feedback provided"
+            },
+            {
+              "name": "receiver_id",
+              "type": "string",
+              "default_value": "EmotionalAnalyzer",
+              "description": "Identifier of the agent receiving feedback"
+            }
+          ]
+        }
+      },
+      "6": {
+        "code": "class EmotionAnalyzedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        emotion_analysis_result: str = 'neutral',\n        analysis_status: str = 'completed',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.emotion_analysis_result = emotion_analysis_result\n        self.analysis_status = analysis_status",
+        "metadata": {
+          "id": 6,
+          "from_agent_type": "EmotionalAnalyzer",
+          "from_action_name": "analyze_emotion",
+          "to_agent_type": "ExperiencedEmployee",
+          "to_action_name": "receive_feedback",
+          "from_action_id": 6,
+          "to_action_id": 3,
+          "event_name": "EmotionAnalyzedEvent",
+          "event_info": "Emotional analysis completed and sent to experienced employee",
+          "fields": [
+            {
+              "name": "emotion_analysis_result",
+              "type": "string",
+              "default_value": "neutral",
+              "description": "Result of the emotional analysis"
+            },
+            {
+              "name": "analysis_status",
+              "type": "string",
+              "default_value": "completed",
+              "description": "Status of the emotional analysis process"
+            }
+          ]
+        }
+      },
+      "7": {
+        "code": "class EmotionAnalyzedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        emotion_analysis_result: str = 'neutral',\n        analysis_status: str = 'completed',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.emotion_analysis_result = emotion_analysis_result\n        self.analysis_status = analysis_status",
+        "metadata": {
+          "id": 7,
+          "from_agent_type": "EmotionalAnalyzer",
+          "from_action_name": "analyze_emotion",
+          "to_agent_type": "EnvAgent",
+          "to_action_name": "terminate",
+          "from_action_id": 6,
+          "to_action_id": -1,
+          "event_name": "EmotionAnalyzedEvent",
+          "event_info": "Emotional analysis completed and process terminates",
+          "fields": [
+            {
+              "name": "emotion_analysis_result",
+              "type": "string",
+              "default_value": "neutral",
+              "description": "Result of the emotional analysis"
+            },
+            {
+              "name": "analysis_status",
+              "type": "string",
+              "default_value": "completed",
+              "description": "Status of the emotional analysis process"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

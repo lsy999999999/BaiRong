@@ -1,0 +1,85 @@
+{
+    "name": {
+        "type": "str",
+        "default": "ConsumerAgent",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's identifier name"
+    },
+    "spending_amount": {
+        "type": "float",
+        "default": 200.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "financial_status": {
+        "type": "str",
+        "default": "stable",
+        "private": false,
+        "sampling": "default"
+    },
+    "purchase_history": {
+        "type": "list",
+        "default": [
+            {
+                "date": "2025-01-01",
+                "amount": 150.0,
+                "item": "electronics"
+            }
+        ],
+        "private": true,
+        "sampling": "default"
+    },
+    "income_level": {
+        "type": "int",
+        "default": 50000,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            30000,
+            100000
+        ]
+    },
+    "spending_habits": {
+        "type": "str",
+        "default": "moderate",
+        "private": false,
+        "sampling": "llm",
+        "description": "The consumer's typical spending behavior"
+    },
+    "credit_rating": {
+        "type": "int",
+        "default": 700,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            300,
+            850
+        ]
+    },
+    "age_group": {
+        "type": "str",
+        "default": "adult",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "teen",
+            "adult",
+            "senior"
+        ]
+    },
+    "location": {
+        "type": "str",
+        "default": "urban",
+        "private": false,
+        "sampling": "llm",
+        "description": "The consumer's primary living environment"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

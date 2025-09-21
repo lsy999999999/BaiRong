@@ -1,0 +1,75 @@
+{
+  "domain": "Communication",
+  "scene_name": "information_cascade_and_silence",
+  "odd_protocol": {
+    "overview": {
+      "system_goal": "Simulate the process of rumor propagation and the formation of the spiral of silence in social networks, and study how mechanisms such as information verification, social pressure, opinion climate perception, and media environment influence information diffusion and willingness to express opinions publicly.",
+      "agent_types": "The system includes five main agent types: (1) Ordinary Users (User): Represent individual users in social networks with attributes such as belief, expressed_opinion, certainty, verification_tendency, conformity_tendency, and isolation_fear. (2) Opinion Leaders: Represent influential users with additional attributes like influence, followers, and content_creation, inheriting all attributes of ordinary users. (3) Media Organizations: Represent traditional or social media platforms with attributes like reach, credibility, editorial_policy, and fact_checking_rigor. (4) Fact-Check Organizations: Represent third-party organizations dedicated to verifying information, with attributes like detection_ability, response_speed, credibility, and reach. (5) Platform Regulators: Represent social media platform content management teams with attributes such as monitoring_ability, intervention_strength, and response_time.",
+      "environment_description": "The environment consists of a social network structure defining connections between users, an information environment characterized by noise and diversity, and the degree of social polarization reflecting the division between different opinion groups."
+    },
+    "design_concepts": {
+      "interaction_patterns": "Interaction patterns include: (1) User-to-user interactions such as information transmission, opinion influence, and social pressure. (2) Opinion leaders initiating new rumors or information, influencing large numbers of users, and gaining media amplification. (3) Media organizations spreading content, setting agendas, and shaping the perception of the opinion climate. (4) Fact-check organizations clarifying truths, influencing credibility, and promoting information literacy. (5) Platform regulators monitoring content, intervening to limit rumor spread, and enforcing platform policies.",
+      "communication_protocols": "Agents communicate through social network connections, media broadcasts, and fact-check reports. Ordinary users exchange information within their network, opinion leaders amplify their views via followers, media organizations disseminate content to broad audiences, fact-check organizations publish findings, and platform regulators intervene by tagging or removing content.",
+      "decision_mechanisms": "Agents make decisions based on attributes and external factors: (1) Ordinary users evaluate information credibility and decide whether to verify, update their beliefs, and express opinions based on perceived risks and rewards. (2) Opinion leaders decide on content creation and dissemination strategies to maximize influence. (3) Media organizations select and amplify topics based on editorial policies. (4) Fact-check organizations prioritize rumor verification based on urgency and impact. (5) Platform regulators assess content risk levels and decide on intervention measures."
+    },
+    "details": {
+      "agent_behaviors": "Agent behaviors include: (1) Ordinary users receiving and processing information, perceiving the opinion climate, making expression decisions, and spreading rumors. (2) Opinion leaders creating content, influencing followers, and initiating discussions. (3) Media organizations selecting and publishing content, amplifying trends, and conducting fact-checking. (4) Fact-check organizations monitoring rumors, verifying facts, and disseminating results. (5) Platform regulators monitoring content, implementing intervention measures, and managing user accounts.",
+      "decision_algorithms": "Decision algorithms include: (1) Ordinary users evaluate information credibility using verification_tendency and update beliefs based on confirmation bias. Expression decisions are based on a formula comparing expression willingness (expression_reward - isolation_risk) to a threshold. (2) Opinion leaders use algorithms to maximize influence by targeting followers and generating high-impact content. (3) Media organizations use editorial policies to prioritize topics and amplify trends. (4) Fact-check organizations employ methods to assess rumor urgency and rigorously verify information. (5) Platform regulators use algorithms to classify content risk levels and determine intervention actions.",
+      "specific_constraints": "Constraints include: (1) Social pressure affecting opinion expression decisions. (2) Limited detection_ability and response_speed of fact-check organizations. (3) Media organizations' editorial_policy biases influencing content selection. (4) Platform regulators balancing intervention_strength with user freedom. (5) Network_structure influencing information flow and polarization effects."
+    }
+  },
+  "agent_types": {
+    "OrdinaryUser": "Represents individual users in social networks who process information, express opinions, and spread rumors based on their beliefs, verification tendencies, and social pressures.",
+    "OpinionLeader": "Represents influential users with the ability to create and disseminate content, influence followers, and amplify trends, inheriting attributes of ordinary users.",
+    "MediaOrganization": "Represents traditional or social media platforms that select, publish, and amplify content, shape opinion climates, and conduct fact-checking based on editorial policies.",
+    "FactCheckOrganization": "Represents third-party organizations dedicated to verifying information, assessing rumor urgency, and publishing findings to promote information credibility and literacy.",
+    "PlatformRegulator": "Represents social media platform content management teams responsible for monitoring content, intervening to limit rumor spread, and enforcing platform policies."
+  },
+  "portrait": {
+    "OrdinaryUser": 5,
+    "OpinionLeader": 4,
+    "MediaOrganization": 3,
+    "FactCheckOrganization": 2,
+    "PlatformRegulator": 1
+  },
+  "metrics": [
+    {
+      "id": "average_credibility_score",
+      "name": "average_credibility_score",
+      "description": "Measures the average credibility score of information as evaluated by Ordinary Users. This reflects the overall perception of information reliability in the system.",
+      "visualization_type": "line",
+      "update_interval": 5,
+      "variables": [
+        {
+          "name": "credibility_score",
+          "source_type": "agent",
+          "agent_type": "OrdinaryUser",
+          "path": "profile.credibility_score",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Retrieve the list of credibility scores from all Ordinary Users. Filter out None values and ensure all elements are numeric. Calculate the average score. If the list is empty after filtering, return 0 as the default value.",
+      "function_name": "average_credibility_score"
+    },
+    {
+      "id": "fact_checking_rumor_detection_rate",
+      "name": "fact_checking_rumor_detection_rate",
+      "description": "Measures the average number of rumors detected by Fact-Check Organizations. This reflects the effectiveness of fact-checking efforts in identifying misinformation.",
+      "visualization_type": "line",
+      "update_interval": 5,
+      "variables": [
+        {
+          "name": "detected_rumors",
+          "source_type": "agent",
+          "agent_type": "FactCheckOrganization",
+          "path": "profile.detected_rumors",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Retrieve the list of detected_rumors from all Fact-Check Organizations. For each organization, count the number of items in the detected_rumors list, ignoring None or invalid entries. Calculate the average count across all organizations. If the list of organizations is empty, return 0 as the default value.",
+      "function_name": "fact_checking_rumor_detection_rate"
+    }
+  ]
+}

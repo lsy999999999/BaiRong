@@ -1,0 +1,213 @@
+{
+    "-1": {
+        "id": -1,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "JudgeAgent",
+        "to_action_name": "interpret_precedents",
+        "from_action_id": 0,
+        "to_action_id": 1,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for judge agents to begin interpreting case law precedents",
+        "fields": []
+    },
+    "-2": {
+        "id": -2,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "CaseAgent",
+        "to_action_name": "define_legal_context",
+        "from_action_id": 0,
+        "to_action_id": 3,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for case agents to define the legal context",
+        "fields": []
+    },
+    "-3": {
+        "id": -3,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "SocioPoliticalAgent",
+        "to_action_name": "analyze_environmental_influences",
+        "from_action_id": 0,
+        "to_action_id": 6,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for socio-political agents to analyze influences on legal judgments",
+        "fields": []
+    },
+    "1": {
+        "id": 1,
+        "from_agent_type": "JudgeAgent",
+        "from_action_name": "interpret_precedents",
+        "to_agent_type": "CaseAgent",
+        "to_action_name": "apply_interpretation",
+        "from_action_id": 1,
+        "to_action_id": 4,
+        "event_name": "PrecedentInterpretedEvent",
+        "event_info": "Event carrying interpreted precedents to case agents for application",
+        "fields": [
+            {
+                "name": "precedent_details",
+                "type": "string",
+                "default_value": "",
+                "description": "Details of the interpreted precedents"
+            },
+            {
+                "name": "case_id",
+                "type": "string",
+                "default_value": "",
+                "description": "Identifier for the case to which precedents are applied"
+            }
+        ]
+    },
+    "2": {
+        "id": 2,
+        "from_agent_type": "JudgeAgent",
+        "from_action_name": "apply_judgment",
+        "to_agent_type": "EnvAgent",
+        "to_action_name": "terminate",
+        "from_action_id": 2,
+        "to_action_id": -1,
+        "event_name": "JudgmentAppliedEvent",
+        "event_info": "Final judgment applied, completing the workflow",
+        "fields": [
+            {
+                "name": "judgment_result",
+                "type": "string",
+                "default_value": "",
+                "description": "Result of the judgment applied"
+            },
+            {
+                "name": "completion_status",
+                "type": "string",
+                "default_value": "completed",
+                "description": "Status indicating the completion of the workflow"
+            }
+        ]
+    },
+    "3": {
+        "id": 3,
+        "from_agent_type": "CaseAgent",
+        "from_action_name": "define_legal_context",
+        "to_agent_type": "PrecedentAgent",
+        "to_action_name": "store_legal_principles",
+        "from_action_id": 3,
+        "to_action_id": 5,
+        "event_name": "LegalContextDefinedEvent",
+        "event_info": "Event defining legal context sent to precedent agents for storage",
+        "fields": [
+            {
+                "name": "legal_context",
+                "type": "string",
+                "default_value": "",
+                "description": "Defined legal context for storage"
+            },
+            {
+                "name": "precedent_id",
+                "type": "string",
+                "default_value": "",
+                "description": "Identifier for the precedent related to the legal context"
+            }
+        ]
+    },
+    "4": {
+        "id": 4,
+        "from_agent_type": "CaseAgent",
+        "from_action_name": "apply_interpretation",
+        "to_agent_type": "LegalExpertAgent",
+        "to_action_name": "analyze_outcomes",
+        "from_action_id": 4,
+        "to_action_id": 7,
+        "event_name": "InterpretationAppliedEvent",
+        "event_info": "Event of applied interpretation sent to legal experts for outcome analysis",
+        "fields": [
+            {
+                "name": "interpretation_details",
+                "type": "string",
+                "default_value": "",
+                "description": "Details of the applied interpretation"
+            },
+            {
+                "name": "analysis_request_id",
+                "type": "string",
+                "default_value": "",
+                "description": "Identifier for the request sent to legal experts for analysis"
+            }
+        ]
+    },
+    "5": {
+        "id": 5,
+        "from_agent_type": "PrecedentAgent",
+        "from_action_name": "store_legal_principles",
+        "to_agent_type": "JudgeAgent",
+        "to_action_name": "interpret_precedents",
+        "from_action_id": 5,
+        "to_action_id": 1,
+        "event_name": "PrinciplesStoredEvent",
+        "event_info": "Stored legal principles sent to judge agents for interpretation",
+        "fields": [
+            {
+                "name": "stored_principles",
+                "type": "string",
+                "default_value": "",
+                "description": "Legal principles stored for future interpretation"
+            },
+            {
+                "name": "judge_request_id",
+                "type": "string",
+                "default_value": "",
+                "description": "Identifier for the request to judge agents for interpretation"
+            }
+        ]
+    },
+    "6": {
+        "id": 6,
+        "from_agent_type": "SocioPoliticalAgent",
+        "from_action_name": "analyze_environmental_influences",
+        "to_agent_type": "JudgeAgent",
+        "to_action_name": "apply_judgment",
+        "from_action_id": 6,
+        "to_action_id": 2,
+        "event_name": "InfluencesAnalyzedEvent",
+        "event_info": "Socio-political influences analyzed and sent to judge agents for judgment application",
+        "fields": [
+            {
+                "name": "socio_political_influences",
+                "type": "string",
+                "default_value": "",
+                "description": "Analyzed socio-political influences affecting judgments"
+            },
+            {
+                "name": "judgment_id",
+                "type": "string",
+                "default_value": "",
+                "description": "Identifier for the judgment application"
+            }
+        ]
+    },
+    "7": {
+        "id": 7,
+        "from_agent_type": "LegalExpertAgent",
+        "from_action_name": "analyze_outcomes",
+        "to_agent_type": "EnvAgent",
+        "to_action_name": "terminate",
+        "from_action_id": 7,
+        "to_action_id": -1,
+        "event_name": "OutcomesAnalyzedEvent",
+        "event_info": "Final outcome analysis completed, terminating the workflow",
+        "fields": [
+            {
+                "name": "outcome_analysis",
+                "type": "string",
+                "default_value": "",
+                "description": "Completed analysis of outcomes"
+            },
+            {
+                "name": "workflow_status",
+                "type": "string",
+                "default_value": "terminated",
+                "description": "Status indicating the termination of the workflow"
+            }
+        ]
+    }
+}

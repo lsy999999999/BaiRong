@@ -1,0 +1,62 @@
+[
+    {
+        "name": "Alice Johnson",
+        "cooperation_willingness": 50.0,
+        "decision_algorithm": "cost_benefit_analysis",
+        "interaction_pattern": "awaiting_decision",
+        "communication_protocol": "implicit_signaling",
+        "agent_type": "Individual",
+        "personal_cost": 7.653296081447266,
+        "personal_benefit": 22.938217577753985,
+        "group_evaluation_impact": 0.0,
+        "id": "0"
+    },
+    {
+        "name": "Michael Smith",
+        "cooperation_willingness": 50.0,
+        "decision_algorithm": "cost_benefit_analysis",
+        "interaction_pattern": "awaiting_decision",
+        "communication_protocol": "implicit_signaling",
+        "agent_type": "Individual",
+        "personal_cost": 13.147861476704787,
+        "personal_benefit": 17.748421597221743,
+        "group_evaluation_impact": 0.0,
+        "id": "1"
+    },
+    {
+        "name": "Sophia Martinez",
+        "cooperation_willingness": 50.0,
+        "decision_algorithm": "cost_benefit_analysis",
+        "interaction_pattern": "awaiting_decision",
+        "communication_protocol": "implicit_signaling",
+        "agent_type": "Individual",
+        "personal_cost": 13.726821220856468,
+        "personal_benefit": 25.811875700043043,
+        "group_evaluation_impact": 0.0,
+        "id": "2"
+    },
+    {
+        "name": "James Anderson",
+        "cooperation_willingness": 50.0,
+        "decision_algorithm": "cost_benefit_analysis",
+        "interaction_pattern": "awaiting_decision",
+        "communication_protocol": "implicit_signaling",
+        "agent_type": "Individual",
+        "personal_cost": 15.053989492919001,
+        "personal_benefit": 19.751045892049078,
+        "group_evaluation_impact": 0.0,
+        "id": "3"
+    },
+    {
+        "name": "Emily Davis",
+        "cooperation_willingness": 50.0,
+        "decision_algorithm": "cost_benefit_analysis",
+        "interaction_pattern": "awaiting_decision",
+        "communication_protocol": "implicit_signaling",
+        "agent_type": "Individual",
+        "personal_cost": 8.658235701259319,
+        "personal_benefit": 13.22983550261247,
+        "group_evaluation_impact": 0.0,
+        "id": "4"
+    }
+]

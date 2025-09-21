@@ -1,0 +1,83 @@
+{
+    "name": {
+        "type": "str",
+        "default": "PhysiologicalAgent",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's name representing its focus on physiological needs"
+    },
+    "physiological_needs_status": {
+        "type": "str",
+        "default": "awaiting_input",
+        "private": false,
+        "sampling": "default"
+    },
+    "resources_required": {
+        "type": "list",
+        "default": [
+            "water",
+            "food"
+        ],
+        "private": false,
+        "sampling": "default"
+    },
+    "motivation_level": {
+        "type": "int",
+        "default": 50,
+        "private": false,
+        "sampling": "default"
+    },
+    "interaction_history": {
+        "type": "list",
+        "default": [
+            {
+                "date": "2023-10-01",
+                "interaction_type": "initial_contact"
+            }
+        ],
+        "private": true,
+        "sampling": "default"
+    },
+    "current_focus": {
+        "type": "str",
+        "default": "physiological",
+        "private": false,
+        "sampling": "default"
+    },
+    "emotional_state": {
+        "type": "str",
+        "default": "neutral",
+        "private": false,
+        "sampling": "default"
+    },
+    "collaboration_score": {
+        "type": "int",
+        "default": 60,
+        "private": false,
+        "sampling": "default"
+    },
+    "feedback_received": {
+        "type": "list",
+        "default": [
+            {
+                "source": "peer",
+                "feedback": "positive"
+            }
+        ],
+        "private": true,
+        "sampling": "default"
+    },
+    "performance_rating": {
+        "type": "float",
+        "default": 3.5,
+        "private": false,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

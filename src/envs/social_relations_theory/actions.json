@@ -1,0 +1,199 @@
+{
+    "NewEmployee": [
+        {
+            "id": 1,
+            "name": "initiate_interaction",
+            "condition": null,
+            "description": "The action where a new employee initiates a social interaction with a team leader to establish rapport and receive feedback.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "interaction_type",
+                    "type": "string",
+                    "context": "env",
+                    "description": "Defines the type of interaction initiated, such as dialogue or collaborative task."
+                },
+                {
+                    "name": "initiator_emotion",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Represents the emotional state of the new employee when initiating the interaction."
+                },
+                {
+                    "name": "receiver_role",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Specifies the role of the agent receiving the interaction, typically a TeamLeader."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "interaction_status",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Tracks whether the interaction was successfully initiated."
+                },
+                {
+                    "name": "initiator_emotion",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Updates the emotional state of the new employee based on the outcome of the interaction."
+                }
+            ]
+        }
+    ],
+    "ExperiencedEmployee": [
+        {
+            "id": 2,
+            "name": "initiate_interaction",
+            "condition": null,
+            "description": "The action where an experienced employee initiates a social interaction with a team leader to maintain relationships and receive feedback.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "interaction_type",
+                    "type": "string",
+                    "context": "env",
+                    "description": "Defines the type of interaction initiated, such as dialogue or collaborative task."
+                },
+                {
+                    "name": "initiator_emotion",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Represents the emotional state of the experienced employee when initiating the interaction."
+                },
+                {
+                    "name": "receiver_role",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Specifies the role of the agent receiving the interaction, typically a TeamLeader."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "interaction_status",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Tracks whether the interaction was successfully initiated."
+                },
+                {
+                    "name": "initiator_emotion",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Updates the emotional state of the experienced employee based on the outcome of the interaction."
+                }
+            ]
+        }
+    ],
+    "NeutralMember": [
+        {
+            "id": 3,
+            "name": "initiate_interaction",
+            "condition": null,
+            "description": "The action where a neutral member initiates a social interaction with a team leader to participate in team dynamics and receive feedback.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "interaction_type",
+                    "type": "string",
+                    "context": "env",
+                    "description": "Defines the type of interaction initiated, such as dialogue or collaborative task."
+                },
+                {
+                    "name": "initiator_emotion",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Represents the emotional state of the neutral member when initiating the interaction."
+                },
+                {
+                    "name": "receiver_role",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Specifies the role of the agent receiving the interaction, typically a TeamLeader."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "interaction_status",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Tracks whether the interaction was successfully initiated."
+                },
+                {
+                    "name": "initiator_emotion",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Updates the emotional state of the neutral member based on the outcome of the interaction."
+                }
+            ]
+        }
+    ],
+    "TeamLeader": [
+        {
+            "id": 4,
+            "name": "provide_feedback",
+            "condition": "Reception of InteractionEvent from any employee",
+            "description": "The action where a team leader provides feedback to an employee or emotional analyzer to influence their emotional state and work behavior.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "feedback_content",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Specifies the content of the feedback provided, such as general or specific remarks."
+                },
+                {
+                    "name": "receiver_id",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Identifies the agent receiving the feedback, such as an EmotionalAnalyzer or employee."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "feedback_status",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Tracks whether the feedback was successfully delivered."
+                }
+            ]
+        }
+    ],
+    "EmotionalAnalyzer": [
+        {
+            "id": 5,
+            "name": "analyze_emotion",
+            "condition": "Reception of FeedbackEvent",
+            "description": "The action where the emotional analyzer processes feedback received from a team leader to assess and update the emotional state of an employee.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "feedback_content",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Specifies the content of the feedback to be analyzed."
+                },
+                {
+                    "name": "receiver_id",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Identifies the employee whose emotional state is to be updated."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "emotion_analysis_result",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Provides the result of the emotional analysis, such as neutral or positive."
+                },
+                {
+                    "name": "analysis_status",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Indicates the completion status of the emotional analysis process."
+                }
+            ]
+        }
+    ]
+}

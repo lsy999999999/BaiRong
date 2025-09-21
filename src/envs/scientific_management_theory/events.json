@@ -1,0 +1,207 @@
+{
+    "-1": {
+        "id": -1,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "ManagerAgent",
+        "to_action_name": "initiate_workflow_design",
+        "from_action_id": 0,
+        "to_action_id": 1,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for workflow design and task allocation",
+        "fields": []
+    },
+    "1": {
+        "id": 1,
+        "from_agent_type": "ManagerAgent",
+        "from_action_name": "initiate_workflow_design",
+        "to_agent_type": "ManagerAgent",
+        "to_action_name": "allocate_tasks",
+        "from_action_id": 1,
+        "to_action_id": 2,
+        "event_name": "WorkflowDesignedEvent",
+        "event_info": "Workflow design completed, ready for task allocation",
+        "fields": [
+            {
+                "name": "workflow_id",
+                "type": "str",
+                "default_value": "",
+                "description": "Unique identifier for the workflow"
+            },
+            {
+                "name": "designer_id",
+                "type": "str",
+                "default_value": "",
+                "description": "Identifier of the manager who designed the workflow"
+            },
+            {
+                "name": "design_details",
+                "type": "str",
+                "default_value": "",
+                "description": "Details of the workflow design"
+            }
+        ]
+    },
+    "2": {
+        "id": 2,
+        "from_agent_type": "ManagerAgent",
+        "from_action_name": "allocate_tasks",
+        "to_agent_type": "WorkerAgent",
+        "to_action_name": "execute_tasks",
+        "from_action_id": 2,
+        "to_action_id": 4,
+        "event_name": "TasksAllocatedEvent",
+        "event_info": "Tasks allocated to workers",
+        "fields": [
+            {
+                "name": "task_list",
+                "type": "list",
+                "default_value": [],
+                "description": "List of tasks allocated to workers"
+            },
+            {
+                "name": "worker_ids",
+                "type": "list",
+                "default_value": [],
+                "description": "List of worker IDs who received tasks"
+            },
+            {
+                "name": "allocation_strategy",
+                "type": "str",
+                "default_value": "skill_based",
+                "description": "Strategy used for task allocation"
+            }
+        ]
+    },
+    "3": {
+        "id": 3,
+        "from_agent_type": "ManagerAgent",
+        "from_action_name": "provide_feedback_and_incentives",
+        "to_agent_type": "WorkerAgent",
+        "to_action_name": "adjust_performance",
+        "from_action_id": 3,
+        "to_action_id": 5,
+        "event_name": "FeedbackAndIncentivesProvidedEvent",
+        "event_info": "Feedback and incentives given to workers",
+        "fields": [
+            {
+                "name": "feedback",
+                "type": "str",
+                "default_value": "",
+                "description": "Feedback given to workers"
+            },
+            {
+                "name": "incentives",
+                "type": "list",
+                "default_value": [],
+                "description": "List of incentives provided to workers"
+            },
+            {
+                "name": "worker_ids",
+                "type": "list",
+                "default_value": [],
+                "description": "List of worker IDs who received feedback and incentives"
+            }
+        ]
+    },
+    "4": {
+        "id": 4,
+        "from_agent_type": "WorkerAgent",
+        "from_action_name": "execute_tasks",
+        "to_agent_type": "ManagerAgent",
+        "to_action_name": "evaluate_performance",
+        "from_action_id": 4,
+        "to_action_id": 6,
+        "event_name": "TasksExecutedEvent",
+        "event_info": "Tasks execution completed by workers",
+        "fields": [
+            {
+                "name": "task_results",
+                "type": "list",
+                "default_value": [],
+                "description": "Results of the tasks executed by workers"
+            },
+            {
+                "name": "worker_ids",
+                "type": "list",
+                "default_value": [],
+                "description": "List of worker IDs who completed the tasks"
+            }
+        ]
+    },
+    "5": {
+        "id": 5,
+        "from_agent_type": "WorkerAgent",
+        "from_action_name": "adjust_performance",
+        "to_agent_type": "ManagerAgent",
+        "to_action_name": "finalize_workflow",
+        "from_action_id": 5,
+        "to_action_id": 7,
+        "event_name": "PerformanceAdjustedEvent",
+        "event_info": "Workers adjusted performance based on feedback and incentives",
+        "fields": [
+            {
+                "name": "adjustments",
+                "type": "str",
+                "default_value": "",
+                "description": "Details of performance adjustments made by workers"
+            },
+            {
+                "name": "worker_ids",
+                "type": "list",
+                "default_value": [],
+                "description": "List of worker IDs who adjusted their performance"
+            }
+        ]
+    },
+    "6": {
+        "id": 6,
+        "from_agent_type": "ManagerAgent",
+        "from_action_name": "evaluate_performance",
+        "to_agent_type": "ManagerAgent",
+        "to_action_name": "provide_feedback_and_incentives",
+        "from_action_id": 6,
+        "to_action_id": 3,
+        "event_name": "PerformanceEvaluatedEvent",
+        "event_info": "Performance evaluation completed",
+        "fields": [
+            {
+                "name": "evaluation_report",
+                "type": "str",
+                "default_value": "",
+                "description": "Report of the performance evaluation"
+            },
+            {
+                "name": "evaluator_id",
+                "type": "str",
+                "default_value": "",
+                "description": "Identifier of the manager who conducted the evaluation"
+            }
+        ]
+    },
+    "7": {
+        "id": 7,
+        "from_agent_type": "ManagerAgent",
+        "from_action_name": "finalize_workflow",
+        "to_agent_type": "EnvAgent",
+        "to_action_name": "terminate",
+        "from_action_id": 7,
+        "to_action_id": -1,
+        "event_name": "WorkflowFinalizedEvent",
+        "event_info": "Workflow finalized and system terminated",
+        "fields": [
+            {
+                "name": "completion_status",
+                "type": "str",
+                "default_value": "completed",
+                "description": "Status of the workflow finalization"
+            },
+            {
+                "name": "final_report",
+                "type": "str",
+                "default_value": "",
+                "description": "Final report of the workflow and system termination"
+            }
+        ]
+    }
+}

@@ -1,0 +1,276 @@
+{
+    "JobSeeker": [
+        {
+            "id": 1,
+            "name": "enter_market",
+            "condition": null,
+            "description": "The job seeker enters the labor market, setting initial job search parameters and strategies.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "skills",
+                    "type": "list",
+                    "context": "agent",
+                    "description": "List of skills possessed by the job seeker."
+                },
+                {
+                    "name": "education",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Education level of the job seeker."
+                },
+                {
+                    "name": "experience",
+                    "type": "int",
+                    "context": "agent",
+                    "description": "Years of experience the job seeker has."
+                },
+                {
+                    "name": "job_preferences",
+                    "type": "list",
+                    "context": "agent",
+                    "description": "Preferences of the job seeker regarding job attributes."
+                },
+                {
+                    "name": "network",
+                    "type": "list",
+                    "context": "agent",
+                    "description": "Professional network connections of the job seeker."
+                },
+                {
+                    "name": "risk_attitude",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Risk-taking attitude of the job seeker."
+                },
+                {
+                    "name": "job_search_strategy",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Strategy adopted by the job seeker for job searching."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "market_status",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Status of the job seeker in the labor market, e.g., 'active'."
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "name": "evaluate_job_applications",
+            "condition": "Job postings received and job seeker is actively searching",
+            "description": "The job seeker evaluates job applications to determine the best fit based on their criteria.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "job_id",
+                    "type": "int",
+                    "context": "event",
+                    "description": "Unique identifier for the job being evaluated."
+                },
+                {
+                    "name": "job_description",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Description of the job being evaluated."
+                },
+                {
+                    "name": "application_cost",
+                    "type": "float",
+                    "context": "env",
+                    "description": "Cost associated with applying to the job."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "applications_submitted",
+                    "type": "list",
+                    "context": "agent",
+                    "description": "List of job applications submitted by the job seeker."
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "name": "negotiate_salaries",
+            "condition": "Job offer received",
+            "description": "The job seeker engages in salary negotiations with potential employers.",
+            "type": "AND",
+            "required_variables": [
+                {
+                    "name": "employer_id",
+                    "type": "int",
+                    "context": "event",
+                    "description": "Unique identifier for the employer engaged in negotiation."
+                },
+                {
+                    "name": "proposed_salary",
+                    "type": "float",
+                    "context": "event",
+                    "description": "Salary proposed by the job seeker during negotiation."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "negotiation_outcomes",
+                    "type": "list",
+                    "context": "agent",
+                    "description": "Outcomes of salary negotiations."
+                }
+            ]
+        },
+        {
+            "id": 4,
+            "name": "decide_on_job_offers",
+            "condition": "Multiple job offers received",
+            "description": "The job seeker decides whether to accept or reject job offers.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "offer_details",
+                    "type": "dict",
+                    "context": "event",
+                    "description": "Details of the job offer received."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "employment_status",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Employment status of the job seeker, e.g., 'employed', 'unemployed'."
+                }
+            ]
+        }
+    ],
+    "Employer": [
+        {
+            "id": 5,
+            "name": "post_job_vacancies",
+            "condition": null,
+            "description": "The employer posts job vacancies to recruitment channels.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "job_id",
+                    "type": "int",
+                    "context": "agent",
+                    "description": "Unique identifier for the job being posted."
+                },
+                {
+                    "name": "job_description",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Description of the job being posted."
+                },
+                {
+                    "name": "required_skills",
+                    "type": "list",
+                    "context": "agent",
+                    "description": "Skills required for the job."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "posted_jobs",
+                    "type": "list",
+                    "context": "agent",
+                    "description": "List of jobs currently posted by the employer."
+                }
+            ]
+        },
+        {
+            "id": 6,
+            "name": "screen_candidates",
+            "condition": "Applications received",
+            "description": "The employer screens candidates for job vacancies.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "candidate_id",
+                    "type": "int",
+                    "context": "event",
+                    "description": "Unique identifier for the candidate being screened."
+                },
+                {
+                    "name": "application_value",
+                    "type": "float",
+                    "context": "event",
+                    "description": "Value of the candidate's application."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "screened_candidates",
+                    "type": "list",
+                    "context": "agent",
+                    "description": "List of candidates who have been screened."
+                }
+            ]
+        },
+        {
+            "id": 7,
+            "name": "conduct_interviews",
+            "condition": "Candidate passed screening",
+            "description": "The employer conducts interviews with shortlisted candidates.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "candidate_id",
+                    "type": "int",
+                    "context": "event",
+                    "description": "Unique identifier for the candidate being interviewed."
+                },
+                {
+                    "name": "interview_outcome",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Outcome of the interview."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "interview_results",
+                    "type": "list",
+                    "context": "agent",
+                    "description": "Results of the interviews conducted."
+                }
+            ]
+        }
+    ],
+    "RecruitmentChannel": [
+        {
+            "id": 8,
+            "name": "distribute_job_postings",
+            "condition": "Job postings from employers",
+            "description": "The recruitment channel distributes job postings to job seekers.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "job_id",
+                    "type": "int",
+                    "context": "event",
+                    "description": "Unique identifier for the job being distributed."
+                },
+                {
+                    "name": "channel_type",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Type of recruitment channel distributing the job postings."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "distributed_jobs",
+                    "type": "list",
+                    "context": "env",
+                    "description": "List of jobs distributed by the recruitment channel."
+                }
+            ]
+        }
+    ]
+}

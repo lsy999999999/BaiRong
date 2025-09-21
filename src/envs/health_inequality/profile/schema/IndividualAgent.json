@@ -1,0 +1,122 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Alex Johnson",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's full name representing an individual in the simulation"
+    },
+    "income_level": {
+        "type": "float",
+        "default": 30000.0,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            15000.0,
+            100000.0
+        ]
+    },
+    "education_level": {
+        "type": "str",
+        "default": "high_school",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "none",
+            "primary",
+            "high_school",
+            "bachelor",
+            "master",
+            "doctorate"
+        ]
+    },
+    "social_support": {
+        "type": "str",
+        "default": "moderate",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "none",
+            "low",
+            "moderate",
+            "high"
+        ]
+    },
+    "health_decision": {
+        "type": "str",
+        "default": "pending",
+        "private": false,
+        "sampling": "default"
+    },
+    "age": {
+        "type": "int",
+        "default": 40,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            18,
+            80
+        ]
+    },
+    "gender": {
+        "type": "str",
+        "default": "female",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "male",
+            "female",
+            "non_binary",
+            "prefer_not_to_say"
+        ]
+    },
+    "health_status": {
+        "type": "str",
+        "default": "stable",
+        "private": true,
+        "sampling": "default"
+    },
+    "healthcare_accessibility": {
+        "type": "float",
+        "default": 0.75,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "cultural_background": {
+        "type": "str",
+        "default": "mixed",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "asian",
+            "african",
+            "european",
+            "hispanic",
+            "mixed",
+            "other"
+        ]
+    },
+    "healthcare_utilization": {
+        "type": "int",
+        "default": 2,
+        "private": false,
+        "sampling": "default"
+    },
+    "policy_impact": {
+        "type": "float",
+        "default": 0.0,
+        "private": true,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

@@ -1,0 +1,132 @@
+[
+    {
+        "name": "GreenThumb Gardeners",
+        "social_influence": 17,
+        "policy_adherence": 0.7923840932757915,
+        "interaction_frequency": 6,
+        "health_state_distribution": [
+            {
+                "state": "S",
+                "percentage": 70
+            },
+            {
+                "state": "I",
+                "percentage": 20
+            },
+            {
+                "state": "R",
+                "percentage": 10
+            }
+        ],
+        "resource_allocation_efficiency": 0.6211717155692471,
+        "communication_effectiveness": 0.7115054093746808,
+        "agent_type": "GroupAgent",
+        "contact_pattern": "standard_interaction",
+        "updated_contact_pattern": "standard_interaction",
+        "id": "5"
+    },
+    {
+        "name": "Tech Innovators Hub",
+        "social_influence": 46,
+        "policy_adherence": 0.0750444724642032,
+        "interaction_frequency": 5,
+        "health_state_distribution": [
+            {
+                "state": "S",
+                "percentage": 70
+            },
+            {
+                "state": "I",
+                "percentage": 20
+            },
+            {
+                "state": "R",
+                "percentage": 10
+            }
+        ],
+        "resource_allocation_efficiency": 0.563396098145238,
+        "communication_effectiveness": 0.9806848447210046,
+        "agent_type": "GroupAgent",
+        "contact_pattern": "standard_interaction",
+        "updated_contact_pattern": "standard_interaction",
+        "id": "6"
+    },
+    {
+        "name": "Culinary Creators Collective",
+        "social_influence": 71,
+        "policy_adherence": 0.9467441619188426,
+        "interaction_frequency": 9,
+        "health_state_distribution": [
+            {
+                "state": "S",
+                "percentage": 70
+            },
+            {
+                "state": "I",
+                "percentage": 20
+            },
+            {
+                "state": "R",
+                "percentage": 10
+            }
+        ],
+        "resource_allocation_efficiency": 0.9706133887334893,
+        "communication_effectiveness": 0.7931312574056355,
+        "agent_type": "GroupAgent",
+        "contact_pattern": "standard_interaction",
+        "updated_contact_pattern": "standard_interaction",
+        "id": "7"
+    },
+    {
+        "name": "Adventure Seekers Society",
+        "social_influence": 3,
+        "policy_adherence": 0.5293656804615975,
+        "interaction_frequency": 8,
+        "health_state_distribution": [
+            {
+                "state": "S",
+                "percentage": 70
+            },
+            {
+                "state": "I",
+                "percentage": 20
+            },
+            {
+                "state": "R",
+                "percentage": 10
+            }
+        ],
+        "resource_allocation_efficiency": 0.747990045590564,
+        "communication_effectiveness": 0.5220970305144511,
+        "agent_type": "GroupAgent",
+        "contact_pattern": "standard_interaction",
+        "updated_contact_pattern": "standard_interaction",
+        "id": "8"
+    },
+    {
+        "name": "Artistic Expressions Guild",
+        "social_influence": 21,
+        "policy_adherence": 0.6630250037010199,
+        "interaction_frequency": 13,
+        "health_state_distribution": [
+            {
+                "state": "S",
+                "percentage": 70
+            },
+            {
+                "state": "I",
+                "percentage": 20
+            },
+            {
+                "state": "R",
+                "percentage": 10
+            }
+        ],
+        "resource_allocation_efficiency": 0.8979749147796445,
+        "communication_effectiveness": 0.8115955437591607,
+        "agent_type": "GroupAgent",
+        "contact_pattern": "standard_interaction",
+        "updated_contact_pattern": "standard_interaction",
+        "id": "9"
+    }
+]

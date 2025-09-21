@@ -1,0 +1,82 @@
+[
+    {
+        "name": "JudgeAgent_A1",
+        "judgment_result": "pending_review",
+        "legal_experience_years": 7,
+        "specialization_field": [
+            "civil law"
+        ],
+        "current_case_load": 5,
+        "communication_protocol": "TCP/IP",
+        "precedent_reference_count": 10,
+        "agent_type": "JudgeAgent",
+        "interpreted_precedents": "awaiting_input",
+        "decision_algorithm_version": "v1.1",
+        "socio_political_influence": 0.5,
+        "id": "0"
+    },
+    {
+        "name": "JudgeAgent_B2",
+        "judgment_result": "pending_review",
+        "legal_experience_years": 12,
+        "specialization_field": [
+            "contract law"
+        ],
+        "current_case_load": 5,
+        "communication_protocol": "HTTP/2",
+        "precedent_reference_count": 10,
+        "agent_type": "JudgeAgent",
+        "interpreted_precedents": "awaiting_input",
+        "decision_algorithm_version": "v1.1",
+        "socio_political_influence": 0.5,
+        "id": "1"
+    },
+    {
+        "name": "JudgeAgent_C3",
+        "judgment_result": "pending_review",
+        "legal_experience_years": 11,
+        "specialization_field": [
+            "civil law"
+        ],
+        "current_case_load": 5,
+        "communication_protocol": "WebSocket",
+        "precedent_reference_count": 10,
+        "agent_type": "JudgeAgent",
+        "interpreted_precedents": "awaiting_input",
+        "decision_algorithm_version": "v2.0",
+        "socio_political_influence": 0.5,
+        "id": "2"
+    },
+    {
+        "name": "JudgeAgent_D4",
+        "judgment_result": "pending_review",
+        "legal_experience_years": 33,
+        "specialization_field": [
+            "civil law"
+        ],
+        "current_case_load": 5,
+        "communication_protocol": "MQTT",
+        "precedent_reference_count": 10,
+        "agent_type": "JudgeAgent",
+        "interpreted_precedents": "awaiting_input",
+        "decision_algorithm_version": "v2.0",
+        "socio_political_influence": 0.5,
+        "id": "3"
+    },
+    {
+        "name": "JudgeAgent_E5",
+        "judgment_result": "pending_review",
+        "legal_experience_years": 12,
+        "specialization_field": [
+            "civil law"
+        ],
+        "current_case_load": 5,
+        "communication_protocol": "AMQP",
+        "precedent_reference_count": 10,
+        "agent_type": "JudgeAgent",
+        "interpreted_precedents": "awaiting_input",
+        "decision_algorithm_version": "v1.1",
+        "socio_political_influence": 0.5,
+        "id": "4"
+    }
+]

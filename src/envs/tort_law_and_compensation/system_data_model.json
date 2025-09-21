@@ -1,0 +1,90 @@
+{
+    "environment": {
+        "variables": [
+            {
+                "name": "decision_outcome",
+                "type": "str",
+                "default_value": null
+            },
+            {
+                "name": "compensation_awarded",
+                "type": "float",
+                "default_value": null
+            },
+            {
+                "name": "completion_status",
+                "type": "str",
+                "default_value": null
+            }
+        ]
+    },
+    "agents": {
+        "Plaintiff": {
+            "variables": [
+                {
+                    "name": "compensation_amount",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "damage_description",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "evidence_list",
+                    "type": "list",
+                    "default_value": null
+                },
+                {
+                    "name": "compensation_request_submitted",
+                    "type": "bool",
+                    "default_value": null
+                }
+            ]
+        },
+        "Defendant": {
+            "variables": [
+                {
+                    "name": "liability_reduction_argument",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "counter_evidence_list",
+                    "type": "list",
+                    "default_value": null
+                },
+                {
+                    "name": "defense_prepared",
+                    "type": "bool",
+                    "default_value": null
+                }
+            ]
+        },
+        "Judge": {
+            "variables": [
+                {
+                    "name": "evaluation_status",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "evaluation_notes",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "evaluation_status_request",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "evaluation_status_defense",
+                    "type": "str",
+                    "default_value": null
+                }
+            ]
+        }
+    }
+}

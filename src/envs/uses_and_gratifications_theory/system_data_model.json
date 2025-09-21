@@ -1,0 +1,61 @@
+{
+    "environment": {
+        "variables": [
+            {
+                "name": "available_media",
+                "type": "list",
+                "default_value": null
+            }
+        ]
+    },
+    "agents": {
+        "AudienceAgent": {
+            "variables": [
+                {
+                    "name": "current_needs",
+                    "type": "list",
+                    "default_value": null
+                },
+                {
+                    "name": "selected_media",
+                    "type": "int",
+                    "default_value": null
+                },
+                {
+                    "name": "satisfaction_level",
+                    "type": "int",
+                    "default_value": null
+                },
+                {
+                    "name": "feedback_history",
+                    "type": "list",
+                    "default_value": null
+                }
+            ]
+        },
+        "MediaAgent": {
+            "variables": [
+                {
+                    "name": "content_type",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "target_need",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "delivered_content",
+                    "type": "dict",
+                    "default_value": null
+                },
+                {
+                    "name": "feedback_records",
+                    "type": "list",
+                    "default_value": null
+                }
+            ]
+        }
+    }
+}

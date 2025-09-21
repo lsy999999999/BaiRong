@@ -1,0 +1,32 @@
+{
+  "environment": {
+      "name": "two_step_flow_model",
+      "mode": "round",
+      "max_rounds": 3
+  },
+  "agent": {
+      "profile": {
+          "MediaAgent": {
+              "count": 50,
+              "max_count": 350,
+              "portrait": 2
+          },
+          "OpinionLeaderAgent": {
+              "count": 50,
+              "max_count": 350,
+              "portrait": 1
+          },
+          "PublicAgent": {
+              "count": 50,
+              "max_count": 350,
+              "portrait": 5
+          }
+      },
+      "planning": "COTPlanning",
+      "memory": "ListStrategy"
+  },
+  "model": {
+      "chat": "/data/pretrain_dir/Qwen2.5-14B-Instruct",
+      "embedding": "/data/pretrain_dir/bge-base-en-v1.5"
+  }
+}

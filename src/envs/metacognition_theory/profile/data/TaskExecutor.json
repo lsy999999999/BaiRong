@@ -1,0 +1,77 @@
+[
+    {
+        "name": "TaskExecutor Alpha",
+        "task_status": "awaiting_task",
+        "cognitive_load": 12,
+        "metacognitive_strategy": "evaluation",
+        "feedback_received": [
+            "No feedback yet"
+        ],
+        "performance_score": 0.0,
+        "agent_type": "TaskExecutor",
+        "reflection_summary": "initial_reflection",
+        "strategy_changes": "no_changes",
+        "adjustment_reason": "none",
+        "id": "0"
+    },
+    {
+        "name": "TaskExecutor Beta",
+        "task_status": "awaiting_task",
+        "cognitive_load": 1,
+        "metacognitive_strategy": "evaluation",
+        "feedback_received": [
+            "No feedback yet"
+        ],
+        "performance_score": 0.0,
+        "agent_type": "TaskExecutor",
+        "reflection_summary": "initial_reflection",
+        "strategy_changes": "no_changes",
+        "adjustment_reason": "none",
+        "id": "1"
+    },
+    {
+        "name": "TaskExecutor Gamma",
+        "task_status": "awaiting_task",
+        "cognitive_load": 38,
+        "metacognitive_strategy": "evaluation",
+        "feedback_received": [
+            "No feedback yet"
+        ],
+        "performance_score": 0.0,
+        "agent_type": "TaskExecutor",
+        "reflection_summary": "initial_reflection",
+        "strategy_changes": "no_changes",
+        "adjustment_reason": "none",
+        "id": "2"
+    },
+    {
+        "name": "TaskExecutor Delta",
+        "task_status": "awaiting_task",
+        "cognitive_load": 80,
+        "metacognitive_strategy": "reflection",
+        "feedback_received": [
+            "No feedback yet"
+        ],
+        "performance_score": 0.0,
+        "agent_type": "TaskExecutor",
+        "reflection_summary": "initial_reflection",
+        "strategy_changes": "no_changes",
+        "adjustment_reason": "none",
+        "id": "3"
+    },
+    {
+        "name": "TaskExecutor Epsilon",
+        "task_status": "awaiting_task",
+        "cognitive_load": 0,
+        "metacognitive_strategy": "evaluation",
+        "feedback_received": [
+            "No feedback yet"
+        ],
+        "performance_score": 0.0,
+        "agent_type": "TaskExecutor",
+        "reflection_summary": "initial_reflection",
+        "strategy_changes": "no_changes",
+        "adjustment_reason": "none",
+        "id": "4"
+    }
+]

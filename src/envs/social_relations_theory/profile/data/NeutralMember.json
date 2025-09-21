@@ -1,0 +1,122 @@
+[
+    {
+        "name": "Community Liaison",
+        "interaction_status": "idle",
+        "motivation_level": 50,
+        "social_needs": "High",
+        "job_satisfaction": 60,
+        "team_interaction_frequency": 5,
+        "role_experience": 1,
+        "sense_of_belonging": 50,
+        "agent_type": "NeutralMember",
+        "initiator_emotion": "neutral",
+        "feedback_received": [
+            {
+                "date": "2023-10-01",
+                "type": "positive",
+                "source": "leader"
+            }
+        ],
+        "emotional_responses": [
+            "satisfaction",
+            "anxiety"
+        ],
+        "id": "10"
+    },
+    {
+        "name": "Data Analyst",
+        "interaction_status": "idle",
+        "motivation_level": 50,
+        "social_needs": "Low",
+        "job_satisfaction": 60,
+        "team_interaction_frequency": 4,
+        "role_experience": 4,
+        "sense_of_belonging": 50,
+        "agent_type": "NeutralMember",
+        "initiator_emotion": "neutral",
+        "feedback_received": [
+            {
+                "date": "2023-10-01",
+                "type": "positive",
+                "source": "leader"
+            }
+        ],
+        "emotional_responses": [
+            "satisfaction",
+            "anxiety"
+        ],
+        "id": "11"
+    },
+    {
+        "name": "Project Coordinator",
+        "interaction_status": "idle",
+        "motivation_level": 50,
+        "social_needs": "Medium",
+        "job_satisfaction": 60,
+        "team_interaction_frequency": 1,
+        "role_experience": 4,
+        "sense_of_belonging": 50,
+        "agent_type": "NeutralMember",
+        "initiator_emotion": "neutral",
+        "feedback_received": [
+            {
+                "date": "2023-10-01",
+                "type": "positive",
+                "source": "leader"
+            }
+        ],
+        "emotional_responses": [
+            "satisfaction",
+            "anxiety"
+        ],
+        "id": "12"
+    },
+    {
+        "name": "Technical Support Specialist",
+        "interaction_status": "idle",
+        "motivation_level": 50,
+        "social_needs": "Medium",
+        "job_satisfaction": 60,
+        "team_interaction_frequency": 3,
+        "role_experience": 5,
+        "sense_of_belonging": 50,
+        "agent_type": "NeutralMember",
+        "initiator_emotion": "neutral",
+        "feedback_received": [
+            {
+                "date": "2023-10-01",
+                "type": "positive",
+                "source": "leader"
+            }
+        ],
+        "emotional_responses": [
+            "satisfaction",
+            "anxiety"
+        ],
+        "id": "13"
+    },
+    {
+        "name": "Research Associate",
+        "interaction_status": "idle",
+        "motivation_level": 50,
+        "social_needs": "Low",
+        "job_satisfaction": 60,
+        "team_interaction_frequency": 5,
+        "role_experience": 7,
+        "sense_of_belonging": 50,
+        "agent_type": "NeutralMember",
+        "initiator_emotion": "neutral",
+        "feedback_received": [
+            {
+                "date": "2023-10-01",
+                "type": "positive",
+                "source": "leader"
+            }
+        ],
+        "emotional_responses": [
+            "satisfaction",
+            "anxiety"
+        ],
+        "id": "14"
+    }
+]

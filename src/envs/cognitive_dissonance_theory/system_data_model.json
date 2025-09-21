@@ -1,0 +1,65 @@
+{
+    "environment": {
+        "variables": [
+            {
+                "name": "dissonance_scenario",
+                "type": "str",
+                "default_value": null
+            }
+        ]
+    },
+    "agents": {
+        "ActorA": {
+            "variables": [
+                {
+                    "name": "dissonance_level",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "dissonance_cause",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "strategy_type",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "expected_outcome",
+                    "type": "str",
+                    "default_value": null
+                }
+            ]
+        },
+        "ObserverB": {
+            "variables": [
+                {
+                    "name": "feedback_content",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "feedback_quality",
+                    "type": "int",
+                    "default_value": null
+                }
+            ]
+        },
+        "FeedbackerC": {
+            "variables": [
+                {
+                    "name": "evaluation_result",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "completion_status",
+                    "type": "str",
+                    "default_value": null
+                }
+            ]
+        }
+    }
+}

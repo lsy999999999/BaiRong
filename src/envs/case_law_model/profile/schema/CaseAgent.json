@@ -1,0 +1,70 @@
+{
+    "name": {
+        "type": "str",
+        "default": "CaseAgent",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's identifier name in the simulation"
+    },
+    "case_context": {
+        "type": "str",
+        "default": "awaiting_input",
+        "private": false,
+        "sampling": "default"
+    },
+    "applied_interpretation": {
+        "type": "str",
+        "default": "pending_analysis",
+        "private": false,
+        "sampling": "default"
+    },
+    "legal_field": {
+        "type": "str",
+        "default": "criminal law",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "criminal law",
+            "civil law",
+            "contract law",
+            "administrative law"
+        ]
+    },
+    "precedent_reference": {
+        "type": "list",
+        "default": [
+            "precedent_1",
+            "precedent_2"
+        ],
+        "private": true,
+        "sampling": "default",
+        "sample_size": 2
+    },
+    "socio_political_influence": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "default",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "interpretation_accuracy": {
+        "type": "int",
+        "default": 80,
+        "private": false,
+        "sampling": "default",
+        "range": [
+            0,
+            100
+        ]
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

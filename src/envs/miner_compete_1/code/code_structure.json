@@ -1,0 +1,367 @@
+{
+  "agents": {
+    "ResourceMiner": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "1": {
+          "code": "async def observe_global_map(self, event: Event) -> List[Event]:\n        instruction = \"\"\"As a ResourceMiner agent, observe the global map to assess the current state \n        of resources on the grid. After observing, prepare for the strategic action phase. \n        Please provide a JSON response including the updated 'map_state' with resource visibility on the grid \n        and 'target_ids' for agents to initiate the 'decide_action' phase. \n        Make sure to select target agent(s) based on optimal strategic workflow.\n        \n        Expected JSON response format:\n        {\n        \"map_state\": \"<A list representing the current state of the grid map>\",\n        \"target_ids\": [\"<List of agent IDs or a single agent ID>\"]\n        }\n        \"\"\"\n    \n        observation = \"Observing the current state of the grid and resource availability.\"\n        result = await self.generate_reaction(instruction, observation)\n        \n        new_map_state = result.get('map_state', None)\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n    \n        await self.profile.update_data(\"map_state\", new_map_state)\n        \n        events = []\n        for target_id in target_ids:\n            map_observed_event = MapObservedEvent(self.profile_id, target_id)\n            events.append(map_observed_event)\n    \n        return events",
+          "metadata": {
+            "id": 1,
+            "name": "observe_global_map",
+            "condition": null,
+            "description": "This action involves observing the global map to assess the current state of the grid and resource availability, laying the groundwork for subsequent strategic decisions.",
+            "type": "OR",
+            "required_variables": [],
+            "output_updates": [
+              {
+                "name": "map_state",
+                "type": "list",
+                "context": "agent",
+                "description": "A representation of the current state of the grid map, including resource availability."
+              }
+            ],
+            "code": ""
+          }
+        },
+        "2": {
+          "code": "async def decide_action(self, event: Event) -> List[Event]:\n        map_state = self.profile.get_data(\"map_state\", None)\n        if map_state is None:\n            return []\n        \n        observation = f\"Map state: {map_state}\"\n        instruction = \"\"\"\n        Considering the current map state, generate an action decision to either occupy, maintain, or compete for land ownership. \n        The decision should include the action type (occupy, maintain, compete), energy investment, target cell coordinates, \n        and target_ids for the outgoing action. Output must be in the JSON format:\n    \n        {\n            \"action_type\": \"<occupy/maintain/compete>\",\n            \"energy_investment\": <int>,\n            \"cell_coordinates\": \"(x,y)\",\n            \"target_ids\": [\"<The string ID(s) of the target agent(s)>\"]\n        }\n        \"\"\"\n        result = await self.generate_reaction(instruction, observation)\n        \n        action_type = result.get('action_type')\n        energy_investment = result.get('energy_investment', 0)\n        cell_coordinates = result.get('cell_coordinates', \"(0,0)\")\n        target_ids = result.get('target_ids', [])\n        \n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n    \n        events = []\n        if action_type in [\"occupy\", \"maintain\", \"compete\"]:\n            for target_id in target_ids:\n                if action_type in [\"occupy\", \"maintain\"]:\n                    event = OccupyLandDecisionEvent(\n                        self.profile_id,\n                        target_id,\n                        energy_investment=energy_investment,\n                        cell_coordinates=cell_coordinates,\n                        previous_owner=self.profile.get_data(\"previous_owner\", \"None\")\n                    )\n                elif action_type == \"compete\":\n                    event = CompeteLandDecisionEvent(\n                        self.profile_id,\n                        target_id,\n                        energy_investment=energy_investment,\n                        cell_coordinates=cell_coordinates,\n                        current_owner=self.profile.get_data(\"current_owner\", \"None\")\n                    )\n                \n                events.append(event)\n        \n        return events",
+          "metadata": {
+            "id": 2,
+            "name": "decide_action",
+            "condition": "Global map state observed",
+            "description": "This action entails making strategic decisions regarding whether to occupy, maintain, or compete for land ownership based on observed map data.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "map_state",
+                "type": "list",
+                "context": "agent",
+                "description": "Current observed state of the grid map to inform decision making."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "action_plan",
+                "type": "dict",
+                "context": "agent",
+                "description": "The plan detailing whether the agent will occupy, maintain, or compete for a cell."
+              }
+            ],
+            "code": ""
+          }
+        },
+        "3": {
+          "code": "async def execute_occupy_or_maintain(self, event: Event) -> List[Event]:\n        cell_coordinates = event.cell_coordinates\n        action_executed = self.profile.get_data(f\"action_executed_{cell_coordinates}\", False)\n        if action_executed or not (event.energy_investment and event.cell_coordinates):\n            return []\n    \n        energy_investment = event.energy_investment\n        previous_owner = event.previous_owner\n    \n        observation = f\"Energy Investment: {energy_investment}, Cell Coordinates: {cell_coordinates}, Previous Owner: {previous_owner}\"\n        instruction = \"\"\"Given the decision to occupy or maintain land ownership:\n        If the agent's energy investment exceeds any prior claims, it should occupy or maintain the land. Determine if the occupation/maintenance can be successful based on the current context.\n        Return the information in JSON format:\n        {\n            \"success\": <true|false>,\n            \"target_ids\": [\"<resource agent ID(s)>\"]\n        }\"\"\"\n        \n        result = await self.generate_reaction(instruction, observation)\n        \n        success = result.get('success', False)\n        target_ids = result.get('target_ids', [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n    \n        self.profile.update_data(f\"action_executed_{cell_coordinates}\", True)\n    \n        events = []\n        \n        if success:\n            new_land_status = {\"owner\": self.profile_id, \"cell\": cell_coordinates}\n            await self.env.update_data(\"new_land_status\", new_land_status)\n            \n            for target_id in target_ids:\n                success_event = OccupyMaintainSuccessEvent(self.profile_id, target_id, self.profile_id, cell_coordinates)\n                events.append(success_event)\n        \n        return events",
+          "metadata": {
+            "id": 3,
+            "name": "execute_occupy_or_maintain",
+            "condition": "Decision to occupy or maintain land ownership",
+            "description": "In this action, the agent undertakes to occupy new land or maintain control over already owned land by investing energy.",
+            "type": "XOR",
+            "required_variables": [
+              {
+                "name": "energy_investment",
+                "type": "int",
+                "context": "event",
+                "description": "Energy the agent has decided to invest in occupying or maintaining land."
+              },
+              {
+                "name": "cell_coordinates",
+                "type": "tuple",
+                "context": "event",
+                "description": "Coordinates of the grid cell targeted for occupation or maintenance."
+              },
+              {
+                "name": "previous_owner",
+                "type": "str",
+                "context": "event",
+                "description": "Identifier of the previous owner of the land, if applicable."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "new_land_status",
+                "type": "dict",
+                "context": "env",
+                "description": "Updates the ownership status of the targeted cell in the environment."
+              }
+            ],
+            "code": ""
+          }
+        },
+        "4": {
+          "code": "async def execute_compete(self, event: Event) -> List[Event]:\n        if event.__class__.__name__ != \"CompeteLandDecisionEvent\":\n            return []\n    \n        energy_investment = event.energy_investment\n        cell_coordinates = event.cell_coordinates\n        current_owner = event.current_owner\n        \n        if current_owner == self.profile_id:\n            return []\n    \n        already_competed = self.profile.get_data(f\"compete_triggered_{cell_coordinates}\", False)\n        if already_competed:\n            return []\n    \n        observation = f\"Competing for cell at {cell_coordinates} with current owner {current_owner}. Energy investment is {energy_investment}.\"\n        instruction = \"\"\"\n        You are about to compete for land ownership. Please decide the outcome of competition based on the current observation.\n        Return the outcome in the following JSON format:\n    \n        {\n        \"competition_result\": {\"result\": \"success\" | \"failure\", \"new_owner\": \"<Agent ID of new owner>\"},\n        \"target_ids\": [\"<ID of the agent(s) to notify>\"]\n        }\n        \"\"\"\n        result = await self.generate_reaction(instruction, observation)\n    \n        competition_result = result.get('competition_result', {})\n        new_owner = competition_result.get('new_owner', None)\n        result_status = competition_result.get('result', None)\n        target_ids = result.get('target_ids', [])\n    \n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n    \n        events = []\n        self.profile.update_data(f\"compete_triggered_{cell_coordinates}\", True)\n        self.env.update_data(\"competition_result\", competition_result)\n    \n        if result_status == \"success\":\n            for target_id in target_ids:\n                compete_success_event = CompeteSuccessEvent(new_owner, target_id, cell_coordinates)\n                events.append(compete_success_event)\n    \n        return events",
+          "metadata": {
+            "id": 4,
+            "name": "execute_compete",
+            "condition": "Decision to compete for land ownership",
+            "description": "This action involves competing with other miners for the acquisition of land ownership by investing strategic amounts of energy.",
+            "type": "XOR",
+            "required_variables": [
+              {
+                "name": "energy_investment",
+                "type": "int",
+                "context": "event",
+                "description": "Energy the agent has decided to invest in competing for land ownership."
+              },
+              {
+                "name": "cell_coordinates",
+                "type": "tuple",
+                "context": "event",
+                "description": "Coordinates of the grid cell targeted for competition."
+              },
+              {
+                "name": "current_owner",
+                "type": "str",
+                "context": "event",
+                "description": "Identifier of the current owner of the land being competed for."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "competition_result",
+                "type": "dict",
+                "context": "env",
+                "description": "Updates the environment with the result of the competition for the targeted cell."
+              }
+            ],
+            "code": ""
+          }
+        },
+        "5": {
+          "code": "async def exploit_resources(self, event: Event) -> List[Event]:\n        new_owner = event.new_owner\n        if new_owner != self.profile_id:\n            return []\n\n        cell_coordinates = event.cell_coordinates\n    \n        occupy_maintain_success_received = self.profile.get_data(\"OccupyMaintainSuccessEvent\", False)\n        compete_success_received = self.profile.get_data(\"CompeteSuccessEvent\", False)\n    \n        if not (occupy_maintain_success_received or compete_success_received):\n            return []\n        \n        resource_count = self.profile.get_data(\"resource_count\", 0)\n        \n        instruction = \"\"\"You are required to exploit resources from a land where you have secured ownership.\n        Based on the secured ownership of land, determine the target to send the ResourceExploitedEvent. \n        Ensure the format is as follows:\n        {\n            \"target_ids\": [\"<String ID of the EnvAgent or other agents>\"]\n        }\n        \"\"\"\n        \n        observation = f\"Successfully exploited resources: {resource_count} units from cell at {cell_coordinates}.\"\n        \n        result = await self.generate_reaction(instruction, observation)\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n    \n        events = []\n        for target_id in target_ids:\n            exploit_event = ResourceExploitedEvent(self.profile_id, target_id, resource_count, cell_coordinates, True)\n            events.append(exploit_event)\n        \n        return events",
+          "metadata": {
+            "id": 5,
+            "name": "exploit_resources",
+            "condition": "Land ownership secured",
+            "description": "The agent exploits the resources of a grid cell they have successfully occupied, maintained, or won via competition.",
+            "type": "AND",
+            "required_variables": [
+              {
+                "name": "new_owner",
+                "type": "str",
+                "context": "event",
+                "description": "Identifier of the agent now owning the land."
+              },
+              {
+                "name": "cell_coordinates",
+                "type": "tuple",
+                "context": "event",
+                "description": "Coordinates of the grid cell being exploited for resources."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "resource_count",
+                "type": "int",
+                "context": "agent",
+                "description": "Number of resource units successfully extracted from the grid cell."
+              }
+            ],
+            "code": ""
+          }
+        }
+      }
+    }
+  },
+  "events": {
+    "imports": "from onesim.events import Event\nfrom typing import Dict, List, Any        \nfrom datetime import datetime\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event",
+    "definitions": {
+      "-1": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event",
+        "metadata": {
+          "id": -1,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "ResourceMiner",
+          "to_action_name": "observe_global_map",
+          "from_action_id": 0,
+          "to_action_id": 1,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for miners to observe the global map state",
+          "fields": [],
+          "code": ""
+        }
+      },
+      "1": {
+        "code": "class MapObservedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": 1,
+          "from_agent_type": "ResourceMiner",
+          "from_action_name": "observe_global_map",
+          "to_agent_type": "ResourceMiner",
+          "to_action_name": "decide_action",
+          "from_action_id": 1,
+          "to_action_id": 2,
+          "event_name": "MapObservedEvent",
+          "event_info": "Event triggered after observing the map, leads to action decision",
+          "fields": [],
+          "code": ""
+        }
+      },
+      "2": {
+        "code": "class OccupyLandDecisionEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        energy_investment: int = 0,\n        cell_coordinates: tuple = '(0,0)',\n        previous_owner: str = 'None',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.energy_investment = energy_investment\n        self.cell_coordinates = cell_coordinates\n        self.previous_owner = previous_owner\n\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event",
+        "metadata": {
+          "id": 2,
+          "from_agent_type": "ResourceMiner",
+          "from_action_name": "decide_action",
+          "to_agent_type": "ResourceMiner",
+          "to_action_name": "execute_occupy_or_maintain",
+          "from_action_id": 2,
+          "to_action_id": 3,
+          "event_name": "OccupyLandDecisionEvent",
+          "event_info": "Decision to occupy or maintain land ownership with energy investment",
+          "fields": [
+            {
+              "name": "energy_investment",
+              "type": "int",
+              "default_value": 0,
+              "description": "Amount of energy invested in occupying or maintaining land"
+            },
+            {
+              "name": "cell_coordinates",
+              "type": "tuple",
+              "default_value": "(0,0)",
+              "description": "Coordinates of the grid cell targeted for occupation or maintenance"
+            },
+            {
+              "name": "previous_owner",
+              "type": "str",
+              "default_value": "None",
+              "description": "Identifier of the previous owner of the land, if applicable"
+            }
+          ],
+          "code": ""
+        }
+      },
+      "3": {
+        "code": "class CompeteLandDecisionEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        energy_investment: int = 0,\n        cell_coordinates: tuple = '(0,0)',\n        current_owner: str = 'None',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.energy_investment = energy_investment\n        self.cell_coordinates = cell_coordinates\n        self.current_owner = current_owner\n\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event",
+        "metadata": {
+          "id": 3,
+          "from_agent_type": "ResourceMiner",
+          "from_action_name": "decide_action",
+          "to_agent_type": "ResourceMiner",
+          "to_action_name": "execute_compete",
+          "from_action_id": 2,
+          "to_action_id": 4,
+          "event_name": "CompeteLandDecisionEvent",
+          "event_info": "Decision to compete for land ownership with energy investment",
+          "fields": [
+            {
+              "name": "energy_investment",
+              "type": "int",
+              "default_value": 0,
+              "description": "Amount of energy invested in competing for land ownership"
+            },
+            {
+              "name": "cell_coordinates",
+              "type": "tuple",
+              "default_value": "(0,0)",
+              "description": "Coordinates of the grid cell targeted for competition"
+            },
+            {
+              "name": "current_owner",
+              "type": "str",
+              "default_value": "None",
+              "description": "Identifier of the current owner of the land being competed for"
+            }
+          ],
+          "code": ""
+        }
+      },
+      "4": {
+        "code": "class OccupyMaintainSuccessEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        new_owner: str = 'None',\n        cell_coordinates: tuple = '(0,0)',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.new_owner = new_owner\n        self.cell_coordinates = cell_coordinates\n\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event",
+        "metadata": {
+          "id": 4,
+          "from_agent_type": "ResourceMiner",
+          "from_action_name": "execute_occupy_or_maintain",
+          "to_agent_type": "ResourceMiner",
+          "to_action_name": "exploit_resources",
+          "from_action_id": 3,
+          "to_action_id": 5,
+          "event_name": "OccupyMaintainSuccessEvent",
+          "event_info": "Successful ownership; proceed to resource exploitation",
+          "fields": [
+            {
+              "name": "new_owner",
+              "type": "str",
+              "default_value": "None",
+              "description": "Identifier of the agent now owning the land"
+            },
+            {
+              "name": "cell_coordinates",
+              "type": "tuple",
+              "default_value": "(0,0)",
+              "description": "Coordinates of the grid cell successfully occupied or maintained"
+            }
+          ],
+          "code": ""
+        }
+      },
+      "5": {
+        "code": "class CompeteSuccessEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        new_owner: str = 'None',\n        cell_coordinates: tuple = '(0,0)',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.new_owner = new_owner\n        self.cell_coordinates = cell_coordinates\n\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event",
+        "metadata": {
+          "id": 5,
+          "from_agent_type": "ResourceMiner",
+          "from_action_name": "execute_compete",
+          "to_agent_type": "ResourceMiner",
+          "to_action_name": "exploit_resources",
+          "from_action_id": 4,
+          "to_action_id": 5,
+          "event_name": "CompeteSuccessEvent",
+          "event_info": "Successful competition; proceed to resource exploitation",
+          "fields": [
+            {
+              "name": "new_owner",
+              "type": "str",
+              "default_value": "None",
+              "description": "Identifier of the agent who won the competition for land"
+            },
+            {
+              "name": "cell_coordinates",
+              "type": "tuple",
+              "default_value": "(0,0)",
+              "description": "Coordinates of the grid cell successfully competed for"
+            }
+          ],
+          "code": ""
+        }
+      },
+      "6": {
+        "code": "class ResourceExploitedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        units_exploited: int = 0,\n        cell_coordinates: tuple = '(0,0)',\n        exploit_success: bool = True,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.units_exploited = units_exploited\n        self.cell_coordinates = cell_coordinates\n        self.exploit_success = exploit_success\n\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event",
+        "metadata": {
+          "id": 6,
+          "from_agent_type": "ResourceMiner",
+          "from_action_name": "exploit_resources",
+          "to_agent_type": "EnvAgent",
+          "to_action_name": "terminate",
+          "from_action_id": 5,
+          "to_action_id": -1,
+          "event_name": "ResourceExploitedEvent",
+          "event_info": "Resources exploited, ending the workflow",
+          "fields": [
+            {
+              "name": "units_exploited",
+              "type": "int",
+              "default_value": 0,
+              "description": "Number of resource units exploited from the grid cell"
+            },
+            {
+              "name": "cell_coordinates",
+              "type": "tuple",
+              "default_value": "(0,0)",
+              "description": "Coordinates of the grid cell from which resources were exploited"
+            },
+            {
+              "name": "exploit_success",
+              "type": "bool",
+              "default_value": true,
+              "description": "Indicates whether resource exploitation was successful"
+            }
+          ],
+          "code": ""
+        }
+      }
+    }
+  }
+}

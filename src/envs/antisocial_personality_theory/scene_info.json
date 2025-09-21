@@ -1,0 +1,62 @@
+{
+  "domain": "Psychology",
+  "scene_name": "antisocial_personality_theory",
+  "odd_protocol": {
+    "overview": {
+      "system_goal": "Simulate how individuals with antisocial personality traits exhibit specific behavioral patterns in social interactions, such as lack of empathy, manipulation, and violation of social norms.",
+      "agent_types": "Individuals exhibiting antisocial personality traits engaging in social interactions.",
+      "environment_description": "A social environment where individuals interact, potentially leading to conflict, manipulation, or violent behavior.",
+      "antisocial_behavior": "The degree to which individuals exhibit antisocial behaviors.",
+      "lack_of_empathy": "The extent to which individuals lack understanding or concern for others' feelings."
+    },
+    "design_concepts": {
+      "interaction_patterns": "Agents engage in social interactions, often manipulating or disrespecting others to achieve personal gain.",
+      "communication_protocols": "Interactions may involve direct communication or subtle manipulative tactics.",
+      "decision_mechanisms": "Decisions are based on maximizing personal gain, often through manipulation or antisocial behavior.",
+      "reinforcement_of_antisocial_behavior": "Antisocial behaviors may be reinforced or rewarded, leading to their persistence."
+    },
+    "details": {
+      "agent_behaviors": "Agents display behaviors such as manipulation, lack of empathy, and violation of social norms.",
+      "decision_algorithms": "Algorithms focus on maximizing personal benefit through antisocial actions.",
+      "specific_constraints": "Agents' behaviors are constrained by their antisocial personality traits.",
+      "relationship_deterioration": "Due to lack of empathy, agents' relationships with others deteriorate, reinforcing antisocial behavior patterns."
+    }
+  },
+  "agent_types": {
+    "AntisocialAgent": "An agent exhibiting antisocial personality traits, engaging in manipulative and norm-violating behaviors to maximize personal gain during social interactions.",
+    "SocialEnvironmentAgent": "An agent representing the social environment, facilitating interactions among individuals and influencing potential outcomes of conflicts or manipulative actions."
+  },
+  "portrait": {
+    "AntisocialAgent": 5,
+    "SocialEnvironmentAgent": 1
+  },
+  "metrics": [
+    {
+      "id": "Manipulation_Strategy_Distribution",
+      "name": "Manipulation Strategy Distribution",
+      "description": "Measures the frequency of antisocial behaviors exhibited by agents, based on their interaction status and manipulation strategy.",
+      "visualization_type": "bar",
+      "update_interval": 5,
+      "variables": [
+        {
+          "name": "interaction_status",
+          "source_type": "agent",
+          "agent_type": "AntisocialAgent",
+          "path": "interaction_status",
+          "required": true,
+          "is_list": true
+        },
+        {
+          "name": "manipulation_strategy",
+          "source_type": "agent",
+          "agent_type": "AntisocialAgent",
+          "path": "manipulation_strategy",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "For each agent, check if interaction_status and manipulation_strategy are not None and not empty. Count occurrences of each unique interaction status and manipulation strategy. Handle None or empty lists by skipping those agents. Return a dictionary with interaction statuses and manipulation strategies as keys and their counts as values.",
+      "function_name": "Manipulation_Strategy_Distribution"
+    }
+  ]
+}

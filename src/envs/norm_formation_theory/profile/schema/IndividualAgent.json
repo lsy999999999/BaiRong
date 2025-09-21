@@ -1,0 +1,84 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Agent Smith",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's full name"
+    },
+    "behavior_tendencies": {
+        "type": "list",
+        "default": [
+            "cooperative",
+            "competitive"
+        ],
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "cooperative",
+            "competitive",
+            "neutral"
+        ],
+        "sample_size": 2
+    },
+    "interaction_details": {
+        "type": "str",
+        "default": "awaiting_interaction",
+        "private": true,
+        "sampling": "default"
+    },
+    "adjusted_behavior_tendencies": {
+        "type": "list",
+        "default": [
+            "neutral"
+        ],
+        "private": false,
+        "sampling": "default"
+    },
+    "group_pressure": {
+        "type": "float",
+        "default": 50.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "norm_acceptance": {
+        "type": "int",
+        "default": 60,
+        "private": false,
+        "sampling": "default"
+    },
+    "communication_protocol": {
+        "type": "str",
+        "default": "active",
+        "private": false,
+        "sampling": "default"
+    },
+    "decision_algorithm": {
+        "type": "str",
+        "default": "observation_based",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "observation_based",
+            "interaction_based"
+        ]
+    },
+    "initial_behavior_tendency": {
+        "type": "str",
+        "default": "cooperative",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "cooperative",
+            "competitive",
+            "neutral"
+        ]
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

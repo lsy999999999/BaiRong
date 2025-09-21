@@ -1,0 +1,92 @@
+{
+    "environment": {
+        "variables": []
+    },
+    "agents": {
+        "IndividualAgent": {
+            "variables": [
+                {
+                    "name": "individual_interests",
+                    "type": "list",
+                    "default_value": null
+                },
+                {
+                    "name": "proposal_details",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "negotiation_terms",
+                    "type": "dict",
+                    "default_value": null
+                },
+                {
+                    "name": "negotiation_status",
+                    "type": "string",
+                    "default_value": null
+                }
+            ]
+        },
+        "SocialGroupAgent": {
+            "variables": [
+                {
+                    "name": "evaluation_criteria",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "evaluation_status",
+                    "type": "string",
+                    "default_value": null
+                }
+            ]
+        },
+        "GovernmentAgent": {
+            "variables": [
+                {
+                    "name": "law_details",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "enforcement_status",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "review_status",
+                    "type": "string",
+                    "default_value": null
+                }
+            ]
+        },
+        "ContractBreakdownAgent": {
+            "variables": [
+                {
+                    "name": "conflict_details",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "conflict_status",
+                    "type": "string",
+                    "default_value": null
+                }
+            ]
+        },
+        "PublicPolicyAgent": {
+            "variables": [
+                {
+                    "name": "impact_analysis_results",
+                    "type": "dict",
+                    "default_value": null
+                },
+                {
+                    "name": "analysis_status",
+                    "type": "string",
+                    "default_value": null
+                }
+            ]
+        }
+    }
+}

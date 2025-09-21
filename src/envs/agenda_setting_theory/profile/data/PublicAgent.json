@@ -1,0 +1,67 @@
+[
+    {
+        "name": "Agent Alpha",
+        "focus_value": 50.0,
+        "initial_topic_interest": "social problems",
+        "social_influence_factor": 1.0,
+        "media_exposure": [
+            "television",
+            "social media platforms"
+        ],
+        "agent_type": "PublicAgent",
+        "emotional_response": "neutral",
+        "id": "5"
+    },
+    {
+        "name": "Agent Bravo",
+        "focus_value": 50.0,
+        "initial_topic_interest": "economic phenomena",
+        "social_influence_factor": 1.0,
+        "media_exposure": [
+            "television",
+            "radio"
+        ],
+        "agent_type": "PublicAgent",
+        "emotional_response": "neutral",
+        "id": "6"
+    },
+    {
+        "name": "Agent Charlie",
+        "focus_value": 50.0,
+        "initial_topic_interest": "social problems",
+        "social_influence_factor": 1.0,
+        "media_exposure": [
+            "radio",
+            "social media platforms"
+        ],
+        "agent_type": "PublicAgent",
+        "emotional_response": "neutral",
+        "id": "7"
+    },
+    {
+        "name": "Agent Delta",
+        "focus_value": 50.0,
+        "initial_topic_interest": "political events",
+        "social_influence_factor": 1.0,
+        "media_exposure": [
+            "social media platforms",
+            "news websites"
+        ],
+        "agent_type": "PublicAgent",
+        "emotional_response": "neutral",
+        "id": "8"
+    },
+    {
+        "name": "Agent Echo",
+        "focus_value": 50.0,
+        "initial_topic_interest": "political events",
+        "social_influence_factor": 1.0,
+        "media_exposure": [
+            "radio",
+            "news websites"
+        ],
+        "agent_type": "PublicAgent",
+        "emotional_response": "neutral",
+        "id": "9"
+    }
+]

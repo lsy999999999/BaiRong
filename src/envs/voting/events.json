@@ -1,0 +1,95 @@
+{
+    "-1": {
+        "id": -1,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "VoterAgent",
+        "to_action_name": "decide_participation",
+        "from_action_id": 0,
+        "to_action_id": 1,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for voter participation decision",
+        "fields": []
+    },
+    "1": {
+        "id": 1,
+        "from_agent_type": "VoterAgent",
+        "from_action_name": "decide_participation",
+        "to_agent_type": "VoterAgent",
+        "to_action_name": "select_candidate",
+        "from_action_id": 1,
+        "to_action_id": 2,
+        "event_name": "ParticipationDecisionEvent",
+        "event_info": "Decision made on whether to participate in voting",
+        "fields": [
+            {
+                "name": "voter_id",
+                "type": "string",
+                "default_value": "unknown",
+                "description": "Unique identifier for the voter making the participation decision"
+            },
+            {
+                "name": "participation_decision",
+                "type": "boolean",
+                "default_value": "false",
+                "description": "Indicates whether the voter decides to participate in voting"
+            }
+        ]
+    },
+    "2": {
+        "id": 2,
+        "from_agent_type": "VoterAgent",
+        "from_action_name": "decide_participation",
+        "to_agent_type": "EnvAgent",
+        "to_action_name": "terminate",
+        "from_action_id": 1,
+        "to_action_id": -1,
+        "event_name": "NonParticipationEvent",
+        "event_info": "Voter decides not to participate",
+        "fields": [
+            {
+                "name": "voter_id",
+                "type": "string",
+                "default_value": "unknown",
+                "description": "Unique identifier for the voter deciding not to participate"
+            },
+            {
+                "name": "reason_for_non_participation",
+                "type": "string",
+                "default_value": "none",
+                "description": "Explanation or reason why the voter chooses not to participate"
+            }
+        ]
+    },
+    "3": {
+        "id": 3,
+        "from_agent_type": "VoterAgent",
+        "from_action_name": "select_candidate",
+        "to_agent_type": "EnvAgent",
+        "to_action_name": "terminate",
+        "from_action_id": 2,
+        "to_action_id": -1,
+        "event_name": "CandidateSelectionEvent",
+        "event_info": "Voter selects a candidate based on preferences",
+        "fields": [
+            {
+                "name": "voter_id",
+                "type": "string",
+                "default_value": "unknown",
+                "description": "Unique identifier for the voter selecting a candidate"
+            },
+            {
+                "name": "selected_candidate_id",
+                "type": "string",
+                "default_value": "none",
+                "description": "Identifier for the candidate selected by the voter"
+            },
+            {
+                "name": "preference_score",
+                "type": "float",
+                "default_value": "0.0",
+                "description": "Score representing the voter's preference for the selected candidate"
+            }
+        ]
+    }
+}

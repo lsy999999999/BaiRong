@@ -1,0 +1,92 @@
+[
+    {
+        "name": "Alice Johnson",
+        "overtime_hours": 0.0,
+        "overtime_reason": "awaiting_input",
+        "work_status": "active",
+        "job_title": "Software Engineer",
+        "salary": 61500.76771981592,
+        "employment_type": "contract",
+        "remote_work": "not eligible",
+        "agent_type": "Employee",
+        "communication_log": [
+            {
+                "date": "2023-10-01",
+                "message": "Initial contact with employer"
+            }
+        ],
+        "id": "0"
+    },
+    {
+        "name": "Michael Smith",
+        "overtime_hours": 0.0,
+        "overtime_reason": "awaiting_input",
+        "work_status": "active",
+        "job_title": "Project Manager",
+        "salary": 117199.2139594203,
+        "employment_type": "full-time",
+        "remote_work": "not eligible",
+        "agent_type": "Employee",
+        "communication_log": [
+            {
+                "date": "2023-10-01",
+                "message": "Initial contact with employer"
+            }
+        ],
+        "id": "1"
+    },
+    {
+        "name": "Sophia Lee",
+        "overtime_hours": 0.0,
+        "overtime_reason": "awaiting_input",
+        "work_status": "active",
+        "job_title": "Data Analyst",
+        "salary": 116078.00206647943,
+        "employment_type": "contract",
+        "remote_work": "eligible",
+        "agent_type": "Employee",
+        "communication_log": [
+            {
+                "date": "2023-10-01",
+                "message": "Initial contact with employer"
+            }
+        ],
+        "id": "2"
+    },
+    {
+        "name": "David Brown",
+        "overtime_hours": 0.0,
+        "overtime_reason": "awaiting_input",
+        "work_status": "active",
+        "job_title": "UX Designer",
+        "salary": 33696.182833156665,
+        "employment_type": "part-time",
+        "remote_work": "not eligible",
+        "agent_type": "Employee",
+        "communication_log": [
+            {
+                "date": "2023-10-01",
+                "message": "Initial contact with employer"
+            }
+        ],
+        "id": "3"
+    },
+    {
+        "name": "Emma Davis",
+        "overtime_hours": 0.0,
+        "overtime_reason": "awaiting_input",
+        "work_status": "active",
+        "job_title": "Human Resources Specialist",
+        "salary": 47563.853453378455,
+        "employment_type": "part-time",
+        "remote_work": "eligible",
+        "agent_type": "Employee",
+        "communication_log": [
+            {
+                "date": "2023-10-01",
+                "message": "Initial contact with employer"
+            }
+        ],
+        "id": "4"
+    }
+]

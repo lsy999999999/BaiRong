@@ -1,0 +1,157 @@
+{
+    "-1": {
+        "id": -1,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "Citizen",
+        "to_action_name": "evaluate_grievance",
+        "from_action_id": 0,
+        "to_action_id": 1,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for citizens to assess their grievances",
+        "fields": []
+    },
+    "-2": {
+        "id": -2,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "Government",
+        "to_action_name": "assess_rebellion",
+        "from_action_id": 0,
+        "to_action_id": 3,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for the government to assess the rebellion situation",
+        "fields": []
+    },
+    "1": {
+        "id": 1,
+        "from_agent_type": "Citizen",
+        "from_action_name": "evaluate_grievance",
+        "to_agent_type": "Citizen",
+        "to_action_name": "decide_rebellion",
+        "from_action_id": 1,
+        "to_action_id": 2,
+        "event_name": "GrievanceEvaluatedEvent",
+        "event_info": "Citizen evaluates grievance level to decide on rebellion",
+        "fields": [
+            {
+                "name": "grievance_level",
+                "type": "float",
+                "default_value": "0.0",
+                "description": "The level of grievance evaluated by the citizen"
+            },
+            {
+                "name": "citizen_id",
+                "type": "string",
+                "default_value": "N/A",
+                "description": "Unique identifier for the citizen evaluating grievance"
+            }
+        ]
+    },
+    "2": {
+        "id": 2,
+        "from_agent_type": "Citizen",
+        "from_action_name": "decide_rebellion",
+        "to_agent_type": "Government",
+        "to_action_name": "implement_repression",
+        "from_action_id": 2,
+        "to_action_id": 4,
+        "event_name": "RebellionDecisionEvent",
+        "event_info": "Citizen decides to participate in rebellion",
+        "fields": [
+            {
+                "name": "citizen_id",
+                "type": "string",
+                "default_value": "N/A",
+                "description": "Unique identifier for the citizen deciding to rebel"
+            },
+            {
+                "name": "decision",
+                "type": "bool",
+                "default_value": "false",
+                "description": "Indicates if the citizen decided to participate in rebellion"
+            }
+        ]
+    },
+    "3": {
+        "id": 3,
+        "from_agent_type": "Citizen",
+        "from_action_name": "decide_rebellion",
+        "to_agent_type": "EnvAgent",
+        "to_action_name": "terminate",
+        "from_action_id": 2,
+        "to_action_id": -1,
+        "event_name": "NoRebellionEvent",
+        "event_info": "Citizen decides not to participate in rebellion",
+        "fields": [
+            {
+                "name": "citizen_id",
+                "type": "string",
+                "default_value": "N/A",
+                "description": "Unique identifier for the citizen deciding not to rebel"
+            },
+            {
+                "name": "decision",
+                "type": "bool",
+                "default_value": "true",
+                "description": "Indicates if the citizen decided not to participate in rebellion"
+            }
+        ]
+    },
+    "4": {
+        "id": 4,
+        "from_agent_type": "Government",
+        "from_action_name": "assess_rebellion",
+        "to_agent_type": "Government",
+        "to_action_name": "implement_repression",
+        "from_action_id": 3,
+        "to_action_id": 4,
+        "event_name": "RebellionAssessedEvent",
+        "event_info": "Government assesses the level of rebellion",
+        "fields": [
+            {
+                "name": "rebellion_level",
+                "type": "float",
+                "default_value": "0.0",
+                "description": "The assessed level of rebellion by the government"
+            },
+            {
+                "name": "government_id",
+                "type": "string",
+                "default_value": "N/A",
+                "description": "Unique identifier for the government assessing rebellion"
+            }
+        ]
+    },
+    "5": {
+        "id": 5,
+        "from_agent_type": "Government",
+        "from_action_name": "implement_repression",
+        "to_agent_type": "EnvAgent",
+        "to_action_name": "terminate",
+        "from_action_id": 4,
+        "to_action_id": -1,
+        "event_name": "RepressionImplementedEvent",
+        "event_info": "Government implements repression strategy to manage rebellion",
+        "fields": [
+            {
+                "name": "repression_strategy",
+                "type": "string",
+                "default_value": "none",
+                "description": "The strategy implemented by the government to manage rebellion"
+            },
+            {
+                "name": "effectiveness",
+                "type": "float",
+                "default_value": "0.0",
+                "description": "The effectiveness of the repression strategy"
+            },
+            {
+                "name": "government_id",
+                "type": "string",
+                "default_value": "N/A",
+                "description": "Unique identifier for the government implementing repression"
+            }
+        ]
+    }
+}

@@ -1,0 +1,97 @@
+[
+    {
+        "name": "Alice Johnson",
+        "service_quality": 0.4639695517801323,
+        "product_quality": 0.42832216300524495,
+        "baseline_service_level": 0.582925704497772,
+        "baseline_product_quality": 0.4968215431951619,
+        "adjustment_cycle": 3,
+        "service_sensitivity_coefficient": 1.122354941362533,
+        "product_sensitivity_coefficient": 1.011153655375851,
+        "agent_type": "MerchantAgent",
+        "average_feedback_score": 0.5,
+        "customer_feedback": [
+            {
+                "time_step": 1,
+                "feedback_score": 0.5
+            }
+        ],
+        "id": "5"
+    },
+    {
+        "name": "Robert Smith",
+        "service_quality": 0.5520073854037002,
+        "product_quality": 0.5524706990398172,
+        "baseline_service_level": 0.5729949717212367,
+        "baseline_product_quality": 0.3998909058086326,
+        "adjustment_cycle": 3,
+        "service_sensitivity_coefficient": 0.906321902922234,
+        "product_sensitivity_coefficient": 0.8530910990500017,
+        "agent_type": "MerchantAgent",
+        "average_feedback_score": 0.5,
+        "customer_feedback": [
+            {
+                "time_step": 1,
+                "feedback_score": 0.5
+            }
+        ],
+        "id": "6"
+    },
+    {
+        "name": "Emily Chen",
+        "service_quality": 0.42591250068845204,
+        "product_quality": 0.6284941639094055,
+        "baseline_service_level": 0.6019626352331091,
+        "baseline_product_quality": 0.3826313261649101,
+        "adjustment_cycle": 3,
+        "service_sensitivity_coefficient": 1.1702967459569742,
+        "product_sensitivity_coefficient": 1.1238635654597844,
+        "agent_type": "MerchantAgent",
+        "average_feedback_score": 0.5,
+        "customer_feedback": [
+            {
+                "time_step": 1,
+                "feedback_score": 0.5
+            }
+        ],
+        "id": "7"
+    },
+    {
+        "name": "Michael Brown",
+        "service_quality": 0.43480701728790594,
+        "product_quality": 0.5097417072685847,
+        "baseline_service_level": 0.3409223346859653,
+        "baseline_product_quality": 0.34509264083348123,
+        "adjustment_cycle": 3,
+        "service_sensitivity_coefficient": 0.9487957892362816,
+        "product_sensitivity_coefficient": 0.8409167424902758,
+        "agent_type": "MerchantAgent",
+        "average_feedback_score": 0.5,
+        "customer_feedback": [
+            {
+                "time_step": 1,
+                "feedback_score": 0.5
+            }
+        ],
+        "id": "8"
+    },
+    {
+        "name": "Sophia Martinez",
+        "service_quality": 0.6317731290376283,
+        "product_quality": 0.4205232622391423,
+        "baseline_service_level": 0.33219907097102475,
+        "baseline_product_quality": 0.4497826696701966,
+        "adjustment_cycle": 3,
+        "service_sensitivity_coefficient": 1.131066384617226,
+        "product_sensitivity_coefficient": 0.9980293210483849,
+        "agent_type": "MerchantAgent",
+        "average_feedback_score": 0.5,
+        "customer_feedback": [
+            {
+                "time_step": 1,
+                "feedback_score": 0.5
+            }
+        ],
+        "id": "9"
+    }
+]

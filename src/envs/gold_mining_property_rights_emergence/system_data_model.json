@@ -1,0 +1,123 @@
+{
+    "environment": {
+        "variables": [
+            {
+                "name": "stamina_reset_value",
+                "type": "int",
+                "default_value": null
+            },
+            {
+                "name": "unowned_plots",
+                "type": "list",
+                "default_value": null
+            },
+            {
+                "name": "successful_claims",
+                "type": "int",
+                "default_value": null
+            },
+            {
+                "name": "failed_claims",
+                "type": "int",
+                "default_value": null
+            },
+            {
+                "name": "new_owners",
+                "type": "list",
+                "default_value": null
+            },
+            {
+                "name": "truce_windows",
+                "type": "list",
+                "default_value": null
+            },
+            {
+                "name": "owned_plots",
+                "type": "list",
+                "default_value": null
+            },
+            {
+                "name": "successful_raids",
+                "type": "int",
+                "default_value": null
+            },
+            {
+                "name": "failed_raids",
+                "type": "int",
+                "default_value": null
+            },
+            {
+                "name": "defended_plots",
+                "type": "list",
+                "default_value": null
+            },
+            {
+                "name": "total_gold_mined",
+                "type": "int",
+                "default_value": null
+            },
+            {
+                "name": "idle_plots",
+                "type": "int",
+                "default_value": null
+            },
+            {
+                "name": "defended_mining_results",
+                "type": "list",
+                "default_value": null
+            }
+        ]
+    },
+    "agents": {
+        "LLMDecisionAgent": {
+            "variables": [
+                {
+                    "name": "current_stamina",
+                    "type": "int",
+                    "default_value": null
+                }
+            ]
+        },
+        "ClaimAgent": {
+            "variables": [
+                {
+                    "name": "claim_actions",
+                    "type": "list",
+                    "default_value": null
+                }
+            ]
+        },
+        "RaidAgent": {
+            "variables": [
+                {
+                    "name": "raid_actions",
+                    "type": "list",
+                    "default_value": null
+                },
+                {
+                    "name": "defense_actions",
+                    "type": "list",
+                    "default_value": null
+                }
+            ]
+        },
+        "DefendAgent": {
+            "variables": [
+                {
+                    "name": "defense_actions",
+                    "type": "list",
+                    "default_value": null
+                }
+            ]
+        },
+        "MineAgent": {
+            "variables": [
+                {
+                    "name": "mine_actions",
+                    "type": "list",
+                    "default_value": null
+                }
+            ]
+        }
+    }
+}

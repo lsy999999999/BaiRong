@@ -1,0 +1,78 @@
+{
+    "name": {
+        "type": "str",
+        "default": "GovernmentAgent",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's designated name representing a government entity"
+    },
+    "policy_goals": {
+        "type": "str",
+        "default": "Improve public health awareness",
+        "private": false,
+        "sampling": "llm",
+        "description": "The overarching goals of the government's health policies"
+    },
+    "implemented_policy": {
+        "type": "str",
+        "default": "Tobacco control regulation",
+        "private": false,
+        "sampling": "default"
+    },
+    "policy_impact": {
+        "type": "float",
+        "default": 0.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "budget": {
+        "type": "float",
+        "default": 1000000.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "communication_channels": {
+        "type": "list",
+        "default": [
+            "media",
+            "public health campaigns"
+        ],
+        "private": false,
+        "sampling": "llm",
+        "description": "The channels through which the government communicates health policies"
+    },
+    "support_infrastructure": {
+        "type": "str",
+        "default": "Developed",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "Developed",
+            "Developing",
+            "Underdeveloped"
+        ]
+    },
+    "policy_effectiveness": {
+        "type": "int",
+        "default": 50,
+        "private": false,
+        "sampling": "default"
+    },
+    "crisis_management_capability": {
+        "type": "int",
+        "default": 75,
+        "private": true,
+        "sampling": "random",
+        "range": [
+            50,
+            100
+        ]
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

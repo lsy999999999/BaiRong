@@ -1,0 +1,97 @@
+[
+    {
+        "name": "John Doe",
+        "interaction_status": "active",
+        "emotional_state": "satisfied",
+        "work_motivation": "high",
+        "years_of_experience": 10,
+        "team_support_level": 75.0,
+        "relationship_quality": "positive",
+        "social_needs": "fulfilled",
+        "communication_style": "Direct and Clear",
+        "sense_of_belonging": 90.0,
+        "agent_type": "ExperiencedEmployee",
+        "initiator_emotion": "ready",
+        "feedback_received": [
+            "Great job on the recent project!",
+            "Keep up the good work!"
+        ],
+        "id": "5"
+    },
+    {
+        "name": "Jane Smith",
+        "interaction_status": "active",
+        "emotional_state": "satisfied",
+        "work_motivation": "high",
+        "years_of_experience": 13,
+        "team_support_level": 75.0,
+        "relationship_quality": "positive",
+        "social_needs": "fulfilled",
+        "communication_style": "Empathetic and Understanding",
+        "sense_of_belonging": 90.0,
+        "agent_type": "ExperiencedEmployee",
+        "initiator_emotion": "ready",
+        "feedback_received": [
+            "Great job on the recent project!",
+            "Keep up the good work!"
+        ],
+        "id": "6"
+    },
+    {
+        "name": "Robert Johnson",
+        "interaction_status": "active",
+        "emotional_state": "satisfied",
+        "work_motivation": "high",
+        "years_of_experience": 10,
+        "team_support_level": 75.0,
+        "relationship_quality": "positive",
+        "social_needs": "fulfilled",
+        "communication_style": "Concise and Efficient",
+        "sense_of_belonging": 90.0,
+        "agent_type": "ExperiencedEmployee",
+        "initiator_emotion": "ready",
+        "feedback_received": [
+            "Great job on the recent project!",
+            "Keep up the good work!"
+        ],
+        "id": "7"
+    },
+    {
+        "name": "Emily Davis",
+        "interaction_status": "active",
+        "emotional_state": "satisfied",
+        "work_motivation": "high",
+        "years_of_experience": 10,
+        "team_support_level": 75.0,
+        "relationship_quality": "positive",
+        "social_needs": "fulfilled",
+        "communication_style": "Friendly and Open",
+        "sense_of_belonging": 90.0,
+        "agent_type": "ExperiencedEmployee",
+        "initiator_emotion": "ready",
+        "feedback_received": [
+            "Great job on the recent project!",
+            "Keep up the good work!"
+        ],
+        "id": "8"
+    },
+    {
+        "name": "Michael Brown",
+        "interaction_status": "active",
+        "emotional_state": "satisfied",
+        "work_motivation": "high",
+        "years_of_experience": 7,
+        "team_support_level": 75.0,
+        "relationship_quality": "positive",
+        "social_needs": "fulfilled",
+        "communication_style": "Assertive and Confident",
+        "sense_of_belonging": 90.0,
+        "agent_type": "ExperiencedEmployee",
+        "initiator_emotion": "ready",
+        "feedback_received": [
+            "Great job on the recent project!",
+            "Keep up the good work!"
+        ],
+        "id": "9"
+    }
+]

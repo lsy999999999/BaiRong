@@ -1,0 +1,65 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Jury",
+        "private": false,
+        "sampling": "default"
+    },
+    "evidence_evaluation": {
+        "type": "list",
+        "default": [
+            {
+                "evidence_strength": 75,
+                "credibility": "high"
+            }
+        ],
+        "private": true,
+        "sampling": "default"
+    },
+    "verdict": {
+        "type": "str",
+        "default": "awaiting_verdict",
+        "private": false,
+        "sampling": "default"
+    },
+    "decision_mechanism": {
+        "type": "str",
+        "default": "collective_discussion",
+        "private": false,
+        "sampling": "llm",
+        "description": "The method by which the jury forms its verdict through evidence evaluation and discussion."
+    },
+    "jury_size": {
+        "type": "int",
+        "default": 12,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            6,
+            12
+        ]
+    },
+    "public_attention": {
+        "type": "float",
+        "default": 50.0,
+        "private": true,
+        "sampling": "default"
+    },
+    "precedent_strength": {
+        "type": "int",
+        "default": 80,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0,
+            100
+        ]
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

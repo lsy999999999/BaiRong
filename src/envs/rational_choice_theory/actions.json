@@ -1,0 +1,130 @@
+{
+    "RationalDecisionMaker": [
+        {
+            "id": 1,
+            "name": "evaluate_choices",
+            "condition": null,
+            "description": "This action involves assessing a range of decision options to determine their potential utility based on the agent's personal goals, available resources, and associated risks.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "decision_options",
+                    "type": "list",
+                    "context": "env",
+                    "description": "A list of available options or scenarios that the agent can choose from."
+                },
+                {
+                    "name": "personal_goals",
+                    "type": "dict",
+                    "context": "agent",
+                    "description": "The goals or objectives that guide the agent's decision-making process."
+                },
+                {
+                    "name": "resource_status",
+                    "type": "dict",
+                    "context": "agent",
+                    "description": "Current status of resources available to the agent for making decisions."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "evaluated_choices",
+                    "type": "list",
+                    "context": "agent",
+                    "description": "A list of choices that have been evaluated for utility."
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "name": "make_decision",
+            "condition": "Requires utility values from UtilityEvaluator",
+            "description": "This action entails selecting the optimal decision from the evaluated choices based on calculated utility values.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "utility_value",
+                    "type": "float",
+                    "context": "event",
+                    "description": "The calculated utility value for each choice."
+                },
+                {
+                    "name": "calculation_details",
+                    "type": "dict",
+                    "context": "event",
+                    "description": "Details of the utility calculation, including factors considered."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "selected_decision",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "The decision made by the agent based on utility maximization."
+                }
+            ]
+        }
+    ],
+    "UtilityEvaluator": [
+        {
+            "id": 2,
+            "name": "calculate_utility",
+            "condition": null,
+            "description": "This action calculates the utility of each evaluated choice using the agent's utility function, considering benefits, costs, and risks.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "evaluated_choices",
+                    "type": "list",
+                    "context": "event",
+                    "description": "Choices that have been evaluated by the RationalDecisionMaker for utility."
+                },
+                {
+                    "name": "evaluation_criteria",
+                    "type": "dict",
+                    "context": "event",
+                    "description": "Criteria used for evaluating choices, including personal goals and risk factors."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "utility_value",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "The calculated utility value for the evaluated choices."
+                }
+            ]
+        }
+    ],
+    "SocialNetworkInteractor": [
+        {
+            "id": 4,
+            "name": "observe_and_adjust",
+            "condition": null,
+            "description": "This action involves observing the decisions made by other agents and adjusting the agent's own decision-making strategy accordingly.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "decision",
+                    "type": "str",
+                    "context": "event",
+                    "description": "The decision made by the RationalDecisionMaker."
+                },
+                {
+                    "name": "influencing_factors",
+                    "type": "list",
+                    "context": "event",
+                    "description": "List of factors that influenced the decision."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "adjustment_status",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Status of the adjustment made in response to observed decisions."
+                }
+            ]
+        }
+    ]
+}

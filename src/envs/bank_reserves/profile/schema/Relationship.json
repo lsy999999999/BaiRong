@@ -1,0 +1,12 @@
+[
+    {
+        "source_agent": "CustomerAgent",
+        "target_agent": "BankAgent",
+        "direction": "bidirectional"
+    },
+    {
+        "source_agent": "BankAgent",
+        "target_agent": "BankAgent",
+        "direction": "unidirectional"
+    }
+]

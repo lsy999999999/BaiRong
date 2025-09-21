@@ -1,0 +1,97 @@
+[
+    {
+        "name": "Agent John Smith",
+        "policy_effect": "Enhance public health through improved sanitation measures",
+        "policy_status": "active",
+        "intervention_level": "moderate",
+        "compliance_rate": 0.75,
+        "policy_duration": 34,
+        "communication_frequency": 2,
+        "agent_type": "GovernmentAgent",
+        "resource_allocation": [
+            {
+                "resource_type": "vaccines",
+                "amount": 1000,
+                "priority": "high"
+            }
+        ],
+        "policy_review_feedback": "pending_review",
+        "id": "10"
+    },
+    {
+        "name": "Agent Emily Johnson",
+        "policy_effect": "Increase educational access by expanding remote learning platforms",
+        "policy_status": "active",
+        "intervention_level": "moderate",
+        "compliance_rate": 0.75,
+        "policy_duration": 44,
+        "communication_frequency": 7,
+        "agent_type": "GovernmentAgent",
+        "resource_allocation": [
+            {
+                "resource_type": "vaccines",
+                "amount": 1000,
+                "priority": "high"
+            }
+        ],
+        "policy_review_feedback": "pending_review",
+        "id": "11"
+    },
+    {
+        "name": "Agent Michael Brown",
+        "policy_effect": "Boost economic growth by supporting small business initiatives",
+        "policy_status": "active",
+        "intervention_level": "moderate",
+        "compliance_rate": 0.75,
+        "policy_duration": 80,
+        "communication_frequency": 6,
+        "agent_type": "GovernmentAgent",
+        "resource_allocation": [
+            {
+                "resource_type": "vaccines",
+                "amount": 1000,
+                "priority": "high"
+            }
+        ],
+        "policy_review_feedback": "pending_review",
+        "id": "12"
+    },
+    {
+        "name": "Agent Sarah Davis",
+        "policy_effect": "Strengthen national security by upgrading cybersecurity infrastructure",
+        "policy_status": "active",
+        "intervention_level": "moderate",
+        "compliance_rate": 0.75,
+        "policy_duration": 69,
+        "communication_frequency": 10,
+        "agent_type": "GovernmentAgent",
+        "resource_allocation": [
+            {
+                "resource_type": "vaccines",
+                "amount": 1000,
+                "priority": "high"
+            }
+        ],
+        "policy_review_feedback": "pending_review",
+        "id": "13"
+    },
+    {
+        "name": "Agent David Wilson",
+        "policy_effect": "Promote environmental sustainability through renewable energy incentives",
+        "policy_status": "active",
+        "intervention_level": "low",
+        "compliance_rate": 0.75,
+        "policy_duration": 68,
+        "communication_frequency": 4,
+        "agent_type": "GovernmentAgent",
+        "resource_allocation": [
+            {
+                "resource_type": "vaccines",
+                "amount": 1000,
+                "priority": "high"
+            }
+        ],
+        "policy_review_feedback": "pending_review",
+        "id": "14"
+    }
+]

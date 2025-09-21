@@ -1,0 +1,104 @@
+{
+    "environment": {
+        "variables": [
+            {
+                "name": "market_conditions",
+                "type": "dict",
+                "default_value": {}
+            }
+        ]
+    },
+    "agents": {
+        "AuctionPlatform": {
+            "variables": [
+                {
+                    "name": "mechanism_type",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "fee_structure",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "transparency_level",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "active_auctions",
+                    "type": "list",
+                    "default_value": null
+                },
+                {
+                    "name": "bids",
+                    "type": "list",
+                    "default_value": null
+                },
+                {
+                    "name": "auction_details",
+                    "type": "dict",
+                    "default_value": null
+                },
+                {
+                    "name": "eligible_bids",
+                    "type": "list",
+                    "default_value": null
+                },
+                {
+                    "name": "bidding_rules",
+                    "type": "dict",
+                    "default_value": null
+                },
+                {
+                    "name": "auction_outcome",
+                    "type": "dict",
+                    "default_value": null
+                }
+            ]
+        },
+        "Buyer": {
+            "variables": [
+                {
+                    "name": "private_value",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "bidding_decision",
+                    "type": "bool",
+                    "default_value": null
+                }
+            ]
+        },
+        "Seller": {
+            "variables": [
+                {
+                    "name": "production_cost",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "reserve_price_decision",
+                    "type": "float",
+                    "default_value": null
+                }
+            ]
+        },
+        "Speculator": {
+            "variables": [
+                {
+                    "name": "capital",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "influence_strategy",
+                    "type": "str",
+                    "default_value": null
+                }
+            ]
+        }
+    }
+}

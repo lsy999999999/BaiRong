@@ -1,0 +1,134 @@
+{
+    "Government": [
+        {
+            "id": 1,
+            "name": "execute_policy",
+            "condition": null,
+            "description": "This action involves the government executing a predefined policy daily, aiming to achieve desired social or economic outcomes.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "policy_id",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Identifier for the policy to be executed"
+                },
+                {
+                    "name": "current_strength",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Current strength level of the policy ranging from 0 to 1"
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "efficiency_metrics",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Calculated efficiency of the policy execution ranging from 0 to 1"
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "name": "adjust_policy_strength",
+            "condition": "Efficiency metrics from PolicyExecutedEvent",
+            "description": "This action involves adjusting the strength of a policy based on the efficiency results obtained from its execution.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "efficiency_metrics",
+                    "type": "float",
+                    "context": "event",
+                    "description": "Efficiency of the policy execution ranging from 0 to 1"
+                },
+                {
+                    "name": "policy_id",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Identifier for the executed policy"
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "new_strength",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Updated strength of the policy ranging from 0 to 1"
+                },
+                {
+                    "name": "adjustment_reason",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Reason for the policy strength adjustment"
+                }
+            ]
+        }
+    ],
+    "Citizens": [
+        {
+            "id": 3,
+            "name": "decide_compliance",
+            "condition": null,
+            "description": "Citizens evaluate the policy and decide whether to comply based on their acceptance of the policy.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "policy_id",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Identifier for the policy being evaluated"
+                },
+                {
+                    "name": "acceptance_level",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Level of acceptance of the policy ranging from 0 to 1"
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "compliance_level",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Level of compliance decided by citizens ranging from 0 to 1"
+                }
+            ]
+        },
+        {
+            "id": 4,
+            "name": "adjust_satisfaction",
+            "condition": "Compliance decision from ComplianceDecisionEvent",
+            "description": "Citizens adjust their satisfaction level based on their compliance decision and the subsequent impact of the policy.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "compliance_level",
+                    "type": "float",
+                    "context": "event",
+                    "description": "Level of citizen compliance ranging from 0 to 1"
+                },
+                {
+                    "name": "policy_id",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Identifier for the policy being complied with"
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "satisfaction_level",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Updated satisfaction level of citizens ranging from 0 to 1"
+                },
+                {
+                    "name": "adjustment_reason",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Reason for the satisfaction level adjustment"
+                }
+            ]
+        }
+    ]
+}

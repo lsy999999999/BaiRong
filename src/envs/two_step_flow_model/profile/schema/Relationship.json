@@ -1,0 +1,12 @@
+[
+    {
+        "source_agent": "MediaAgent",
+        "target_agent": "OpinionLeaderAgent",
+        "direction": "unidirectional"
+    },
+    {
+        "source_agent": "OpinionLeaderAgent",
+        "target_agent": "PublicAgent",
+        "direction": "unidirectional"
+    }
+]

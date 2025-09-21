@@ -1,0 +1,97 @@
+[
+    {
+        "name": "Agent001",
+        "credit_rating": 394,
+        "interest_rate": 9.01428243026437,
+        "loan_conditions": null,
+        "economic_conditions": "growth",
+        "agent_type": "BankAgent",
+        "loan_decision": "pending_review",
+        "approved_loan_amount": 0.0,
+        "repayment_history": [
+            {
+                "date": "2025-04-01",
+                "status": "on_time",
+                "amount": 1000
+            }
+        ],
+        "default_risk_assessment": "low",
+        "id": "5"
+    },
+    {
+        "name": "Agent002",
+        "credit_rating": 431,
+        "interest_rate": 1.1647355033423719,
+        "loan_conditions": null,
+        "economic_conditions": "stable",
+        "agent_type": "BankAgent",
+        "loan_decision": "pending_review",
+        "approved_loan_amount": 0.0,
+        "repayment_history": [
+            {
+                "date": "2025-04-01",
+                "status": "on_time",
+                "amount": 1000
+            }
+        ],
+        "default_risk_assessment": "high",
+        "id": "6"
+    },
+    {
+        "name": "Agent003",
+        "credit_rating": 343,
+        "interest_rate": 3.218221595647259,
+        "loan_conditions": null,
+        "economic_conditions": "recession",
+        "agent_type": "BankAgent",
+        "loan_decision": "pending_review",
+        "approved_loan_amount": 0.0,
+        "repayment_history": [
+            {
+                "date": "2025-04-01",
+                "status": "on_time",
+                "amount": 1000
+            }
+        ],
+        "default_risk_assessment": "high",
+        "id": "7"
+    },
+    {
+        "name": "Agent004",
+        "credit_rating": 417,
+        "interest_rate": 7.1261271432082145,
+        "loan_conditions": null,
+        "economic_conditions": "stable",
+        "agent_type": "BankAgent",
+        "loan_decision": "pending_review",
+        "approved_loan_amount": 0.0,
+        "repayment_history": [
+            {
+                "date": "2025-04-01",
+                "status": "on_time",
+                "amount": 1000
+            }
+        ],
+        "default_risk_assessment": "medium",
+        "id": "8"
+    },
+    {
+        "name": "Agent005",
+        "credit_rating": 442,
+        "interest_rate": 8.696855769535842,
+        "loan_conditions": null,
+        "economic_conditions": "growth",
+        "agent_type": "BankAgent",
+        "loan_decision": "pending_review",
+        "approved_loan_amount": 0.0,
+        "repayment_history": [
+            {
+                "date": "2025-04-01",
+                "status": "on_time",
+                "amount": 1000
+            }
+        ],
+        "default_risk_assessment": "high",
+        "id": "9"
+    }
+]

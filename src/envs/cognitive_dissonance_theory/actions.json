@@ -1,0 +1,154 @@
+{
+    "ActorA": [
+        {
+            "id": 1,
+            "name": "experience_dissonance",
+            "condition": null,
+            "description": "This action involves Actor A experiencing cognitive dissonance, a psychological state where conflicting beliefs, attitudes, or behaviors cause discomfort.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "dissonance_scenario",
+                    "type": "str",
+                    "context": "env",
+                    "description": "The scenario or context which triggers cognitive dissonance in Actor A."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "dissonance_level",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "The intensity of cognitive dissonance experienced by Actor A."
+                },
+                {
+                    "name": "dissonance_cause",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "The cause or reason for the cognitive dissonance experienced by Actor A."
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "name": "decide_strategy",
+            "condition": "Feedback from Observer B received",
+            "description": "Actor A decides on a strategy to reduce cognitive dissonance, choosing between belief change, behavior change, or rationalization.",
+            "type": "AND",
+            "required_variables": [
+                {
+                    "name": "dissonance_level",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "The intensity of cognitive dissonance that Actor A needs to address."
+                },
+                {
+                    "name": "dissonance_cause",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "The cause of the cognitive dissonance that influences strategy selection."
+                },
+                {
+                    "name": "feedback_content",
+                    "type": "str",
+                    "context": "event",
+                    "description": "The feedback provided by Observer B regarding the dissonance."
+                },
+                {
+                    "name": "feedback_quality",
+                    "type": "int",
+                    "context": "event",
+                    "description": "A rating of the quality of feedback provided by Observer B."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "strategy_type",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "The type of strategy selected by Actor A to reduce dissonance."
+                },
+                {
+                    "name": "expected_outcome",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "The expected outcome of the strategy chosen by Actor A."
+                }
+            ]
+        }
+    ],
+    "ObserverB": [
+        {
+            "id": 3,
+            "name": "observe_and_provide_feedback",
+            "condition": "DissonanceExperiencedEvent received from Actor A",
+            "description": "Observer B observes the dissonance experienced by Actor A and provides feedback to assist in strategy selection.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "dissonance_level",
+                    "type": "float",
+                    "context": "event",
+                    "description": "The intensity of cognitive dissonance experienced by Actor A."
+                },
+                {
+                    "name": "dissonance_cause",
+                    "type": "str",
+                    "context": "event",
+                    "description": "The cause of the cognitive dissonance experienced by Actor A."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "feedback_content",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "The content of the feedback provided to Actor A."
+                },
+                {
+                    "name": "feedback_quality",
+                    "type": "int",
+                    "context": "agent",
+                    "description": "A rating of the quality of feedback provided, ranging from 1 to 5."
+                }
+            ]
+        }
+    ],
+    "FeedbackerC": [
+        {
+            "id": 4,
+            "name": "evaluate_outcome",
+            "condition": "StrategyDecidedEvent received from Actor A",
+            "description": "Feedbacker C evaluates the outcome of Actor A's chosen strategy to determine its effectiveness in reducing dissonance.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "strategy_type",
+                    "type": "str",
+                    "context": "event",
+                    "description": "The type of strategy Actor A decided to use."
+                },
+                {
+                    "name": "expected_outcome",
+                    "type": "str",
+                    "context": "event",
+                    "description": "The expected outcome of the strategy chosen by Actor A."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "evaluation_result",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "The result of the evaluation performed by Feedbacker C."
+                },
+                {
+                    "name": "completion_status",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "The status of the evaluation process, e.g., complete or incomplete."
+                }
+            ]
+        }
+    ]
+}

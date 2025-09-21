@@ -1,0 +1,17 @@
+[
+    {
+        "source_agent": "IndividualAgent",
+        "target_agent": "CommunicationAgent",
+        "direction": "unidirectional"
+    },
+    {
+        "source_agent": "CommunicationAgent",
+        "target_agent": "DecisionAgent",
+        "direction": "unidirectional"
+    },
+    {
+        "source_agent": "DecisionAgent",
+        "target_agent": "IndividualAgent",
+        "direction": "unidirectional"
+    }
+]

@@ -1,0 +1,285 @@
+{
+  "agents": {
+    "RationalDecisionMaker": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "1": {
+          "code": "async def evaluate_choices(self, event: Event) -> List[Event]:\n        if event.__class__.__name__ != \"StartEvent\":\n            return []\n\n        decision_options = await self.get_env_data(\"decision_options\", [])\n        personal_goals = self.profile.get_data(\"personal_goals\", {})\n        resource_status = self.profile.get_data(\"resource_status\", {})\n\n        instruction = \"\"\"\n        Evaluate the provided decision options based on personal goals and resource status.\n        Return the evaluated choices and the criteria used in the following JSON format:\n        {\n            \"evaluated_choices\": [\"<List of evaluated choices>\"],\n            \"evaluation_criteria\": {\n                \"personal_goals\": \"<Personal goals influencing the evaluation>\",\n                \"risk_factors\": \"<Risk factors considered during evaluation>\"\n            },\n            \"target_ids\": [\"<The string ID(s) of the UtilityEvaluator agent(s)>\"]\n        }\n        \"\"\"\n        observation = f\"Decision options: {decision_options}, Personal goals: {personal_goals}, Resource status: {resource_status}\"\n        result = await self.generate_reaction(instruction, observation)\n\n        evaluated_choices = result.get('evaluated_choices', [])\n        evaluation_criteria = result.get('evaluation_criteria', {})\n        target_ids = result.get('target_ids', [])\n\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        self.profile.update_data(\"evaluated_choices\", evaluated_choices)\n\n        events = []\n        for target_id in target_ids:\n            choices_evaluated_event = ChoicesEvaluatedEvent(\n                self.profile_id,\n                target_id,\n                evaluated_choices,\n                evaluation_criteria\n            )\n            events.append(choices_evaluated_event)\n\n        return events",
+          "metadata": {
+            "id": 1,
+            "name": "evaluate_choices",
+            "condition": null,
+            "description": "This action involves assessing a range of decision options to determine their potential utility based on the agent's personal goals, available resources, and associated risks.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "decision_options",
+                "type": "list",
+                "context": "env",
+                "description": "A list of available options or scenarios that the agent can choose from."
+              },
+              {
+                "name": "personal_goals",
+                "type": "dict",
+                "context": "agent",
+                "description": "The goals or objectives that guide the agent's decision-making process."
+              },
+              {
+                "name": "resource_status",
+                "type": "dict",
+                "context": "agent",
+                "description": "Current status of resources available to the agent for making decisions."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "evaluated_choices",
+                "type": "list",
+                "context": "agent",
+                "description": "A list of choices that have been evaluated for utility."
+              }
+            ]
+          }
+        },
+        "3": {
+          "code": "async def make_decision(self, event: Event) -> List[Event]:\n        if not hasattr(event, 'utility_value') or not hasattr(event, 'calculation_details'):\n            return []\n\n        utility_value = event.utility_value\n        calculation_details = event.calculation_details\n\n        instruction = f\"\"\"\n        You are tasked with making a decision based on calculated utility values from a UtilityEvaluator.\n        The goal is to select the decision that maximizes utility. Consider the following details:\n        - Utility Value: {utility_value}\n        - Calculation Details: {calculation_details}\n\n        Please return the decision made and the influencing factors in the following JSON format:\n        {{\n            \"decision\": \"<The decision made>\",\n            \"influencing_factors\": [\"<List of factors influencing the decision>\"],\n            \"target_ids\": [\"<The string ID of the SocialNetworkInteractor agent>\"]\n        }}\n        \"\"\"\n\n        result = await self.generate_reaction(instruction)\n\n        decision = result.get('decision', '')\n        influencing_factors = result.get('influencing_factors', [])\n        target_ids = result.get('target_ids', [])\n\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        self.profile.update_data(\"selected_decision\", decision)\n\n        events = []\n        for target_id in target_ids:\n            decision_event = DecisionMadeEvent(self.profile_id, target_id, decision=decision, influencing_factors=influencing_factors)\n            events.append(decision_event)\n\n        return events;",
+          "metadata": {
+            "id": 3,
+            "name": "make_decision",
+            "condition": "Requires utility values from UtilityEvaluator",
+            "description": "This action entails selecting the optimal decision from the evaluated choices based on calculated utility values.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "utility_value",
+                "type": "float",
+                "context": "event",
+                "description": "The calculated utility value for each choice."
+              },
+              {
+                "name": "calculation_details",
+                "type": "dict",
+                "context": "event",
+                "description": "Details of the utility calculation, including factors considered."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "selected_decision",
+                "type": "str",
+                "context": "agent",
+                "description": "The decision made by the agent based on utility maximization."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "UtilityEvaluator": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "2": {
+          "code": "async def calculate_utility(self, event: Event) -> List[Event]:\n        # Condition Check\n        if not isinstance(event, ChoicesEvaluatedEvent):\n            return []\n\n        # Data Access\n        evaluated_choices = event.choices_list\n        evaluation_criteria = event.evaluation_criteria\n\n        # Decision Making\n        instruction = \"\"\"\n        Calculate the utility for the given evaluated choices based on the evaluation criteria.\n        Please return the information in the following JSON format:\n\n        {\n        \"utility_value\": \"<The calculated utility value as a float>\",\n        \"calculation_details\": \"<A dictionary detailing the calculation including factors considered>\",\n        \"target_ids\": [\"<The string ID(s) of the RationalDecisionMaker agent(s)>\"]\n        }\n        \"\"\"\n        observation = f\"Evaluated Choices: {evaluated_choices}, Evaluation Criteria: {evaluation_criteria}\"\n        result = await self.generate_reaction(instruction, observation)\n\n        # Response Processing\n        utility_value = result.get('utility_value', 0.0)\n        calculation_details = result.get('calculation_details', {})\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Update agent data\n        self.profile.update_data(\"utility_value\", utility_value)\n\n        # Prepare and send UtilityCalculatedEvent to each target\n        events = []\n        for target_id in target_ids:\n            utility_event = UtilityCalculatedEvent(self.profile_id, target_id, utility_value, calculation_details)\n            events.append(utility_event)\n\n        return events",
+          "metadata": {
+            "id": 2,
+            "name": "calculate_utility",
+            "condition": null,
+            "description": "This action calculates the utility of each evaluated choice using the agent's utility function, considering benefits, costs, and risks.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "evaluated_choices",
+                "type": "list",
+                "context": "event",
+                "description": "Choices that have been evaluated by the RationalDecisionMaker for utility."
+              },
+              {
+                "name": "evaluation_criteria",
+                "type": "dict",
+                "context": "event",
+                "description": "Criteria used for evaluating choices, including personal goals and risk factors."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "utility_value",
+                "type": "float",
+                "context": "agent",
+                "description": "The calculated utility value for the evaluated choices."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "SocialNetworkInteractor": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "4": {
+          "code": "async def observe_and_adjust(self, event: Event) -> List[Event]:\n        # Check if the event is an instance of DecisionMadeEvent\n        if not isinstance(event, DecisionMadeEvent):\n            return []  # Return empty list if condition not met\n\n        # Extracting event data\n        decision = event.decision\n        influencing_factors = event.influencing_factors\n    \n        # Observation and instruction for LLM\n        observation = f\"Decision: {decision}, Influencing Factors: {influencing_factors}\"\n        instruction = \"\"\"\n        Based on the observed decision and influencing factors, determine the necessary adjustment in strategy for the agent.\n        Please return the information in the following JSON format:\n    \n        {\n        \"adjustment_status\": \"<Status of the adjustment>\",\n        \"target_ids\": [\"<The string ID of the EnvAgent, use 'ENV' for terminal events>\"],\n        \"results_summary\": {\"<Key results and observations after adjustment>\"}\n        }\n        \"\"\"\n    \n        # Generate reaction using LLM\n        result = await self.generate_reaction(instruction, observation)\n    \n        # Extracting results from LLM response\n        adjustment_status = result.get('adjustment_status', 'no_adjustment')\n        target_ids = result.get('target_ids', None)\n        results_summary = result.get('results_summary', {})\n    \n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n    \n        # Update agent's state\n        self.profile.update_data(\"adjustment_status\", adjustment_status)\n    \n        # Prepare and send AdjustmentObservedEvent to EnvAgent\n        events = []\n        for target_id in target_ids:\n            adjustment_event = AdjustmentObservedEvent(self.profile_id, target_id, adjustment_status, results_summary)\n            events.append(adjustment_event)\n    \n        return events",
+          "metadata": {
+            "id": 4,
+            "name": "observe_and_adjust",
+            "condition": null,
+            "description": "This action involves observing the decisions made by other agents and adjusting the agent's own decision-making strategy accordingly.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "decision",
+                "type": "str",
+                "context": "event",
+                "description": "The decision made by the RationalDecisionMaker."
+              },
+              {
+                "name": "influencing_factors",
+                "type": "list",
+                "context": "event",
+                "description": "List of factors that influenced the decision."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "adjustment_status",
+                "type": "str",
+                "context": "agent",
+                "description": "Status of the adjustment made in response to observed decisions."
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "events": {
+    "imports": "from onesim.events import Event\nfrom typing import Any, List, Dict\nfrom datetime import datetime",
+    "definitions": {
+      "-1": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": -1,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "RationalDecisionMaker",
+          "to_action_name": "evaluate_choices",
+          "from_action_id": 0,
+          "to_action_id": 1,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for agents to start evaluating choices",
+          "fields": []
+        }
+      },
+      "1": {
+        "code": "class ChoicesEvaluatedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        choices_list: List[Any] = [],\n        evaluation_criteria: Dict[str, Any] = {},\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.choices_list = choices_list\n        self.evaluation_criteria = evaluation_criteria",
+        "metadata": {
+          "id": 1,
+          "from_agent_type": "RationalDecisionMaker",
+          "from_action_name": "evaluate_choices",
+          "to_agent_type": "UtilityEvaluator",
+          "to_action_name": "calculate_utility",
+          "from_action_id": 1,
+          "to_action_id": 2,
+          "event_name": "ChoicesEvaluatedEvent",
+          "event_info": "Event indicating choices have been evaluated",
+          "fields": [
+            {
+              "name": "choices_list",
+              "type": "list",
+              "default_value": "[]",
+              "description": "A list of choices evaluated by the RationalDecisionMaker."
+            },
+            {
+              "name": "evaluation_criteria",
+              "type": "dict",
+              "default_value": "{}",
+              "description": "Criteria used for evaluating choices, including personal goals and risk factors."
+            }
+          ]
+        }
+      },
+      "2": {
+        "code": "class UtilityCalculatedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        utility_value: float = 0.0,\n        calculation_details: Dict[str, Any] = {},\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.utility_value = utility_value\n        self.calculation_details = calculation_details",
+        "metadata": {
+          "id": 2,
+          "from_agent_type": "UtilityEvaluator",
+          "from_action_name": "calculate_utility",
+          "to_agent_type": "RationalDecisionMaker",
+          "to_action_name": "make_decision",
+          "from_action_id": 2,
+          "to_action_id": 3,
+          "event_name": "UtilityCalculatedEvent",
+          "event_info": "Event indicating utility has been calculated",
+          "fields": [
+            {
+              "name": "utility_value",
+              "type": "float",
+              "default_value": "0.0",
+              "description": "Calculated utility value for the evaluated choices."
+            },
+            {
+              "name": "calculation_details",
+              "type": "dict",
+              "default_value": "{}",
+              "description": "Details of the utility calculation including factors considered."
+            }
+          ]
+        }
+      },
+      "3": {
+        "code": "class DecisionMadeEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        decision: str = \"\",\n        influencing_factors: List[Any] = [],\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.decision = decision\n        self.influencing_factors = influencing_factors",
+        "metadata": {
+          "id": 3,
+          "from_agent_type": "RationalDecisionMaker",
+          "from_action_name": "make_decision",
+          "to_agent_type": "SocialNetworkInteractor",
+          "to_action_name": "observe_and_adjust",
+          "from_action_id": 3,
+          "to_action_id": 4,
+          "event_name": "DecisionMadeEvent",
+          "event_info": "Event indicating a decision has been made",
+          "fields": [
+            {
+              "name": "decision",
+              "type": "str",
+              "default_value": "",
+              "description": "The decision made by the RationalDecisionMaker."
+            },
+            {
+              "name": "influencing_factors",
+              "type": "list",
+              "default_value": "[]",
+              "description": "List of factors that influenced the decision."
+            }
+          ]
+        }
+      },
+      "4": {
+        "code": "class AdjustmentObservedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        adjustment_status: str = 'completed',\n        results_summary: Dict[str, Any] = {},\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.adjustment_status = adjustment_status\n        self.results_summary = results_summary",
+        "metadata": {
+          "id": 4,
+          "from_agent_type": "SocialNetworkInteractor",
+          "from_action_name": "observe_and_adjust",
+          "to_agent_type": "EnvAgent",
+          "to_action_name": "terminate",
+          "from_action_id": 4,
+          "to_action_id": -1,
+          "event_name": "AdjustmentObservedEvent",
+          "event_info": "Final event indicating the adjustment has been observed and the workflow is complete",
+          "fields": [
+            {
+              "name": "adjustment_status",
+              "type": "str",
+              "default_value": "completed",
+              "description": "Status of the adjustment observed in the environment."
+            },
+            {
+              "name": "results_summary",
+              "type": "dict",
+              "default_value": "{}",
+              "description": "Summary of results after the adjustment is observed."
+            }
+          ]
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,17 @@
+source_id,target_id,direction
+0,5,unidirectional
+1,5,unidirectional
+2,5,unidirectional
+3,5,unidirectional
+4,5,unidirectional
+0,6,unidirectional
+1,6,unidirectional
+2,6,unidirectional
+3,6,unidirectional
+4,6,unidirectional
+0,9,unidirectional
+1,9,unidirectional
+2,9,unidirectional
+3,8,unidirectional
+4,9,unidirectional
+2,7,unidirectional

@@ -1,0 +1,10 @@
+{
+    "behavior_tendencies": [
+        "assertive",
+        "compliant",
+        "innovative",
+        "conservative",
+        "empathetic"
+    ],
+    "group_pressure": 0.75
+}

@@ -1,0 +1,12 @@
+[
+    {
+        "source_agent": "ActorA",
+        "target_agent": "ObserverB",
+        "direction": "bidirectional"
+    },
+    {
+        "source_agent": "ActorA",
+        "target_agent": "FeedbackerC",
+        "direction": "unidirectional"
+    }
+]

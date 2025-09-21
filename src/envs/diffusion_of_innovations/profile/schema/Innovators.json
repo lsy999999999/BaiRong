@@ -1,0 +1,105 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Innovator",
+        "private": false,
+        "sampling": "llm",
+        "description": "The type of agent within the diffusion of innovations model"
+    },
+    "spread_status": {
+        "type": "bool",
+        "default": false,
+        "private": false,
+        "sampling": "default"
+    },
+    "network_influence": {
+        "type": "float",
+        "default": 1.0,
+        "private": true,
+        "sampling": "random",
+        "range": [
+            0.5,
+            2.0
+        ]
+    },
+    "social_status": {
+        "type": "str",
+        "default": "high",
+        "private": true,
+        "sampling": "llm",
+        "description": "The perceived social status of the agent in the network"
+    },
+    "trust_in_innovation": {
+        "type": "float",
+        "default": 0.8,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "adoption_time": {
+        "type": "int",
+        "default": 0,
+        "private": false,
+        "sampling": "default"
+    },
+    "innovation_advantage": {
+        "type": "float",
+        "default": 1.5,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            1.0,
+            3.0
+        ]
+    },
+    "compatibility": {
+        "type": "float",
+        "default": 0.9,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "complexity": {
+        "type": "float",
+        "default": 0.3,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "trialability": {
+        "type": "float",
+        "default": 0.7,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "observability": {
+        "type": "float",
+        "default": 0.8,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

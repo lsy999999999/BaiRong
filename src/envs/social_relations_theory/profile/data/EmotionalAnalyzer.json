@@ -1,0 +1,107 @@
+[
+    {
+        "name": "Alex Johnson",
+        "role": "Experienced Employee",
+        "work_motivation": 50,
+        "job_satisfaction": 60,
+        "social_needs": 55,
+        "team_interaction_quality": 75,
+        "emotional_state": "content",
+        "feedback_received": [
+            {
+                "source": "leader",
+                "type": "positive",
+                "date": "2025-04-01"
+            }
+        ],
+        "sense_of_belonging": 65,
+        "agent_type": "EmotionalAnalyzer",
+        "emotion_analysis_result": "neutral",
+        "analysis_status": "pending",
+        "id": "20"
+    },
+    {
+        "name": "Maria Rodriguez",
+        "role": "Neutral Member",
+        "work_motivation": 50,
+        "job_satisfaction": 60,
+        "social_needs": 61,
+        "team_interaction_quality": 75,
+        "emotional_state": "content",
+        "feedback_received": [
+            {
+                "source": "leader",
+                "type": "positive",
+                "date": "2025-04-01"
+            }
+        ],
+        "sense_of_belonging": 65,
+        "agent_type": "EmotionalAnalyzer",
+        "emotion_analysis_result": "neutral",
+        "analysis_status": "pending",
+        "id": "21"
+    },
+    {
+        "name": "Samuel Lee",
+        "role": "Neutral Member",
+        "work_motivation": 50,
+        "job_satisfaction": 60,
+        "social_needs": 46,
+        "team_interaction_quality": 75,
+        "emotional_state": "content",
+        "feedback_received": [
+            {
+                "source": "leader",
+                "type": "positive",
+                "date": "2025-04-01"
+            }
+        ],
+        "sense_of_belonging": 65,
+        "agent_type": "EmotionalAnalyzer",
+        "emotion_analysis_result": "neutral",
+        "analysis_status": "pending",
+        "id": "22"
+    },
+    {
+        "name": "Jessica Brown",
+        "role": "Neutral Member",
+        "work_motivation": 50,
+        "job_satisfaction": 60,
+        "social_needs": 78,
+        "team_interaction_quality": 75,
+        "emotional_state": "content",
+        "feedback_received": [
+            {
+                "source": "leader",
+                "type": "positive",
+                "date": "2025-04-01"
+            }
+        ],
+        "sense_of_belonging": 65,
+        "agent_type": "EmotionalAnalyzer",
+        "emotion_analysis_result": "neutral",
+        "analysis_status": "pending",
+        "id": "23"
+    },
+    {
+        "name": "David Smith",
+        "role": "Experienced Employee",
+        "work_motivation": 50,
+        "job_satisfaction": 60,
+        "social_needs": 54,
+        "team_interaction_quality": 75,
+        "emotional_state": "content",
+        "feedback_received": [
+            {
+                "source": "leader",
+                "type": "positive",
+                "date": "2025-04-01"
+            }
+        ],
+        "sense_of_belonging": 65,
+        "agent_type": "EmotionalAnalyzer",
+        "emotion_analysis_result": "neutral",
+        "analysis_status": "pending",
+        "id": "24"
+    }
+]

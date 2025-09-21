@@ -1,0 +1,87 @@
+[
+    {
+        "name": "John Doe",
+        "commitment_level": 50,
+        "spread_target": "initial_target",
+        "interaction_frequency": 10,
+        "social_support_received": 75,
+        "health_behavior_status": "active",
+        "network_influence": 0.5,
+        "agent_type": "BehaviorChangeRecipient",
+        "reciprocal_promises": [
+            {
+                "promise": "help_others",
+                "status": "pending"
+            }
+        ],
+        "id": "5"
+    },
+    {
+        "name": "Jane Smith",
+        "commitment_level": 50,
+        "spread_target": "initial_target",
+        "interaction_frequency": 9,
+        "social_support_received": 75,
+        "health_behavior_status": "active",
+        "network_influence": 0.5,
+        "agent_type": "BehaviorChangeRecipient",
+        "reciprocal_promises": [
+            {
+                "promise": "help_others",
+                "status": "pending"
+            }
+        ],
+        "id": "6"
+    },
+    {
+        "name": "Alice Johnson",
+        "commitment_level": 50,
+        "spread_target": "initial_target",
+        "interaction_frequency": 9,
+        "social_support_received": 75,
+        "health_behavior_status": "active",
+        "network_influence": 0.5,
+        "agent_type": "BehaviorChangeRecipient",
+        "reciprocal_promises": [
+            {
+                "promise": "help_others",
+                "status": "pending"
+            }
+        ],
+        "id": "7"
+    },
+    {
+        "name": "Michael Brown",
+        "commitment_level": 50,
+        "spread_target": "initial_target",
+        "interaction_frequency": 1,
+        "social_support_received": 75,
+        "health_behavior_status": "active",
+        "network_influence": 0.5,
+        "agent_type": "BehaviorChangeRecipient",
+        "reciprocal_promises": [
+            {
+                "promise": "help_others",
+                "status": "pending"
+            }
+        ],
+        "id": "8"
+    },
+    {
+        "name": "Emily Davis",
+        "commitment_level": 50,
+        "spread_target": "initial_target",
+        "interaction_frequency": 2,
+        "social_support_received": 75,
+        "health_behavior_status": "active",
+        "network_influence": 0.5,
+        "agent_type": "BehaviorChangeRecipient",
+        "reciprocal_promises": [
+            {
+                "promise": "help_others",
+                "status": "pending"
+            }
+        ],
+        "id": "9"
+    }
+]

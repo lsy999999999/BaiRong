@@ -1,0 +1,82 @@
+[
+    {
+        "name": "Tech Innovators Inc.",
+        "business_sector": "Healthcare",
+        "financial_status": 1000000.0,
+        "current_case_status": "awaiting_judgment",
+        "legal_team_size": 5,
+        "overtime_policy": "Employees are eligible for overtime pay at 1.5x the regular rate for hours worked beyond 40 per week. Overtime must be pre-approved by management.",
+        "remote_work_impact": "minimal",
+        "agent_type": "Employer",
+        "defense_arguments": "All overtime was paid according to contract terms.",
+        "evidence_documents": [
+            "contract_agreement.pdf",
+            "timesheets.xlsx"
+        ],
+        "id": "5"
+    },
+    {
+        "name": "Global Finance Solutions",
+        "business_sector": "Healthcare",
+        "financial_status": 1000000.0,
+        "current_case_status": "awaiting_judgment",
+        "legal_team_size": 7,
+        "overtime_policy": "Overtime is compensated at 1.5x the regular hourly rate for any hours worked over 40 per week. Employees must log overtime hours in the company portal for approval.",
+        "remote_work_impact": "significant",
+        "agent_type": "Employer",
+        "defense_arguments": "All overtime was paid according to contract terms.",
+        "evidence_documents": [
+            "contract_agreement.pdf",
+            "timesheets.xlsx"
+        ],
+        "id": "6"
+    },
+    {
+        "name": "Creative Media Group",
+        "business_sector": "Technology",
+        "financial_status": 1000000.0,
+        "current_case_status": "awaiting_judgment",
+        "legal_team_size": 9,
+        "overtime_policy": "Overtime is paid at the standard rate with compensatory time off provided. All overtime work must receive prior approval from the department head.",
+        "remote_work_impact": "minimal",
+        "agent_type": "Employer",
+        "defense_arguments": "All overtime was paid according to contract terms.",
+        "evidence_documents": [
+            "contract_agreement.pdf",
+            "timesheets.xlsx"
+        ],
+        "id": "7"
+    },
+    {
+        "name": "Healthcare Partners LLC",
+        "business_sector": "Retail",
+        "financial_status": 1000000.0,
+        "current_case_status": "awaiting_judgment",
+        "legal_team_size": 9,
+        "overtime_policy": "Overtime pay is calculated at twice the regular hourly rate for hours exceeding 45 per week. Overtime hours must be documented and submitted for approval by the end of each pay period.",
+        "remote_work_impact": "minimal",
+        "agent_type": "Employer",
+        "defense_arguments": "All overtime was paid according to contract terms.",
+        "evidence_documents": [
+            "contract_agreement.pdf",
+            "timesheets.xlsx"
+        ],
+        "id": "8"
+    },
+    {
+        "name": "Retail Dynamics Corp.",
+        "business_sector": "Retail",
+        "financial_status": 1000000.0,
+        "current_case_status": "awaiting_judgment",
+        "legal_team_size": 7,
+        "overtime_policy": "Employees receive 1.5x their regular pay rate for any hours worked over 40 per week. Prior written approval from the store manager is required for all overtime work.",
+        "remote_work_impact": "minimal",
+        "agent_type": "Employer",
+        "defense_arguments": "All overtime was paid according to contract terms.",
+        "evidence_documents": [
+            "contract_agreement.pdf",
+            "timesheets.xlsx"
+        ],
+        "id": "9"
+    }
+]

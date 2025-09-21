@@ -1,0 +1,67 @@
+[
+    {
+        "name": "Alice Johnson",
+        "risk_preference": "low",
+        "budget": 3969.885034227383,
+        "learning_rate": 0.013464199974570544,
+        "experience": 9,
+        "reputation": 0.0,
+        "bidding_decision": false,
+        "agent_type": "Buyer",
+        "private_value": 96.77195000482274,
+        "bidding_strategy": "balanced",
+        "id": "0"
+    },
+    {
+        "name": "Michael Smith",
+        "risk_preference": "high",
+        "budget": 4390.024104578622,
+        "learning_rate": 0.112943501479626,
+        "experience": 0,
+        "reputation": 0.0,
+        "bidding_decision": false,
+        "agent_type": "Buyer",
+        "private_value": 48.32548595082768,
+        "bidding_strategy": "aggressive",
+        "id": "1"
+    },
+    {
+        "name": "Sophia Lee",
+        "risk_preference": "medium",
+        "budget": 2234.8975062550744,
+        "learning_rate": 0.4664980778190197,
+        "experience": 4,
+        "reputation": 0.0,
+        "bidding_decision": false,
+        "agent_type": "Buyer",
+        "private_value": 78.90107590820504,
+        "bidding_strategy": "balanced",
+        "id": "2"
+    },
+    {
+        "name": "James Brown",
+        "risk_preference": "low",
+        "budget": 1934.5571658857968,
+        "learning_rate": 0.011122146892565308,
+        "experience": 0,
+        "reputation": 0.0,
+        "bidding_decision": false,
+        "agent_type": "Buyer",
+        "private_value": 62.855333851839504,
+        "bidding_strategy": "balanced",
+        "id": "3"
+    },
+    {
+        "name": "Emma Garcia",
+        "risk_preference": "medium",
+        "budget": 4595.9177369390645,
+        "learning_rate": 0.47099060156146527,
+        "experience": 8,
+        "reputation": 0.0,
+        "bidding_decision": false,
+        "agent_type": "Buyer",
+        "private_value": 2.7082756541908726,
+        "bidding_strategy": "balanced",
+        "id": "4"
+    }
+]

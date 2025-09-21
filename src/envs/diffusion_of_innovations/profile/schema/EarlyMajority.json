@@ -1,0 +1,85 @@
+{
+    "name": {
+        "type": "str",
+        "default": "EarlyMajority",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's role in the diffusion of innovations process"
+    },
+    "consideration_status": {
+        "type": "bool",
+        "default": false,
+        "private": false,
+        "sampling": "default"
+    },
+    "adoption_likelihood": {
+        "type": "float",
+        "default": 0.5,
+        "private": true,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "social_influence": {
+        "type": "int",
+        "default": 50,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0,
+            100
+        ]
+    },
+    "network_connections": {
+        "type": "list",
+        "default": [
+            "Innovator_1",
+            "EarlyAdopter_3"
+        ],
+        "private": true,
+        "sampling": "default",
+        "sample_size": 2
+    },
+    "innovation_exposure": {
+        "type": "int",
+        "default": 1,
+        "private": false,
+        "sampling": "default"
+    },
+    "decision_algorithm": {
+        "type": "str",
+        "default": "threshold_model",
+        "private": false,
+        "sampling": "llm",
+        "description": "The algorithm used by the agent to decide on adopting the innovation"
+    },
+    "perceived_advantage": {
+        "type": "float",
+        "default": 0.7,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "trust_in_innovation": {
+        "type": "float",
+        "default": 0.6,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

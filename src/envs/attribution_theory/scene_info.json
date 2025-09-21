@@ -1,0 +1,55 @@
+{
+  "domain": "Psychology",
+  "scene_name": "attribution_theory",
+  "odd_protocol": {
+    "overview": {
+      "system_goal": "Explore the application of attribution theory in social interactions through simulation of three LLM agents: Participant A, Participant B, and Feedbacker C.",
+      "agent_types": "Three agents: Participant A, Participant B, Feedbacker C. Participant A and B engage in interactions; Feedbacker C analyzes attribution bias.",
+      "environment_description": "The environment consists of interaction scenarios such as task collaboration and social dialogue where agents attribute behaviors to internal or external causes.",
+      "interaction_scenarios": "Scenarios include complex task collaboration and social dialogue, each designed to elicit attribution judgments from Participant A."
+    },
+    "design_concepts": {
+      "interaction_patterns": "Participant A and B engage in interactions where A observes and attributes B's behavior; Feedbacker C evaluates A's attribution process.",
+      "communication_protocols": "Agents communicate via simulated interactions, with Feedbacker C providing evaluative feedback on attribution bias.",
+      "decision_mechanisms": "Participant A decides on internal or external attribution based on observations; Feedbacker C assesses attribution bias and provides feedback.",
+      "attribution_types": "Internal attribution involves attributing behavior to traits or motivations; external attribution involves situational factors."
+    },
+    "details": {
+      "agent_behaviors": "Participant A observes and attributes B's behavior, deciding between internal and external causes. Participant B displays behaviors subject to A's attribution. Feedbacker C monitors and provides feedback on attribution biases.",
+      "decision_algorithms": "Participant A uses attribution theory principles to decide on attribution type. Feedbacker C uses bias detection algorithms to evaluate A's attributions.",
+      "specific_constraints": "Tasks are designed to challenge B's performance, prompting attribution decisions from A. Feedbacker C must detect biases like fundamental attribution error.",
+      "simulation_steps": "Task initiation, decision execution by A, feedback and adjustment by C, task evaluation by Feedbacker C."
+    }
+  },
+  "agent_types": {
+    "ParticipantA": "An agent that observes and attributes behaviors of Participant B, deciding between internal and external causes based on attribution theory principles.",
+    "ParticipantB": "An agent that displays behaviors which are subject to observation and attribution by Participant A during interactions.",
+    "FeedbackerC": "An agent that analyzes the attribution process of Participant A, evaluating for biases such as the fundamental attribution error, and provides feedback."
+  },
+  "portrait": {
+    "ParticipantA": 2,
+    "ParticipantB": 5,
+    "FeedbackerC": 1
+  },
+  "metrics": [
+    {
+      "id": "Attribution_Type_Distribution",
+      "name": "Attribution Type Distribution",
+      "description": "Proportion of internal vs external attributions made by Participant A.",
+      "visualization_type": "pie",
+      "update_interval": 1,
+      "variables": [
+        {
+          "name": "attribution_type",
+          "source_type": "agent",
+          "agent_type": "ParticipantA",
+          "path": "attribution_type",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Calculate the proportion of each attribution type (internal/external) made by Participant A. Filter out None values and handle empty lists by returning an empty dictionary. Count occurrences of each attribution type and compute their proportions relative to the total valid attributions.",
+      "function_name": "Attribution_Type_Distribution"
+    }
+  ]
+}

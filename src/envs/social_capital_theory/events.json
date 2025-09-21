@@ -1,0 +1,150 @@
+{
+    "-1": {
+        "id": -1,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "IndividualAgent",
+        "to_action_name": "evaluate_social_capital",
+        "from_action_id": 0,
+        "to_action_id": 1,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for evaluating individual social capital",
+        "fields": []
+    },
+    "-2": {
+        "id": -2,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "SocialNetworkAgent",
+        "to_action_name": "analyze_relationships",
+        "from_action_id": 0,
+        "to_action_id": 3,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for analyzing social network relationships",
+        "fields": []
+    },
+    "1": {
+        "id": 1,
+        "from_agent_type": "IndividualAgent",
+        "from_action_name": "evaluate_social_capital",
+        "to_agent_type": "IndividualAgent",
+        "to_action_name": "decide_cooperation",
+        "from_action_id": 1,
+        "to_action_id": 2,
+        "event_name": "SocialCapitalEvaluatedEvent",
+        "event_info": "Evaluation of social capital completed, prompting decision on cooperation",
+        "fields": [
+            {
+                "name": "individual_id",
+                "type": "str",
+                "default_value": "",
+                "description": "Unique identifier for the individual whose social capital is evaluated."
+            },
+            {
+                "name": "social_capital_value",
+                "type": "float",
+                "default_value": 0.0,
+                "description": "The evaluated social capital value of the individual."
+            },
+            {
+                "name": "cooperation_potential",
+                "type": "bool",
+                "default_value": false,
+                "description": "Indicates whether the individual is likely to cooperate based on social capital."
+            }
+        ]
+    },
+    "2": {
+        "id": 2,
+        "from_agent_type": "IndividualAgent",
+        "from_action_name": "decide_cooperation",
+        "to_agent_type": "SocialNetworkAgent",
+        "to_action_name": "update_network",
+        "from_action_id": 2,
+        "to_action_id": 4,
+        "event_name": "CooperationDecisionEvent",
+        "event_info": "Decision on cooperation made, updating social network",
+        "fields": [
+            {
+                "name": "individual_id",
+                "type": "str",
+                "default_value": "",
+                "description": "Unique identifier for the individual making the cooperation decision."
+            },
+            {
+                "name": "decision",
+                "type": "str",
+                "default_value": "undecided",
+                "description": "The decision made by the individual regarding cooperation ('cooperate' or 'not_cooperate')."
+            },
+            {
+                "name": "impact_on_network",
+                "type": "str",
+                "default_value": "none",
+                "description": "The expected impact of the cooperation decision on the social network."
+            }
+        ]
+    },
+    "3": {
+        "id": 3,
+        "from_agent_type": "SocialNetworkAgent",
+        "from_action_name": "analyze_relationships",
+        "to_agent_type": "SocialNetworkAgent",
+        "to_action_name": "update_network",
+        "from_action_id": 3,
+        "to_action_id": 4,
+        "event_name": "RelationshipsAnalyzedEvent",
+        "event_info": "Relationships analyzed, preparing to update network",
+        "fields": [
+            {
+                "name": "network_id",
+                "type": "str",
+                "default_value": "",
+                "description": "Identifier for the social network being analyzed."
+            },
+            {
+                "name": "analysis_summary",
+                "type": "str",
+                "default_value": "pending",
+                "description": "Summary of the relationship analysis."
+            },
+            {
+                "name": "potential_updates",
+                "type": "list",
+                "default_value": [],
+                "description": "List of potential updates to the network based on analysis."
+            }
+        ]
+    },
+    "4": {
+        "id": 4,
+        "from_agent_type": "SocialNetworkAgent",
+        "from_action_name": "update_network",
+        "to_agent_type": "EnvAgent",
+        "to_action_name": "terminate",
+        "from_action_id": 4,
+        "to_action_id": -1,
+        "event_name": "NetworkUpdatedEvent",
+        "event_info": "Social network updated based on cooperation decisions and relationship analysis",
+        "fields": [
+            {
+                "name": "network_id",
+                "type": "str",
+                "default_value": "",
+                "description": "Identifier for the social network that was updated."
+            },
+            {
+                "name": "update_status",
+                "type": "str",
+                "default_value": "incomplete",
+                "description": "Status of the network update process."
+            },
+            {
+                "name": "changes_applied",
+                "type": "list",
+                "default_value": [],
+                "description": "List of changes that were applied to the network."
+            }
+        ]
+    }
+}

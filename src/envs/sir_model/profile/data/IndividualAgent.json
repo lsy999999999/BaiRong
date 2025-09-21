@@ -1,0 +1,102 @@
+[
+    {
+        "name": "Alice Johnson",
+        "current_health_state": "susceptible",
+        "risk_level": 0.1,
+        "previous_health_state": "none",
+        "age": 28,
+        "social_group": "Urban Professionals",
+        "contact_rate": 5.0,
+        "recovery_rate": 0.2,
+        "policy_compliance_level": 51,
+        "agent_type": "IndividualAgent",
+        "mask_wearing_behavior": "never",
+        "infection_probability": 0.05,
+        "social_network": [
+            "Bob Smith",
+            "Charlie Davis",
+            "Dana Lee"
+        ],
+        "id": "0"
+    },
+    {
+        "name": "Bob Smith",
+        "current_health_state": "susceptible",
+        "risk_level": 0.1,
+        "previous_health_state": "none",
+        "age": 17,
+        "social_group": "Urban Professionals",
+        "contact_rate": 5.0,
+        "recovery_rate": 0.2,
+        "policy_compliance_level": 92,
+        "agent_type": "IndividualAgent",
+        "mask_wearing_behavior": "never",
+        "infection_probability": 0.05,
+        "social_network": [
+            "Alice Johnson",
+            "Evan Brown",
+            "Fiona Clark"
+        ],
+        "id": "1"
+    },
+    {
+        "name": "Charlie Davis",
+        "current_health_state": "susceptible",
+        "risk_level": 0.1,
+        "previous_health_state": "none",
+        "age": 51,
+        "social_group": "Creative Artists",
+        "contact_rate": 5.0,
+        "recovery_rate": 0.2,
+        "policy_compliance_level": 39,
+        "agent_type": "IndividualAgent",
+        "mask_wearing_behavior": "never",
+        "infection_probability": 0.05,
+        "social_network": [
+            "Alice Johnson",
+            "Gina Martinez",
+            "Hank Wilson"
+        ],
+        "id": "2"
+    },
+    {
+        "name": "Dana Lee",
+        "current_health_state": "susceptible",
+        "risk_level": 0.1,
+        "previous_health_state": "none",
+        "age": 4,
+        "social_group": "Tech Enthusiasts",
+        "contact_rate": 5.0,
+        "recovery_rate": 0.2,
+        "policy_compliance_level": 86,
+        "agent_type": "IndividualAgent",
+        "mask_wearing_behavior": "never",
+        "infection_probability": 0.05,
+        "social_network": [
+            "Alice Johnson",
+            "Ivy Green",
+            "Jack White"
+        ],
+        "id": "3"
+    },
+    {
+        "name": "Evan Brown",
+        "current_health_state": "susceptible",
+        "risk_level": 0.1,
+        "previous_health_state": "none",
+        "age": 10,
+        "social_group": "Urban Professionals",
+        "contact_rate": 5.0,
+        "recovery_rate": 0.2,
+        "policy_compliance_level": 72,
+        "agent_type": "IndividualAgent",
+        "mask_wearing_behavior": "occasionally",
+        "infection_probability": 0.05,
+        "social_network": [
+            "Bob Smith",
+            "Kara Black",
+            "Liam Scott"
+        ],
+        "id": "4"
+    }
+]

@@ -1,0 +1,12 @@
+[
+    {
+        "source_agent": "Aggressor",
+        "target_agent": "Defender",
+        "direction": "unidirectional"
+    },
+    {
+        "source_agent": "Defender",
+        "target_agent": "Judge",
+        "direction": "unidirectional"
+    }
+]

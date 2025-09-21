@@ -1,0 +1,672 @@
+{
+  "agents": {
+    "JobSeeker": {
+      "imports": "from typing import Any, List, Optional\nimport asyncio\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "1": {
+          "code": "async def enter_market(self, event: Event) -> List[Event]:\n        skills = self.profile.get_data(\"skills\", [])\n        education = self.profile.get_data(\"education\", \"\")\n        experience = self.profile.get_data(\"experience\", 0)\n        job_preferences = self.profile.get_data(\"job_preferences\", [])\n        network = self.profile.get_data(\"network\", [])\n        risk_attitude = self.profile.get_data(\"risk_attitude\", \"neutral\")\n        job_search_strategy = self.profile.get_data(\"job_search_strategy\", \"active\")\n    \n        self.profile.update_data(\"market_status\", \"active\")\n    \n        instruction = \"\"\"\n        The job seeker is entering the labor market. Please provide a list of target_ids for the RecruitmentChannel agents that should be notified about this entry. \n        The response should be in the following JSON format:\n        {\n            \"target_ids\": [\"<List of RecruitmentChannel agent IDs>\"]\n        }\n        \"\"\"\n        observation = f\"Skills: {skills}, Education: {education}, Experience: {experience}, Job Preferences: {job_preferences}, Network: {network}, Risk Attitude: {risk_attitude}, Job Search Strategy: {job_search_strategy}\"\n    \n        result = await self.generate_reaction(instruction, observation)\n    \n        target_ids = result.get('target_ids', [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n    \n        events = []\n        for target_id in target_ids:\n            job_market_entry_event = JobMarketEntryEvent(\n                self.profile_id, target_id,\n                skills=skills,\n                education=education,\n                experience=experience,\n                job_preferences=job_preferences,\n                network=network,\n                risk_attitude=risk_attitude,\n                job_search_strategy=job_search_strategy\n            )\n            events.append(job_market_entry_event)\n    \n        return events",
+          "metadata": {
+            "id": 1,
+            "name": "enter_market",
+            "condition": null,
+            "description": "The job seeker enters the labor market, setting initial job search parameters and strategies.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "skills",
+                "type": "list",
+                "context": "agent",
+                "description": "List of skills possessed by the job seeker."
+              },
+              {
+                "name": "education",
+                "type": "str",
+                "context": "agent",
+                "description": "Education level of the job seeker."
+              },
+              {
+                "name": "experience",
+                "type": "int",
+                "context": "agent",
+                "description": "Years of experience the job seeker has."
+              },
+              {
+                "name": "job_preferences",
+                "type": "list",
+                "context": "agent",
+                "description": "Preferences of the job seeker regarding job attributes."
+              },
+              {
+                "name": "network",
+                "type": "list",
+                "context": "agent",
+                "description": "Professional network connections of the job seeker."
+              },
+              {
+                "name": "risk_attitude",
+                "type": "str",
+                "context": "agent",
+                "description": "Risk-taking attitude of the job seeker."
+              },
+              {
+                "name": "job_search_strategy",
+                "type": "str",
+                "context": "agent",
+                "description": "Strategy adopted by the job seeker for job searching."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "market_status",
+                "type": "str",
+                "context": "agent",
+                "description": "Status of the job seeker in the labor market, e.g., 'active'."
+              }
+            ]
+          }
+        },
+        "2": {
+          "code": "async def evaluate_job_applications(self, event: Event) -> List[Event]:\n        active_search = self.profile.get_data(\"active_search\", False)\n        if not active_search or event.__class__.__name__ != \"JobPostingDistributionEvent\":\n            return []\n\n        job_id = event.job_id\n        application_cost = event.application_cost\n\n        instruction = f\"\"\"\n        Evaluate the job application for the job with ID {job_id}.\n        Consider the application cost of {application_cost}. \n        Please return the information in the following JSON format:\n\n        {{\n            \"target_ids\": [\"<The string ID(s) of the Employer agent(s)>\"],\n            \"application_value\": <Calculated value of the job application>\n        }}\n        \"\"\"\n\n        observation = f\"Job ID: {job_id}, Application Cost: {application_cost}\"\n        result = await self.generate_reaction(instruction, observation)\n\n        target_ids = result.get('target_ids', [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n        application_value = result.get('application_value', 0.0)\n\n        applications_submitted = self.profile.get_data(\"applications_submitted\", [])\n        applications_submitted.append(job_id)\n        self.profile.update_data(\"applications_submitted\", applications_submitted)\n\n        events = []\n        for target_id in target_ids:\n            application_event = JobApplicationEvaluationEvent(\n                self.profile_id,\n                target_id,\n                job_seeker_id=self.profile_id,\n                job_id=job_id,\n                application_value=application_value,\n                candidate_id=self.profile_id\n            )\n            events.append(application_event)\n\n        return events",
+          "metadata": {
+            "id": 2,
+            "name": "evaluate_job_applications",
+            "condition": "Job postings received and job seeker is actively searching",
+            "description": "The job seeker evaluates job applications to determine the best fit based on their criteria.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "job_id",
+                "type": "int",
+                "context": "event",
+                "description": "Unique identifier for the job being evaluated."
+              },
+              {
+                "name": "job_description",
+                "type": "str",
+                "context": "event",
+                "description": "Description of the job being evaluated."
+              },
+              {
+                "name": "application_cost",
+                "type": "float",
+                "context": "env",
+                "description": "Cost associated with applying to the job."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "applications_submitted",
+                "type": "list",
+                "context": "agent",
+                "description": "List of job applications submitted by the job seeker."
+              }
+            ]
+          }
+        },
+        "3": {
+          "code": "async def negotiate_salaries(self, event: Event) -> List[Event]:\n        if event.__class__.__name__ != \"CandidateScreeningEvent\":\n            return []\n\n        employer_id = event.employer_id\n        proposed_salary = event.proposed_salary\n\n        observation = f\"Employer ID: {employer_id}, Proposed Salary: {proposed_salary}\"\n        instruction = \"\"\"You are engaging in salary negotiation with a potential employer. \n        Your negotiation strategy should consider your negotiation_style and reservation_wage. \n        Please generate negotiation outcomes and decide on target_ids for the next step. \n        Return the information in the following JSON format:\n\n        {\n        \"negotiation_outcomes\": \"<List of outcomes from the negotiation>\",\n        \"target_ids\": [\"<The string ID(s) of the Employer agent(s)>\"]\n        }\n        \"\"\"\n\n        result = await self.generate_reaction(instruction, observation)\n\n        negotiation_outcomes = result.get('negotiation_outcomes', [])\n        target_ids = result.get('target_ids', [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        self.profile.update_data(\"negotiation_outcomes\", negotiation_outcomes)\n\n        events = []\n        for target_id in target_ids:\n            negotiation_event = SalaryNegotiationEvent(\n                self.profile_id,\n                target_id,\n                job_seeker_id=self.profile_id,\n                employer_id=employer_id,\n                proposed_salary=proposed_salary\n            )\n            events.append(negotiation_event)\n\n        return events",
+          "metadata": {
+            "id": 3,
+            "name": "negotiate_salaries",
+            "condition": "Job offer received",
+            "description": "The job seeker engages in salary negotiations with potential employers.",
+            "type": "AND",
+            "required_variables": [
+              {
+                "name": "employer_id",
+                "type": "int",
+                "context": "event",
+                "description": "Unique identifier for the employer engaged in negotiation."
+              },
+              {
+                "name": "proposed_salary",
+                "type": "float",
+                "context": "event",
+                "description": "Salary proposed by the job seeker during negotiation."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "negotiation_outcomes",
+                "type": "list",
+                "context": "agent",
+                "description": "Outcomes of salary negotiations."
+              }
+            ]
+          }
+        },
+        "4": {
+          "code": "async def decide_on_job_offers(self, event: Event) -> List[Event]:\n        if event.__class__.__name__ != \"InterviewEvent\":\n            return []\n\n        offers = self.profile.get_data(\"offers\", [])\n        if len(offers) == 0:\n            return []\n\n        offer_details = event.offer_details\n\n        instruction = \"\"\"You are a job seeker with multiple job offers. Evaluate each offer based on your preferences, skills match, and salary expectations. Decide whether to accept or reject each offer.\n        Please return the decision in the following JSON format:\n\n        {\n        \"offer_accepted\": <True or False>,\n        \"offer_details\": <Details of the job offer you decided on>,\n        \"target_ids\": [\"ENV\"]\n        }\n        \"\"\"\n\n        observation = f\"Offers: {offers}\"\n\n        result = await self.generate_reaction(instruction, observation)\n\n        offer_accepted = result.get('offer_accepted', False)\n        decision_offer_details = result.get('offer_details', {})\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        employment_status = 'employed' if offer_accepted else 'unemployed'\n        self.profile.update_data(\"employment_status\", employment_status)\n\n        events = []\n        for target_id in target_ids:\n            job_offer_decision_event = JobOfferDecisionEvent(\n                self.profile_id,\n                target_id,\n                job_seeker_id=self.profile_id,\n                offer_accepted=offer_accepted,\n                offer_details=decision_offer_details\n            )\n            events.append(job_offer_decision_event)\n\n        return events",
+          "metadata": {
+            "id": 4,
+            "name": "decide_on_job_offers",
+            "condition": "Multiple job offers received",
+            "description": "The job seeker decides whether to accept or reject job offers.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "offer_details",
+                "type": "dict",
+                "context": "event",
+                "description": "Details of the job offer received."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "employment_status",
+                "type": "str",
+                "context": "agent",
+                "description": "Employment status of the job seeker, e.g., 'employed', 'unemployed'."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "Employer": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "5": {
+          "code": "async def post_job_vacancies(self, event: Event) -> List[Event]:\n        # Since there is no condition, proceed directly to the handler logic\n\n        # Retrieve necessary data from the agent's profile\n        job_id = self.profile.get_data(\"job_id\", 0)\n        job_description = self.profile.get_data(\"job_description\", \"\")\n        required_skills = self.profile.get_data(\"required_skills\", [])\n\n        # Prepare instruction for LLM to decide on target_ids\n        instruction = \"\"\"You are posting job vacancies to recruitment channels. \n        Please determine the target recruitment channels based on the current context and agent relationships. \n        Ensure to return the information in the following JSON format:\n\n        {\n        \"target_ids\": [\"<A list of string IDs representing the recruitment channels>\"]\n        }\n        \"\"\"\n\n        # Generate the reaction using the LLM\n        result = await self.generate_reaction(instruction)\n\n        # Extract target_ids from the LLM's response\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Update the agent's posted_jobs list\n        posted_jobs = self.profile.get_data(\"posted_jobs\", [])\n        posted_jobs.append(job_id)\n        self.profile.update_data(\"posted_jobs\", posted_jobs)\n\n        # Prepare and send JobPostingEvent to each target_id\n        events = []\n        for target_id in target_ids:\n            job_posting_event = JobPostingEvent(\n                employer_id=self.profile_id,\n                job_id=job_id,\n                job_description=job_description,\n                required_skills=required_skills,\n                from_agent_id=self.profile_id,\n                to_agent_id=target_id\n            )\n            events.append(job_posting_event)\n\n        return events",
+          "metadata": {
+            "id": 5,
+            "name": "post_job_vacancies",
+            "condition": null,
+            "description": "The employer posts job vacancies to recruitment channels.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "job_id",
+                "type": "int",
+                "context": "agent",
+                "description": "Unique identifier for the job being posted."
+              },
+              {
+                "name": "job_description",
+                "type": "str",
+                "context": "agent",
+                "description": "Description of the job being posted."
+              },
+              {
+                "name": "required_skills",
+                "type": "list",
+                "context": "agent",
+                "description": "Skills required for the job."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "posted_jobs",
+                "type": "list",
+                "context": "agent",
+                "description": "List of jobs currently posted by the employer."
+              }
+            ]
+          }
+        },
+        "6": {
+          "code": "async def screen_candidates(self, event: Event) -> List[Event]:\n        # Condition Check: Applications received\n        if event.application_value <= 0:\n            return []\n\n        # Access required variables from event\n        candidate_id = event.candidate_id\n        application_value = event.application_value\n\n        # Prepare observation and instruction for generate_reaction\n        observation = f\"Candidate ID: {candidate_id}, Application Value: {application_value}\"\n        instruction = \"\"\"\n        You are screening candidates for job vacancies. Based on the provided application value and candidate details, decide whether to proceed with the candidate and propose a salary for negotiation. Please return the information in the following JSON format:\n\n        {\n        \"target_ids\": [\"<The string ID(s) of the JobSeeker agent(s)>\"],\n        \"screening_result\": \"<Result of the screening process>\",\n        \"proposed_salary\": <Proposed salary for negotiation>\n        }\n        \"\"\"\n\n        # Generate reaction using LLM\n        result = await self.generate_reaction(instruction, observation)\n\n        # Parse the LLM's JSON response\n        target_ids = result.get('target_ids', [])\n        screening_result = result.get('screening_result', \"pending\")\n        proposed_salary = result.get('proposed_salary', 0.0)\n\n        # Ensure target_ids is a list\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Update screened_candidates in agent profile\n        screened_candidates = self.profile.get_data(\"screened_candidates\", [])\n        if candidate_id not in screened_candidates:\n            screened_candidates.append(candidate_id)\n        self.profile.update_data(\"screened_candidates\", screened_candidates)\n\n        # Prepare and send CandidateScreeningEvent(s) to the target JobSeeker(s)\n        events = []\n        for target_id in target_ids:\n            screening_event = CandidateScreeningEvent(\n                employer_id=self.profile_id,\n                candidate_id=candidate_id,\n                screening_result=screening_result,\n                proposed_salary=proposed_salary,\n                from_agent_id=self.profile_id,\n                to_agent_id=target_id\n            )\n            events.append(screening_event)\n\n        return events",
+          "metadata": {
+            "id": 6,
+            "name": "screen_candidates",
+            "condition": "Applications received",
+            "description": "The employer screens candidates for job vacancies.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "candidate_id",
+                "type": "int",
+                "context": "event",
+                "description": "Unique identifier for the candidate being screened."
+              },
+              {
+                "name": "application_value",
+                "type": "float",
+                "context": "event",
+                "description": "Value of the candidate's application."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "screened_candidates",
+                "type": "list",
+                "context": "agent",
+                "description": "List of candidates who have been screened."
+              }
+            ]
+          }
+        },
+        "7": {
+          "code": "async def conduct_interviews(self, event: Event) -> List[Event]:\n        # Check condition: Candidate passed screening\n        if not isinstance(event, CandidateScreeningEvent):\n            return []\n\n        # Access required variables from the event\n        candidate_id = event.candidate_id\n        interview_outcome = event.interview_outcome\n\n        # Generate reaction for conducting interviews\n        instruction = \"\"\"\n        You are conducting interviews for candidates who have passed screening.\n        Please determine the outcome for each candidate and decide on the appropriate next steps.\n        Return the result in the following JSON format:\n        {\n            \"target_ids\": [\"<The string ID(s) of the JobSeeker agent(s)>\"],\n            \"interview_outcome\": \"<The result of the interview>\",\n            \"offer_details\": {\"salary\": <salary>, \"position\": \"<position>\", \"benefits\": \"<benefits>\"}\n        }\n        \"\"\"\n        observation = f\"Candidate ID: {candidate_id}, Interview Outcome: {interview_outcome}, Current state: {self.profile.get_data('current_state', '')}\"\n        result = await self.generate_reaction(instruction, observation)\n\n        # Parse the LLM's JSON response\n        target_ids = result.get('target_ids', [])\n        interview_outcome = result.get('interview_outcome', 'pending')\n        offer_details = result.get('offer_details', {})\n\n        # Ensure target_ids is a list\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Update the agent's interview results\n        interview_results = self.profile.get_data('interview_results', [])\n        interview_results.append({'candidate_id': candidate_id, 'outcome': interview_outcome})\n        self.profile.update_data('interview_results', interview_results)\n\n        # Prepare and send InterviewEvent to the relevant JobSeeker(s)\n        events = []\n        for target_id in target_ids:\n            interview_event = InterviewEvent(\n                from_agent_id=self.profile_id,\n                to_agent_id=target_id,\n                employer_id=self.profile_id,\n                candidate_id=candidate_id,\n                interview_outcome=interview_outcome,\n                offer_details=offer_details\n            )\n            events.append(interview_event)\n\n        return events",
+          "metadata": {
+            "id": 7,
+            "name": "conduct_interviews",
+            "condition": "Candidate passed screening",
+            "description": "The employer conducts interviews with shortlisted candidates.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "candidate_id",
+                "type": "int",
+                "context": "event",
+                "description": "Unique identifier for the candidate being interviewed."
+              },
+              {
+                "name": "interview_outcome",
+                "type": "str",
+                "context": "event",
+                "description": "Outcome of the interview."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "interview_results",
+                "type": "list",
+                "context": "agent",
+                "description": "Results of the interviews conducted."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "RecruitmentChannel": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "8": {
+          "code": "async def distribute_job_postings(self, event: Event) -> List[Event]:\n        # Condition Check Implementation\n        if isinstance(event, JobMarketEntryEvent):\n            # Check specific fields for JobMarketEntryEvent\n            if not hasattr(event, 'skills') or not hasattr(event, 'education') or not hasattr(event, 'experience'):\n                return []\n        elif isinstance(event, JobPostingEvent):\n            # Check specific fields for JobPostingEvent\n            if not hasattr(event, 'job_id') or not hasattr(event, 'required_skills'):\n                return []\n        else:\n            return []\n\n        # Data Access\n        job_id = event.job_id if hasattr(event, 'job_id') else None\n        channel_type = event.channel_type if hasattr(event, 'channel_type') else 'online'\n        application_cost = event.application_cost if hasattr(event, 'application_cost') else 0.0\n        distributed_jobs = await self.get_env_data(\"distributed_jobs\", [])\n\n        # Decision Making\n        instruction = \"\"\"\n        The recruitment channel is tasked with distributing job postings to job seekers. \n        Please identify the target job seeker IDs who should receive the job posting based on their skills, education, experience, and job preferences.\n        Ensure to return the information in the following JSON format:\n        {\n            \"target_ids\": [\"<A list of job seeker IDs>\"],\n            \"job_id\": \"<The unique identifier for the job>\",\n            \"channel_type\": \"<The type of recruitment channel>\"\n        }\n        \"\"\"\n        observation = f\"Job ID: {job_id}, Channel Type: {channel_type}, Event Type: {event.__class__.__name__}\"\n        result = await self.generate_reaction(instruction, observation)\n\n        target_ids = result.get('target_ids', [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Response Processing\n        events = []\n        for target_id in target_ids:\n            job_posting_event = JobPostingDistributionEvent(\n                self.profile_id, target_id, channel_type=channel_type, job_id=job_id, application_cost=application_cost\n            )\n            events.append(job_posting_event)\n\n        # Update Environment Data\n        if job_id is not None:\n            distributed_jobs.append(job_id)\n            self.env.update_data(\"distributed_jobs\", distributed_jobs)\n\n        return events",
+          "metadata": {
+            "id": 8,
+            "name": "distribute_job_postings",
+            "condition": "Job postings from employers",
+            "description": "The recruitment channel distributes job postings to job seekers.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "job_id",
+                "type": "int",
+                "context": "event",
+                "description": "Unique identifier for the job being distributed."
+              },
+              {
+                "name": "channel_type",
+                "type": "str",
+                "context": "event",
+                "description": "Type of recruitment channel distributing the job postings."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "distributed_jobs",
+                "type": "list",
+                "context": "env",
+                "description": "List of jobs distributed by the recruitment channel."
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "events": {
+    "imports": "from onesim.events import Event\nfrom typing import Dict, List, Any",
+    "definitions": {
+      "-1": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": -1,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "JobSeeker",
+          "to_action_name": "enter_market",
+          "from_action_id": 0,
+          "to_action_id": 1,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for job seeker to enter the labor market",
+          "fields": []
+        }
+      },
+      "-2": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": -2,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "Employer",
+          "to_action_name": "post_job_vacancies",
+          "from_action_id": 0,
+          "to_action_id": 5,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for employer to post job vacancies",
+          "fields": []
+        }
+      },
+      "1": {
+        "code": "class JobMarketEntryEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        skills: List[Any] = [],\n        education: str = \"\",\n        experience: int = 0,\n        job_preferences: List[Any] = [],\n        network: List[Any] = [],\n        risk_attitude: str = 'neutral',\n        job_search_strategy: str = 'active',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.skills = skills\n        self.education = education\n        self.experience = experience\n        self.job_preferences = job_preferences\n        self.network = network\n        self.risk_attitude = risk_attitude\n        self.job_search_strategy = job_search_strategy",
+        "metadata": {
+          "id": 1,
+          "from_agent_type": "JobSeeker",
+          "from_action_name": "enter_market",
+          "to_agent_type": "RecruitmentChannel",
+          "to_action_name": "distribute_job_postings",
+          "from_action_id": 1,
+          "to_action_id": 8,
+          "event_name": "JobMarketEntryEvent",
+          "event_info": "Job seeker enters the market and looks for job postings",
+          "fields": [
+            {
+              "name": "skills",
+              "type": "list",
+              "default_value": [],
+              "description": "List of skills possessed by the job seeker."
+            },
+            {
+              "name": "education",
+              "type": "str",
+              "default_value": "",
+              "description": "Education level of the job seeker."
+            },
+            {
+              "name": "experience",
+              "type": "int",
+              "default_value": 0,
+              "description": "Years of experience the job seeker has."
+            },
+            {
+              "name": "job_preferences",
+              "type": "list",
+              "default_value": [],
+              "description": "Preferences of the job seeker regarding job attributes."
+            },
+            {
+              "name": "network",
+              "type": "list",
+              "default_value": [],
+              "description": "Professional network connections of the job seeker."
+            },
+            {
+              "name": "risk_attitude",
+              "type": "str",
+              "default_value": "neutral",
+              "description": "Risk-taking attitude of the job seeker."
+            },
+            {
+              "name": "job_search_strategy",
+              "type": "str",
+              "default_value": "active",
+              "description": "Strategy adopted by the job seeker for job searching."
+            }
+          ]
+        }
+      },
+      "2": {
+        "code": "class JobApplicationEvaluationEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        job_seeker_id: int = 0,\n        job_id: int = 0,\n        application_value: float = 0.0,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.job_seeker_id = job_seeker_id\n        self.job_id = job_id\n        self.application_value = application_value",
+        "metadata": {
+          "id": 2,
+          "from_agent_type": "JobSeeker",
+          "from_action_name": "evaluate_job_applications",
+          "to_agent_type": "Employer",
+          "to_action_name": "screen_candidates",
+          "from_action_id": 2,
+          "to_action_id": 6,
+          "event_name": "JobApplicationEvaluationEvent",
+          "event_info": "Job seeker evaluates job applications and applies",
+          "fields": [
+            {
+              "name": "job_seeker_id",
+              "type": "int",
+              "default_value": 0,
+              "description": "Unique identifier for the job seeker"
+            },
+            {
+              "name": "job_id",
+              "type": "int",
+              "default_value": 0,
+              "description": "Unique identifier for the job being applied to"
+            },
+            {
+              "name": "application_value",
+              "type": "float",
+              "default_value": 0.0,
+              "description": "Calculated value of the job application based on job seeker's evaluation"
+            },
+            {
+              "name": "candidate_id",
+              "type": "int",
+              "default_value": 0,
+              "description": "Unique identifier for the candidate being screened"
+            }
+          ]
+        }
+      },
+      "3": {
+        "code": "class SalaryNegotiationEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        job_seeker_id: int = 0,\n        employer_id: int = 0,\n        proposed_salary: float = 0.0,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.job_seeker_id = job_seeker_id\n        self.employer_id = employer_id\n        self.proposed_salary = proposed_salary",
+        "metadata": {
+          "id": 3,
+          "from_agent_type": "JobSeeker",
+          "from_action_name": "negotiate_salaries",
+          "to_agent_type": "Employer",
+          "to_action_name": "conduct_interviews",
+          "from_action_id": 3,
+          "to_action_id": 7,
+          "event_name": "SalaryNegotiationEvent",
+          "event_info": "Job seeker negotiates salary with employer",
+          "fields": [
+            {
+              "name": "job_seeker_id",
+              "type": "int",
+              "default_value": 0,
+              "description": "Unique identifier for the job seeker"
+            },
+            {
+              "name": "employer_id",
+              "type": "int",
+              "default_value": 0,
+              "description": "Unique identifier for the employer"
+            },
+            {
+              "name": "proposed_salary",
+              "type": "float",
+              "default_value": 0.0,
+              "description": "Salary proposed by the job seeker during negotiation"
+            },
+            {
+              "name": "interview_outcome",
+              "type": "str",
+              "default_value": "pending",
+              "description": "Outcome of the interview"
+            }
+          ]
+        }
+      },
+      "4": {
+        "code": "class JobOfferDecisionEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        job_seeker_id: int = 0,\n        offer_accepted: bool = False,\n        offer_details: Dict[str, Any] = {},\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.job_seeker_id = job_seeker_id\n        self.offer_accepted = offer_accepted\n        self.offer_details = offer_details",
+        "metadata": {
+          "id": 4,
+          "from_agent_type": "JobSeeker",
+          "from_action_name": "decide_on_job_offers",
+          "to_agent_type": "EnvAgent",
+          "to_action_name": "terminate",
+          "from_action_id": 4,
+          "to_action_id": -1,
+          "event_name": "JobOfferDecisionEvent",
+          "event_info": "Job seeker decides on job offer and exits the job search process",
+          "fields": [
+            {
+              "name": "job_seeker_id",
+              "type": "int",
+              "default_value": 0,
+              "description": "Unique identifier for the job seeker"
+            },
+            {
+              "name": "offer_accepted",
+              "type": "bool",
+              "default_value": false,
+              "description": "Indicates whether the job offer was accepted by the job seeker"
+            },
+            {
+              "name": "offer_details",
+              "type": "dict",
+              "default_value": {},
+              "description": "Details of the job offer received"
+            }
+          ]
+        }
+      },
+      "5": {
+        "code": "class JobPostingEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        employer_id: int = 0,\n        job_id: int = 0,\n        job_description: str = \"\",\n        required_skills: List[Any] = [],\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.employer_id = employer_id\n        self.job_id = job_id\n        self.job_description = job_description\n        self.required_skills = required_skills",
+        "metadata": {
+          "id": 5,
+          "from_agent_type": "Employer",
+          "from_action_name": "post_job_vacancies",
+          "to_agent_type": "RecruitmentChannel",
+          "to_action_name": "distribute_job_postings",
+          "from_action_id": 5,
+          "to_action_id": 8,
+          "event_name": "JobPostingEvent",
+          "event_info": "Employer posts job vacancies to recruitment channels",
+          "fields": [
+            {
+              "name": "employer_id",
+              "type": "int",
+              "default_value": 0,
+              "description": "Unique identifier for the employer"
+            },
+            {
+              "name": "job_id",
+              "type": "int",
+              "default_value": 0,
+              "description": "Unique identifier for the job being posted"
+            },
+            {
+              "name": "job_description",
+              "type": "str",
+              "default_value": "",
+              "description": "Description of the job being posted"
+            },
+            {
+              "name": "required_skills",
+              "type": "list",
+              "default_value": [],
+              "description": "Skills required for the job"
+            }
+          ]
+        }
+      },
+      "6": {
+        "code": "class CandidateScreeningEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        employer_id: int = 0,\n        candidate_id: int = 0,\n        screening_result: str = 'pending',\n        proposed_salary: float = 0.0,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.employer_id = employer_id\n        self.candidate_id = candidate_id\n        self.screening_result = screening_result\n        self.proposed_salary = proposed_salary",
+        "metadata": {
+          "id": 6,
+          "from_agent_type": "Employer",
+          "from_action_name": "screen_candidates",
+          "to_agent_type": "JobSeeker",
+          "to_action_name": "negotiate_salaries",
+          "from_action_id": 6,
+          "to_action_id": 3,
+          "event_name": "CandidateScreeningEvent",
+          "event_info": "Employer screens candidates and initiates salary negotiations",
+          "fields": [
+            {
+              "name": "employer_id",
+              "type": "int",
+              "default_value": 0,
+              "description": "Unique identifier for the employer"
+            },
+            {
+              "name": "candidate_id",
+              "type": "int",
+              "default_value": 0,
+              "description": "Unique identifier for the candidate being screened"
+            },
+            {
+              "name": "screening_result",
+              "type": "str",
+              "default_value": "pending",
+              "description": "Result of the candidate screening process"
+            },
+            {
+              "name": "proposed_salary",
+              "type": "float",
+              "default_value": 0.0,
+              "description": "Salary proposed by the employer for negotiation"
+            }
+          ]
+        }
+      },
+      "7": {
+        "code": "class InterviewEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        employer_id: int = 0,\n        candidate_id: int = 0,\n        interview_outcome: str = 'pending',\n        offer_details: Dict[str, Any] = {},\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.employer_id = employer_id\n        self.candidate_id = candidate_id\n        self.interview_outcome = interview_outcome\n        self.offer_details = offer_details",
+        "metadata": {
+          "id": 7,
+          "from_agent_type": "Employer",
+          "from_action_name": "conduct_interviews",
+          "to_agent_type": "JobSeeker",
+          "to_action_name": "decide_on_job_offers",
+          "from_action_id": 7,
+          "to_action_id": 4,
+          "event_name": "InterviewEvent",
+          "event_info": "Employer conducts interviews and extends job offers",
+          "fields": [
+            {
+              "name": "employer_id",
+              "type": "int",
+              "default_value": 0,
+              "description": "Unique identifier for the employer"
+            },
+            {
+              "name": "candidate_id",
+              "type": "int",
+              "default_value": 0,
+              "description": "Unique identifier for the candidate being interviewed"
+            },
+            {
+              "name": "interview_outcome",
+              "type": "str",
+              "default_value": "pending",
+              "description": "Outcome of the interview process"
+            },
+            {
+              "name": "offer_details",
+              "type": "dict",
+              "default_value": {},
+              "description": "Details of the job offer extended"
+            }
+          ]
+        }
+      },
+      "8": {
+        "code": "class JobPostingDistributionEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        channel_type: str = 'online',\n        job_id: int = 0,\n        application_cost: float = 0.0,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.channel_type = channel_type\n        self.job_id = job_id\n        self.application_cost = application_cost",
+        "metadata": {
+          "id": 8,
+          "from_agent_type": "RecruitmentChannel",
+          "from_action_name": "distribute_job_postings",
+          "to_agent_type": "JobSeeker",
+          "to_action_name": "evaluate_job_applications",
+          "from_action_id": 8,
+          "to_action_id": 2,
+          "event_name": "JobPostingDistributionEvent",
+          "event_info": "Recruitment channel distributes job postings to job seekers",
+          "fields": [
+            {
+              "name": "channel_type",
+              "type": "str",
+              "default_value": "online",
+              "description": "Type of recruitment channel distributing the job postings"
+            },
+            {
+              "name": "job_id",
+              "type": "int",
+              "default_value": 0,
+              "description": "Unique identifier for the job being distributed"
+            },
+            {
+              "name": "application_cost",
+              "type": "float",
+              "default_value": 0.0,
+              "description": "Cost associated with applying to the job"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

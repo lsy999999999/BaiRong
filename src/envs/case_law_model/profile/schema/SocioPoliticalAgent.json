@@ -1,0 +1,64 @@
+{
+    "name": {
+        "type": "str",
+        "default": "SocioPoliticalAgent",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's identifier within the simulation"
+    },
+    "socio_political_influences": {
+        "type": "str",
+        "default": "stable_government",
+        "private": true,
+        "sampling": "default"
+    },
+    "influence_strength": {
+        "type": "int",
+        "default": 50,
+        "private": false,
+        "sampling": "default"
+    },
+    "legal_field_focus": {
+        "type": "str",
+        "default": "criminal_law",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "criminal_law",
+            "civil_law",
+            "contract_law",
+            "administrative_law"
+        ]
+    },
+    "interaction_history": {
+        "type": "list",
+        "default": [
+            {
+                "date": "2025-04-01",
+                "interaction": "initial_setup",
+                "impact": "moderate"
+            }
+        ],
+        "private": true,
+        "sampling": "default"
+    },
+    "current_status": {
+        "type": "str",
+        "default": "active",
+        "private": false,
+        "sampling": "default"
+    },
+    "impact_factor": {
+        "type": "float",
+        "default": 1.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

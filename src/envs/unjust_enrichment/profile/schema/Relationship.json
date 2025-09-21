@@ -1,0 +1,17 @@
+[
+    {
+        "source_agent": "Plaintiff",
+        "target_agent": "Judge",
+        "direction": "unidirectional"
+    },
+    {
+        "source_agent": "Defendant",
+        "target_agent": "Judge",
+        "direction": "unidirectional"
+    },
+    {
+        "source_agent": "Judge",
+        "target_agent": "Judge",
+        "direction": "unidirectional"
+    }
+]

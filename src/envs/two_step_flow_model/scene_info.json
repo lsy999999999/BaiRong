@@ -1,0 +1,112 @@
+{
+  "domain": "Communication",
+  "scene_name": "two_step_flow_model",
+  "odd_protocol": {
+    "overview": {
+      "system_goal": "Simulate how information spreads in society and validate the two-step flow model hypothesis.",
+      "agent_types": "Media agent, opinion leader agents, and public agents.",
+      "environment_description": "A social network where agents are connected, with stronger connections between opinion leaders and weaker ones among public agents.",
+      "information_flow": "Information flows from media to opinion leaders and then to the public.",
+      "role_of_opinion_leaders": "Opinion leaders act as filters and interpreters of information, influencing public perception."
+    },
+    "design_concepts": {
+      "interaction_patterns": "Information spreads from media to opinion leaders who then disseminate it to the public.",
+      "communication_protocols": "Opinion leaders communicate with the public through dialogue and interaction, modifying information based on personal beliefs.",
+      "decision_mechanisms": "Agents adjust beliefs and attitudes based on received information, simulating opinion changes.",
+      "network_structure": "Agents are connected in a network with opinion leaders having stronger interconnections.",
+      "information_adaptation": "Agents, especially opinion leaders, adapt their stance based on new information."
+    },
+    "details": {
+      "agent_behaviors": "Media agents generate and send information; opinion leaders filter and modify information before sharing; public agents receive and react to information.",
+      "decision_algorithms": "Opinion leaders evaluate information credibility and modify it according to personal views.",
+      "specific_constraints": "Information transmission has delays, and the rate of spread affects the extent of diffusion.",
+      "simulation_process": "Initialize a network with agents, simulate media information release, track spread to opinion leaders and public.",
+      "agent_quantity": "1 media agent, 10-100 opinion leaders, and 100-1000 public agents depending on simulation scale."
+    }
+  },
+  "agent_types": {
+    "MediaAgent": "Responsible for generating and disseminating information to opinion leaders, initiating the information flow in the network.",
+    "OpinionLeaderAgent": "Filters and modifies information received from media agents based on personal beliefs before sharing it with the public, acting as an intermediary in the information spread.",
+    "PublicAgent": "Receives and reacts to information from opinion leaders, adjusting beliefs and attitudes based on the modified information."
+  },
+  "portrait": {
+    "MediaAgent": 2,
+    "OpinionLeaderAgent": 1,
+    "PublicAgent": 5
+  },
+  "metrics": [
+    {
+      "id": "Information_Spread_Success_Rate",
+      "name": "Information Spread Success Rate",
+      "description": "Measures the percentage of public agents that have received any information.",
+      "visualization_type": "pie",
+      "update_frequency": 5,
+      "variables": [
+        {
+          "name": "received_information",
+          "source_type": "agent",
+          "agent_type": "PublicAgent",
+          "path": "received_information",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Count the number of PublicAgent instances where 'received_information' is not None or empty. Divide this by the total number of PublicAgent instances to get the percentage. Handle None or empty lists by considering them as not having received information.",
+      "function_name": "Information_Spread_Success_Rate"
+    },
+    {
+      "id": "Opinion_Modification_Rate",
+      "name": "Opinion Modification Rate",
+      "description": "Tracks how often opinion leaders modify the information before passing it to public agents.",
+      "visualization_type": "bar",
+      "update_frequency": 5,
+      "variables": [
+        {
+          "name": "original_information",
+          "source_type": "agent",
+          "agent_type": "OpinionLeaderAgent",
+          "path": "original_information",
+          "required": true,
+          "is_list": true
+        },
+        {
+          "name": "modified_information",
+          "source_type": "agent",
+          "agent_type": "OpinionLeaderAgent",
+          "path": "modified_information",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Compare 'original_information' and 'modified_information' for each OpinionLeaderAgent. Count instances where they differ, indicating modification. Handle None or empty values by skipping those comparisons. The result is a dictionary with keys as 'Modified' and 'Unmodified' with counts as values.",
+      "function_name": "Opinion_Modification_Rate"
+    },
+    {
+      "id": "Agent_Communication_Load",
+      "name": "Agent Communication Load",
+      "description": "Evaluates the distribution of communication load among opinion leaders by counting how many public agents each opinion leader targets.",
+      "visualization_type": "bar",
+      "update_frequency": 5,
+      "variables": [
+        {
+          "name": "target_public_agents",
+          "source_type": "agent",
+          "agent_type": "OpinionLeaderAgent",
+          "path": "target_public_agents",
+          "required": true,
+          "is_list": true
+        },
+        {
+          "name": "opinion_leader_id",
+          "source_type": "agent",
+          "agent_type": "OpinionLeaderAgent",
+          "path": "opinion_leader_id",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "For each OpinionLeaderAgent, count the number of entries in 'target_public_agents'. Handle None or empty lists by considering them as zero load. Return a dictionary where keys are 'opinion_leader_id' and values are the counts of target public agents.",
+      "function_name": "Agent_Communication_Load"
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+    "environment": {
+        "variables": [
+            {
+                "name": "engagement_status",
+                "type": "string",
+                "default_value": null
+            },
+            {
+                "name": "handling_method",
+                "type": "string",
+                "default_value": null
+            },
+            {
+                "name": "outcome",
+                "type": "string",
+                "default_value": null
+            },
+            {
+                "name": "response_action",
+                "type": "string",
+                "default_value": null
+            },
+            {
+                "name": "resolution_status",
+                "type": "string",
+                "default_value": null
+            }
+        ]
+    },
+    "agents": {
+        "AntisocialAgent": {
+            "variables": [
+                {
+                    "name": "personal_goal",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "interaction_status",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "manipulation_strategy",
+                    "type": "string",
+                    "default_value": null
+                }
+            ]
+        },
+        "SocialEnvironmentAgent": {
+            "variables": []
+        }
+    }
+}

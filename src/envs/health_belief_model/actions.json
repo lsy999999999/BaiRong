@@ -1,0 +1,197 @@
+{
+    "IndividualAgent": [
+        {
+            "id": 1,
+            "name": "evaluate_health_threat",
+            "condition": null,
+            "description": "Assess the perceived threat of a health issue based on personal beliefs and information.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "personal_health_data",
+                    "type": "object",
+                    "context": "agent",
+                    "description": "Individual's personal health data and history"
+                },
+                {
+                    "name": "environmental_cues",
+                    "type": "list",
+                    "context": "env",
+                    "description": "External cues from the environment that may influence health threat perception"
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "perceived_threat_level",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Updated perception of the health threat level"
+                },
+                {
+                    "name": "perceived_susceptibility",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Updated perception of susceptibility to the health threat"
+                },
+                {
+                    "name": "perceived_severity",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Updated perception of severity of the health threat"
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "name": "adopt_health_behavior",
+            "condition": "Requires perception of threat, benefits, barriers, and self-efficacy",
+            "description": "Decide to adopt a specific health behavior based on perceived benefits, barriers, and self-efficacy.",
+            "type": "AND",
+            "required_variables": [
+                {
+                    "name": "perceived_benefits",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Perceived benefits of adopting the health behavior"
+                },
+                {
+                    "name": "perceived_barriers",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Perceived barriers to adopting the health behavior"
+                },
+                {
+                    "name": "self_efficacy",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Individual's confidence in successfully adopting the health behavior"
+                },
+                {
+                    "name": "support_type",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Type of support received from family"
+                },
+                {
+                    "name": "norm_description",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Community norms supporting the health behavior"
+                },
+                {
+                    "name": "policy_name",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Government policy supporting health behavior adoption"
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "adopted_behavior",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Type of health behavior adopted"
+                },
+                {
+                    "name": "adoption_success",
+                    "type": "bool",
+                    "context": "agent",
+                    "description": "Indicates if the adoption of the health behavior was successful"
+                }
+            ]
+        }
+    ],
+    "FamilyAgent": [
+        {
+            "id": 3,
+            "name": "provide_support",
+            "condition": null,
+            "description": "Offer support to family members to encourage the adoption of health behaviors.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "family_health_priorities",
+                    "type": "list",
+                    "context": "agent",
+                    "description": "Health priorities and concerns within the family"
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "support_provided",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Type of support provided to family members"
+                }
+            ]
+        }
+    ],
+    "CommunityAgent": [
+        {
+            "id": 4,
+            "name": "establish_norms",
+            "condition": null,
+            "description": "Create and promote community norms that support health behaviors.",
+            "type": "AND",
+            "required_variables": [
+                {
+                    "name": "community_health_data",
+                    "type": "object",
+                    "context": "agent",
+                    "description": "Health data and statistics relevant to the community"
+                },
+                {
+                    "name": "government_policy",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Policy implemented by the government affecting community norms"
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "community_norms",
+                    "type": "list",
+                    "context": "agent",
+                    "description": "List of norms established by the community to support health behaviors"
+                }
+            ]
+        }
+    ],
+    "GovernmentAgent": [
+        {
+            "id": 5,
+            "name": "implement_policy",
+            "condition": null,
+            "description": "Develop and enforce policies to promote public health and influence community and individual behaviors.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "policy_goals",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Goals and objectives of the health policy"
+                },
+                {
+                    "name": "resource_availability",
+                    "type": "float",
+                    "context": "env",
+                    "description": "Availability of resources to support policy implementation"
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "implemented_policy",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Details of the policy implemented"
+                },
+                {
+                    "name": "policy_impact",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Expected impact level of the policy on health behaviors"
+                }
+            ]
+        }
+    ]
+}

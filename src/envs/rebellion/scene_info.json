@@ -1,0 +1,73 @@
+{
+  "domain": "Politics",
+  "scene_name": "rebellion",
+  "odd_protocol": {
+    "overview": {
+      "system_goal": "The model simulates individual rebellion behavior against unjust regimes to study how different repression strategies affect social stability.",
+      "agent_types": "Citizens who may participate in rebellion and the Government responsible for maintaining order and deciding repression strategies.",
+      "environment_description": "A societal setting where citizens and government interact, with citizens evaluating their grievances and the government implementing repression.",
+      "state_variables_description": "Grievance level indicating citizens' discontent with the government, repression intensity by the government, and rebellion-state indicating individual participation in rebellion.",
+      "process_overview": "Initialization involves setting a number of citizens with random grievance values and government repression strategy; dynamics include citizens deciding on rebellion based on grievance and government repressing rebels to influence future rebellion probability."
+    },
+    "design_concepts": {
+      "interaction_patterns": "Citizens assess their grievance levels and decide on rebellion, while the government applies repression to manage rebellion.",
+      "communication_protocols": "Implicit communication through actions and responses between citizens and the government.",
+      "decision_mechanisms": "Citizens decide on rebellion based on their grievance levels, and the government decides on repression intensity.",
+      "social_stability_observation": "Monitor whether society reaches a stable state or remains in turmoil after a set period."
+    },
+    "details": {
+      "agent_behaviors": "Citizens evaluate their grievance and decide on rebellion; the government applies repression to manage rebellion.",
+      "decision_algorithms": "Citizens use grievance levels to decide on rebellion, while the government uses strategies to determine repression intensity.",
+      "specific_constraints": "The model runs for a predefined time to observe societal stability or continuous turmoil.",
+      "research_value": "The model aids in studying social protests, repression policy effectiveness, and dynamics of collective action."
+    }
+  },
+  "agent_types": {
+    "Citizen": "Citizens are individuals who evaluate their grievances and decide whether to participate in rebellion against the government.",
+    "Government": "The Government is responsible for maintaining order and deciding on repression strategies to manage and control rebellion."
+  },
+  "portrait": {
+    "Citizen": 5,
+    "Government": 1
+  },
+  "metrics": [
+    {
+      "id": "Average_Grievance_Level",
+      "name": "Average Grievance Level",
+      "description": "Measures the average level of grievance among citizens, indicating potential unrest.",
+      "visualization_type": "line",
+      "update_interval": 5,
+      "variables": [
+        {
+          "name": "grievance_level",
+          "source_type": "agent",
+          "agent_type": "Citizen",
+          "path": "grievance_level",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Calculate the average grievance level by summing all non-None values in the grievance_level list and dividing by the count of non-None values. If the list is empty or contains only None values, return a default value of 0. Handle type errors by skipping invalid entries.",
+      "function_name": "Average_Grievance_Level"
+    },
+    {
+      "id": "Rebellion_Decision_Ratio",
+      "name": "Rebellion Decision Ratio",
+      "description": "Tracks the proportion of citizens deciding to rebel, reflecting the effectiveness of government strategies.",
+      "visualization_type": "pie",
+      "update_interval": 5,
+      "variables": [
+        {
+          "name": "rebellion_decision",
+          "source_type": "agent",
+          "agent_type": "Citizen",
+          "path": "rebellion_decision",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Count the number of True values in the rebellion_decision list and divide by the total number of non-None entries to get the ratio of citizens deciding to rebel. If the list is empty or contains only None values, return a default ratio of 0. Handle type errors by skipping invalid entries.",
+      "function_name": "Rebellion_Decision_Ratio"
+    }
+  ]
+}

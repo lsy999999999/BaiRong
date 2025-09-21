@@ -1,0 +1,51 @@
+{
+    "environment": {
+        "variables": [
+            {
+                "name": "global_map_state",
+                "type": "object",
+                "default_value": null
+            }
+        ]
+    },
+    "agents": {
+        "ResourceMiner": {
+            "variables": [
+                {
+                    "name": "miner_id",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "current_state",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "observed_state",
+                    "type": "object",
+                    "default_value": null
+                },
+                {
+                    "name": "investment_strategy",
+                    "type": "object",
+                    "default_value": null
+                }
+            ]
+        },
+        "AdjudicatorAgent": {
+            "variables": [
+                {
+                    "name": "resolution_status",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "resolution_outcome",
+                    "type": "object",
+                    "default_value": null
+                }
+            ]
+        }
+    }
+}

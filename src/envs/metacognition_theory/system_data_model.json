@@ -1,0 +1,75 @@
+{
+    "environment": {
+        "variables": [
+            {
+                "name": "task_id",
+                "type": "str",
+                "default_value": null
+            },
+            {
+                "name": "task_details",
+                "type": "str",
+                "default_value": null
+            }
+        ]
+    },
+    "agents": {
+        "TaskExecutor": {
+            "variables": [
+                {
+                    "name": "task_status",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "reflection_summary",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "strategy_changes",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "adjustment_reason",
+                    "type": "str",
+                    "default_value": null
+                }
+            ]
+        },
+        "Monitor": {
+            "variables": [
+                {
+                    "name": "observation_data",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "feedback_details",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "recommendations",
+                    "type": "str",
+                    "default_value": null
+                }
+            ]
+        },
+        "Evaluator": {
+            "variables": [
+                {
+                    "name": "performance_summary",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "completion_status",
+                    "type": "str",
+                    "default_value": null
+                }
+            ]
+        }
+    }
+}

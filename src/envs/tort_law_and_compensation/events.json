@@ -1,0 +1,163 @@
+{
+    "-1": {
+        "id": -1,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "Plaintiff",
+        "to_action_name": "submit_compensation_request",
+        "from_action_id": 0,
+        "to_action_id": 1,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for Plaintiff to submit compensation request",
+        "fields": []
+    },
+    "-2": {
+        "id": -2,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "Defendant",
+        "to_action_name": "prepare_defense",
+        "from_action_id": 0,
+        "to_action_id": 2,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for Defendant to prepare defense",
+        "fields": []
+    },
+    "1": {
+        "id": 1,
+        "from_agent_type": "Plaintiff",
+        "from_action_name": "submit_compensation_request",
+        "to_agent_type": "Judge",
+        "to_action_name": "evaluate_request",
+        "from_action_id": 1,
+        "to_action_id": 3,
+        "event_name": "CompensationRequestEvent",
+        "event_info": "Plaintiff submits compensation request and damage facts",
+        "fields": [
+            {
+                "name": "compensation_amount",
+                "type": "float",
+                "default_value": "0.0",
+                "description": "Requested amount for compensation"
+            },
+            {
+                "name": "damage_description",
+                "type": "str",
+                "default_value": "",
+                "description": "Description of the damages incurred"
+            },
+            {
+                "name": "evidence_list",
+                "type": "list",
+                "default_value": "[]",
+                "description": "List of evidence supporting the compensation request"
+            }
+        ]
+    },
+    "2": {
+        "id": 2,
+        "from_agent_type": "Defendant",
+        "from_action_name": "prepare_defense",
+        "to_agent_type": "Judge",
+        "to_action_name": "evaluate_defense",
+        "from_action_id": 2,
+        "to_action_id": 4,
+        "event_name": "DefensePreparedEvent",
+        "event_info": "Defendant prepares defense and argues for liability reduction",
+        "fields": [
+            {
+                "name": "liability_reduction_argument",
+                "type": "str",
+                "default_value": "",
+                "description": "Argument prepared by the defendant for reducing liability"
+            },
+            {
+                "name": "counter_evidence_list",
+                "type": "list",
+                "default_value": "[]",
+                "description": "List of evidence countering the plaintiff's claims"
+            }
+        ]
+    },
+    "3": {
+        "id": 3,
+        "from_agent_type": "Judge",
+        "from_action_name": "evaluate_request",
+        "to_agent_type": "Judge",
+        "to_action_name": "make_decision",
+        "from_action_id": 3,
+        "to_action_id": 5,
+        "event_name": "RequestEvaluationEvent",
+        "event_info": "Judge evaluates the compensation request based on evidence",
+        "fields": [
+            {
+                "name": "evaluation_status",
+                "type": "str",
+                "default_value": "pending",
+                "description": "Status of the evaluation process"
+            },
+            {
+                "name": "evaluation_notes",
+                "type": "str",
+                "default_value": "",
+                "description": "Notes and observations made during the evaluation"
+            }
+        ]
+    },
+    "4": {
+        "id": 4,
+        "from_agent_type": "Judge",
+        "from_action_name": "evaluate_defense",
+        "to_agent_type": "Judge",
+        "to_action_name": "make_decision",
+        "from_action_id": 4,
+        "to_action_id": 5,
+        "event_name": "DefenseEvaluationEvent",
+        "event_info": "Judge evaluates the defense arguments based on evidence",
+        "fields": [
+            {
+                "name": "evaluation_status",
+                "type": "str",
+                "default_value": "pending",
+                "description": "Status of the defense evaluation process"
+            },
+            {
+                "name": "evaluation_notes",
+                "type": "str",
+                "default_value": "",
+                "description": "Notes and observations made during the defense evaluation"
+            }
+        ]
+    },
+    "5": {
+        "id": 5,
+        "from_agent_type": "Judge",
+        "from_action_name": "make_decision",
+        "to_agent_type": "EnvAgent",
+        "to_action_name": "terminate",
+        "from_action_id": 5,
+        "to_action_id": -1,
+        "event_name": "DecisionMadeEvent",
+        "event_info": "Judge makes a decision on compensation and concludes the case",
+        "fields": [
+            {
+                "name": "decision_outcome",
+                "type": "str",
+                "default_value": "",
+                "description": "Outcome of the case decision"
+            },
+            {
+                "name": "compensation_awarded",
+                "type": "float",
+                "default_value": "0.0",
+                "description": "Amount of compensation awarded to the plaintiff"
+            },
+            {
+                "name": "completion_status",
+                "type": "str",
+                "default_value": "completed",
+                "description": "Status indicating completion of the case"
+            }
+        ]
+    }
+}

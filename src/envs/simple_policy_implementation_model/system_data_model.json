@@ -1,0 +1,65 @@
+{
+    "environment": {
+        "variables": []
+    },
+    "agents": {
+        "Government": {
+            "variables": [
+                {
+                    "name": "policy_id",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "current_strength",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "efficiency_metrics",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "new_strength",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "adjustment_reason",
+                    "type": "string",
+                    "default_value": null
+                }
+            ]
+        },
+        "Citizens": {
+            "variables": [
+                {
+                    "name": "policy_id",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "acceptance_level",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "compliance_level",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "satisfaction_level",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "adjustment_reason",
+                    "type": "string",
+                    "default_value": null
+                }
+            ]
+        }
+    }
+}

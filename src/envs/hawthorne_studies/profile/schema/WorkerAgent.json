@@ -1,0 +1,90 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Alex Johnson",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's full name"
+    },
+    "emotional_state": {
+        "type": "str",
+        "default": "neutral",
+        "private": false,
+        "sampling": "default"
+    },
+    "leadership_attention_level": {
+        "type": "int",
+        "default": 50,
+        "private": false,
+        "sampling": "default"
+    },
+    "productivity_level": {
+        "type": "int",
+        "default": 75,
+        "private": false,
+        "sampling": "default"
+    },
+    "experience_years": {
+        "type": "int",
+        "default": 5,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            1,
+            30
+        ]
+    },
+    "skills": {
+        "type": "list",
+        "default": [
+            "communication",
+            "teamwork"
+        ],
+        "private": false,
+        "sampling": "llm",
+        "sample_size": 3,
+        "description": "List of skills the agent possesses"
+    },
+    "job_satisfaction": {
+        "type": "int",
+        "default": 70,
+        "private": false,
+        "sampling": "default"
+    },
+    "motivation_level": {
+        "type": "int",
+        "default": 80,
+        "private": false,
+        "sampling": "default"
+    },
+    "work_environment_preference": {
+        "type": "str",
+        "default": "collaborative",
+        "private": true,
+        "sampling": "random",
+        "choices": [
+            "collaborative",
+            "independent",
+            "flexible"
+        ]
+    },
+    "feedback_responsiveness": {
+        "type": "int",
+        "default": 60,
+        "private": true,
+        "sampling": "default"
+    },
+    "team_interaction_level": {
+        "type": "int",
+        "default": 65,
+        "private": false,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

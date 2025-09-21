@@ -1,0 +1,235 @@
+{
+    "CommunityCommittee": {
+        "collected_proposals": {
+            "type": "list",
+            "default": null,
+            "private": false,
+            "sampling": "llm",
+            "description": "A list of governance proposals collected from residents and stakeholders."
+        },
+        "review_status": {
+            "type": "str",
+            "default": null,
+            "private": false,
+            "sampling": "random",
+            "choices": [
+                "pending",
+                "in_review",
+                "approved",
+                "rejected"
+            ]
+        },
+        "meeting_schedule": {
+            "type": "str",
+            "default": "monthly",
+            "private": false,
+            "sampling": "random",
+            "choices": [
+                "monthly",
+                "quarterly"
+            ]
+        },
+        "negotiation_strategies": {
+            "type": "list",
+            "default": [],
+            "private": true,
+            "sampling": "llm",
+            "description": "Strategies used by the committee to negotiate governance solutions."
+        },
+        "alliance_structures": {
+            "type": "list",
+            "default": [],
+            "private": false,
+            "sampling": "llm",
+            "description": "Current structures and alliances formed by residents based on issue priorities."
+        },
+        "resource_allocation": {
+            "type": "float",
+            "default": 0.0,
+            "private": false,
+            "sampling": "random",
+            "range": [
+                0.0,
+                100.0
+            ]
+        },
+        "policy_support": {
+            "type": "str",
+            "default": "neutral",
+            "private": false,
+            "sampling": "random",
+            "choices": [
+                "supportive",
+                "neutral",
+                "opposed"
+            ]
+        },
+        "feedback_collection": {
+            "type": "list",
+            "default": [],
+            "private": false,
+            "sampling": "llm",
+            "description": "Feedback from past meetings and implemented solutions to guide future priorities."
+        },
+        "id": {
+            "type": "int",
+            "default": 0,
+            "private": true,
+            "sampling": "preset",
+            "description": "Unique id of agent"
+        }
+    },
+    "GovernmentRepresentative": {
+        "policy_support_status": {
+            "type": "str",
+            "default": null,
+            "private": false,
+            "sampling": "llm",
+            "description": "The current status of policy support provided by the government representative."
+        },
+        "resource_allocation_capacity": {
+            "type": "int",
+            "default": 100,
+            "private": false,
+            "sampling": "random",
+            "range": [
+                0,
+                100
+            ]
+        },
+        "meeting_participation_frequency": {
+            "type": "str",
+            "default": "monthly",
+            "private": false,
+            "sampling": "random",
+            "choices": [
+                "monthly",
+                "quarterly"
+            ]
+        },
+        "feasibility_assessment_expertise": {
+            "type": "list",
+            "choices": [
+                "financial",
+                "logistical",
+                "regulatory"
+            ],
+            "private": false,
+            "sampling": "random",
+            "sample_size": [
+                1,
+                2
+            ]
+        },
+        "policy_influence_score": {
+            "type": "float",
+            "default": 0.5,
+            "private": false,
+            "sampling": "random",
+            "range": [
+                0.0,
+                1.0
+            ]
+        },
+        "feedback_collection_method": {
+            "type": "str",
+            "default": "survey",
+            "private": false,
+            "sampling": "random",
+            "choices": [
+                "survey",
+                "interview",
+                "focus_group"
+            ]
+        },
+        "negotiation_strategy": {
+            "type": "str",
+            "default": "collaborative",
+            "private": false,
+            "sampling": "llm",
+            "description": "The strategy used by the government representative during negotiations to achieve consensus."
+        },
+        "id": {
+            "type": "int",
+            "default": 0,
+            "private": true,
+            "sampling": "preset",
+            "description": "Unique id of agent"
+        }
+    },
+    "PropertyManagementCompany": {
+        "feasibility_report": {
+            "type": "str",
+            "default": null,
+            "private": false,
+            "sampling": "llm",
+            "description": "A detailed report evaluating the feasibility of proposed community projects."
+        },
+        "operational_costs": {
+            "type": "float",
+            "default": 0.0,
+            "private": false,
+            "sampling": "random",
+            "range": [
+                1000.0,
+                100000.0
+            ]
+        },
+        "response_speed": {
+            "type": "int",
+            "default": 24,
+            "private": false,
+            "sampling": "random",
+            "range": [
+                1,
+                72
+            ]
+        },
+        "resource_availability": {
+            "type": "list",
+            "choices": [
+                "Personnel",
+                "Equipment",
+                "Funding",
+                "Time"
+            ],
+            "private": false,
+            "sampling": "random",
+            "sample_size": [
+                1,
+                3
+            ]
+        },
+        "policy_constraints": {
+            "type": "str",
+            "default": "",
+            "private": true,
+            "sampling": "llm",
+            "description": "A summary of policy constraints that may affect decision-making and project feasibility."
+        },
+        "meeting_participation": {
+            "type": "int",
+            "default": 0,
+            "private": false,
+            "sampling": "random",
+            "range": [
+                0,
+                10
+            ]
+        },
+        "execution_plan": {
+            "type": "str",
+            "default": null,
+            "private": true,
+            "sampling": "llm",
+            "description": "A comprehensive plan outlining the steps for executing approved governance solutions."
+        },
+        "id": {
+            "type": "int",
+            "default": 0,
+            "private": true,
+            "sampling": "preset",
+            "description": "Unique id of agent"
+        }
+    }
+}

@@ -1,0 +1,97 @@
+[
+    {
+        "name": "Alicia Carter",
+        "initial_response_time": 2,
+        "legal_knowledge_level": 71,
+        "stress_tolerance": 43,
+        "defense_strategy": "Layered Defense",
+        "communication_skill": 77,
+        "current_status": "ready",
+        "agent_type": "Defender",
+        "defensive_action_type": "verbal_warning",
+        "defense_intensity": 50,
+        "evidence_collected": [
+            {
+                "type": "video",
+                "timestamp": "2023-10-01T10:00:00Z"
+            }
+        ],
+        "id": "5"
+    },
+    {
+        "name": "Marcus Lee",
+        "initial_response_time": 2,
+        "legal_knowledge_level": 76,
+        "stress_tolerance": 65,
+        "defense_strategy": "Risk-Based Approach",
+        "communication_skill": 63,
+        "current_status": "ready",
+        "agent_type": "Defender",
+        "defensive_action_type": "verbal_warning",
+        "defense_intensity": 50,
+        "evidence_collected": [
+            {
+                "type": "video",
+                "timestamp": "2023-10-01T10:00:00Z"
+            }
+        ],
+        "id": "6"
+    },
+    {
+        "name": "Samantha Nguyen",
+        "initial_response_time": 7,
+        "legal_knowledge_level": 72,
+        "stress_tolerance": 67,
+        "defense_strategy": "Zero Trust Model",
+        "communication_skill": 59,
+        "current_status": "ready",
+        "agent_type": "Defender",
+        "defensive_action_type": "verbal_warning",
+        "defense_intensity": 50,
+        "evidence_collected": [
+            {
+                "type": "video",
+                "timestamp": "2023-10-01T10:00:00Z"
+            }
+        ],
+        "id": "7"
+    },
+    {
+        "name": "Daniel Ortiz",
+        "initial_response_time": 9,
+        "legal_knowledge_level": 53,
+        "stress_tolerance": 69,
+        "defense_strategy": "Incident Response Planning",
+        "communication_skill": 69,
+        "current_status": "ready",
+        "agent_type": "Defender",
+        "defensive_action_type": "verbal_warning",
+        "defense_intensity": 50,
+        "evidence_collected": [
+            {
+                "type": "video",
+                "timestamp": "2023-10-01T10:00:00Z"
+            }
+        ],
+        "id": "8"
+    },
+    {
+        "name": "Emma Johansson",
+        "initial_response_time": 5,
+        "legal_knowledge_level": 96,
+        "stress_tolerance": 31,
+        "defense_strategy": "Proactive Threat Hunting",
+        "communication_skill": 50,
+        "current_status": "ready",
+        "agent_type": "Defender",
+        "defensive_action_type": "verbal_warning",
+        "defense_intensity": 50,
+        "evidence_collected": [
+            {
+                "type": "video",
+                "timestamp": "2023-10-01T10:00:00Z"
+            }
+        ],
+        "id": "9"
+    }
+]

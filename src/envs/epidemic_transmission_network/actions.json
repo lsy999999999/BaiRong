@@ -1,0 +1,177 @@
+{
+    "Individual": [
+        {
+            "id": 1,
+            "name": "perceive_risk",
+            "condition": "null",
+            "description": "The action where an individual assesses their risk of infection based on personal experiences and external information sources.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "information_sources",
+                    "type": "list",
+                    "context": "agent",
+                    "description": "List of information sources that the individual uses to assess risk."
+                },
+                {
+                    "name": "personal_experiences",
+                    "type": "dict",
+                    "context": "agent",
+                    "description": "Personal experiences that influence the individual's risk perception."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "risk_perception",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Updated risk perception value for the individual."
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "name": "adjust_behavior",
+            "condition": "RiskPerceptionUpdatedEvent received",
+            "description": "The action where an individual modifies their behavior (e.g., social distancing, seeking healthcare) based on updated risk perception.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "risk_perception",
+                    "type": "float",
+                    "context": "event",
+                    "description": "The updated risk perception that triggers behavior adjustment."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "behavior_changes",
+                    "type": "list",
+                    "context": "agent",
+                    "description": "List of behavior changes made by the individual."
+                }
+            ]
+        }
+    ],
+    "PublicHealthAuthority": [
+        {
+            "id": 3,
+            "name": "evaluate_epidemiological_data",
+            "condition": "null",
+            "description": "The action where public health authorities analyze epidemiological data to determine the current state of the epidemic.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "epidemiological_data",
+                    "type": "dict",
+                    "context": "env",
+                    "description": "Data concerning the current state of the epidemic, including infection rates and transmission dynamics."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "intervention_strategies",
+                    "type": "list",
+                    "context": "agent",
+                    "description": "List of potential intervention strategies based on evaluated data."
+                }
+            ]
+        },
+        {
+            "id": 4,
+            "name": "deploy_interventions",
+            "condition": "EpidemiologicalDataEvaluatedEvent received",
+            "description": "The action where public health authorities implement intervention strategies to control the spread of the disease.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "intervention_strategies",
+                    "type": "list",
+                    "context": "event",
+                    "description": "List of intervention strategies determined from epidemiological evaluations."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "active_interventions",
+                    "type": "list",
+                    "context": "agent",
+                    "description": "List of interventions currently being deployed."
+                }
+            ]
+        }
+    ],
+    "Household": [
+        {
+            "id": 5,
+            "name": "update_quarantine_status",
+            "condition": "BehaviorAdjustedEvent received",
+            "description": "The action where a household updates its quarantine status based on the behavior of its members.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "behavior_changes",
+                    "type": "list",
+                    "context": "event",
+                    "description": "List of behavior changes in household members that might affect quarantine status."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "quarantine_status",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Updated quarantine status of the household."
+                }
+            ]
+        }
+    ],
+    "HealthcareFacility": [
+        {
+            "id": 6,
+            "name": "provide_healthcare_services",
+            "condition": "BehaviorAdjustedEvent received",
+            "description": "The action where a healthcare facility provides medical services to individuals seeking care.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "individual_needs",
+                    "type": "dict",
+                    "context": "event",
+                    "description": "Details of healthcare needs for the individual seeking services."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "current_occupancy",
+                    "type": "int",
+                    "context": "agent",
+                    "description": "Updated number of patients currently being treated at the facility."
+                }
+            ]
+        },
+        {
+            "id": 7,
+            "name": "allocate_resources",
+            "condition": "InterventionDeployedEvent received",
+            "description": "The action where a healthcare facility allocates resources in response to public health interventions.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "intervention_requirements",
+                    "type": "dict",
+                    "context": "event",
+                    "description": "Resource requirements dictated by public health interventions."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "resource_level",
+                    "type": "dict",
+                    "context": "agent",
+                    "description": "Updated levels of resources available at the facility."
+                }
+            ]
+        }
+    ]
+}

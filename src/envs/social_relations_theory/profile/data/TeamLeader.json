@@ -1,0 +1,117 @@
+[
+    {
+        "name": "Alice Johnson",
+        "role": "Team Leader",
+        "motivation_level": 80,
+        "social_needs": [
+            "Recognition",
+            "Collaboration",
+            "Trust"
+        ],
+        "emotional_state": "content",
+        "communication_protocol": "active",
+        "decision_mechanism": "Data-driven analysis",
+        "job_satisfaction": 75,
+        "team_dynamics": "tense",
+        "agent_type": "TeamLeader",
+        "feedback_content": "Great job on the recent project!",
+        "feedback_status": "pending",
+        "interaction_patterns": [
+            "collaborative_task",
+            "feedback_session"
+        ],
+        "id": "15"
+    },
+    {
+        "name": "Robert Smith",
+        "role": "Team Leader",
+        "motivation_level": 80,
+        "social_needs": [
+            "Autonomy",
+            "Feedback",
+            "Community"
+        ],
+        "emotional_state": "content",
+        "communication_protocol": "active",
+        "decision_mechanism": "Consensus building",
+        "job_satisfaction": 75,
+        "team_dynamics": "neutral",
+        "agent_type": "TeamLeader",
+        "feedback_content": "Great job on the recent project!",
+        "feedback_status": "pending",
+        "interaction_patterns": [
+            "collaborative_task",
+            "feedback_session"
+        ],
+        "id": "16"
+    },
+    {
+        "name": "Emily Davis",
+        "role": "Team Leader",
+        "motivation_level": 80,
+        "social_needs": [
+            "Empathy",
+            "Support",
+            "Engagement"
+        ],
+        "emotional_state": "content",
+        "communication_protocol": "active",
+        "decision_mechanism": "Intuitive judgment",
+        "job_satisfaction": 75,
+        "team_dynamics": "tense",
+        "agent_type": "TeamLeader",
+        "feedback_content": "Great job on the recent project!",
+        "feedback_status": "pending",
+        "interaction_patterns": [
+            "collaborative_task",
+            "feedback_session"
+        ],
+        "id": "17"
+    },
+    {
+        "name": "Michael Brown",
+        "role": "Team Leader",
+        "motivation_level": 80,
+        "social_needs": [
+            "Respect",
+            "Mentorship",
+            "Inclusion"
+        ],
+        "emotional_state": "content",
+        "communication_protocol": "active",
+        "decision_mechanism": "Risk assessment",
+        "job_satisfaction": 75,
+        "team_dynamics": "tense",
+        "agent_type": "TeamLeader",
+        "feedback_content": "Great job on the recent project!",
+        "feedback_status": "pending",
+        "interaction_patterns": [
+            "collaborative_task",
+            "feedback_session"
+        ],
+        "id": "18"
+    },
+    {
+        "name": "Sophia Martinez",
+        "role": "Team Leader",
+        "motivation_level": 80,
+        "social_needs": [
+            "Connection",
+            "Purpose",
+            "Growth"
+        ],
+        "emotional_state": "content",
+        "communication_protocol": "active",
+        "decision_mechanism": "Strategic planning",
+        "job_satisfaction": 75,
+        "team_dynamics": "tense",
+        "agent_type": "TeamLeader",
+        "feedback_content": "Great job on the recent project!",
+        "feedback_status": "pending",
+        "interaction_patterns": [
+            "collaborative_task",
+            "feedback_session"
+        ],
+        "id": "19"
+    }
+]

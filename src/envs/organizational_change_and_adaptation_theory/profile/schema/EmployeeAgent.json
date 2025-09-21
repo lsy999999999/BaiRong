@@ -1,0 +1,83 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Alex Johnson",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's full name representing an employee"
+    },
+    "feedback": {
+        "type": "str",
+        "default": "awaiting_input",
+        "private": false,
+        "sampling": "default"
+    },
+    "emotional_response": {
+        "type": "str",
+        "default": "neutral",
+        "private": false,
+        "sampling": "default"
+    },
+    "role": {
+        "type": "str",
+        "default": "employee",
+        "private": false,
+        "sampling": "llm",
+        "description": "The role of the agent within the organization"
+    },
+    "support_level": {
+        "type": "int",
+        "default": 50,
+        "private": false,
+        "sampling": "default"
+    },
+    "training_sessions_attended": {
+        "type": "int",
+        "default": 0,
+        "private": false,
+        "sampling": "default"
+    },
+    "change_adaptation_type": {
+        "type": "str",
+        "default": "incremental",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "incremental",
+            "rapid",
+            "strategic"
+        ]
+    },
+    "performance_score": {
+        "type": "float",
+        "default": 75.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "communication_style": {
+        "type": "str",
+        "default": "open",
+        "private": false,
+        "sampling": "llm",
+        "description": "The style of communication preferred by the agent"
+    },
+    "feedback_received": {
+        "type": "list",
+        "default": [
+            {
+                "date": "2023-10-01",
+                "content": "Initial feedback",
+                "type": "positive"
+            }
+        ],
+        "private": true,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

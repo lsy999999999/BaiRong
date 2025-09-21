@@ -1,0 +1,19 @@
+{
+    "aggressor_intent": "To intimidate and provoke the defender through verbal threats and physical gestures.",
+    "defender_actions": [
+        "Blocking with arms",
+        "Dodging",
+        "Using pepper spray",
+        "Calling for help"
+    ],
+    "judge_evaluation": "Assessing proportionality of defense and necessity based on evidence presented.",
+    "threat_level": 7,
+    "defensive_measures_effectiveness": 0.75,
+    "legal_standards_met": true,
+    "conflict_duration_seconds": 120,
+    "evidence_presented": [
+        "Video footage from security camera",
+        "Witness testimony",
+        "Medical report detailing injuries"
+    ]
+}

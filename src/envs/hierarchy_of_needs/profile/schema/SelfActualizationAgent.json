@@ -1,0 +1,85 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Alex Johnson",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's full name"
+    },
+    "self_actualization_goals": {
+        "type": "list",
+        "default": [
+            "lead a team project",
+            "publish research paper"
+        ],
+        "private": false,
+        "sampling": "default",
+        "sample_size": 2
+    },
+    "self_actualization_status": {
+        "type": "str",
+        "default": "in_progress",
+        "private": false,
+        "sampling": "default"
+    },
+    "current_need_level": {
+        "type": "str",
+        "default": "esteem",
+        "private": false,
+        "sampling": "default"
+    },
+    "motivation_level": {
+        "type": "int",
+        "default": 70,
+        "private": false,
+        "sampling": "default"
+    },
+    "interaction_history": {
+        "type": "list",
+        "default": [
+            {
+                "interaction": "team meeting",
+                "outcome": "positive"
+            }
+        ],
+        "private": true,
+        "sampling": "default",
+        "sample_size": 1
+    },
+    "emotional_state": {
+        "type": "str",
+        "default": "optimistic",
+        "private": false,
+        "sampling": "default"
+    },
+    "work_performance": {
+        "type": "float",
+        "default": 85.5,
+        "private": false,
+        "sampling": "default"
+    },
+    "social_connections": {
+        "type": "list",
+        "default": [
+            "colleague A",
+            "mentor B"
+        ],
+        "private": true,
+        "sampling": "default",
+        "sample_size": 2
+    },
+    "leadership_style": {
+        "type": "str",
+        "default": "transformational",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's preferred leadership style"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

@@ -1,0 +1,153 @@
+{
+    "LeaderAgent": [
+        {
+            "id": 1,
+            "name": "initiate_change_process",
+            "condition": null,
+            "description": "The leader initiates the change process by defining and communicating the goals of the change to the organization.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "change_type",
+                    "type": "string",
+                    "context": "env",
+                    "description": "Type of change being initiated (incremental, rapid, strategic)"
+                },
+                {
+                    "name": "change_goals",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Goals of the change process"
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "change_status",
+                    "type": "string",
+                    "context": "env",
+                    "description": "Current status of the change process"
+                }
+            ]
+        },
+        {
+            "id": 5,
+            "name": "finalize_change_process",
+            "condition": null,
+            "description": "The leader finalizes the change process by evaluating its success and documenting the outcomes.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "completion_status",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Status of the change process completion"
+                },
+                {
+                    "name": "results",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Results and outcomes of the change process"
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "final_report",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Final report detailing the change process outcomes"
+                }
+            ]
+        }
+    ],
+    "ManagerAgent": [
+        {
+            "id": 2,
+            "name": "execute_change_plan",
+            "condition": "Receipt of ChangeInitiatedEvent and employee feedback",
+            "description": "The manager executes the change plan, coordinating resources and ensuring the plan is followed.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "execution_plan",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Details of the change execution plan"
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "execution_status",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Status of the change plan execution"
+                }
+            ]
+        },
+        {
+            "id": 4,
+            "name": "adjust_change_strategy",
+            "condition": "Receipt of FeedbackEvent",
+            "description": "The manager adjusts the change strategy based on feedback from employees.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "feedback",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Feedback provided by the employee"
+                },
+                {
+                    "name": "emotional_response",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Emotional response of the employee to the change"
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "adjusted_strategy",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Details of the adjusted strategy based on feedback"
+                }
+            ]
+        }
+    ],
+    "EmployeeAgent": [
+        {
+            "id": 3,
+            "name": "respond_to_change",
+            "condition": null,
+            "description": "The employee responds to the change process, providing feedback and emotional responses.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "change_type",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Type of change being implemented"
+                },
+                {
+                    "name": "change_goals",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Goals of the change process"
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "feedback",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Feedback provided by the employee on the change process"
+                },
+                {
+                    "name": "emotional_response",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Emotional response of the employee to the change"
+                }
+            ]
+        }
+    ]
+}

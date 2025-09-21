@@ -1,0 +1,102 @@
+[
+    {
+        "name": "Alexandra Pierce",
+        "defense_strategy_options": [
+            "plea_focus",
+            "evidence_based",
+            "cautious"
+        ],
+        "communication_protocol": "informal",
+        "trial_phase": "preparation",
+        "public_attention": 50,
+        "precedent_strength": 0.75,
+        "procedural_rule_strictness": 70,
+        "agent_type": "DefenseLawyer",
+        "defense_strategy": "awaiting_input",
+        "prepared_defense": "ready",
+        "plea_terms": "negotiation_pending",
+        "negotiated_plea": "unconfirmed",
+        "case_evaluation": "initial_review",
+        "id": "10"
+    },
+    {
+        "name": "Jordan Mitchell",
+        "defense_strategy_options": [
+            "evidence_based",
+            "plea_focus",
+            "cautious"
+        ],
+        "communication_protocol": "informal",
+        "trial_phase": "preparation",
+        "public_attention": 50,
+        "precedent_strength": 0.75,
+        "procedural_rule_strictness": 70,
+        "agent_type": "DefenseLawyer",
+        "defense_strategy": "awaiting_input",
+        "prepared_defense": "ready",
+        "plea_terms": "negotiation_pending",
+        "negotiated_plea": "unconfirmed",
+        "case_evaluation": "initial_review",
+        "id": "11"
+    },
+    {
+        "name": "Cameron Lee",
+        "defense_strategy_options": [
+            "plea_focus",
+            "evidence_based",
+            "cautious"
+        ],
+        "communication_protocol": "informal",
+        "trial_phase": "preparation",
+        "public_attention": 50,
+        "precedent_strength": 0.75,
+        "procedural_rule_strictness": 70,
+        "agent_type": "DefenseLawyer",
+        "defense_strategy": "awaiting_input",
+        "prepared_defense": "ready",
+        "plea_terms": "negotiation_pending",
+        "negotiated_plea": "unconfirmed",
+        "case_evaluation": "initial_review",
+        "id": "12"
+    },
+    {
+        "name": "Taylor Morgan",
+        "defense_strategy_options": [
+            "aggressive",
+            "plea_focus",
+            "evidence_based"
+        ],
+        "communication_protocol": "informal",
+        "trial_phase": "preparation",
+        "public_attention": 50,
+        "precedent_strength": 0.75,
+        "procedural_rule_strictness": 70,
+        "agent_type": "DefenseLawyer",
+        "defense_strategy": "awaiting_input",
+        "prepared_defense": "ready",
+        "plea_terms": "negotiation_pending",
+        "negotiated_plea": "unconfirmed",
+        "case_evaluation": "initial_review",
+        "id": "13"
+    },
+    {
+        "name": "Riley Bennett",
+        "defense_strategy_options": [
+            "cautious",
+            "plea_focus",
+            "aggressive"
+        ],
+        "communication_protocol": "formal",
+        "trial_phase": "preparation",
+        "public_attention": 50,
+        "precedent_strength": 0.75,
+        "procedural_rule_strictness": 70,
+        "agent_type": "DefenseLawyer",
+        "defense_strategy": "awaiting_input",
+        "prepared_defense": "ready",
+        "plea_terms": "negotiation_pending",
+        "negotiated_plea": "unconfirmed",
+        "case_evaluation": "initial_review",
+        "id": "14"
+    }
+]

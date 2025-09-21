@@ -1,0 +1,102 @@
+[
+    {
+        "name": "John Doe",
+        "expressed_preferences": {
+            "policy": "undecided",
+            "candidate": "undecided"
+        },
+        "trust_level": 50,
+        "current_status": "ready",
+        "age": 36,
+        "political_affiliation": "republican",
+        "agent_type": "Voter",
+        "selected_voter_id": "awaiting_selection",
+        "interaction_history": [
+            {
+                "pollster_id": "P1",
+                "interaction_outcome": "neutral"
+            }
+        ],
+        "id": "0"
+    },
+    {
+        "name": "Jane Smith",
+        "expressed_preferences": {
+            "policy": "undecided",
+            "candidate": "undecided"
+        },
+        "trust_level": 50,
+        "current_status": "ready",
+        "age": 51,
+        "political_affiliation": "independent",
+        "agent_type": "Voter",
+        "selected_voter_id": "awaiting_selection",
+        "interaction_history": [
+            {
+                "pollster_id": "P1",
+                "interaction_outcome": "neutral"
+            }
+        ],
+        "id": "1"
+    },
+    {
+        "name": "Michael Johnson",
+        "expressed_preferences": {
+            "policy": "undecided",
+            "candidate": "undecided"
+        },
+        "trust_level": 50,
+        "current_status": "ready",
+        "age": 78,
+        "political_affiliation": "democrat",
+        "agent_type": "Voter",
+        "selected_voter_id": "awaiting_selection",
+        "interaction_history": [
+            {
+                "pollster_id": "P1",
+                "interaction_outcome": "neutral"
+            }
+        ],
+        "id": "2"
+    },
+    {
+        "name": "Emily Davis",
+        "expressed_preferences": {
+            "policy": "undecided",
+            "candidate": "undecided"
+        },
+        "trust_level": 50,
+        "current_status": "ready",
+        "age": 48,
+        "political_affiliation": "democrat",
+        "agent_type": "Voter",
+        "selected_voter_id": "awaiting_selection",
+        "interaction_history": [
+            {
+                "pollster_id": "P1",
+                "interaction_outcome": "neutral"
+            }
+        ],
+        "id": "3"
+    },
+    {
+        "name": "William Brown",
+        "expressed_preferences": {
+            "policy": "undecided",
+            "candidate": "undecided"
+        },
+        "trust_level": 50,
+        "current_status": "ready",
+        "age": 30,
+        "political_affiliation": "independent",
+        "agent_type": "Voter",
+        "selected_voter_id": "awaiting_selection",
+        "interaction_history": [
+            {
+                "pollster_id": "P1",
+                "interaction_outcome": "neutral"
+            }
+        ],
+        "id": "4"
+    }
+]

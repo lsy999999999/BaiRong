@@ -1,0 +1,48 @@
+{
+    "variables": [
+        {
+            "name": "media_content",
+            "type": "str",
+            "value": "Breaking news on climate change impacts"
+        },
+        {
+            "name": "opinion_leader_influence",
+            "type": "float",
+            "value": 0.85
+        },
+        {
+            "name": "public_reaction_time",
+            "type": "int",
+            "value": 48
+        },
+        {
+            "name": "information_delay",
+            "type": "float",
+            "value": 2.75
+        },
+        {
+            "name": "network_density",
+            "type": "list",
+            "value": [
+                "High density among opinion leaders",
+                "Medium density in public networks",
+                "Sparse connections to media agents"
+            ]
+        },
+        {
+            "name": "belief_update_rate",
+            "type": "float",
+            "value": 0.65
+        },
+        {
+            "name": "dialogue_frequency",
+            "type": "int",
+            "value": 14
+        },
+        {
+            "name": "trust_level",
+            "type": "bool",
+            "value": true
+        }
+    ]
+}

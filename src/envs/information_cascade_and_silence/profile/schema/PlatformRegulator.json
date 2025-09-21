@@ -1,0 +1,113 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Platform Regulator",
+        "private": false,
+        "sampling": "llm",
+        "description": "The name of the platform regulator agent."
+    },
+    "monitoring_ability": {
+        "type": "int",
+        "default": 50,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            1,
+            100
+        ]
+    },
+    "intervention_strength": {
+        "type": "int",
+        "default": 50,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            1,
+            100
+        ]
+    },
+    "response_time": {
+        "type": "float",
+        "default": 1.0,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.1,
+            10.0
+        ]
+    },
+    "monitored_content": {
+        "type": "str",
+        "default": "",
+        "private": true,
+        "sampling": "default"
+    },
+    "risk_level": {
+        "type": "str",
+        "default": "",
+        "private": true,
+        "sampling": "default"
+    },
+    "intervention_status": {
+        "type": "str",
+        "default": "",
+        "private": true,
+        "sampling": "default"
+    },
+    "content_logs": {
+        "type": "list",
+        "default": [],
+        "private": true,
+        "sampling": "default"
+    },
+    "policy_bias": {
+        "type": "str",
+        "choices": [
+            "neutral",
+            "strict",
+            "lenient"
+        ],
+        "default": "neutral",
+        "private": false,
+        "sampling": "random"
+    },
+    "enforcement_history": {
+        "type": "list",
+        "default": [],
+        "private": true,
+        "sampling": "default"
+    },
+    "flagged_content_count": {
+        "type": "int",
+        "default": 0,
+        "private": true,
+        "sampling": "default"
+    },
+    "escalation_threshold": {
+        "type": "int",
+        "default": 10,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            1,
+            50
+        ]
+    },
+    "public_perception": {
+        "type": "float",
+        "default": 50.0,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            100.0
+        ]
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

@@ -1,0 +1,66 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Defendant",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's role in the legal scenario"
+    },
+    "defense_arguments": {
+        "type": "str",
+        "default": "awaiting_input",
+        "private": true,
+        "sampling": "default"
+    },
+    "defense_prepared": {
+        "type": "int",
+        "default": 50,
+        "private": true,
+        "sampling": "default"
+    },
+    "legal_experience": {
+        "type": "int",
+        "default": 5,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0,
+            30
+        ]
+    },
+    "strategy_type": {
+        "type": "str",
+        "default": "negotiation",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "negotiation",
+            "litigation",
+            "settlement"
+        ]
+    },
+    "current_status": {
+        "type": "str",
+        "default": "preparing_defense",
+        "private": false,
+        "sampling": "default"
+    },
+    "communication_log": {
+        "type": "list",
+        "default": [
+            {
+                "event": "initial_contact",
+                "timestamp": "2025-04-01T10:00:00Z"
+            }
+        ],
+        "private": true,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

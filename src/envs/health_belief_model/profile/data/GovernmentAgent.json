@@ -1,0 +1,92 @@
+[
+    {
+        "name": "HealthGuard",
+        "policy_goals": "To ensure universal access to comprehensive healthcare services and improve health outcomes across all demographics.",
+        "implemented_policy": "Tobacco control regulation",
+        "policy_impact": 0.0,
+        "budget": 1000000.0,
+        "communication_channels": [
+            "Official Website",
+            "Press Releases",
+            "Social Media",
+            "Public Service Announcements"
+        ],
+        "support_infrastructure": "Underdeveloped",
+        "policy_effectiveness": 50,
+        "agent_type": "GovernmentAgent",
+        "crisis_management_capability": 52,
+        "id": "15"
+    },
+    {
+        "name": "WellnessWatch",
+        "policy_goals": "To promote preventive healthcare measures and reduce the incidence of chronic diseases.",
+        "implemented_policy": "Tobacco control regulation",
+        "policy_impact": 0.0,
+        "budget": 1000000.0,
+        "communication_channels": [
+            "Community Workshops",
+            "Email Newsletters",
+            "Radio Broadcasts",
+            "Mobile Health Apps"
+        ],
+        "support_infrastructure": "Developed",
+        "policy_effectiveness": 50,
+        "agent_type": "GovernmentAgent",
+        "crisis_management_capability": 87,
+        "id": "16"
+    },
+    {
+        "name": "CareConnect",
+        "policy_goals": "To integrate technology in healthcare delivery and enhance patient engagement and satisfaction.",
+        "implemented_policy": "Tobacco control regulation",
+        "policy_impact": 0.0,
+        "budget": 1000000.0,
+        "communication_channels": [
+            "Telehealth Platforms",
+            "SMS Alerts",
+            "Health Fairs",
+            "Interactive Webinars"
+        ],
+        "support_infrastructure": "Underdeveloped",
+        "policy_effectiveness": 50,
+        "agent_type": "GovernmentAgent",
+        "crisis_management_capability": 90,
+        "id": "17"
+    },
+    {
+        "name": "VitalityVision",
+        "policy_goals": "To address health disparities and achieve equity in healthcare access and quality.",
+        "implemented_policy": "Tobacco control regulation",
+        "policy_impact": 0.0,
+        "budget": 1000000.0,
+        "communication_channels": [
+            "Town Hall Meetings",
+            "Local Newspaper Columns",
+            "Podcasts",
+            "Bilingual Outreach Programs"
+        ],
+        "support_infrastructure": "Developing",
+        "policy_effectiveness": 50,
+        "agent_type": "GovernmentAgent",
+        "crisis_management_capability": 63,
+        "id": "18"
+    },
+    {
+        "name": "LifeLine",
+        "policy_goals": "To strengthen public health infrastructure and emergency preparedness for effective response to health crises.",
+        "implemented_policy": "Tobacco control regulation",
+        "policy_impact": 0.0,
+        "budget": 1000000.0,
+        "communication_channels": [
+            "Emergency Hotlines",
+            "Television Broadcasts",
+            "Government Portals",
+            "Crisis Management Workshops"
+        ],
+        "support_infrastructure": "Developing",
+        "policy_effectiveness": 50,
+        "agent_type": "GovernmentAgent",
+        "crisis_management_capability": 82,
+        "id": "19"
+    }
+]

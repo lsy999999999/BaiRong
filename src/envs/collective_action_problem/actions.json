@@ -1,0 +1,70 @@
+{
+    "Individual": [
+        {
+            "id": 1,
+            "name": "calculate_cooperation_willingness",
+            "condition": "null",
+            "description": "This action involves an individual agent calculating its willingness to cooperate in a collective action. The decision is based on a cost-benefit analysis where the agent evaluates the personal cost of participating against the benefits received.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "personal_cost",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "The cost incurred by the individual for participating in the collective action."
+                },
+                {
+                    "name": "personal_benefit",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "The benefit received by the individual from participating in the collective action."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "cooperation_willingness",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "The degree to which the individual is willing to cooperate, calculated based on cost-benefit analysis."
+                }
+            ]
+        }
+    ],
+    "Group": [
+        {
+            "id": 2,
+            "name": "evaluate_collective_action_success",
+            "condition": "All individual cooperation decisions received",
+            "description": "This action involves the group agent evaluating the overall success of the collective action based on the cooperation willingness of individual agents. The group aggregates individual decisions to determine whether the collective action goals are met.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "cooperation_willingness",
+                    "type": "float",
+                    "context": "event",
+                    "description": "The degree to which an individual is willing to cooperate, as calculated and sent by the individual agent."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "collective_success",
+                    "type": "bool",
+                    "context": "env",
+                    "description": "Indicates whether the collective action was successful based on individual cooperation levels."
+                },
+                {
+                    "name": "total_cooperation",
+                    "type": "float",
+                    "context": "env",
+                    "description": "The aggregated cooperation level of all individuals, used to evaluate the success of the collective action."
+                },
+                {
+                    "name": "group_benefit",
+                    "type": "float",
+                    "context": "env",
+                    "description": "The overall benefit achieved by the group as a result of the collective action."
+                }
+            ]
+        }
+    ]
+}

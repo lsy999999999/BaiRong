@@ -1,0 +1,226 @@
+{
+  "agents": {
+    "VoterAgent": {
+      "imports": "from typing import Any, List\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "1": {
+          "code": "async def select_media_source(self, event: Event) -> List[Event]:\n        if event.__class__.__name__ != \"StartEvent\":\n            return []\n\n        current_political_preference = self.profile.get_data(\"current_political_preference\", 0.0)\n        available_media_sources = await self.get_env_data(\"available_media_sources\", [])\n\n        if not available_media_sources:\n            logger.warning(\"No available media sources for selection.\")\n            return []\n\n        instruction = \"\"\"\n        Analyze the voter's current political preference against the available media sources.\n        Select the media source that most closely aligns with the voter's preferences.\n        Please return the information in the following JSON format:\n\n        {\n        \"selected_media_id\": \"<The ID of the selected media source>\",\n        \"voter_id\": \"<Unique identifier for the voter>\",\n        \"bias_alignment_score\": \"<Score representing the alignment of media bias with voter's preferences>\",\n        \"target_ids\": [\"<The string ID of the MediaAgent>\"]\n        }\n        \"\"\"\n\n        observation = f\"Current political preference: {current_political_preference}, Available media sources: {available_media_sources}\"\n\n        result = await self.generate_reaction(instruction, observation)\n\n        selected_media_id = result.get('selected_media_id', -1)\n        voter_id = self.profile_id\n        bias_alignment_score = result.get('bias_alignment_score', 0.0)\n        target_ids = result.get('target_ids', [])\n\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        self.profile.update_data(\"selected_media_id\", selected_media_id)\n\n        events = []\n        for target_id in target_ids:\n            media_selection_event = MediaSelectionEvent(\n                from_agent_id=self.profile_id,\n                to_agent_id=target_id,\n                voter_id=voter_id,\n                selected_media_id=selected_media_id,\n                bias_alignment_score=bias_alignment_score\n            )\n            events.append(media_selection_event)\n\n        return events",
+          "metadata": {
+            "id": 1,
+            "name": "select_media_source",
+            "condition": "Voter's current political leaning and available media biases",
+            "description": "The voter selects a media source to consume based on alignment with their political preferences.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "current_political_preference",
+                "type": "float",
+                "context": "agent",
+                "description": "The current political preference score of the voter."
+              },
+              {
+                "name": "available_media_sources",
+                "type": "list",
+                "context": "env",
+                "description": "List of available media sources with associated bias scores."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "selected_media_id",
+                "type": "int",
+                "context": "agent",
+                "description": "The identifier of the media source selected by the voter."
+              }
+            ]
+          }
+        },
+        "2": {
+          "code": "async def adjust_political_preference(self, event: Event) -> List[Event]:\n        if event.__class__.__name__ != \"ContentDeliveryEvent\":\n            return []\n\n        content_bias_score = event.fields['content_bias_score']\n        current_political_preference = self.profile.get_data(\"current_political_preference\", 0.0)\n\n        observation = f\"Current political preference: {current_political_preference}, Content bias score: {content_bias_score}\"\n        instruction = \"\"\"Adjust the voter's political preference based on the media content bias score and current preference.\n        Return the updated adjusted_political_preference and specify target_ids as either a single string ID or a list of IDs.\n        Use the following JSON format:\n\n        {\n        \"adjusted_political_preference\": <The updated political preference score as a float>,\n        \"target_ids\": [\"<The string ID of the EnvAgent>\"]\n        }\n        \"\"\"\n\n        result = await self.generate_reaction(instruction, observation)\n\n        adjusted_political_preference = result.get('adjusted_political_preference', current_political_preference)\n        target_ids = result.get('target_ids', [])\n\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        self.profile.update_data(\"adjusted_political_preference\", adjusted_political_preference)\n\n        events = []\n        for target_id in target_ids:\n            preference_adjustment_event = PreferenceAdjustmentEvent(\n                from_agent_id=self.profile_id,\n                to_agent_id=target_id,\n                voter_id=self.profile_id,\n                adjusted_preference_score=adjusted_political_preference\n            )\n            events.append(preference_adjustment_event)\n\n        return events",
+          "metadata": {
+            "id": 2,
+            "name": "adjust_political_preference",
+            "condition": "Reception of media content",
+            "description": "The voter adjusts their political preference after consuming media content.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "media_content_bias_score",
+                "type": "float",
+                "context": "event",
+                "description": "The bias score of the media content consumed by the voter."
+              },
+              {
+                "name": "current_political_preference",
+                "type": "float",
+                "context": "agent",
+                "description": "The current political preference score of the voter before adjustment."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "adjusted_political_preference",
+                "type": "float",
+                "context": "agent",
+                "description": "The updated political preference score of the voter after adjustment."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "MediaAgent": {
+      "imports": "from typing import Any, List\nimport asyncio\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import Event\nfrom onesim.relationship import RelationshipManager\nfrom .events import MediaSelectionEvent, ContentDeliveryEvent",
+      "handlers": {
+        "3": {
+          "code": "async def provide_content(self, event: Event) -> List[Event]:\n        # Condition Check: Ensure the event is a MediaSelectionEvent\n        if not isinstance(event, MediaSelectionEvent):\n            return []\n\n        # Access required variables from the event and agent profile\n        voter_id = event.voter_id\n        media_id = self.profile_id\n        media_bias_score = self.profile.get_data(\"media_bias_score\", 0.0)\n\n        # Decision Making using generate_reaction\n        instruction = \"\"\"\n        The 'provide_content' action is triggered by the 'MediaSelectionEvent'. \n        The media entity should provide political content to the voter based on the voter's media selection.\n        Access the 'voter_id' from the event and 'media_bias_score' from the agent's profile.\n        Please return the result in the following JSON format:\n\n        {\n        \"target_ids\": [\"<The string ID(s) of the VoterAgent(s) receiving the content>\"],\n        \"content_bias_score\": <The bias score of the content delivered>\n        }\n        \"\"\"\n        observation = f\"Voter ID: {voter_id}, Media Bias Score: {media_bias_score}\"\n        result = await self.generate_reaction(instruction, observation)\n\n        # Parse the LLM's JSON response\n        target_ids = result.get('target_ids', [])\n        content_bias_score = result.get('content_bias_score', media_bias_score)\n\n        # Ensure target_ids is a list\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Create and send ContentDeliveryEvent(s) to each target VoterAgent\n        events = []\n        for target_id in target_ids:\n            content_delivery_event = ContentDeliveryEvent(\n                from_agent_id=self.profile_id,\n                to_agent_id=target_id,\n                media_id=media_id,\n                voter_id=voter_id,\n                content_bias_score=content_bias_score\n            )\n            events.append(content_delivery_event)\n\n        return events",
+          "metadata": {
+            "id": 3,
+            "name": "provide_content",
+            "condition": "Receipt of MediaSelectionEvent",
+            "description": "The media entity provides political content to the voter based on the voter's media selection.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "selected_media_id",
+                "type": "int",
+                "context": "event",
+                "description": "The identifier of the media source selected by the voter."
+              },
+              {
+                "name": "media_bias_score",
+                "type": "float",
+                "context": "agent",
+                "description": "The bias score associated with the media content being provided."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "media_content_bias_score",
+                "type": "float",
+                "context": "event",
+                "description": "The bias score of the media content delivered to the voter."
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "events": {
+    "imports": "from onesim.events import Event\nfrom typing import Any",
+    "definitions": {
+      "-1": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.fields = {}",
+        "metadata": {
+          "id": -1,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "VoterAgent",
+          "to_action_name": "select_media_source",
+          "from_action_id": 0,
+          "to_action_id": 1,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for voter media selection process",
+          "fields": []
+        }
+      },
+      "1": {
+        "code": "class MediaSelectionEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        voter_id: int = 0,\n        selected_media_id: int = -1,\n        bias_alignment_score: float = 0.0,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.voter_id = voter_id\n        self.selected_media_id = selected_media_id\n        self.bias_alignment_score = bias_alignment_score\n        self.fields = {\n            \"voter_id\": voter_id,\n            \"selected_media_id\": selected_media_id,\n            \"bias_alignment_score\": bias_alignment_score\n        }",
+        "metadata": {
+          "id": 1,
+          "from_agent_type": "VoterAgent",
+          "from_action_name": "select_media_source",
+          "to_agent_type": "MediaAgent",
+          "to_action_name": "provide_content",
+          "from_action_id": 1,
+          "to_action_id": 3,
+          "event_name": "MediaSelectionEvent",
+          "event_info": "Voter selects a media source based on bias alignment",
+          "fields": [
+            {
+              "name": "voter_id",
+              "type": "int",
+              "default_value": "0",
+              "description": "Unique identifier for the voter making the selection"
+            },
+            {
+              "name": "selected_media_id",
+              "type": "int",
+              "default_value": "-1",
+              "description": "Unique identifier for the media source selected by the voter"
+            },
+            {
+              "name": "bias_alignment_score",
+              "type": "float",
+              "default_value": "0.0",
+              "description": "Score representing the alignment of media bias with voter's preferences"
+            }
+          ]
+        }
+      },
+      "2": {
+        "code": "class PreferenceAdjustmentEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        voter_id: int = 0,\n        adjusted_preference_score: float = 0.0,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.voter_id = voter_id\n        self.adjusted_preference_score = adjusted_preference_score\n        self.fields = {\n            \"voter_id\": voter_id,\n            \"adjusted_preference_score\": adjusted_preference_score\n        }",
+        "metadata": {
+          "id": 2,
+          "from_agent_type": "VoterAgent",
+          "from_action_name": "adjust_political_preference",
+          "to_agent_type": "EnvAgent",
+          "to_action_name": "terminate",
+          "from_action_id": 2,
+          "to_action_id": -1,
+          "event_name": "PreferenceAdjustmentEvent",
+          "event_info": "Voter adjusts political preferences after consuming media content",
+          "fields": [
+            {
+              "name": "voter_id",
+              "type": "int",
+              "default_value": "0",
+              "description": "Unique identifier for the voter adjusting preferences"
+            },
+            {
+              "name": "adjusted_preference_score",
+              "type": "float",
+              "default_value": "0.0",
+              "description": "New score representing voter's adjusted political preference"
+            }
+          ]
+        }
+      },
+      "3": {
+        "code": "class ContentDeliveryEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        media_id: int = 0,\n        voter_id: int = 0,\n        content_bias_score: float = 0.0,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.media_id = media_id\n        self.voter_id = voter_id\n        self.content_bias_score = content_bias_score\n        self.fields = {\n            \"media_id\": media_id,\n            \"voter_id\": voter_id,\n            \"content_bias_score\": content_bias_score\n        }",
+        "metadata": {
+          "id": 3,
+          "from_agent_type": "MediaAgent",
+          "from_action_name": "provide_content",
+          "to_agent_type": "VoterAgent",
+          "to_action_name": "adjust_political_preference",
+          "from_action_id": 3,
+          "to_action_id": 2,
+          "event_name": "ContentDeliveryEvent",
+          "event_info": "Media provides political content to voter",
+          "fields": [
+            {
+              "name": "media_id",
+              "type": "int",
+              "default_value": "0",
+              "description": "Unique identifier for the media providing content"
+            },
+            {
+              "name": "voter_id",
+              "type": "int",
+              "default_value": "0",
+              "description": "Unique identifier for the voter receiving the content"
+            },
+            {
+              "name": "content_bias_score",
+              "type": "float",
+              "default_value": "0.0",
+              "description": "Score representing the bias of the content delivered"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

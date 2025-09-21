@@ -1,0 +1,126 @@
+{
+    "-1": {
+        "id": -1,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "IndividualAgent",
+        "to_action_name": "evaluate_cultural_capital",
+        "from_action_id": 0,
+        "to_action_id": 1,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for evaluating cultural capital",
+        "fields": []
+    },
+    "-2": {
+        "id": -2,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "SocialStructureAgent",
+        "to_action_name": "assess_social_class",
+        "from_action_id": 0,
+        "to_action_id": 4,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for assessing social class influence",
+        "fields": []
+    },
+    "1": {
+        "id": 1,
+        "from_agent_type": "IndividualAgent",
+        "from_action_name": "evaluate_cultural_capital",
+        "to_agent_type": "IndividualAgent",
+        "to_action_name": "pursue_education",
+        "from_action_id": 1,
+        "to_action_id": 2,
+        "event_name": "CulturalCapitalEvaluatedEvent",
+        "event_info": "Evaluation of cultural capital completed, decision to pursue education",
+        "fields": [
+            {
+                "name": "cultural_capital_level",
+                "type": "float",
+                "default_value": "0.0",
+                "description": "The evaluated level of cultural capital for the individual."
+            },
+            {
+                "name": "education_decision",
+                "type": "bool",
+                "default_value": "false",
+                "description": "Decision made by the individual to pursue further education based on cultural capital evaluation."
+            }
+        ]
+    },
+    "2": {
+        "id": 2,
+        "from_agent_type": "IndividualAgent",
+        "from_action_name": "pursue_education",
+        "to_agent_type": "IndividualAgent",
+        "to_action_name": "seek_job_opportunities",
+        "from_action_id": 2,
+        "to_action_id": 3,
+        "event_name": "EducationCompletedEvent",
+        "event_info": "Education completed, seeking job opportunities",
+        "fields": [
+            {
+                "name": "education_level",
+                "type": "string",
+                "default_value": "None",
+                "description": "The level of education completed by the individual."
+            },
+            {
+                "name": "job_search_status",
+                "type": "string",
+                "default_value": "not_started",
+                "description": "Status of job search after education completion."
+            }
+        ]
+    },
+    "3": {
+        "id": 3,
+        "from_agent_type": "IndividualAgent",
+        "from_action_name": "seek_job_opportunities",
+        "to_agent_type": "EnvAgent",
+        "to_action_name": "terminate",
+        "from_action_id": 3,
+        "to_action_id": -1,
+        "event_name": "JobOpportunityFoundEvent",
+        "event_info": "Job opportunity found, workflow completed",
+        "fields": [
+            {
+                "name": "job_position",
+                "type": "string",
+                "default_value": "None",
+                "description": "The job position found by the individual."
+            },
+            {
+                "name": "workflow_completion_status",
+                "type": "string",
+                "default_value": "incomplete",
+                "description": "Status indicating completion of job search workflow."
+            }
+        ]
+    },
+    "4": {
+        "id": 4,
+        "from_agent_type": "SocialStructureAgent",
+        "from_action_name": "assess_social_class",
+        "to_agent_type": "IndividualAgent",
+        "to_action_name": "evaluate_cultural_capital",
+        "from_action_id": 4,
+        "to_action_id": 1,
+        "event_name": "SocialClassAssessedEvent",
+        "event_info": "Social class assessment completed, influencing cultural capital evaluation",
+        "fields": [
+            {
+                "name": "social_class",
+                "type": "string",
+                "default_value": "unknown",
+                "description": "The assessed social class of the individual."
+            },
+            {
+                "name": "influence_on_cultural_capital",
+                "type": "string",
+                "default_value": "neutral",
+                "description": "The influence of social class assessment on the individual's cultural capital evaluation."
+            }
+        ]
+    }
+}

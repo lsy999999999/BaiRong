@@ -1,0 +1,92 @@
+[
+    {
+        "name": "Alex Johnson",
+        "social_capital": "high",
+        "public_resources": "abundant",
+        "medical_facilities": "none",
+        "community_health_level": "good",
+        "policy_influence": 0.5,
+        "health_behavior_index": 50,
+        "education_level_distribution": [
+            "high school",
+            "bachelor",
+            "master"
+        ],
+        "resource_allocation_efficiency": 0.75,
+        "community_engagement_level": 70,
+        "agent_type": "CommunityAgent",
+        "id": "10"
+    },
+    {
+        "name": "Maria Gonzalez",
+        "social_capital": "high",
+        "public_resources": "adequate",
+        "medical_facilities": "advanced",
+        "community_health_level": "good",
+        "policy_influence": 0.5,
+        "health_behavior_index": 50,
+        "education_level_distribution": [
+            "high school",
+            "bachelor",
+            "master"
+        ],
+        "resource_allocation_efficiency": 0.75,
+        "community_engagement_level": 70,
+        "agent_type": "CommunityAgent",
+        "id": "11"
+    },
+    {
+        "name": "Chen Wei",
+        "social_capital": "high",
+        "public_resources": "abundant",
+        "medical_facilities": "basic",
+        "community_health_level": "good",
+        "policy_influence": 0.5,
+        "health_behavior_index": 50,
+        "education_level_distribution": [
+            "high school",
+            "bachelor",
+            "master"
+        ],
+        "resource_allocation_efficiency": 0.75,
+        "community_engagement_level": 70,
+        "agent_type": "CommunityAgent",
+        "id": "12"
+    },
+    {
+        "name": "Fatima Al-Mansouri",
+        "social_capital": "low",
+        "public_resources": "scarce",
+        "medical_facilities": "basic",
+        "community_health_level": "moderate",
+        "policy_influence": 0.5,
+        "health_behavior_index": 50,
+        "education_level_distribution": [
+            "high school",
+            "bachelor",
+            "master"
+        ],
+        "resource_allocation_efficiency": 0.75,
+        "community_engagement_level": 70,
+        "agent_type": "CommunityAgent",
+        "id": "13"
+    },
+    {
+        "name": "Liam O'Connor",
+        "social_capital": "medium",
+        "public_resources": "adequate",
+        "medical_facilities": "none",
+        "community_health_level": "moderate",
+        "policy_influence": 0.5,
+        "health_behavior_index": 50,
+        "education_level_distribution": [
+            "high school",
+            "bachelor",
+            "master"
+        ],
+        "resource_allocation_efficiency": 0.75,
+        "community_engagement_level": 70,
+        "agent_type": "CommunityAgent",
+        "id": "14"
+    }
+]

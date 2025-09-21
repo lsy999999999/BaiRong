@@ -1,0 +1,55 @@
+{
+    "environment": {
+        "variables": []
+    },
+    "agents": {
+        "IndividualAgent": {
+            "variables": [
+                {
+                    "name": "cultural_capital_level",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "education_decision",
+                    "type": "bool",
+                    "default_value": null
+                },
+                {
+                    "name": "education_level",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "job_search_status",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "job_position",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "workflow_completion_status",
+                    "type": "string",
+                    "default_value": null
+                }
+            ]
+        },
+        "SocialStructureAgent": {
+            "variables": [
+                {
+                    "name": "social_class",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "influence_on_cultural_capital",
+                    "type": "string",
+                    "default_value": null
+                }
+            ]
+        }
+    }
+}

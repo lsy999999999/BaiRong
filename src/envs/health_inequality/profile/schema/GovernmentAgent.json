@@ -1,0 +1,77 @@
+{
+    "name": {
+        "type": "str",
+        "default": "GovernmentAgent",
+        "private": false,
+        "sampling": "llm",
+        "description": "The name of the government agent"
+    },
+    "policy_details": {
+        "type": "str",
+        "default": "healthcare_policy_2025",
+        "private": false,
+        "sampling": "llm",
+        "description": "Details of the policy implemented by the government agent"
+    },
+    "target_population": {
+        "type": "str",
+        "default": "low_income_families",
+        "private": false,
+        "sampling": "llm",
+        "description": "The population group targeted by the policy"
+    },
+    "resource_distribution": {
+        "type": "float",
+        "default": 1000000.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "policy_impact": {
+        "type": "float",
+        "default": 0.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "current_status": {
+        "type": "str",
+        "default": "active",
+        "private": false,
+        "sampling": "default"
+    },
+    "budget_allocation": {
+        "type": "float",
+        "default": 500000.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "policy_duration": {
+        "type": "int",
+        "default": 5,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            1,
+            10
+        ]
+    },
+    "communication_protocol": {
+        "type": "str",
+        "default": "standard",
+        "private": false,
+        "sampling": "llm",
+        "description": "The communication protocol used by the government agent"
+    },
+    "healthcare_accessibility": {
+        "type": "float",
+        "default": 75.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

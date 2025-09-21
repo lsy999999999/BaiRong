@@ -1,0 +1,79 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Alex Johnson",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's full name"
+    },
+    "change_goals": {
+        "type": "str",
+        "default": "Increase collaboration across departments",
+        "private": false,
+        "sampling": "llm",
+        "description": "Goals the leader sets for organizational change"
+    },
+    "final_report": {
+        "type": "str",
+        "default": "Awaiting compilation",
+        "private": false,
+        "sampling": "default"
+    },
+    "leadership_style": {
+        "type": "str",
+        "default": "transformational",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "transformational",
+            "transactional",
+            "laissez-faire"
+        ]
+    },
+    "communication_frequency": {
+        "type": "int",
+        "default": 5,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            1,
+            10
+        ]
+    },
+    "motivation_level": {
+        "type": "int",
+        "default": 80,
+        "private": false,
+        "sampling": "default"
+    },
+    "feedback_loop": {
+        "type": "list",
+        "default": [
+            {
+                "date": "2023-10-01",
+                "type": "initial",
+                "result": "positive"
+            }
+        ],
+        "private": true,
+        "sampling": "default"
+    },
+    "adaptation_strategy": {
+        "type": "str",
+        "default": "incremental",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "incremental",
+            "rapid",
+            "strategic"
+        ]
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

@@ -1,0 +1,106 @@
+{
+  "domain": "Organization",
+  "scene_name": "hawthorne_studies",
+  "odd_protocol": {
+    "overview": {
+      "system_goal": "Simulate the Hawthorne experiments using LLM to study how employee productivity, job satisfaction, and motivation change under different work environments and social interaction conditions. The simulation includes employee reactions to being observed, the impact of leader attention on productivity, and how team interactions affect overall performance. The goal is to understand the role of social factors in work performance through emotional responses and social interactions.",
+      "agent_types": "Worker Agents: Represent employees whose behavior and performance are influenced by leadership attention, team atmosphere, and social interactions. Leader Agents: Manage and guide employees, enhancing productivity through care and attention. Team Agents: Represent different team members, simulating how interaction, cooperation, and emotional support affect work performance.",
+      "environment_description": "Physical Environment: Simulates various physical environment changes (e.g., lighting, work hours) from the Hawthorne experiments and analyzes how these changes interact with social factors like leadership attention. Leadership Attention: Simulates how leaders motivate employees through attention, feedback, and communication to improve productivity. Team Interaction: Simulates interaction and cooperation among team members to study how social relations and team atmosphere enhance overall work efficiency."
+    },
+    "design_concepts": {
+      "interaction_patterns": "Employees respond to leadership attention and feedback, and engage in team interactions and cooperation. Leaders provide care and feedback to motivate employees. Teams support each other through communication and collaboration.",
+      "communication_protocols": "Leaders communicate with employees through regular feedback and assistance, while employees interact through team discussions and cooperative efforts.",
+      "decision_mechanisms": "Leaders decide on feedback and task assignments based on employee performance. Employees adjust their behavior and productivity in response to leadership attention and team support."
+    },
+    "details": {
+      "agent_behaviors": "Worker Agents show emotional responses and productivity changes based on leadership attention and team dynamics. Leader Agents provide feedback and care to motivate workers. Team Agents engage in cooperative interactions to boost group performance.",
+      "decision_algorithms": "Task allocation and feedback mechanisms are used by leaders to influence employee task completion and motivation. Emotional analysis tools assess employee emotional changes in different scenarios.",
+      "specific_constraints": "Minimum of 3 agents required for basic leader-employee interaction, recommended 10 agents for complex team dynamics. Initial states set for agents, with leaders providing tasks and feedback to employees."
+    }
+  },
+  "agent_types": {
+    "WorkerAgent": "Represents employees whose behavior and performance are influenced by leadership attention, team atmosphere, and social interactions.",
+    "LeaderAgent": "Manages and guides employees, enhancing productivity through care, attention, feedback, and communication.",
+    "TeamAgent": "Simulates different team members and their interactions, cooperation, and emotional support to affect work performance."
+  },
+  "portrait": {
+    "WorkerAgent": 3,
+    "LeaderAgent": 1,
+    "TeamAgent": 5
+  },
+  "metrics": [
+    {
+      "id": "AverageProductivity",
+      "name": "AverageProductivity",
+      "description": "Average productivity of worker agents over time",
+      "visualization_type": "line",
+      "update_interval": 5,
+      "variables": [
+        {
+          "name": "productivity",
+          "source_type": "agent",
+          "agent_type": "WorkerAgent",
+          "path": "productivity",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Calculate the average productivity of worker agents. If the productivity list is empty or contains None values, return 0. If the list contains non-numeric values, skip those values in the calculation.",
+      "function_name": "AverageProductivity"
+    },
+    {
+      "id": "AttentionImpact",
+      "name": "AttentionImpact",
+      "description": "Impact of leader attention on worker productivity",
+      "visualization_type": "bar",
+      "update_interval": 5,
+      "variables": [
+        {
+          "name": "leaderAttention",
+          "source_type": "agent",
+          "agent_type": "LeaderAgent",
+          "path": "attention",
+          "required": true,
+          "is_list": true
+        },
+        {
+          "name": "workerProductivity",
+          "source_type": "agent",
+          "agent_type": "WorkerAgent",
+          "path": "productivity",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Calculate the average productivity of worker agents for each level of leader attention. If the leaderAttention list or workerProductivity list is empty or contains None values, return 0 for that attention level. If the lists contain non-numeric values, skip those values in the calculation.",
+      "function_name": "AttentionImpact"
+    },
+    {
+      "id": "TeamInteractionEffectiveness",
+      "name": "TeamInteractionEffectiveness",
+      "description": "Effectiveness of team interactions on overall productivity",
+      "visualization_type": "pie",
+      "update_interval": 5,
+      "variables": [
+        {
+          "name": "teamInteraction",
+          "source_type": "agent",
+          "agent_type": "TeamAgent",
+          "path": "interaction",
+          "required": true,
+          "is_list": true
+        },
+        {
+          "name": "overallProductivity",
+          "source_type": "agent",
+          "agent_type": "WorkerAgent",
+          "path": "productivity",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Calculate the proportion of overall productivity attributed to different levels of team interaction. If the teamInteraction list or overallProductivity list is empty or contains None values, return 0 for that interaction level. If the lists contain non-numeric values, skip those values in the calculation.",
+      "function_name": "TeamInteractionEffectiveness"
+    }
+  ]
+}

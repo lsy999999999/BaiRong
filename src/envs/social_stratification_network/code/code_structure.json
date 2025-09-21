@@ -1,0 +1,773 @@
+{
+  "agents": {
+    "Individual": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "1": {
+          "code": "async def identify_exchange_partners(self, event: Event) -> List[Event]:\n        social_network = self.profile.get_data(\"social_network\", [])\n        trust_threshold = self.profile.get_data(\"trust_threshold\", 0.0)\n\n        instruction = \"\"\"\n        You are an agent in a social resource exchange network. Your task is to identify potential exchange partners from your social network. \n        You should only consider individuals whose trust level meets or exceeds your trust threshold. \n        Please return the information in the following JSON format:\n\n        {\n        \"target_ids\": [\"<List of IDs of identified exchange partners>\"]\n        }\n        \"\"\"\n\n        result = await self.generate_reaction(instruction)\n\n        target_ids = result.get('target_ids', [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        self.profile.update_data(\"exchange_partners\", target_ids)\n\n        events = []\n        for partner_id in target_ids:\n            trust_level = await self.get_agent_data(partner_id, \"trust_level\", None)\n            if trust_level is not None and trust_level >= trust_threshold:\n                exchange_event = ExchangePartnerIdentifiedEvent(\n                    from_agent_id=self.profile_id,\n                    to_agent_id=partner_id,\n                    initiator_id=self.profile_id,\n                    partner_id=partner_id,\n                    trust_level=trust_level\n                )\n                events.append(exchange_event)\n\n        return events",
+          "metadata": {
+            "id": 1,
+            "name": "identify_exchange_partners",
+            "condition": null,
+            "description": "The action of identifying potential partners for resource exchange within the individual's social network.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "social_network",
+                "type": "list",
+                "context": "agent",
+                "description": "List of individuals within the social network of the agent."
+              },
+              {
+                "name": "trust_threshold",
+                "type": "float",
+                "context": "agent",
+                "description": "Minimum trust level required to consider an individual as a potential exchange partner."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "exchange_partners",
+                "type": "list",
+                "context": "agent",
+                "description": "List of identified potential exchange partners."
+              }
+            ]
+          }
+        },
+        "2": {
+          "code": "async def evaluate_exchange_value(self, event: Event) -> List[Event]:\n        exchange_partners = self.profile.get_data(\"exchange_partners\", [])\n        trust_level = event.trust_level\n        trust_threshold = self.profile.get_data(\"trust_threshold\", 0.0)\n\n        if not exchange_partners:\n            return []\n\n        observation = f\"Trust level: {trust_level}, Exchange partners: {exchange_partners}\"\n        instruction = \"\"\"\n        Evaluate the potential exchange value and risks using the provided trust level and exchange partners.\n        Calculate 'exchange_value' and 'risk_assessment'. Return the results in the following JSON format:\n\n        {\n        \"exchange_value\": \"<Calculated exchange value>\",\n        \"risk_assessment\": \"<Calculated risk assessment>\",\n        \"target_ids\": [\"<The string ID(s) of the partner(s) evaluated>\"]\n        }\n        \"\"\"\n\n        result = await self.generate_reaction(instruction, observation)\n\n        exchange_value = result.get('exchange_value', 0.0)\n        risk_assessment = result.get('risk_assessment', 0.0)\n        target_ids = result.get('target_ids', [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        self.profile.update_data(\"exchange_value\", exchange_value)\n        self.profile.update_data(\"risk_assessment\", risk_assessment)\n\n        events = []\n        for target_id in target_ids:\n            exchange_evaluated_event = ExchangeEvaluatedEvent(\n                from_agent_id=self.profile_id,\n                to_agent_id=target_id,\n                initiator_id=self.profile_id,\n                partner_id=target_id,\n                exchange_value=exchange_value,\n                risk_assessment=risk_assessment\n            )\n            events.append(exchange_evaluated_event)\n\n        return events",
+          "metadata": {
+            "id": 2,
+            "name": "evaluate_exchange_value",
+            "condition": "Potential partner and exchange value data available",
+            "description": "The process of evaluating the potential value and risks of an exchange with a selected partner.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "exchange_partners",
+                "type": "list",
+                "context": "agent",
+                "description": "List of identified potential exchange partners."
+              },
+              {
+                "name": "trust_level",
+                "type": "float",
+                "context": "event",
+                "description": "Trust level between the individual and the partner."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "exchange_value",
+                "type": "float",
+                "context": "agent",
+                "description": "Calculated value of the exchange."
+              },
+              {
+                "name": "risk_assessment",
+                "type": "float",
+                "context": "agent",
+                "description": "Assessment of risks associated with the exchange."
+              }
+            ]
+          }
+        },
+        "3": {
+          "code": "async def execute_exchange(self, event: Event) -> List[Event]:\n        exchange_value = event.exchange_value\n        trust_threshold = self.profile.get_data(\"trust_threshold\", 0.0)  # Corrected from exchange_threshold\n\n        if exchange_value < trust_threshold:  # Corrected logic condition\n            return []\n\n        initiator_id = event.initiator_id\n        partner_id = event.partner_id\n        risk_assessment = event.risk_assessment\n\n        observation = f\"Exchange value: {exchange_value}, Risk assessment: {risk_assessment}, Partner ID: {partner_id}\"\n\n        instruction = \"\"\"Please determine the appropriate target IDs for executing the exchange. \n        Ensure that the response includes the 'resources_exchanged' details and 'target_ids' in the following JSON format:\n        {\n            \"resources_exchanged\": {\n                \"<resource_type>\": \"<amount>\"\n            },\n            \"target_ids\": [\"<String ID of the Partner agent>\"]\n        }\n        \"\"\"\n\n        result = await self.generate_reaction(instruction, observation)\n\n        resources_exchanged = result.get('resources_exchanged', {})\n        target_ids = result.get('target_ids', [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        exchange_history = self.profile.get_data(\"exchange_history\", [])\n        exchange_history.append({\n            \"partner_id\": partner_id,\n            \"exchange_value\": exchange_value,\n            \"risk_assessment\": risk_assessment,\n            \"resources_exchanged\": resources_exchanged\n        })\n        self.profile.update_data(\"exchange_history\", exchange_history)\n        self.profile.update_data(\"resources_exchanged\", resources_exchanged)\n\n        events = []\n        for target_id in target_ids:\n            exchange_executed_event = ExchangeExecutedEvent(\n                from_agent_id=initiator_id,\n                to_agent_id=target_id,\n                initiator_id=initiator_id,\n                partner_id=target_id,\n                resources_exchanged=resources_exchanged\n            )\n            events.append(exchange_executed_event)\n\n        return events",
+          "metadata": {
+            "id": 3,
+            "name": "execute_exchange",
+            "condition": "Exchange evaluation meets trust threshold",
+            "description": "The execution of the resource exchange between the individual and the partner.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "exchange_value",
+                "type": "float",
+                "context": "agent",
+                "description": "Calculated value of the exchange."
+              },
+              {
+                "name": "risk_assessment",
+                "type": "float",
+                "context": "agent",
+                "description": "Assessment of risks associated with the exchange."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "exchange_history",
+                "type": "list",
+                "context": "agent",
+                "description": "Updated history of exchanges made by the individual."
+              },
+              {
+                "name": "resources_exchanged",
+                "type": "dict",
+                "context": "agent",
+                "description": "Details of resources exchanged between individuals."
+              }
+            ]
+          }
+        },
+        "4": {
+          "code": "async def update_social_capital(self, event: Event) -> List[Event]:\n        if event.__class__.__name__ != \"ExchangeExecutedEvent\":\n            return []\n\n        initiator_id = event.initiator_id\n        partner_id = event.partner_id\n        resources_exchanged = event.resources_exchanged\n\n        instruction = \"\"\"\n        You are tasked with updating the social capital of an individual based on the resources exchanged during a social interaction.\n        The `resources_exchanged` dictionary contains the details of the exchange. Use this information to calculate the change in social capital.\n        Please return the result in the following JSON format:\n        {\n            \"social_capital_change\": <calculated change in social capital as a float>,\n            \"target_ids\": [\"<The string ID of the individual whose social capital is updated>\"]\n        }\n        \"\"\"\n\n        observation = f\"Resources exchanged: {resources_exchanged}\"\n        result = await self.generate_reaction(instruction, observation)\n\n        social_capital_change = result.get('social_capital_change', 0.0)\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        for target_id in target_ids:\n            current_social_capital = self.profile.get_data(\"social_capital\", 0.0)\n            new_social_capital = current_social_capital + social_capital_change\n            self.profile.update_data(\"social_capital\", new_social_capital)\n\n        events = []\n        for target_id in target_ids:\n            social_capital_event = SocialCapitalUpdatedEvent(\n                from_agent_id=self.profile_id,\n                to_agent_id=target_id,\n                individual_id=target_id,\n                social_capital_change=social_capital_change\n            )\n            events.append(social_capital_event)\n\n        return events",
+          "metadata": {
+            "id": 4,
+            "name": "update_social_capital",
+            "condition": null,
+            "description": "Updating the individual's social capital based on the outcome of the exchange.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "resources_exchanged",
+                "type": "dict",
+                "context": "agent",
+                "description": "Details of resources exchanged between individuals."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "social_capital",
+                "type": "float",
+                "context": "agent",
+                "description": "Updated social capital of the individual."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "Family": {
+      "imports": "from typing import Any, List, Optional\nimport asyncio\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "5": {
+          "code": "async def decide_education_investment(self, event: Event) -> List[Event]:\n        if event.__class__.__name__ != \"StartEvent\":\n            return []\n\n        collective_resources = self.profile.get_data(\"collective_resources\", 0.0)\n        education_strategy = self.profile.get_data(\"education_strategy\", \"\")\n\n        instruction = \"\"\"You are tasked with deciding on education investments for a family. \n        Based on the available collective resources and the family's education strategy, \n        determine the investment amount and the target educational institutions. \n        Please provide the response in the following JSON format:\n\n        {\n            \"investment_amount\": <float value representing the amount of resources allocated>,\n            \"target_ids\": [\"<List of string IDs of the educational institutions to apply to>\"]\n        }\n        \"\"\"\n\n        observation = f\"Collective resources: {collective_resources}, Education strategy: {education_strategy}\"\n        result = await self.generate_reaction(instruction, observation)\n\n        investment_amount = result.get('investment_amount', 0.0)\n        target_ids = result.get('target_ids', [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        self.profile.update_data(\"education_investment\", investment_amount)\n\n        events = []\n        family_id = self.profile_id\n        for institution_id in target_ids:\n            event = EducationInvestmentDecidedEvent(family_id=family_id, institution_id=institution_id, investment_amount=investment_amount)\n            events.append(event)\n\n        return events",
+          "metadata": {
+            "id": 5,
+            "name": "decide_education_investment",
+            "condition": null,
+            "description": "The decision-making process regarding the allocation of resources for educational investments.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "collective_resources",
+                "type": "float",
+                "context": "agent",
+                "description": "Total resources available to the family for investment."
+              },
+              {
+                "name": "education_strategy",
+                "type": "str",
+                "context": "agent",
+                "description": "The strategy employed by the family regarding education investments."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "education_investment",
+                "type": "float",
+                "context": "agent",
+                "description": "Resources allocated for education investment."
+              }
+            ]
+          }
+        },
+        "6": {
+          "code": "async def receive_admission_decision(self, event: Event) -> List[Event]:\n        if not hasattr(event, 'admission_status') or event.admission_status not in [\"accepted\", \"rejected\"]:\n            return []\n\n        admission_decisions = self.profile.get_data(\"admission_decisions\", [])\n\n        instruction = \"\"\"You have received an admission decision from an educational institution.\n        Please update the admission decisions list with the new decision.\n        The decision includes the application status and the ID of the student.\n        Return the updated admission decisions and the target_ids for further processing.\n\n        Please return the information in the following JSON format:\n        {\n            \"admission_status\": \"<The status of the admission (e.g., 'accepted', 'rejected')>\",\n            \"target_ids\": [\"<The string ID(s) of the family member(s) to notify>\"]\n        }\n        \"\"\"\n\n        observation = f\"Application status: {event.admission_status}, Institution ID: {event.institution_id}, Selected Student IDs: {event.selected_students_ids}\"\n        result = await self.generate_reaction(instruction, observation)\n\n        admission_status = result.get('admission_status', None)\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        admission_decisions.append(admission_status)\n        self.profile.update_data(\"admission_decisions\", admission_decisions)\n\n        events = []\n        for target_id in target_ids:\n            admission_event = AdmissionDecisionReceivedEvent(self.profile_id, target_id, family_id=event.family_id, admission_status=admission_status)\n            events.append(admission_event)\n\n        return events",
+          "metadata": {
+            "id": 6,
+            "name": "receive_admission_decision",
+            "condition": "Admission decision received from educational institutions",
+            "description": "The process of receiving and processing admission decisions from educational institutions.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "application_status",
+                "type": "str",
+                "context": "event",
+                "description": "Status of the admission decision received from the institution."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "admission_decisions",
+                "type": "list",
+                "context": "agent",
+                "description": "List of admission decisions received."
+              }
+            ]
+          }
+        },
+        "7": {
+          "code": "async def allocate_education_resources(self, event: Event) -> List[Event]:\n        admission_decisions = self.profile.get_data(\"admission_decisions\", [])\n\n        observation = f\"Admission decisions: {admission_decisions}, Event family_id: {event.family_id}, Admission status: {event.admission_status}\"\n\n        instruction = \"\"\"\n        Based on the admission decisions received and the current event data, calculate the total resources allocated for education.\n        Please return the information in the following JSON format:\n\n        {\n        \"allocated_resources\": \"<Calculated float value of resources allocated>\",\n        \"target_ids\": [\"<The string ID of the EnvAgent>\"]\n        }\n        \"\"\"\n\n        result = await self.generate_reaction(instruction, observation)\n\n        allocated_resources = result.get('allocated_resources', 0.0)\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        self.profile.update_data(\"allocated_resources\", allocated_resources)\n\n        events = []\n        for target_id in target_ids:\n            resources_event = EducationResourcesAllocatedEvent(\n                from_agent_id=self.profile_id,\n                to_agent_id=target_id,\n                family_id=event.family_id,\n                resources_allocated=allocated_resources\n            )\n            events.append(resources_event)\n\n        return events",
+          "metadata": {
+            "id": 7,
+            "name": "allocate_education_resources",
+            "condition": null,
+            "description": "Allocating resources based on the received admission decisions.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "admission_decisions",
+                "type": "list",
+                "context": "agent",
+                "description": "List of admission decisions received."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "allocated_resources",
+                "type": "float",
+                "context": "agent",
+                "description": "Total resources allocated for education."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "EducationalInstitution": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "8": {
+          "code": "async def select_students(self, event: Event) -> List[Event]:\n        # Check the condition: Applications received from families\n        applications_received = self.profile.get_data(\"applications_received\", [])\n        if not applications_received:\n            return []\n\n        # Retrieve admission criteria\n        admission_criteria = self.profile.get_data(\"admission_criteria\", {})\n\n        # Prepare the instruction for the LLM\n        instruction = \"\"\"\n        Based on the admission criteria provided, evaluate each application from the received list.\n        Select students who meet the criteria and return their IDs in the following JSON format:\n\n        {\n        \"selected_students_ids\": [\"<List of student IDs who meet the criteria>\"],\n        \"target_ids\": [\"<The string ID of the Family agent(s) to notify>\"]\n        }\n        \"\"\"\n\n        # Generate a reaction using the admission criteria and applications received\n        observation = f\"Admission Criteria: {admission_criteria}, Applications: {applications_received}\"\n        result = await self.generate_reaction(instruction, observation)\n\n        # Parse the result\n        selected_students_ids = result.get('selected_students_ids', [])\n        target_ids = result.get('target_ids', [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Update the selected students in the agent's profile\n        self.profile.update_data(\"selected_students\", selected_students_ids)\n\n        # Prepare and send the StudentsSelectedEvent to the relevant Family agents\n        events = []\n        for target_id in target_ids:\n            students_selected_event = StudentsSelectedEvent(\n                self.profile_id,\n                target_id,\n                institution_id=self.profile_id,\n                selected_students_ids=selected_students_ids\n            )\n            events.append(students_selected_event)\n\n        return events",
+          "metadata": {
+            "id": 8,
+            "name": "select_students",
+            "condition": "Applications received from families",
+            "description": "Selecting students for admission based on predefined criteria.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "admission_criteria",
+                "type": "dict",
+                "context": "agent",
+                "description": "Criteria used by the institution to select students."
+              },
+              {
+                "name": "applications_received",
+                "type": "list",
+                "context": "agent",
+                "description": "List of applications received by the institution."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "selected_students",
+                "type": "list",
+                "context": "agent",
+                "description": "List of students selected for admission."
+              }
+            ]
+          }
+        },
+        "9": {
+          "code": "async def receive_application(self, event: Event) -> List[Event]:\n        # Extract application data from the event\n        application_data = event.application_data\n\n        # Update the applications_received list in the agent's profile\n        applications_received = self.profile.get_data(\"applications_received\", [])\n        applications_received.append(application_data)\n        self.profile.update_data(\"applications_received\", applications_received)\n\n        # Generate a reaction to decide on target_ids and application_id\n        observation = f\"Application data received: {application_data}\"\n        instruction = \"\"\"Please process the application data and determine the appropriate target institution IDs for the application.\n        Return a JSON response with the following format:\n        {\n            \"target_ids\": [\"<List of institution IDs or a single institution ID>\"],\n            \"application_id\": \"<Unique ID for the application>\"\n        }\n        \"\"\"\n\n        result = await self.generate_reaction(instruction, observation)\n\n        # Extract target_ids and application_id from the LLM's response\n        target_ids = result.get('target_ids', None)\n        application_id = result.get('application_id', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Prepare and send ApplicationReceivedEvent to each target institution\n        events = []\n        for target_id in target_ids:\n            application_received_event = ApplicationReceivedEvent(\n                self.profile_id,\n                target_id,\n                institution_id=self.profile_id,\n                application_id=application_id\n            )\n            events.append(application_received_event)\n\n        return events",
+          "metadata": {
+            "id": 9,
+            "name": "receive_application",
+            "condition": null,
+            "description": "The process of receiving applications from families for student admission.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "application_data",
+                "type": "dict",
+                "context": "event",
+                "description": "Data contained within the received application."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "applications_received",
+                "type": "list",
+                "context": "agent",
+                "description": "Updated list of applications received by the institution."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "Employer": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "10": {
+          "code": "async def evaluate_candidates(self, event: Event) -> List[Event]:\n        # Condition Check: Ensure candidate applications have been received\n        candidates_list = self.profile.get_data(\"candidates_list\", [])\n        if not candidates_list:\n            return []\n\n        # Access required variables\n        evaluation_criteria = self.profile.get_data(\"evaluation_criteria\", {})\n\n        # Generate reaction using LLM\n        instruction = \"\"\"\n        Evaluate each candidate in the 'candidates_list' using the 'evaluation_criteria'.\n        Please return the information in the following JSON format:\n        {\n            \"evaluation_results\": {\n                \"<candidate_id>\": \"<evaluation_score>\"\n            },\n            \"target_ids\": [\"<candidate_id>\"]\n        }\n        \"\"\"\n        observation = f\"Candidates to evaluate: {candidates_list}, Evaluation criteria: {evaluation_criteria}\"\n        result = await self.generate_reaction(instruction, observation)\n\n        # Parse the LLM's response\n        evaluation_results = result.get('evaluation_results', {})\n        target_ids = result.get('target_ids', [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Update agent's state with evaluation results\n        self.profile.update_data('evaluation_results', evaluation_results)\n\n        # Prepare and send CandidatesEvaluatedEvent to make_hiring_decision action\n        events = []\n        candidates_evaluated_event = CandidatesEvaluatedEvent(\n            from_agent_id=self.profile_id,\n            to_agent_id=self.profile_id,\n            employer_id=self.profile_id,\n            candidate_ids=target_ids,\n            evaluation_scores=evaluation_results\n        )\n        events.append(candidates_evaluated_event)\n\n        return events",
+          "metadata": {
+            "id": 10,
+            "name": "evaluate_candidates",
+            "condition": "Candidate applications received",
+            "description": "Evaluating candidates for potential hiring based on skill and cultural fit.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "candidates_list",
+                "type": "list",
+                "context": "agent",
+                "description": "List of candidates to be evaluated."
+              },
+              {
+                "name": "evaluation_criteria",
+                "type": "dict",
+                "context": "agent",
+                "description": "Criteria used to evaluate candidates."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "evaluation_results",
+                "type": "dict",
+                "context": "agent",
+                "description": "Results of the candidate evaluations."
+              }
+            ]
+          }
+        },
+        "11": {
+          "code": "async def make_hiring_decision(self, event: Event) -> List[Event]:\n        # Check if the condition \"Candidate evaluations completed\" is met\n        evaluation_results = self.profile.get_data(\"evaluation_results\", None)\n        if not evaluation_results:\n            return []\n\n        # Retrieve necessary data from the event\n        employer_id = event.employer_id\n        candidate_ids = event.candidate_ids\n        evaluation_scores = event.evaluation_scores\n\n        # Generate reaction to make a hiring decision\n        observation = f\"Evaluation scores: {evaluation_scores}\"\n        instruction = \"\"\"\n        Based on the evaluation scores provided, make a hiring decision. \n        Your decision should consider the best candidate(s) based on their scores.\n        Please return the information in the following JSON format:\n\n        {\n        \"hired_candidate_id\": \"<The ID of the candidate hired or a list of IDs if multiple candidates are hired>\",\n        \"hiring_status\": \"<The status of the hiring decision, e.g., 'hired', 'pending', 'rejected'>\",\n        \"target_ids\": [\"<The string ID 'ENV' for the EnvAgent>\"]\n        }\n        \"\"\"\n\n        result = await self.generate_reaction(instruction, observation)\n\n        # Parse the LLM's response\n        hired_candidate_id = result.get('hired_candidate_id', None)\n        if not isinstance(hired_candidate_id, list):\n            hired_candidate_id = [hired_candidate_id]\n        hiring_status = result.get('hiring_status', 'pending')\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Update the agent's profile with the hiring decision\n        hiring_decision = {\n            \"hired_candidate_id\": hired_candidate_id,\n            \"hiring_status\": hiring_status\n        }\n        self.profile.update_data(\"hiring_decision\", hiring_decision)\n\n        # Prepare and send HiringDecisionMadeEvent to the EnvAgent\n        events = []\n        for target_id in target_ids:\n            for candidate_id in hired_candidate_id:\n                hiring_event = HiringDecisionMadeEvent(\n                    from_agent_id=self.profile_id,\n                    to_agent_id=target_id,\n                    employer_id=employer_id,\n                    hired_candidate_id=candidate_id,\n                    hiring_status=hiring_status\n                )\n                events.append(hiring_event)\n\n        return events",
+          "metadata": {
+            "id": 11,
+            "name": "make_hiring_decision",
+            "condition": "Candidate evaluations completed",
+            "description": "Making a hiring decision based on the evaluation results.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "evaluation_results",
+                "type": "dict",
+                "context": "agent",
+                "description": "Results of the candidate evaluations."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "hiring_decision",
+                "type": "str",
+                "context": "agent",
+                "description": "Final decision regarding the hiring of a candidate."
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "events": {
+    "imports": "from onesim.events import Event\nfrom typing import Dict, List, Any",
+    "definitions": {
+      "-1": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": -1,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "Individual",
+          "to_action_name": "identify_exchange_partners",
+          "from_action_id": 0,
+          "to_action_id": 1,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for individuals to start identifying potential exchange partners",
+          "fields": []
+        }
+      },
+      "-2": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": -2,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "Family",
+          "to_action_name": "decide_education_investment",
+          "from_action_id": 0,
+          "to_action_id": 5,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for families to decide on educational investments",
+          "fields": []
+        }
+      },
+      "-3": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": -3,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "EducationalInstitution",
+          "to_action_name": "select_students",
+          "from_action_id": 0,
+          "to_action_id": 8,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for educational institutions to start selecting students",
+          "fields": []
+        }
+      },
+      "-4": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": -4,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "Employer",
+          "to_action_name": "evaluate_candidates",
+          "from_action_id": 0,
+          "to_action_id": 10,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for employers to start evaluating candidates for hiring",
+          "fields": []
+        }
+      },
+      "1": {
+        "code": "class ExchangePartnerIdentifiedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        initiator_id: int = 0,\n        partner_id: int = 0,\n        trust_level: float = 0.0,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.initiator_id = initiator_id\n        self.partner_id = partner_id\n        self.trust_level = trust_level",
+        "metadata": {
+          "id": 1,
+          "from_agent_type": "Individual",
+          "from_action_name": "identify_exchange_partners",
+          "to_agent_type": "Individual",
+          "to_action_name": "evaluate_exchange_value",
+          "from_action_id": 1,
+          "to_action_id": 2,
+          "event_name": "ExchangePartnerIdentifiedEvent",
+          "event_info": "Individual identifies a potential partner for resource exchange",
+          "fields": [
+            {
+              "name": "initiator_id",
+              "type": "int",
+              "default_value": "0",
+              "description": "ID of the individual initiating the exchange identification"
+            },
+            {
+              "name": "partner_id",
+              "type": "int",
+              "default_value": "0",
+              "description": "ID of the potential exchange partner identified"
+            },
+            {
+              "name": "trust_level",
+              "type": "float",
+              "default_value": "0.0",
+              "description": "Trust level between the initiator and the partner"
+            }
+          ]
+        }
+      },
+      "2": {
+        "code": "class ExchangeEvaluatedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        initiator_id: int = 0,\n        partner_id: int = 0,\n        exchange_value: float = 0.0,\n        risk_assessment: float = 0.0,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.initiator_id = initiator_id\n        self.partner_id = partner_id\n        self.exchange_value = exchange_value\n        self.risk_assessment = risk_assessment",
+        "metadata": {
+          "id": 2,
+          "from_agent_type": "Individual",
+          "from_action_name": "evaluate_exchange_value",
+          "to_agent_type": "Individual",
+          "to_action_name": "execute_exchange",
+          "from_action_id": 2,
+          "to_action_id": 3,
+          "event_name": "ExchangeEvaluatedEvent",
+          "event_info": "Evaluation of potential exchange value and risks completed",
+          "fields": [
+            {
+              "name": "initiator_id",
+              "type": "int",
+              "default_value": "0",
+              "description": "ID of the individual evaluating the exchange"
+            },
+            {
+              "name": "partner_id",
+              "type": "int",
+              "default_value": "0",
+              "description": "ID of the exchange partner being evaluated"
+            },
+            {
+              "name": "exchange_value",
+              "type": "float",
+              "default_value": "0.0",
+              "description": "Calculated value of the exchange"
+            },
+            {
+              "name": "risk_assessment",
+              "type": "float",
+              "default_value": "0.0",
+              "description": "Assessment of risks associated with the exchange"
+            }
+          ]
+        }
+      },
+      "3": {
+        "code": "class ExchangeExecutedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        initiator_id: int = 0,\n        partner_id: int = 0,\n        resources_exchanged: Dict[str, Any] = {},\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.initiator_id = initiator_id\n        self.partner_id = partner_id\n        self.resources_exchanged = resources_exchanged",
+        "metadata": {
+          "id": 3,
+          "from_agent_type": "Individual",
+          "from_action_name": "execute_exchange",
+          "to_agent_type": "Individual",
+          "to_action_name": "update_social_capital",
+          "from_action_id": 3,
+          "to_action_id": 4,
+          "event_name": "ExchangeExecutedEvent",
+          "event_info": "Execution of the resource exchange between individuals",
+          "fields": [
+            {
+              "name": "initiator_id",
+              "type": "int",
+              "default_value": "0",
+              "description": "ID of the individual executing the exchange"
+            },
+            {
+              "name": "partner_id",
+              "type": "int",
+              "default_value": "0",
+              "description": "ID of the exchange partner"
+            },
+            {
+              "name": "resources_exchanged",
+              "type": "dict",
+              "default_value": "{}",
+              "description": "Details of resources exchanged between individuals"
+            }
+          ]
+        }
+      },
+      "4": {
+        "code": "class SocialCapitalUpdatedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        individual_id: int = 0,\n        social_capital_change: float = 0.0,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.individual_id = individual_id\n        self.social_capital_change = social_capital_change",
+        "metadata": {
+          "id": 4,
+          "from_agent_type": "Individual",
+          "from_action_name": "update_social_capital",
+          "to_agent_type": "EnvAgent",
+          "to_action_name": "terminate",
+          "from_action_id": 4,
+          "to_action_id": -1,
+          "event_name": "SocialCapitalUpdatedEvent",
+          "event_info": "Individual's social capital updated post-exchange",
+          "fields": [
+            {
+              "name": "individual_id",
+              "type": "int",
+              "default_value": "0",
+              "description": "ID of the individual whose social capital is updated"
+            },
+            {
+              "name": "social_capital_change",
+              "type": "float",
+              "default_value": "0.0",
+              "description": "Amount of change in social capital post-exchange"
+            }
+          ]
+        }
+      },
+      "5": {
+        "code": "class EducationInvestmentDecidedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        family_id: int = 0,\n        institution_id: int = 0,\n        investment_amount: float = 0.0,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.family_id = family_id\n        self.institution_id = institution_id\n        self.investment_amount = investment_amount",
+        "metadata": {
+          "id": 5,
+          "from_agent_type": "Family",
+          "from_action_name": "decide_education_investment",
+          "to_agent_type": "EducationalInstitution",
+          "to_action_name": "receive_application",
+          "from_action_id": 5,
+          "to_action_id": 9,
+          "event_name": "EducationInvestmentDecidedEvent",
+          "event_info": "Family decides on education investment and applies to institutions",
+          "fields": [
+            {
+              "name": "family_id",
+              "type": "int",
+              "default_value": "0",
+              "description": "ID of the family deciding on education investment"
+            },
+            {
+              "name": "institution_id",
+              "type": "int",
+              "default_value": "0",
+              "description": "ID of the educational institution applied to"
+            },
+            {
+              "name": "investment_amount",
+              "type": "float",
+              "default_value": "0.0",
+              "description": "Amount of resources allocated for education investment"
+            }
+          ]
+        }
+      },
+      "6": {
+        "code": "class AdmissionDecisionReceivedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        family_id: int = 0,\n        admission_status: str = 'pending',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.family_id = family_id\n        self.admission_status = admission_status",
+        "metadata": {
+          "id": 6,
+          "from_agent_type": "Family",
+          "from_action_name": "receive_admission_decision",
+          "to_agent_type": "Family",
+          "to_action_name": "allocate_education_resources",
+          "from_action_id": 6,
+          "to_action_id": 7,
+          "event_name": "AdmissionDecisionReceivedEvent",
+          "event_info": "Family receives admission decision and allocates resources accordingly",
+          "fields": [
+            {
+              "name": "family_id",
+              "type": "int",
+              "default_value": "0",
+              "description": "ID of the family receiving the admission decision"
+            },
+            {
+              "name": "admission_status",
+              "type": "str",
+              "default_value": "pending",
+              "description": "Status of the admission decision received"
+            }
+          ]
+        }
+      },
+      "7": {
+        "code": "class EducationResourcesAllocatedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        family_id: int = 0,\n        resources_allocated: float = 0.0,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.family_id = family_id\n        self.resources_allocated = resources_allocated",
+        "metadata": {
+          "id": 7,
+          "from_agent_type": "Family",
+          "from_action_name": "allocate_education_resources",
+          "to_agent_type": "EnvAgent",
+          "to_action_name": "terminate",
+          "from_action_id": 7,
+          "to_action_id": -1,
+          "event_name": "EducationResourcesAllocatedEvent",
+          "event_info": "Family allocates resources for education based on admission decision",
+          "fields": [
+            {
+              "name": "family_id",
+              "type": "int",
+              "default_value": "0",
+              "description": "ID of the family allocating resources for education"
+            },
+            {
+              "name": "resources_allocated",
+              "type": "float",
+              "default_value": "0.0",
+              "description": "Total resources allocated for education"
+            }
+          ]
+        }
+      },
+      "8": {
+        "code": "class StudentsSelectedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        institution_id: int = 0,\n        selected_students_ids: List[int] = [],\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.institution_id = institution_id\n        self.selected_students_ids = selected_students_ids",
+        "metadata": {
+          "id": 8,
+          "from_agent_type": "EducationalInstitution",
+          "from_action_name": "select_students",
+          "to_agent_type": "Family",
+          "to_action_name": "receive_admission_decision",
+          "from_action_id": 8,
+          "to_action_id": 6,
+          "event_name": "StudentsSelectedEvent",
+          "event_info": "Educational institution selects students based on criteria",
+          "fields": [
+            {
+              "name": "institution_id",
+              "type": "int",
+              "default_value": "0",
+              "description": "ID of the educational institution selecting students"
+            },
+            {
+              "name": "selected_students_ids",
+              "type": "list",
+              "default_value": "[]",
+              "description": "List of IDs of students selected by the institution"
+            }
+          ]
+        }
+      },
+      "9": {
+        "code": "class ApplicationReceivedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        institution_id: int = 0,\n        application_id: int = 0,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.institution_id = institution_id\n        self.application_id = application_id",
+        "metadata": {
+          "id": 9,
+          "from_agent_type": "EducationalInstitution",
+          "from_action_name": "receive_application",
+          "to_agent_type": "EducationalInstitution",
+          "to_action_name": "select_students",
+          "from_action_id": 9,
+          "to_action_id": 8,
+          "event_name": "ApplicationReceivedEvent",
+          "event_info": "Application received and processed for student selection",
+          "fields": [
+            {
+              "name": "institution_id",
+              "type": "int",
+              "default_value": "0",
+              "description": "ID of the educational institution receiving the application"
+            },
+            {
+              "name": "application_id",
+              "type": "int",
+              "default_value": "0",
+              "description": "ID of the application received"
+            }
+          ]
+        }
+      },
+      "10": {
+        "code": "class CandidatesEvaluatedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        employer_id: int = 0,\n        candidate_ids: List[int] = [],\n        evaluation_scores: Dict[int, float] = {},\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.employer_id = employer_id\n        self.candidate_ids = candidate_ids\n        self.evaluation_scores = evaluation_scores",
+        "metadata": {
+          "id": 10,
+          "from_agent_type": "Employer",
+          "from_action_name": "evaluate_candidates",
+          "to_agent_type": "Employer",
+          "to_action_name": "make_hiring_decision",
+          "from_action_id": 10,
+          "to_action_id": 11,
+          "event_name": "CandidatesEvaluatedEvent",
+          "event_info": "Evaluation of candidates for potential hiring",
+          "fields": [
+            {
+              "name": "employer_id",
+              "type": "int",
+              "default_value": "0",
+              "description": "ID of the employer evaluating candidates"
+            },
+            {
+              "name": "candidate_ids",
+              "type": "list",
+              "default_value": "[]",
+              "description": "List of candidate IDs evaluated"
+            },
+            {
+              "name": "evaluation_scores",
+              "type": "dict",
+              "default_value": "{}",
+              "description": "Scores assigned to candidates based on evaluation"
+            }
+          ]
+        }
+      },
+      "11": {
+        "code": "class HiringDecisionMadeEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        employer_id: int = 0,\n        hired_candidate_id: int = 0,\n        hiring_status: str = 'pending',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.employer_id = employer_id\n        self.hired_candidate_id = hired_candidate_id\n        self.hiring_status = hiring_status",
+        "metadata": {
+          "id": 11,
+          "from_agent_type": "Employer",
+          "from_action_name": "make_hiring_decision",
+          "to_agent_type": "EnvAgent",
+          "to_action_name": "terminate",
+          "from_action_id": 11,
+          "to_action_id": -1,
+          "event_name": "HiringDecisionMadeEvent",
+          "event_info": "Employer makes a hiring decision based on evaluations",
+          "fields": [
+            {
+              "name": "employer_id",
+              "type": "int",
+              "default_value": "0",
+              "description": "ID of the employer making the hiring decision"
+            },
+            {
+              "name": "hired_candidate_id",
+              "type": "int",
+              "default_value": "0",
+              "description": "ID of the candidate hired"
+            },
+            {
+              "name": "hiring_status",
+              "type": "str",
+              "default_value": "pending",
+              "description": "Status of the hiring decision"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

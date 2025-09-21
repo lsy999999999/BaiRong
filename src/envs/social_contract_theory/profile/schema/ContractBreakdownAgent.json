@@ -1,0 +1,80 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Contract Breakdown Agent",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's role in simulating conflicts within social contracts"
+    },
+    "conflict_details": {
+        "type": "str",
+        "default": "Initial conflict scenario description",
+        "private": true,
+        "sampling": "default"
+    },
+    "conflict_status": {
+        "type": "str",
+        "default": "awaiting_resolution",
+        "private": false,
+        "sampling": "default"
+    },
+    "historical_case_analysis": {
+        "type": "list",
+        "default": [
+            {
+                "case_id": "001",
+                "outcome": "successful resolution",
+                "impact": "high"
+            }
+        ],
+        "private": true,
+        "sampling": "default"
+    },
+    "interaction_pattern": {
+        "type": "str",
+        "default": "contract_negotiation",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "contract_negotiation",
+            "conflict_resolution",
+            "policy_evaluation"
+        ]
+    },
+    "decision_algorithm": {
+        "type": "str",
+        "default": "social_contract_theory_based",
+        "private": true,
+        "sampling": "llm",
+        "description": "Algorithm used to simulate decision-making based on social contract theory texts"
+    },
+    "initial_natural_state": {
+        "type": "str",
+        "default": "state_of_nature",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "state_of_nature",
+            "civil_society"
+        ]
+    },
+    "government_legitimacy": {
+        "type": "float",
+        "default": 75.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "social_contract_adaptability": {
+        "type": "int",
+        "default": 50,
+        "private": false,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

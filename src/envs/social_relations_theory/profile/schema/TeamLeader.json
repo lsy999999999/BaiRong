@@ -1,0 +1,98 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Alex Johnson",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's full name"
+    },
+    "role": {
+        "type": "str",
+        "default": "TeamLeader",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's role within the organization"
+    },
+    "feedback_content": {
+        "type": "str",
+        "default": "Great job on the recent project!",
+        "private": true,
+        "sampling": "default"
+    },
+    "feedback_status": {
+        "type": "str",
+        "default": "pending",
+        "private": true,
+        "sampling": "default"
+    },
+    "motivation_level": {
+        "type": "int",
+        "default": 80,
+        "private": false,
+        "sampling": "default"
+    },
+    "social_needs": {
+        "type": "list",
+        "default": [
+            "team_support",
+            "recognition"
+        ],
+        "private": false,
+        "sampling": "llm",
+        "sample_size": 2,
+        "description": "Social needs of the agent affecting their work satisfaction"
+    },
+    "emotional_state": {
+        "type": "str",
+        "default": "content",
+        "private": false,
+        "sampling": "default"
+    },
+    "interaction_patterns": {
+        "type": "list",
+        "default": [
+            "collaborative_task",
+            "feedback_session"
+        ],
+        "private": true,
+        "sampling": "default",
+        "sample_size": 2
+    },
+    "communication_protocol": {
+        "type": "str",
+        "default": "active",
+        "private": false,
+        "sampling": "default"
+    },
+    "decision_mechanism": {
+        "type": "str",
+        "default": "emotional_response",
+        "private": false,
+        "sampling": "llm",
+        "description": "The method used by the agent to make decisions"
+    },
+    "job_satisfaction": {
+        "type": "int",
+        "default": 75,
+        "private": false,
+        "sampling": "default"
+    },
+    "team_dynamics": {
+        "type": "str",
+        "default": "supportive",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "supportive",
+            "neutral",
+            "tense"
+        ]
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

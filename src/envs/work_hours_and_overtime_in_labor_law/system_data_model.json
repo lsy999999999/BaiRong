@@ -1,0 +1,70 @@
+{
+    "environment": {
+        "variables": [
+            {
+                "name": "ruling",
+                "type": "str",
+                "default_value": null
+            },
+            {
+                "name": "legal_references",
+                "type": "list",
+                "default_value": null
+            },
+            {
+                "name": "completion_status",
+                "type": "str",
+                "default_value": null
+            }
+        ]
+    },
+    "agents": {
+        "Employee": {
+            "variables": [
+                {
+                    "name": "employee_id",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "overtime_hours",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "overtime_reason",
+                    "type": "str",
+                    "default_value": null
+                }
+            ]
+        },
+        "Employer": {
+            "variables": [
+                {
+                    "name": "employer_id",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "defense_arguments",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "evidence_documents",
+                    "type": "list",
+                    "default_value": null
+                }
+            ]
+        },
+        "Judge": {
+            "variables": [
+                {
+                    "name": "judge_id",
+                    "type": "str",
+                    "default_value": null
+                }
+            ]
+        }
+    }
+}

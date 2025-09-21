@@ -1,0 +1,751 @@
+[
+    {
+        "name": "Alice Johnson",
+        "miner_id": "miner_001",
+        "current_state": "idle",
+        "observed_state": {
+            "grid_position": [
+                0,
+                0
+            ],
+            "resources": 0,
+            "energy": 100
+        },
+        "investment_strategy": {
+            "base_investment": 50,
+            "increment_per_round": 10
+        },
+        "energy_reserve": 100,
+        "grid_position": [
+            0,
+            0
+        ],
+        "resources_collected": 0,
+        "last_action": "idle",
+        "action_history": [
+            "idle"
+        ],
+        "competitor_ids": [
+            "miner_002",
+            "miner_003"
+        ],
+        "contest_outcome": "lost",
+        "exploitation_status": "inactive",
+        "maintenance_energy": 20,
+        "resource_extraction_rate": 0.5,
+        "agent_type": "ResourceMiner",
+        "id": "16"
+    },
+    {
+        "name": "Bob Smith",
+        "miner_id": "miner_001",
+        "current_state": "idle",
+        "observed_state": {
+            "grid_position": [
+                0,
+                0
+            ],
+            "resources": 0,
+            "energy": 100
+        },
+        "investment_strategy": {
+            "base_investment": 50,
+            "increment_per_round": 10
+        },
+        "energy_reserve": 100,
+        "grid_position": [
+            0,
+            0
+        ],
+        "resources_collected": 0,
+        "last_action": "idle",
+        "action_history": [
+            "idle"
+        ],
+        "competitor_ids": [
+            "miner_002",
+            "miner_003"
+        ],
+        "contest_outcome": "lost",
+        "exploitation_status": "inactive",
+        "maintenance_energy": 20,
+        "resource_extraction_rate": 0.5,
+        "agent_type": "ResourceMiner",
+        "id": "17"
+    },
+    {
+        "name": "Charlie Brown",
+        "miner_id": "miner_001",
+        "current_state": "idle",
+        "observed_state": {
+            "grid_position": [
+                0,
+                0
+            ],
+            "resources": 0,
+            "energy": 100
+        },
+        "investment_strategy": {
+            "base_investment": 50,
+            "increment_per_round": 10
+        },
+        "energy_reserve": 100,
+        "grid_position": [
+            0,
+            0
+        ],
+        "resources_collected": 0,
+        "last_action": "idle",
+        "action_history": [
+            "idle"
+        ],
+        "competitor_ids": [
+            "miner_002",
+            "miner_003"
+        ],
+        "contest_outcome": "lost",
+        "exploitation_status": "inactive",
+        "maintenance_energy": 20,
+        "resource_extraction_rate": 0.5,
+        "agent_type": "ResourceMiner",
+        "id": "18"
+    },
+    {
+        "name": "Diana White",
+        "miner_id": "miner_001",
+        "current_state": "idle",
+        "observed_state": {
+            "grid_position": [
+                0,
+                0
+            ],
+            "resources": 0,
+            "energy": 100
+        },
+        "investment_strategy": {
+            "base_investment": 50,
+            "increment_per_round": 10
+        },
+        "energy_reserve": 100,
+        "grid_position": [
+            0,
+            0
+        ],
+        "resources_collected": 0,
+        "last_action": "idle",
+        "action_history": [
+            "idle"
+        ],
+        "competitor_ids": [
+            "miner_002",
+            "miner_003"
+        ],
+        "contest_outcome": "lost",
+        "exploitation_status": "inactive",
+        "maintenance_energy": 20,
+        "resource_extraction_rate": 0.5,
+        "agent_type": "ResourceMiner",
+        "id": "19"
+    },
+    {
+        "name": "Eve Green",
+        "miner_id": "miner_001",
+        "current_state": "idle",
+        "observed_state": {
+            "grid_position": [
+                0,
+                0
+            ],
+            "resources": 0,
+            "energy": 100
+        },
+        "investment_strategy": {
+            "base_investment": 50,
+            "increment_per_round": 10
+        },
+        "energy_reserve": 100,
+        "grid_position": [
+            0,
+            0
+        ],
+        "resources_collected": 0,
+        "last_action": "idle",
+        "action_history": [
+            "idle"
+        ],
+        "competitor_ids": [
+            "miner_002",
+            "miner_003"
+        ],
+        "contest_outcome": "lost",
+        "exploitation_status": "inactive",
+        "maintenance_energy": 20,
+        "resource_extraction_rate": 0.5,
+        "agent_type": "ResourceMiner",
+        "id": "20"
+    },
+    {
+        "name": "Alice Johnson",
+        "miner_id": "miner_001",
+        "current_state": "idle",
+        "observed_state": {
+            "grid_position": [
+                0,
+                0
+            ],
+            "resources": 0,
+            "energy": 100
+        },
+        "investment_strategy": {
+            "base_investment": 50,
+            "increment_per_round": 10
+        },
+        "energy_reserve": 100,
+        "grid_position": [
+            0,
+            0
+        ],
+        "resources_collected": 0,
+        "last_action": "idle",
+        "action_history": [
+            "idle"
+        ],
+        "competitor_ids": [
+            "miner_002",
+            "miner_003"
+        ],
+        "contest_outcome": "lost",
+        "exploitation_status": "inactive",
+        "maintenance_energy": 20,
+        "resource_extraction_rate": 0.5,
+        "agent_type": "ResourceMiner",
+        "id": "161"
+    },
+    {
+        "name": "Bob Smith",
+        "miner_id": "miner_001",
+        "current_state": "idle",
+        "observed_state": {
+            "grid_position": [
+                0,
+                0
+            ],
+            "resources": 0,
+            "energy": 100
+        },
+        "investment_strategy": {
+            "base_investment": 50,
+            "increment_per_round": 10
+        },
+        "energy_reserve": 100,
+        "grid_position": [
+            0,
+            0
+        ],
+        "resources_collected": 0,
+        "last_action": "idle",
+        "action_history": [
+            "idle"
+        ],
+        "competitor_ids": [
+            "miner_002",
+            "miner_003"
+        ],
+        "contest_outcome": "lost",
+        "exploitation_status": "inactive",
+        "maintenance_energy": 20,
+        "resource_extraction_rate": 0.5,
+        "agent_type": "ResourceMiner",
+        "id": "162"
+    },
+    {
+        "name": "Charlie Brown",
+        "miner_id": "miner_001",
+        "current_state": "idle",
+        "observed_state": {
+            "grid_position": [
+                0,
+                0
+            ],
+            "resources": 0,
+            "energy": 100
+        },
+        "investment_strategy": {
+            "base_investment": 50,
+            "increment_per_round": 10
+        },
+        "energy_reserve": 100,
+        "grid_position": [
+            0,
+            0
+        ],
+        "resources_collected": 0,
+        "last_action": "idle",
+        "action_history": [
+            "idle"
+        ],
+        "competitor_ids": [
+            "miner_002",
+            "miner_003"
+        ],
+        "contest_outcome": "lost",
+        "exploitation_status": "inactive",
+        "maintenance_energy": 20,
+        "resource_extraction_rate": 0.5,
+        "agent_type": "ResourceMiner",
+        "id": "163"
+    },
+    {
+        "name": "Diana White",
+        "miner_id": "miner_001",
+        "current_state": "idle",
+        "observed_state": {
+            "grid_position": [
+                0,
+                0
+            ],
+            "resources": 0,
+            "energy": 100
+        },
+        "investment_strategy": {
+            "base_investment": 50,
+            "increment_per_round": 10
+        },
+        "energy_reserve": 100,
+        "grid_position": [
+            0,
+            0
+        ],
+        "resources_collected": 0,
+        "last_action": "idle",
+        "action_history": [
+            "idle"
+        ],
+        "competitor_ids": [
+            "miner_002",
+            "miner_003"
+        ],
+        "contest_outcome": "lost",
+        "exploitation_status": "inactive",
+        "maintenance_energy": 20,
+        "resource_extraction_rate": 0.5,
+        "agent_type": "ResourceMiner",
+        "id": "164"
+    },
+    {
+        "name": "Eve Green",
+        "miner_id": "miner_001",
+        "current_state": "idle",
+        "observed_state": {
+            "grid_position": [
+                0,
+                0
+            ],
+            "resources": 0,
+            "energy": 100
+        },
+        "investment_strategy": {
+            "base_investment": 50,
+            "increment_per_round": 10
+        },
+        "energy_reserve": 100,
+        "grid_position": [
+            0,
+            0
+        ],
+        "resources_collected": 0,
+        "last_action": "idle",
+        "action_history": [
+            "idle"
+        ],
+        "competitor_ids": [
+            "miner_002",
+            "miner_003"
+        ],
+        "contest_outcome": "lost",
+        "exploitation_status": "inactive",
+        "maintenance_energy": 20,
+        "resource_extraction_rate": 0.5,
+        "agent_type": "ResourceMiner",
+        "id": "165"
+    },
+    {
+        "name": "Frank Black",
+        "miner_id": "miner_001",
+        "current_state": "idle",
+        "observed_state": {
+            "grid_position": [
+                0,
+                0
+            ],
+            "resources": 0,
+            "energy": 100
+        },
+        "investment_strategy": {
+            "base_investment": 50,
+            "increment_per_round": 10
+        },
+        "energy_reserve": 100,
+        "grid_position": [
+            0,
+            0
+        ],
+        "resources_collected": 0,
+        "last_action": "idle",
+        "action_history": [
+            "idle"
+        ],
+        "competitor_ids": [
+            "miner_002",
+            "miner_003"
+        ],
+        "contest_outcome": "lost",
+        "exploitation_status": "inactive",
+        "maintenance_energy": 20,
+        "resource_extraction_rate": 0.5,
+        "agent_type": "ResourceMiner",
+        "id": "166"
+    },
+    {
+        "name": "Grace Blue",
+        "miner_id": "miner_001",
+        "current_state": "idle",
+        "observed_state": {
+            "grid_position": [
+                0,
+                0
+            ],
+            "resources": 0,
+            "energy": 100
+        },
+        "investment_strategy": {
+            "base_investment": 50,
+            "increment_per_round": 10
+        },
+        "energy_reserve": 100,
+        "grid_position": [
+            0,
+            0
+        ],
+        "resources_collected": 0,
+        "last_action": "idle",
+        "action_history": [
+            "idle"
+        ],
+        "competitor_ids": [
+            "miner_002",
+            "miner_003"
+        ],
+        "contest_outcome": "lost",
+        "exploitation_status": "inactive",
+        "maintenance_energy": 20,
+        "resource_extraction_rate": 0.5,
+        "agent_type": "ResourceMiner",
+        "id": "167"
+    },
+    {
+        "name": "Henry Red",
+        "miner_id": "miner_001",
+        "current_state": "idle",
+        "observed_state": {
+            "grid_position": [
+                0,
+                0
+            ],
+            "resources": 0,
+            "energy": 100
+        },
+        "investment_strategy": {
+            "base_investment": 50,
+            "increment_per_round": 10
+        },
+        "energy_reserve": 100,
+        "grid_position": [
+            0,
+            0
+        ],
+        "resources_collected": 0,
+        "last_action": "idle",
+        "action_history": [
+            "idle"
+        ],
+        "competitor_ids": [
+            "miner_002",
+            "miner_003"
+        ],
+        "contest_outcome": "lost",
+        "exploitation_status": "inactive",
+        "maintenance_energy": 20,
+        "resource_extraction_rate": 0.5,
+        "agent_type": "ResourceMiner",
+        "id": "168"
+    },
+    {
+        "name": "Ivy Yellow",
+        "miner_id": "miner_001",
+        "current_state": "idle",
+        "observed_state": {
+            "grid_position": [
+                0,
+                0
+            ],
+            "resources": 0,
+            "energy": 100
+        },
+        "investment_strategy": {
+            "base_investment": 50,
+            "increment_per_round": 10
+        },
+        "energy_reserve": 100,
+        "grid_position": [
+            0,
+            0
+        ],
+        "resources_collected": 0,
+        "last_action": "idle",
+        "action_history": [
+            "idle"
+        ],
+        "competitor_ids": [
+            "miner_002",
+            "miner_003"
+        ],
+        "contest_outcome": "lost",
+        "exploitation_status": "inactive",
+        "maintenance_energy": 20,
+        "resource_extraction_rate": 0.5,
+        "agent_type": "ResourceMiner",
+        "id": "169"
+    },
+    {
+        "name": "Jack Orange",
+        "miner_id": "miner_001",
+        "current_state": "idle",
+        "observed_state": {
+            "grid_position": [
+                0,
+                0
+            ],
+            "resources": 0,
+            "energy": 100
+        },
+        "investment_strategy": {
+            "base_investment": 50,
+            "increment_per_round": 10
+        },
+        "energy_reserve": 100,
+        "grid_position": [
+            0,
+            0
+        ],
+        "resources_collected": 0,
+        "last_action": "idle",
+        "action_history": [
+            "idle"
+        ],
+        "competitor_ids": [
+            "miner_002",
+            "miner_003"
+        ],
+        "contest_outcome": "lost",
+        "exploitation_status": "inactive",
+        "maintenance_energy": 20,
+        "resource_extraction_rate": 0.5,
+        "agent_type": "ResourceMiner",
+        "id": "170"
+    },
+    {
+        "name": "Dana White",
+        "miner_id": "miner_001",
+        "current_state": "idle",
+        "observed_state": {
+            "grid_position": [
+                0,
+                0
+            ],
+            "resources": 0,
+            "energy": 100
+        },
+        "investment_strategy": {
+            "base_investment": 50,
+            "increment_per_round": 10
+        },
+        "energy_reserve": 100,
+        "grid_position": [
+            0,
+            0
+        ],
+        "resources_collected": 0,
+        "last_action": "idle",
+        "action_history": [
+            "idle"
+        ],
+        "competitor_ids": [
+            "miner_002",
+            "miner_003"
+        ],
+        "contest_outcome": "lost",
+        "exploitation_status": "inactive",
+        "maintenance_energy": 20,
+        "resource_extraction_rate": 0.5,
+        "agent_type": "ResourceMiner",
+        "id": "171"
+    },
+    {
+        "name": "Elliot Green",
+        "miner_id": "miner_001",
+        "current_state": "idle",
+        "observed_state": {
+            "grid_position": [
+                0,
+                0
+            ],
+            "resources": 0,
+            "energy": 100
+        },
+        "investment_strategy": {
+            "base_investment": 50,
+            "increment_per_round": 10
+        },
+        "energy_reserve": 100,
+        "grid_position": [
+            0,
+            0
+        ],
+        "resources_collected": 0,
+        "last_action": "idle",
+        "action_history": [
+            "idle"
+        ],
+        "competitor_ids": [
+            "miner_002",
+            "miner_003"
+        ],
+        "contest_outcome": "lost",
+        "exploitation_status": "inactive",
+        "maintenance_energy": 20,
+        "resource_extraction_rate": 0.5,
+        "agent_type": "ResourceMiner",
+        "id": "172"
+    },
+    {
+        "name": "Alice Johnson",
+        "miner_id": "miner_001",
+        "current_state": "idle",
+        "observed_state": {
+            "grid_position": [
+                0,
+                0
+            ],
+            "resources": 0,
+            "energy": 100
+        },
+        "investment_strategy": {
+            "base_investment": 50,
+            "increment_per_round": 10
+        },
+        "energy_reserve": 100,
+        "grid_position": [
+            0,
+            0
+        ],
+        "resources_collected": 0,
+        "last_action": "idle",
+        "action_history": [
+            "idle"
+        ],
+        "competitor_ids": [
+            "miner_002",
+            "miner_003"
+        ],
+        "contest_outcome": "lost",
+        "exploitation_status": "inactive",
+        "maintenance_energy": 20,
+        "resource_extraction_rate": 0.5,
+        "agent_type": "ResourceMiner",
+        "age": 32,
+        "occupation": "Software Engineer",
+        "location": "San Francisco, CA",
+        "id": "173"
+    },
+    {
+        "name": "Carlos Rodriguez",
+        "miner_id": "miner_001",
+        "current_state": "idle",
+        "observed_state": {
+            "grid_position": [
+                0,
+                0
+            ],
+            "resources": 0,
+            "energy": 100
+        },
+        "investment_strategy": {
+            "base_investment": 50,
+            "increment_per_round": 10
+        },
+        "energy_reserve": 100,
+        "grid_position": [
+            0,
+            0
+        ],
+        "resources_collected": 0,
+        "last_action": "idle",
+        "action_history": [
+            "idle"
+        ],
+        "competitor_ids": [
+            "miner_002",
+            "miner_003"
+        ],
+        "contest_outcome": "lost",
+        "exploitation_status": "inactive",
+        "maintenance_energy": 20,
+        "resource_extraction_rate": 0.5,
+        "agent_type": "ResourceMiner",
+        "age": 28,
+        "occupation": "Data Analyst",
+        "location": "Austin, TX",
+        "id": "174"
+    },
+    {
+        "name": "Zoe Lee",
+        "miner_id": "miner_001",
+        "current_state": "idle",
+        "observed_state": {
+            "grid_position": [
+                0,
+                0
+            ],
+            "resources": 0,
+            "energy": 100
+        },
+        "investment_strategy": {
+            "base_investment": 50,
+            "increment_per_round": 10
+        },
+        "energy_reserve": 100,
+        "grid_position": [
+            0,
+            0
+        ],
+        "resources_collected": 0,
+        "last_action": "idle",
+        "action_history": [
+            "idle"
+        ],
+        "competitor_ids": [
+            "miner_002",
+            "miner_003"
+        ],
+        "contest_outcome": "lost",
+        "exploitation_status": "inactive",
+        "maintenance_energy": 20,
+        "resource_extraction_rate": 0.5,
+        "agent_type": "ResourceMiner",
+        "age": 45,
+        "occupation": "Project Manager",
+        "location": "Seattle, WA",
+        "id": "175"
+    }
+]

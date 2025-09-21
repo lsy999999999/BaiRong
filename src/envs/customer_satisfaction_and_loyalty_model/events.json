@@ -1,0 +1,252 @@
+{
+    "-1": {
+        "id": -1,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "CustomerAgent",
+        "to_action_name": "initialize_customer",
+        "from_action_id": 0,
+        "to_action_id": 1,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger to set up customer attributes and begin simulation",
+        "fields": []
+    },
+    "-2": {
+        "id": -2,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "MerchantAgent",
+        "to_action_name": "initialize_merchant",
+        "from_action_id": 0,
+        "to_action_id": 6,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger to set up merchant baseline service and product quality",
+        "fields": []
+    },
+    "1": {
+        "id": 1,
+        "from_agent_type": "CustomerAgent",
+        "from_action_name": "initialize_customer",
+        "to_agent_type": "MerchantAgent",
+        "to_action_name": "collect_feedback",
+        "from_action_id": 1,
+        "to_action_id": 7,
+        "event_name": "CustomerInitializedEvent",
+        "event_info": "Signals customer initialization and readiness for interaction",
+        "fields": [
+            {
+                "name": "customer_id",
+                "type": "str",
+                "default_value": "None",
+                "description": "Unique identifier for the customer"
+            },
+            {
+                "name": "initial_loyalty",
+                "type": "float",
+                "default_value": "0.0",
+                "description": "Initial loyalty level of the customer"
+            }
+        ]
+    },
+    "2": {
+        "id": 2,
+        "from_agent_type": "CustomerAgent",
+        "from_action_name": "perceive_quality",
+        "to_agent_type": "CustomerAgent",
+        "to_action_name": "evaluate_satisfaction",
+        "from_action_id": 2,
+        "to_action_id": 3,
+        "event_name": "QualityPerceptionEvent",
+        "event_info": "Customer perceives service and product quality based on merchant baseline and sensitivity coefficients",
+        "fields": [
+            {
+                "name": "perceived_service_quality",
+                "type": "float",
+                "default_value": "0.0",
+                "description": "Customer's perceived service quality"
+            },
+            {
+                "name": "product_experience_score",
+                "type": "float",
+                "default_value": "0.0",
+                "description": "Customer's product experience score"
+            }
+        ]
+    },
+    "3": {
+        "id": 3,
+        "from_agent_type": "CustomerAgent",
+        "from_action_name": "evaluate_satisfaction",
+        "to_agent_type": "CustomerAgent",
+        "to_action_name": "update_loyalty",
+        "from_action_id": 3,
+        "to_action_id": 4,
+        "event_name": "SatisfactionEvaluatedEvent",
+        "event_info": "Customer satisfaction calculated based on perceived quality and product experience",
+        "fields": [
+            {
+                "name": "satisfaction_score",
+                "type": "float",
+                "default_value": "0.0",
+                "description": "Calculated satisfaction score of the customer"
+            }
+        ]
+    },
+    "4": {
+        "id": 4,
+        "from_agent_type": "CustomerAgent",
+        "from_action_name": "update_loyalty",
+        "to_agent_type": "CustomerAgent",
+        "to_action_name": "make_purchase_decision",
+        "from_action_id": 4,
+        "to_action_id": 5,
+        "event_name": "LoyaltyUpdatedEvent",
+        "event_info": "Customer loyalty adjusted based on historical satisfaction trends",
+        "fields": [
+            {
+                "name": "loyalty_score",
+                "type": "float",
+                "default_value": "0.0",
+                "description": "Updated loyalty score of the customer"
+            }
+        ]
+    },
+    "5": {
+        "id": 5,
+        "from_agent_type": "CustomerAgent",
+        "from_action_name": "make_purchase_decision",
+        "to_agent_type": "MerchantAgent",
+        "to_action_name": "collect_feedback",
+        "from_action_id": 5,
+        "to_action_id": 7,
+        "event_name": "PurchaseDecisionEvent",
+        "event_info": "Customer makes a purchasing decision based on satisfaction and loyalty",
+        "fields": [
+            {
+                "name": "purchase_decision",
+                "type": "bool",
+                "default_value": "false",
+                "description": "Indicates whether the customer made a purchase"
+            },
+            {
+                "name": "purchase_probability",
+                "type": "float",
+                "default_value": "0.0",
+                "description": "Probability of the customer making a purchase"
+            }
+        ]
+    },
+    "6": {
+        "id": 6,
+        "from_agent_type": "CustomerAgent",
+        "from_action_name": "make_purchase_decision",
+        "to_agent_type": "EnvAgent",
+        "to_action_name": "terminate",
+        "from_action_id": 5,
+        "to_action_id": -1,
+        "event_name": "EndEvent",
+        "event_info": "Customer's purchasing decision completes their workflow branch",
+        "fields": [
+            {
+                "name": "completion_status",
+                "type": "str",
+                "default_value": "Completed",
+                "description": "Status indicating the completion of the merchant's workflow"
+            }
+        ]
+    },
+    "7": {
+        "id": 7,
+        "from_agent_type": "MerchantAgent",
+        "from_action_name": "initialize_merchant",
+        "to_agent_type": "CustomerAgent",
+        "to_action_name": "perceive_quality",
+        "from_action_id": 6,
+        "to_action_id": 2,
+        "event_name": "MerchantInitializedEvent",
+        "event_info": "Signals merchant initialization and readiness for customer interaction",
+        "fields": [
+            {
+                "name": "merchant_id",
+                "type": "str",
+                "default_value": "None",
+                "description": "Unique identifier for the merchant"
+            },
+            {
+                "name": "baseline_service_quality",
+                "type": "float",
+                "default_value": "0.0",
+                "description": "Initial baseline service quality level"
+            },
+            {
+                "name": "baseline_product_quality",
+                "type": "float",
+                "default_value": "0.0",
+                "description": "Initial baseline product quality level"
+            }
+        ]
+    },
+    "8": {
+        "id": 8,
+        "from_agent_type": "MerchantAgent",
+        "from_action_name": "collect_feedback",
+        "to_agent_type": "MerchantAgent",
+        "to_action_name": "adjust_quality",
+        "from_action_id": 7,
+        "to_action_id": 8,
+        "event_name": "FeedbackCollectedEvent",
+        "event_info": "Merchant collects feedback from customer purchasing decisions",
+        "fields": [
+            {
+                "name": "average_feedback_score",
+                "type": "float",
+                "default_value": "0.0",
+                "description": "Average feedback score collected from customers"
+            }
+        ]
+    },
+    "9": {
+        "id": 9,
+        "from_agent_type": "MerchantAgent",
+        "from_action_name": "adjust_quality",
+        "to_agent_type": "CustomerAgent",
+        "to_action_name": "perceive_quality",
+        "from_action_id": 8,
+        "to_action_id": 2,
+        "event_name": "QualityAdjustedEvent",
+        "event_info": "Merchant adjusts service and product quality based on average customer feedback",
+        "fields": [
+            {
+                "name": "new_service_quality",
+                "type": "float",
+                "default_value": "0.0",
+                "description": "Adjusted service quality level"
+            },
+            {
+                "name": "new_product_quality",
+                "type": "float",
+                "default_value": "0.0",
+                "description": "Adjusted product quality level"
+            }
+        ]
+    },
+    "10": {
+        "id": 10,
+        "from_agent_type": "MerchantAgent",
+        "from_action_name": "adjust_quality",
+        "to_agent_type": "EnvAgent",
+        "to_action_name": "terminate",
+        "from_action_id": 8,
+        "to_action_id": -1,
+        "event_name": "EndEvent",
+        "event_info": "Merchant's quality adjustment completes their workflow branch",
+        "fields": [
+            {
+                "name": "completion_status",
+                "type": "str",
+                "default_value": "Completed",
+                "description": "Status indicating the completion of the merchant's workflow"
+            }
+        ]
+    }
+}

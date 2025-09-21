@@ -1,0 +1,94 @@
+{
+    "name": {
+        "type": "str",
+        "default": "BankAgent",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's identifier or name within the system"
+    },
+    "loan_decision": {
+        "type": "str",
+        "default": "pending_review",
+        "private": true,
+        "sampling": "default"
+    },
+    "approved_loan_amount": {
+        "type": "float",
+        "default": 0.0,
+        "private": true,
+        "sampling": "default"
+    },
+    "credit_rating": {
+        "type": "int",
+        "default": 700,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            300,
+            850
+        ]
+    },
+    "interest_rate": {
+        "type": "float",
+        "default": 3.5,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            1.0,
+            10.0
+        ]
+    },
+    "loan_conditions": {
+        "type": "list",
+        "default": [
+            "fixed_rate",
+            "variable_rate",
+            "secured",
+            "unsecured"
+        ],
+        "private": false,
+        "sampling": "random",
+        "sample_size": 2
+    },
+    "economic_conditions": {
+        "type": "str",
+        "default": "stable",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "stable",
+            "growth",
+            "recession"
+        ]
+    },
+    "repayment_history": {
+        "type": "list",
+        "default": [
+            {
+                "date": "2025-04-01",
+                "status": "on_time",
+                "amount": 1000
+            }
+        ],
+        "private": true,
+        "sampling": "default"
+    },
+    "default_risk_assessment": {
+        "type": "str",
+        "default": "low",
+        "private": true,
+        "sampling": "random",
+        "choices": [
+            "low",
+            "medium",
+            "high"
+        ]
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

@@ -1,0 +1,23 @@
+[33mcommit 9f2855c63ef8d48f537b28b5295c56922b54022d[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: Paitesanshi <45314239+Paitesanshi@users.noreply.github.com>
+Date:   Thu Sep 11 20:41:20 2025 +0800
+
+    FIX: fix bugs in simulation
+
+[33mcommit 5e1d9e1274d102b2b5b82fa2e838b6e780a08dd8[m
+Author: Paitesanshi <45314239+Paitesanshi@users.noreply.github.com>
+Date:   Tue Sep 2 15:08:09 2025 +0800
+
+    FIX: fix bugs in distributed simulation
+
+[33mcommit 59c1e51349821f1b3bb63c7b18e7433af020545b[m
+Author: Paitesanshi <45314239+Paitesanshi@users.noreply.github.com>
+Date:   Sat Aug 23 16:09:35 2025 +0800
+
+    FIX: fix bugs of frontend
+
+[33mcommit 29960baac93df6e61d9757ff7de01ae1beb86afa[m
+Author: Paitesanshi <45314239+Paitesanshi@users.noreply.github.com>
+Date:   Wed Aug 20 15:12:50 2025 +0800
+
+    FIX: add agent profile config in example

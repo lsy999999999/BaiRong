@@ -1,0 +1,7 @@
+[
+    {
+        "source_agent": "AntisocialAgent",
+        "target_agent": "SocialEnvironmentAgent",
+        "direction": "bidirectional"
+    }
+]

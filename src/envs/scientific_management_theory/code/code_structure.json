@@ -1,0 +1,453 @@
+{
+  "agents": {
+    "ManagerAgent": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "1": {
+          "code": "async def initiate_workflow_design(self, event: Event) -> List[Event]:\n        if event.__class__.__name__ != \"StartEvent\":\n            return []\n\n        instruction = \"\"\"Begin the process of designing a workflow by analyzing tasks and determining optimal task allocation strategies.\n        Please return the information in the following JSON format:\n        {\n            \"workflow_design_status\": \"Initiated\",\n            \"workflow_id\": \"<Unique identifier for the workflow>\",\n            \"designer_id\": \"<Identifier of the manager who designed the workflow>\",\n            \"design_details\": \"<Details of the workflow design>\",\n            \"target_ids\": [\"<The string ID of the Manager agent for task allocation>\"]\n        }\n        \"\"\"\n\n        result = await self.generate_reaction(instruction)\n\n        workflow_design_status = result.get(\"workflow_design_status\", \"Initiated\")\n        workflow_id = result.get(\"workflow_id\", \"\")\n        designer_id = result.get(\"designer_id\", \"\")\n        design_details = result.get(\"design_details\", \"\")\n        target_ids = result.get(\"target_ids\", [])\n\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        self.profile.update_data(\"workflow_design_status\", workflow_design_status)\n\n        events = []\n        for target_id in target_ids:\n            workflow_event = WorkflowDesignedEvent(\n                self.profile_id,\n                target_id,\n                workflow_id=workflow_id,\n                designer_id=designer_id,\n                design_details=design_details\n            )\n            events.append(workflow_event)\n\n        return events",
+          "metadata": {
+            "id": 1,
+            "name": "initiate_workflow_design",
+            "condition": null,
+            "description": "Begins the process of designing a workflow by analyzing tasks and determining optimal task allocation strategies.",
+            "type": "OR",
+            "required_variables": [],
+            "output_updates": [
+              {
+                "name": "workflow_design_status",
+                "type": "str",
+                "context": "agent",
+                "description": "Status indicating the initiation of workflow design."
+              }
+            ]
+          }
+        },
+        "2": {
+          "code": "async def allocate_tasks(self, event: Event) -> List[Event]:\n        workflow_id = event.workflow_id\n        design_details = event.design_details\n\n        worker_skills = self.profile.get_data(\"worker_skills\", [])\n\n        instruction = f\"\"\"\n        You are tasked with allocating tasks to workers based on their skills and the designed workflow.\n        Workflow ID: {workflow_id}\n        Design Details: {design_details}\n        Worker Skills: {worker_skills}\n    \n        Please determine the most suitable worker(s) for the tasks and return the target_ids in the following JSON format:\n        {{\n            \"task_list\": [\"<task1>\", \"<task2>\", ...],\n            \"target_ids\": [\"<worker_id1>\", \"<worker_id2>\", ...]\n        }}\n        \"\"\"\n\n        result = await self.generate_reaction(instruction)\n\n        task_list = result.get('task_list', [])\n        target_ids = result.get('target_ids', [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        self.profile.update_data(\"task_allocation_status\", \"completed\")\n\n        events = []\n        for target_id in target_ids:\n            allocation_strategy = \"skill_based\"\n            tasks_allocated_event = TasksAllocatedEvent(\n                self.profile_id,\n                target_id,\n                task_list=task_list,\n                worker_ids=target_ids,\n                allocation_strategy=allocation_strategy\n            )\n            events.append(tasks_allocated_event)\n\n        return events",
+          "metadata": {
+            "id": 2,
+            "name": "allocate_tasks",
+            "condition": null,
+            "description": "Allocates tasks to workers based on the designed workflow and worker capabilities.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "workflow_id",
+                "type": "str",
+                "context": "event",
+                "description": "Unique identifier for the workflow."
+              },
+              {
+                "name": "design_details",
+                "type": "str",
+                "context": "event",
+                "description": "Details of the workflow design."
+              },
+              {
+                "name": "worker_skills",
+                "type": "list",
+                "context": "agent",
+                "description": "List of skills for each worker to match tasks."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "task_allocation_status",
+                "type": "str",
+                "context": "agent",
+                "description": "Status indicating completion of task allocation."
+              }
+            ]
+          }
+        },
+        "3": {
+          "code": "async def provide_feedback_and_incentives(self, event: Event) -> List[Event]:\n        evaluation_report = event.evaluation_report\n        worker_performance = self.profile.get_data(\"worker_performance\", [])\n\n        if not evaluation_report or not worker_performance:\n            return []\n\n        observation = f\"Evaluation Report: {evaluation_report}\\nWorker Performance: {worker_performance}\"\n        instruction = \"\"\"Based on the evaluation report and worker performance metrics provided, generate feedback and an incentive plan for the workers.\n        Please return the information in the following JSON format:\n\n        {\n            \"feedback\": \"<Feedback message for the workers>\",\n            \"incentives\": [\"<List of incentives for the workers>\"],\n            \"target_ids\": [\"<List of worker IDs to receive feedback and incentives>\"]\n        }\n        \"\"\"\n        result = await self.generate_reaction(instruction, observation)\n\n        feedback = result.get('feedback', \"\")\n        incentives = result.get('incentives', [])\n        target_ids = result.get('target_ids', [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        self.profile.update_data(\"incentive_plan\", incentives)\n\n        events = []\n        for target_id in target_ids:\n            feedback_event = FeedbackAndIncentivesProvidedEvent(\n                self.profile_id,\n                target_id,\n                feedback=feedback,\n                incentives=incentives,\n                worker_ids=target_ids\n            )\n            events.append(feedback_event)\n\n        return events",
+          "metadata": {
+            "id": 3,
+            "name": "provide_feedback_and_incentives",
+            "condition": null,
+            "description": "Provides feedback and incentives to workers based on their performance to motivate and improve productivity.",
+            "type": "AND",
+            "required_variables": [
+              {
+                "name": "evaluation_report",
+                "type": "str",
+                "context": "event",
+                "description": "Report of the performance evaluation."
+              },
+              {
+                "name": "worker_performance",
+                "type": "list",
+                "context": "agent",
+                "description": "Performance metrics of each worker."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "incentive_plan",
+                "type": "list",
+                "context": "agent",
+                "description": "List of incentives planned for workers."
+              }
+            ]
+          }
+        },
+        "6": {
+          "code": "async def evaluate_performance(self, event: Event) -> List[Event]:\n        task_results = event.task_results\n        worker_ids = event.worker_ids\n        expected_worker_ids = self.profile.get_data(\"expected_worker_ids\", [])\n\n        received_worker_ids = self.profile.get_data(\"received_worker_ids\", [])\n        received_worker_ids.extend(worker_ids)\n        self.profile.update_data(\"received_worker_ids\", list(set(received_worker_ids)))\n\n        if set(received_worker_ids) != set(expected_worker_ids):\n            return []\n\n        observation = f\"Task results: {task_results}, Worker IDs: {worker_ids}\"\n\n        instruction = \"\"\"Evaluate the performance based on the task results provided by the Worker Agents. \n        Use scientific management principles to analyze the effectiveness and productivity of the workers. \n        Generate a performance evaluation report and decide which ManagerAgent(s) should receive the evaluation.\n        Please return the information in the following JSON format:\n\n        {\n        \"evaluation_report\": \"<A detailed evaluation report>\",\n        \"target_ids\": [\"<The string ID(s) of the Manager agent(s)>\"]\n        }\n        \"\"\"\n\n        result = await self.generate_reaction(instruction, observation)\n\n        evaluation_report = result.get('evaluation_report', \"\")\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        events = []\n        for target_id in target_ids:\n            performance_event = PerformanceEvaluatedEvent(\n                self.profile_id, target_id,\n                evaluation_report=evaluation_report,\n                evaluator_id=self.profile_id\n            )\n            events.append(performance_event)\n\n        return events",
+          "metadata": {
+            "id": 6,
+            "name": "evaluate_performance",
+            "condition": "TasksExecutedEvent received from all WorkerAgents",
+            "description": "Evaluates the performance of workers after task execution to determine effectiveness and productivity.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "task_results",
+                "type": "list",
+                "context": "event",
+                "description": "Results of the tasks executed by workers."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "performance_evaluation",
+                "type": "str",
+                "context": "agent",
+                "description": "Summary of the performance evaluation."
+              }
+            ]
+          }
+        },
+        "7": {
+          "code": "async def finalize_workflow(self, event: Event) -> List[Event]:\n        adjustments = event.adjustments\n\n        if not self.profile.get_data(\"PerformanceAdjustedEvent_received\", False):\n            self.profile.update_data(\"PerformanceAdjustedEvent_received\", True)\n            self.profile.update_data(\"adjustments\", adjustments)\n        else:\n            observation = f\"Adjustments received: {adjustments}\"\n            instruction = \"\"\"\n            Please generate a final report summarizing the workflow adjustments and completion status.\n            Ensure the report includes a summary of the adjustments and specifies the target_ids for the final event.\n            The target_ids should be a list of IDs, which will include 'ENV' for the terminal event.\n            Return the information in the following JSON format:\n\n            {\n            \"final_report\": \"<Summary of adjustments and final status>\",\n            \"target_ids\": [\"<Target IDs, including 'ENV'>\"]\n            }\n            \"\"\"\n\n            result = await self.generate_reaction(instruction, observation)\n\n            final_report = result.get('final_report', \"\")\n            target_ids = result.get('target_ids', [])\n            if not isinstance(target_ids, list):\n                target_ids = [target_ids]\n\n            self.profile.update_data(\"workflow_final_status\", \"completed\")\n\n            events = []\n            for target_id in target_ids:\n                workflow_finalized_event = WorkflowFinalizedEvent(\n                    self.profile_id, target_id, completion_status=\"completed\", final_report=final_report\n                )\n                events.append(workflow_finalized_event)\n\n            return events\n\n        return []",
+          "metadata": {
+            "id": 7,
+            "name": "finalize_workflow",
+            "condition": null,
+            "description": "Finalizes the workflow based on performance adjustments and concludes the simulation process.",
+            "type": "AND",
+            "required_variables": [
+              {
+                "name": "adjustments",
+                "type": "str",
+                "context": "event",
+                "description": "Details of performance adjustments made by workers."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "workflow_final_status",
+                "type": "str",
+                "context": "agent",
+                "description": "Final status of the workflow indicating completion."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "WorkerAgent": {
+      "imports": "from typing import Any, List, Optional\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "4": {
+          "code": "async def execute_tasks(self, event: TasksAllocatedEvent) -> List[Event]:\n        # Extract necessary data from the event\n        task_list = event.task_list\n        worker_ids = event.worker_ids\n\n        # Check if the required fields are present in the event\n        if not task_list or self.profile_id not in worker_ids:\n            return []\n\n        # Create an observation string for the current context\n        observation = f\"Received tasks: {task_list} for worker: {self.profile_id}\"\n\n        # Craft the instruction for the LLM\n        instruction = \"\"\"Execute the tasks assigned by the manager according to the standardized workflow.\n        Please ensure that the tasks are completed efficiently and return the task completion status.\n        Provide the response in the following JSON format:\n        {\n            \"task_completion_status\": \"<Status indicating the completion of tasks>\",\n            \"target_ids\": [\"<The string ID of the Manager agent>\"]\n        }\n        \"\"\"\n\n        # Generate reaction using the LLM\n        result = await self.generate_reaction(instruction, observation)\n\n        # Parse the LLM's JSON response\n        task_completion_status = result.get('task_completion_status', None)\n        target_ids = result.get('target_ids', None)\n    \n        # Ensure target_ids is a list\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Update the agent's profile with the task completion status\n        self.profile.update_data(\"task_completion_status\", task_completion_status)\n\n        # Prepare and send the TasksExecutedEvent to the ManagerAgent\n        events = []\n        for target_id in target_ids:\n            tasks_executed_event = TasksExecutedEvent(\n                from_agent_id=self.profile_id,\n                to_agent_id=target_id,\n                task_results=task_list,\n                worker_ids=[self.profile_id]\n            )\n            events.append(tasks_executed_event)\n\n        return events",
+          "metadata": {
+            "id": 4,
+            "name": "execute_tasks",
+            "condition": null,
+            "description": "Executes the tasks assigned by the manager according to the standardized workflow.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "task_list",
+                "type": "list",
+                "context": "event",
+                "description": "List of tasks allocated to the worker."
+              },
+              {
+                "name": "workflow_id",
+                "type": "str",
+                "context": "event",
+                "description": "Identifier of the workflow in which tasks are executed."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "task_completion_status",
+                "type": "str",
+                "context": "agent",
+                "description": "Status indicating the completion of tasks."
+              }
+            ]
+          }
+        },
+        "5": {
+          "code": "async def adjust_performance(self, event: FeedbackAndIncentivesProvidedEvent) -> List[Event]:\n        # Extract required variables from the event\n        feedback = event.feedback\n        incentives = event.incentives\n        worker_ids = event.worker_ids\n\n        # Check if the required fields are present in the event\n        if not feedback or not incentives or self.profile_id not in worker_ids:\n            return []\n\n        # Create an observation string for the current context\n        observation = f\"Feedback: {feedback}, Incentives: {incentives}, Worker ID: {self.profile_id}\"\n\n        # Craft the instruction for the LLM\n        instruction = f\"\"\"\n        You are tasked with adjusting your performance based on the feedback and incentives provided.\n        Please analyze the feedback: '{feedback}' and incentives: {incentives}.\n        Generate a performance adjustment strategy and specify which workers (target_ids) should implement these adjustments.\n        Return the information in the following JSON format:\n\n        {{\n        \"adjustments\": \"<Details of performance adjustments>\",\n        \"target_ids\": [\"<The string ID(s) of WorkerAgent(s) who adjusted their performance>\"]\n        }}\n        \"\"\"\n    \n        # Generate reaction using the instruction\n        result = await self.generate_reaction(instruction, observation)\n    \n        # Parse the LLM's response\n        adjustments = result.get('adjustments', None)\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n    \n        # Update the agent's state with performance adjustment details\n        self.profile.update_data(\"performance_adjustment_status\", \"Adjusted based on feedback and incentives\")\n    \n        # Prepare and send the PerformanceAdjustedEvent to the ManagerAgent\n        events = []\n        for target_id in target_ids:\n            performance_adjusted_event = PerformanceAdjustedEvent(\n                from_agent_id=self.profile_id,\n                to_agent_id=target_id,\n                adjustments=adjustments,\n                worker_ids=[self.profile_id]\n            )\n            events.append(performance_adjusted_event)\n    \n        return events",
+          "metadata": {
+            "id": 5,
+            "name": "adjust_performance",
+            "condition": null,
+            "description": "Adjusts performance based on feedback and incentives received to improve task execution.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "feedback",
+                "type": "str",
+                "context": "event",
+                "description": "Feedback given to the worker."
+              },
+              {
+                "name": "incentives",
+                "type": "list",
+                "context": "event",
+                "description": "Incentives provided to the worker."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "performance_adjustment_status",
+                "type": "str",
+                "context": "agent",
+                "description": "Status indicating the adjustment of performance."
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "events": {
+    "imports": "from onesim.events import Event\nfrom typing import Any, List",
+    "definitions": {
+      "-1": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": -1,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "ManagerAgent",
+          "to_action_name": "initiate_workflow_design",
+          "from_action_id": 0,
+          "to_action_id": 1,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for workflow design and task allocation",
+          "fields": []
+        }
+      },
+      "1": {
+        "code": "class WorkflowDesignedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        workflow_id: str = \"\",\n        designer_id: str = \"\",\n        design_details: str = \"\",\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.workflow_id = workflow_id\n        self.designer_id = designer_id\n        self.design_details = design_details",
+        "metadata": {
+          "id": 1,
+          "from_agent_type": "ManagerAgent",
+          "from_action_name": "initiate_workflow_design",
+          "to_agent_type": "ManagerAgent",
+          "to_action_name": "allocate_tasks",
+          "from_action_id": 1,
+          "to_action_id": 2,
+          "event_name": "WorkflowDesignedEvent",
+          "event_info": "Workflow design completed, ready for task allocation",
+          "fields": [
+            {
+              "name": "workflow_id",
+              "type": "str",
+              "default_value": "",
+              "description": "Unique identifier for the workflow"
+            },
+            {
+              "name": "designer_id",
+              "type": "str",
+              "default_value": "",
+              "description": "Identifier of the manager who designed the workflow"
+            },
+            {
+              "name": "design_details",
+              "type": "str",
+              "default_value": "",
+              "description": "Details of the workflow design"
+            }
+          ]
+        }
+      },
+      "2": {
+        "code": "class TasksAllocatedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        task_list: List[Any] = [],\n        worker_ids: List[Any] = [],\n        allocation_strategy: str = 'skill_based',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.task_list = task_list\n        self.worker_ids = worker_ids\n        self.allocation_strategy = allocation_strategy",
+        "metadata": {
+          "id": 2,
+          "from_agent_type": "ManagerAgent",
+          "from_action_name": "allocate_tasks",
+          "to_agent_type": "WorkerAgent",
+          "to_action_name": "execute_tasks",
+          "from_action_id": 2,
+          "to_action_id": 4,
+          "event_name": "TasksAllocatedEvent",
+          "event_info": "Tasks allocated to workers",
+          "fields": [
+            {
+              "name": "task_list",
+              "type": "list",
+              "default_value": [],
+              "description": "List of tasks allocated to workers"
+            },
+            {
+              "name": "worker_ids",
+              "type": "list",
+              "default_value": [],
+              "description": "List of worker IDs who received tasks"
+            },
+            {
+              "name": "allocation_strategy",
+              "type": "str",
+              "default_value": "skill_based",
+              "description": "Strategy used for task allocation"
+            }
+          ]
+        }
+      },
+      "3": {
+        "code": "class FeedbackAndIncentivesProvidedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        feedback: str = \"\",\n        incentives: List[Any] = [],\n        worker_ids: List[Any] = [],\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.feedback = feedback\n        self.incentives = incentives\n        self.worker_ids = worker_ids",
+        "metadata": {
+          "id": 3,
+          "from_agent_type": "ManagerAgent",
+          "from_action_name": "provide_feedback_and_incentives",
+          "to_agent_type": "WorkerAgent",
+          "to_action_name": "adjust_performance",
+          "from_action_id": 3,
+          "to_action_id": 5,
+          "event_name": "FeedbackAndIncentivesProvidedEvent",
+          "event_info": "Feedback and incentives given to workers",
+          "fields": [
+            {
+              "name": "feedback",
+              "type": "str",
+              "default_value": "",
+              "description": "Feedback given to workers"
+            },
+            {
+              "name": "incentives",
+              "type": "list",
+              "default_value": [],
+              "description": "List of incentives provided to workers"
+            },
+            {
+              "name": "worker_ids",
+              "type": "list",
+              "default_value": [],
+              "description": "List of worker IDs who received feedback and incentives"
+            }
+          ]
+        }
+      },
+      "4": {
+        "code": "class TasksExecutedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        task_results: List[Any] = [],\n        worker_ids: List[Any] = [],\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.task_results = task_results\n        self.worker_ids = worker_ids",
+        "metadata": {
+          "id": 4,
+          "from_agent_type": "WorkerAgent",
+          "from_action_name": "execute_tasks",
+          "to_agent_type": "ManagerAgent",
+          "to_action_name": "evaluate_performance",
+          "from_action_id": 4,
+          "to_action_id": 6,
+          "event_name": "TasksExecutedEvent",
+          "event_info": "Tasks execution completed by workers",
+          "fields": [
+            {
+              "name": "task_results",
+              "type": "list",
+              "default_value": [],
+              "description": "Results of the tasks executed by workers"
+            },
+            {
+              "name": "worker_ids",
+              "type": "list",
+              "default_value": [],
+              "description": "List of worker IDs who completed the tasks"
+            }
+          ]
+        }
+      },
+      "5": {
+        "code": "class PerformanceAdjustedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        adjustments: str = \"\",\n        worker_ids: List[Any] = [],\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.adjustments = adjustments\n        self.worker_ids = worker_ids",
+        "metadata": {
+          "id": 5,
+          "from_agent_type": "WorkerAgent",
+          "from_action_name": "adjust_performance",
+          "to_agent_type": "ManagerAgent",
+          "to_action_name": "finalize_workflow",
+          "from_action_id": 5,
+          "to_action_id": 7,
+          "event_name": "PerformanceAdjustedEvent",
+          "event_info": "Workers adjusted performance based on feedback and incentives",
+          "fields": [
+            {
+              "name": "adjustments",
+              "type": "str",
+              "default_value": "",
+              "description": "Details of performance adjustments made by workers"
+            },
+            {
+              "name": "worker_ids",
+              "type": "list",
+              "default_value": [],
+              "description": "List of worker IDs who adjusted their performance"
+            }
+          ]
+        }
+      },
+      "6": {
+        "code": "class PerformanceEvaluatedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        evaluation_report: str = \"\",\n        evaluator_id: str = \"\",\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.evaluation_report = evaluation_report\n        self.evaluator_id = evaluator_id",
+        "metadata": {
+          "id": 6,
+          "from_agent_type": "ManagerAgent",
+          "from_action_name": "evaluate_performance",
+          "to_agent_type": "ManagerAgent",
+          "to_action_name": "provide_feedback_and_incentives",
+          "from_action_id": 6,
+          "to_action_id": 3,
+          "event_name": "PerformanceEvaluatedEvent",
+          "event_info": "Performance evaluation completed",
+          "fields": [
+            {
+              "name": "evaluation_report",
+              "type": "str",
+              "default_value": "",
+              "description": "Report of the performance evaluation"
+            },
+            {
+              "name": "evaluator_id",
+              "type": "str",
+              "default_value": "",
+              "description": "Identifier of the manager who conducted the evaluation"
+            }
+          ]
+        }
+      },
+      "7": {
+        "code": "class WorkflowFinalizedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        completion_status: str = 'completed',\n        final_report: str = \"\",\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.completion_status = completion_status\n        self.final_report = final_report",
+        "metadata": {
+          "id": 7,
+          "from_agent_type": "ManagerAgent",
+          "from_action_name": "finalize_workflow",
+          "to_agent_type": "EnvAgent",
+          "to_action_name": "terminate",
+          "from_action_id": 7,
+          "to_action_id": -1,
+          "event_name": "WorkflowFinalizedEvent",
+          "event_info": "Workflow finalized and system terminated",
+          "fields": [
+            {
+              "name": "completion_status",
+              "type": "str",
+              "default_value": "completed",
+              "description": "Status of the workflow finalization"
+            },
+            {
+              "name": "final_report",
+              "type": "str",
+              "default_value": "",
+              "description": "Final report of the workflow and system termination"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,122 @@
+[
+    {
+        "name": "Hon. Alice M. Thompson",
+        "experience_years": 13,
+        "current_case_status": "awaiting_verdict",
+        "cases_resolved": 120,
+        "communication_style": "Direct and concise",
+        "decision_making_speed": 4,
+        "agent_type": "Judge",
+        "legal_knowledge_level": 98,
+        "overtime_law_comprehension": 0.755874779471848,
+        "recent_rulings": [
+            {
+                "case_id": "C001",
+                "outcome": "favor_employee",
+                "date": "2023-09-15"
+            },
+            {
+                "case_id": "C002",
+                "outcome": "favor_employer",
+                "date": "2023-09-20"
+            }
+        ],
+        "id": "10"
+    },
+    {
+        "name": "Hon. Robert J. Sanchez",
+        "experience_years": 5,
+        "current_case_status": "awaiting_verdict",
+        "cases_resolved": 120,
+        "communication_style": "Calm and deliberative",
+        "decision_making_speed": 1,
+        "agent_type": "Judge",
+        "legal_knowledge_level": 97,
+        "overtime_law_comprehension": 0.776032677264618,
+        "recent_rulings": [
+            {
+                "case_id": "C001",
+                "outcome": "favor_employee",
+                "date": "2023-09-15"
+            },
+            {
+                "case_id": "C002",
+                "outcome": "favor_employer",
+                "date": "2023-09-20"
+            }
+        ],
+        "id": "11"
+    },
+    {
+        "name": "Hon. Emily K. Chen",
+        "experience_years": 35,
+        "current_case_status": "awaiting_verdict",
+        "cases_resolved": 120,
+        "communication_style": "Empathetic and understanding",
+        "decision_making_speed": 4,
+        "agent_type": "Judge",
+        "legal_knowledge_level": 90,
+        "overtime_law_comprehension": 0.7459956489870359,
+        "recent_rulings": [
+            {
+                "case_id": "C001",
+                "outcome": "favor_employee",
+                "date": "2023-09-15"
+            },
+            {
+                "case_id": "C002",
+                "outcome": "favor_employer",
+                "date": "2023-09-20"
+            }
+        ],
+        "id": "12"
+    },
+    {
+        "name": "Hon. Michael L. Patel",
+        "experience_years": 18,
+        "current_case_status": "awaiting_verdict",
+        "cases_resolved": 120,
+        "communication_style": "Firm and authoritative",
+        "decision_making_speed": 5,
+        "agent_type": "Judge",
+        "legal_knowledge_level": 86,
+        "overtime_law_comprehension": 0.7864964672702461,
+        "recent_rulings": [
+            {
+                "case_id": "C001",
+                "outcome": "favor_employee",
+                "date": "2023-09-15"
+            },
+            {
+                "case_id": "C002",
+                "outcome": "favor_employer",
+                "date": "2023-09-20"
+            }
+        ],
+        "id": "13"
+    },
+    {
+        "name": "Hon. Sarah B. Williams",
+        "experience_years": 23,
+        "current_case_status": "awaiting_verdict",
+        "cases_resolved": 120,
+        "communication_style": "Analytical and detailed",
+        "decision_making_speed": 4,
+        "agent_type": "Judge",
+        "legal_knowledge_level": 88,
+        "overtime_law_comprehension": 0.7562433332059172,
+        "recent_rulings": [
+            {
+                "case_id": "C001",
+                "outcome": "favor_employee",
+                "date": "2023-09-15"
+            },
+            {
+                "case_id": "C002",
+                "outcome": "favor_employer",
+                "date": "2023-09-20"
+            }
+        ],
+        "id": "14"
+    }
+]

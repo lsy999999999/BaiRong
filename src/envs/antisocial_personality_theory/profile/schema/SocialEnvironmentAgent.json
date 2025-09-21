@@ -1,0 +1,91 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Alex Doe",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's full name, representing an individual with antisocial personality traits"
+    },
+    "age": {
+        "type": "int",
+        "default": 30,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            18,
+            65
+        ]
+    },
+    "empathy_level": {
+        "type": "int",
+        "default": 10,
+        "private": true,
+        "sampling": "random",
+        "range": [
+            0,
+            20
+        ]
+    },
+    "manipulation_skill": {
+        "type": "int",
+        "default": 70,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            50,
+            100
+        ]
+    },
+    "social_norm_violation_tendency": {
+        "type": "float",
+        "default": 0.75,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.5,
+            1.0
+        ]
+    },
+    "interaction_history": {
+        "type": "list",
+        "default": [
+            {
+                "interaction_type": "manipulation",
+                "success": true,
+                "date": "2023-10-01"
+            }
+        ],
+        "private": true,
+        "sampling": "default"
+    },
+    "current_status": {
+        "type": "str",
+        "default": "active",
+        "private": false,
+        "sampling": "default"
+    },
+    "personal_gain_focus": {
+        "type": "int",
+        "default": 90,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            70,
+            100
+        ]
+    },
+    "communication_style": {
+        "type": "str",
+        "default": "subtle_manipulation",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's preferred style of communication, often involving manipulation"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

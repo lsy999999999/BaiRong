@@ -1,0 +1,75 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Witness",
+        "private": false,
+        "sampling": "default"
+    },
+    "testimony_content": {
+        "type": "str",
+        "default": "awaiting_input",
+        "private": true,
+        "sampling": "default"
+    },
+    "prepared_testimony": {
+        "type": "str",
+        "default": "ready",
+        "private": true,
+        "sampling": "default"
+    },
+    "testimony_given": {
+        "type": "str",
+        "default": "inactive",
+        "private": true,
+        "sampling": "default"
+    },
+    "credibility": {
+        "type": "float",
+        "default": 75.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "cross_examination_responses": {
+        "type": "list",
+        "default": [
+            "initial_response"
+        ],
+        "private": true,
+        "sampling": "default"
+    },
+    "public_attention": {
+        "type": "int",
+        "default": 50,
+        "private": false,
+        "sampling": "default"
+    },
+    "legal_system_type": {
+        "type": "str",
+        "default": "common law with jury",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "common law with jury",
+            "civil law with judge ruling"
+        ]
+    },
+    "precedent_strength": {
+        "type": "float",
+        "default": 80.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "procedural_rule_strictness": {
+        "type": "int",
+        "default": 70,
+        "private": false,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

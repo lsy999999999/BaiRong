@@ -1,0 +1,117 @@
+[
+    {
+        "name": "Alex Johnson",
+        "attitude_score": 0.6,
+        "perceived_behavioral_control": 0.5,
+        "behavioral_intention": 0.7,
+        "actual_behavior": "pending",
+        "communication_style": "informal",
+        "resource_availability": 1.0,
+        "agent_type": "SocialNormAgent",
+        "social_norms_score": 0.5,
+        "adjusted_subjective_norms": {
+            "peer_pressure": 0.7,
+            "family_influence": 0.6
+        },
+        "interaction_history": [
+            {
+                "date": "2023-10-01",
+                "interaction": "discussion",
+                "outcome": "positive"
+            }
+        ],
+        "id": "5"
+    },
+    {
+        "name": "Taylor Smith",
+        "attitude_score": 0.6,
+        "perceived_behavioral_control": 0.5,
+        "behavioral_intention": 0.7,
+        "actual_behavior": "pending",
+        "communication_style": "neutral",
+        "resource_availability": 1.0,
+        "agent_type": "SocialNormAgent",
+        "social_norms_score": 0.5,
+        "adjusted_subjective_norms": {
+            "peer_pressure": 0.7,
+            "family_influence": 0.6
+        },
+        "interaction_history": [
+            {
+                "date": "2023-10-01",
+                "interaction": "discussion",
+                "outcome": "positive"
+            }
+        ],
+        "id": "6"
+    },
+    {
+        "name": "Jordan Lee",
+        "attitude_score": 0.6,
+        "perceived_behavioral_control": 0.5,
+        "behavioral_intention": 0.7,
+        "actual_behavior": "pending",
+        "communication_style": "neutral",
+        "resource_availability": 1.0,
+        "agent_type": "SocialNormAgent",
+        "social_norms_score": 0.5,
+        "adjusted_subjective_norms": {
+            "peer_pressure": 0.7,
+            "family_influence": 0.6
+        },
+        "interaction_history": [
+            {
+                "date": "2023-10-01",
+                "interaction": "discussion",
+                "outcome": "positive"
+            }
+        ],
+        "id": "7"
+    },
+    {
+        "name": "Morgan Brown",
+        "attitude_score": 0.6,
+        "perceived_behavioral_control": 0.5,
+        "behavioral_intention": 0.7,
+        "actual_behavior": "pending",
+        "communication_style": "informal",
+        "resource_availability": 1.0,
+        "agent_type": "SocialNormAgent",
+        "social_norms_score": 0.5,
+        "adjusted_subjective_norms": {
+            "peer_pressure": 0.7,
+            "family_influence": 0.6
+        },
+        "interaction_history": [
+            {
+                "date": "2023-10-01",
+                "interaction": "discussion",
+                "outcome": "positive"
+            }
+        ],
+        "id": "8"
+    },
+    {
+        "name": "Casey Davis",
+        "attitude_score": 0.6,
+        "perceived_behavioral_control": 0.5,
+        "behavioral_intention": 0.7,
+        "actual_behavior": "pending",
+        "communication_style": "informal",
+        "resource_availability": 1.0,
+        "agent_type": "SocialNormAgent",
+        "social_norms_score": 0.5,
+        "adjusted_subjective_norms": {
+            "peer_pressure": 0.7,
+            "family_influence": 0.6
+        },
+        "interaction_history": [
+            {
+                "date": "2023-10-01",
+                "interaction": "discussion",
+                "outcome": "positive"
+            }
+        ],
+        "id": "9"
+    }
+]

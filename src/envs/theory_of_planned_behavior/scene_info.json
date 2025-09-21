@@ -1,0 +1,103 @@
+{
+  "domain": "Psychology",
+  "scene_name": "theory_of_planned_behavior",
+  "odd_protocol": {
+    "overview": {
+      "system_goal": "Simulate the core mechanisms of the Theory of Planned Behavior (TPB) using a large language model (LLM) to explore the interactions between attitude, subjective norm, and perceived behavioral control in forming behavioral intentions and predicting actual behavior.",
+      "agent_types": "Agents represent individuals with cognitive capabilities whose behavioral intentions are influenced by TPB components.",
+      "environment_description": "The environment provides context with social norms such as group pressure and situational constraints like resource availability.",
+      "entities_state_variables_scales": "Includes attitude, subjective norm, perceived behavioral control, behavioral intention, and actual behavior as state variables with specified numerical ranges.",
+      "process_overview_and_scheduling": "Initialization of agents with random values, LLM reasoning with input-output transformation, intention calculation using TPB formula, actual behavior determination, and feedback update."
+    },
+    "design_concepts": {
+      "interaction_patterns": "Agents interact by exchanging natural language information, simulating social networks to influence each other's subjective norms.",
+      "communication_protocols": "Utilizes LLM for text-based interaction, parsing environmental inputs like policy regulations and peer opinions.",
+      "decision_mechanisms": "Behavioral intentions are calculated using a weighted sum of TPB components, and actual behavior is triggered based on intention and PBC thresholds.",
+      "theoretical_framework": "Based on Ajzen's TPB theory, assuming linear weighting of components to determine intention, with LLM as the cognitive engine.",
+      "emergence": "Macro behavior patterns may emerge from the dynamic intentions of micro agents, such as S-curve diffusion in groups."
+    },
+    "details": {
+      "agent_behaviors": "Agents aim to maximize behavioral utility consistent with their values, dynamically adjusting TPB components based on feedback.",
+      "decision_algorithms": "Uses TPB formula to compute intentions and employs LLM for reasoning and prediction of behavior consequences.",
+      "specific_constraints": "Social norm intensity and resource availability are environmental parameters affecting agent decision-making.",
+      "initialization": "User-defined number of agents, with uniformly distributed random sampling for initial TPB component values.",
+      "input_data": "LLM input structured as prompt templates, with optional external survey data for weight calibration."
+    }
+  },
+  "agent_types": {
+    "CognitiveAgent": "Represents individuals with cognitive capabilities whose behavioral intentions are influenced by the Theory of Planned Behavior components.",
+    "SocialNormAgent": "Simulates social networks to influence other agents' subjective norms through natural language interactions.",
+    "EnvironmentalAgent": "Provides contextual inputs such as policy regulations, group pressure, and resource availability that affect agent decision-making."
+  },
+  "portrait": {
+    "CognitiveAgent": 2,
+    "SocialNormAgent": 5,
+    "EnvironmentalAgent": 1
+  },
+  "metrics": [
+    {
+      "id": "Average_Behavioral_Intentions",
+      "name": "Average Behavioral Intentions",
+      "description": "Measures the average behavioral intentions across all CognitiveAgents, providing insight into the overall inclination towards certain behaviors in the system.",
+      "visualization_type": "line",
+      "update_interval": 5,
+      "variables": [
+        {
+          "name": "behavioral_intentions",
+          "source_type": "agent",
+          "agent_type": "CognitiveAgent",
+          "path": "behavioral_intentions",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Calculate the average of the 'behavioral_intentions' list. If the list is empty or contains None values, these entries are ignored in the average calculation. If all values are None or the list is empty, the metric should return None or a default value indicating no data.",
+      "function_name": "Average_Behavioral_Intentions"
+    },
+    {
+      "id": "Resource_Availability_vs__Social_Norms_Impact",
+      "name": "Resource Availability vs. Social Norms Impact",
+      "description": "Compares the average resource availability with the average social norms score to understand how environmental resources and social pressures are balancing each other.",
+      "visualization_type": "bar",
+      "update_interval": 5,
+      "variables": [
+        {
+          "name": "resource_availability",
+          "source_type": "env",
+          "path": "resource_availability",
+          "required": true,
+          "is_list": false
+        },
+        {
+          "name": "social_norms_score",
+          "source_type": "agent",
+          "agent_type": "SocialNormAgent",
+          "path": "social_norms_score",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Compute the average of 'social_norms_score' across all SocialNormAgents. Compare this with the 'resource_availability' from the environment. If 'resource_availability' is None, use a default value or skip calculation. For 'social_norms_score', ignore None values in the average calculation.",
+      "function_name": "Resource_Availability_vs__Social_Norms_Impact"
+    },
+    {
+      "id": "Completion_Status_Distribution",
+      "name": "Completion Status Distribution",
+      "description": "Shows the distribution of completion statuses across all CognitiveAgents to assess how many agents have completed their tasks successfully.",
+      "visualization_type": "pie",
+      "update_interval": 5,
+      "variables": [
+        {
+          "name": "completion_status",
+          "source_type": "agent",
+          "agent_type": "CognitiveAgent",
+          "path": "completion_status",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Count occurrences of each unique 'completion_status' value in the list of CognitiveAgents. Handle None values by either categorizing them separately or excluding them from the count. Return a dictionary where keys are the unique statuses and values are their respective counts.",
+      "function_name": "Completion_Status_Distribution"
+    }
+  ]
+}

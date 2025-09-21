@@ -1,0 +1,294 @@
+{
+  "agents": {
+    "IndividualAgent": {
+      "imports": "from typing import Any, List\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "1": {
+          "code": "async def evaluate_cultural_capital(self, event: Event) -> List[Event]:\n        social_class = getattr(event, 'social_class', 'unknown')\n        influence_on_cultural_capital = getattr(event, 'influence_on_cultural_capital', 'neutral')\n\n        observation = f\"Social class: {social_class}, Influence: {influence_on_cultural_capital}\"\n        instruction = \"\"\"\n        Evaluate the individual's cultural capital based on the provided social class and influence.\n        Determine the new level of cultural capital and decide if the individual should pursue further education.\n        Please return the information in the following JSON format:\n    \n        {\n        \"cultural_capital_level\": <The evaluated float level of cultural capital>,\n        \"education_decision\": <True or False based on whether to pursue further education>,\n        \"target_ids\": [\"<The string ID of the target agent(s)>\"]\n        }\n        \"\"\"\n        \n        result = await self.generate_reaction(instruction, observation)\n\n        cultural_capital_level = result.get('cultural_capital_level', 0.0)\n        education_decision = result.get('education_decision', False)\n        target_ids = result.get('target_ids', [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        self.profile.update_data(\"cultural_capital_level\", cultural_capital_level)\n        self.profile.update_data(\"education_decision\", education_decision)\n\n        events = []\n        for target_id in target_ids:\n            cultural_capital_evaluated_event = CulturalCapitalEvaluatedEvent(\n                self.profile_id, target_id, cultural_capital_level, education_decision\n            )\n            events.append(cultural_capital_evaluated_event)\n\n        return events",
+          "metadata": {
+            "id": 1,
+            "name": "evaluate_cultural_capital",
+            "condition": null,
+            "description": "Assess the individual's current level of cultural capital to inform decisions on education and job opportunities.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "social_class",
+                "type": "string",
+                "context": "event",
+                "description": "The assessed social class of the individual influencing cultural capital evaluation."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "cultural_capital_level",
+                "type": "float",
+                "context": "agent",
+                "description": "The updated level of cultural capital for the individual after evaluation."
+              },
+              {
+                "name": "education_decision",
+                "type": "bool",
+                "context": "agent",
+                "description": "Decision made by the individual to pursue further education based on cultural capital evaluation."
+              }
+            ]
+          }
+        },
+        "2": {
+          "code": "async def pursue_education(self, event: Event) -> List[Event]:\n        cultural_capital_level = event.cultural_capital_level\n        education_decision = event.education_decision\n\n        if cultural_capital_level < 0.5 or not education_decision:\n            return []\n\n        education_level = self.profile.get_data(\"education_level\", \"None\")\n        job_search_status = self.profile.get_data(\"job_search_status\", \"not_started\")\n\n        instruction = \"\"\"You are tasked with deciding the next steps for pursuing education based on cultural capital evaluation.\n        Please generate the outcome in the following JSON format:\n    \n        {\n        \"education_level\": \"<The updated level of education completed>\",\n        \"job_search_status\": \"<The updated status of job search>\",\n        \"target_ids\": [\"<The string ID(s) of the target agent(s) to send the EducationCompletedEvent>\"]\n        }\n        \"\"\"\n        observation = f\"Cultural Capital Level: {cultural_capital_level}, Current Education Level: {education_level}, Job Search Status: {job_search_status}\"\n        \n        result = await self.generate_reaction(instruction, observation)\n\n        education_level = result.get('education_level', \"None\")\n        job_search_status = result.get('job_search_status', \"not_started\")\n        target_ids = result.get('target_ids', [])\n\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        self.profile.update_data(\"education_level\", education_level)\n        self.profile.update_data(\"job_search_status\", job_search_status)\n\n        events = []\n        for target_id in target_ids:\n            education_completed_event = EducationCompletedEvent(\n                self.profile_id, target_id, education_level, job_search_status\n            )\n            events.append(education_completed_event)\n\n        return events",
+          "metadata": {
+            "id": 2,
+            "name": "pursue_education",
+            "condition": "Cultural capital level assessment",
+            "description": "Engage in educational activities to improve cultural capital and enhance job prospects.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "cultural_capital_level",
+                "type": "float",
+                "context": "agent",
+                "description": "The current level of cultural capital influencing education pursuit."
+              },
+              {
+                "name": "education_decision",
+                "type": "bool",
+                "context": "agent",
+                "description": "Decision to pursue education based on cultural capital evaluation."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "education_level",
+                "type": "string",
+                "context": "agent",
+                "description": "The level of education completed by the individual."
+              },
+              {
+                "name": "job_search_status",
+                "type": "string",
+                "context": "agent",
+                "description": "Status of job search after education completion."
+              }
+            ]
+          }
+        },
+        "3": {
+          "code": "async def seek_job_opportunities(self, event: Event) -> List[Event]:\n        if event.__class__.__name__ != \"EducationCompletedEvent\":\n            return []\n\n        education_level = event.education_level\n        job_search_status = event.job_search_status\n\n        if job_search_status == \"completed\":\n            return []\n\n        self.profile.update_data(\"education_level\", education_level)\n        self.profile.update_data(\"job_search_status\", job_search_status)\n\n        observation = f\"Education level: {education_level}, Job search status: {job_search_status}\"\n        instruction = \"\"\"Based on the received education level and job search status, determine the job position the agent should seek. \n        Return the following JSON format:\n        {\n            \"job_position\": \"<The job position found by the agent>\",\n            \"workflow_completion_status\": \"<Status indicating completion of job search workflow>\",\n            \"target_ids\": [\"<The string ID(s) of the target agent(s)>\"]\n        }\n        \"\"\"\n    \n        result = await self.generate_reaction(instruction, observation)\n\n        job_position = result.get('job_position', \"None\")\n        workflow_completion_status = result.get('workflow_completion_status', \"incomplete\")\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        self.profile.update_data(\"job_position\", job_position)\n        self.profile.update_data(\"workflow_completion_status\", workflow_completion_status)\n\n        events = []\n        for target_id in target_ids:\n            job_event = JobOpportunityFoundEvent(self.profile_id, target_id, job_position, workflow_completion_status)\n            events.append(job_event)\n\n        return events",
+          "metadata": {
+            "id": 3,
+            "name": "seek_job_opportunities",
+            "condition": null,
+            "description": "Search for job opportunities utilizing the cultural capital and education acquired.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "education_level",
+                "type": "string",
+                "context": "agent",
+                "description": "The level of education completed by the individual, guiding job search."
+              },
+              {
+                "name": "job_search_status",
+                "type": "string",
+                "context": "agent",
+                "description": "Current status of job search process."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "job_position",
+                "type": "string",
+                "context": "agent",
+                "description": "The job position found by the individual."
+              },
+              {
+                "name": "workflow_completion_status",
+                "type": "string",
+                "context": "agent",
+                "description": "Status indicating completion of job search workflow."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "SocialStructureAgent": {
+      "imports": "from typing import Any, List,Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "4": {
+          "code": "async def assess_social_class(self, event: Event) -> List[Event]:\n        # No condition to check as per the requirements\n    \n        # Generate reaction to assess social class\n        observation = \"Assessing social class based on incoming event.\"\n        instruction = \"\"\"\n        Determine the social class of the individual based on current context and event information. \n        Provide an assessment of the social class and its influence on cultural capital. \n        Return the results in the following JSON format:\n        \n        {\n            \"social_class\": \"<Assessed social class>\",\n            \"influence_on_cultural_capital\": \"<Influence on cultural capital>\",\n            \"target_ids\": [\"<Target agent ID or list of IDs>\"]\n        }\n        \"\"\"\n    \n        result = await self.generate_reaction(instruction, observation)\n        \n        social_class = result.get('social_class', 'unknown')\n        influence_on_cultural_capital = result.get('influence_on_cultural_capital', 'neutral')\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n    \n        # Update the agent's profile with the assessed social class and influence\n        self.profile.update_data(\"social_class\", social_class)\n        self.profile.update_data(\"influence_on_cultural_capital\", influence_on_cultural_capital)\n    \n        # Prepare and send the SocialClassAssessedEvent to the target agents\n        events = []\n        for target_id in target_ids:\n            social_class_event = SocialClassAssessedEvent(\n                self.profile_id, target_id, social_class=social_class, influence_on_cultural_capital=influence_on_cultural_capital\n            )\n            events.append(social_class_event)\n        \n        return events",
+          "metadata": {
+            "id": 4,
+            "name": "assess_social_class",
+            "condition": null,
+            "description": "Determine the social class of individuals to influence their cultural capital evaluation.",
+            "type": "OR",
+            "required_variables": [],
+            "output_updates": [
+              {
+                "name": "social_class",
+                "type": "string",
+                "context": "agent",
+                "description": "The assessed social class of the individual."
+              },
+              {
+                "name": "influence_on_cultural_capital",
+                "type": "string",
+                "context": "agent",
+                "description": "The influence of social class assessment on the individual's cultural capital evaluation."
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "events": {
+    "imports": "from onesim.events import Event\nfrom typing import Any",
+    "definitions": {
+      "-1": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": -1,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "IndividualAgent",
+          "to_action_name": "evaluate_cultural_capital",
+          "from_action_id": 0,
+          "to_action_id": 1,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for evaluating cultural capital",
+          "fields": []
+        }
+      },
+      "-2": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": -2,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "SocialStructureAgent",
+          "to_action_name": "assess_social_class",
+          "from_action_id": 0,
+          "to_action_id": 4,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for assessing social class influence",
+          "fields": []
+        }
+      },
+      "1": {
+        "code": "class CulturalCapitalEvaluatedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        cultural_capital_level: float = 0.0,\n        education_decision: bool = False,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.cultural_capital_level = cultural_capital_level\n        self.education_decision = education_decision",
+        "metadata": {
+          "id": 1,
+          "from_agent_type": "IndividualAgent",
+          "from_action_name": "evaluate_cultural_capital",
+          "to_agent_type": "IndividualAgent",
+          "to_action_name": "pursue_education",
+          "from_action_id": 1,
+          "to_action_id": 2,
+          "event_name": "CulturalCapitalEvaluatedEvent",
+          "event_info": "Evaluation of cultural capital completed, decision to pursue education",
+          "fields": [
+            {
+              "name": "cultural_capital_level",
+              "type": "float",
+              "default_value": "0.0",
+              "description": "The evaluated level of cultural capital for the individual."
+            },
+            {
+              "name": "education_decision",
+              "type": "bool",
+              "default_value": "false",
+              "description": "Decision made by the individual to pursue further education based on cultural capital evaluation."
+            }
+          ]
+        }
+      },
+      "2": {
+        "code": "class EducationCompletedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        education_level: str = 'None',\n        job_search_status: str = 'not_started',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.education_level = education_level\n        self.job_search_status = job_search_status",
+        "metadata": {
+          "id": 2,
+          "from_agent_type": "IndividualAgent",
+          "from_action_name": "pursue_education",
+          "to_agent_type": "IndividualAgent",
+          "to_action_name": "seek_job_opportunities",
+          "from_action_id": 2,
+          "to_action_id": 3,
+          "event_name": "EducationCompletedEvent",
+          "event_info": "Education completed, seeking job opportunities",
+          "fields": [
+            {
+              "name": "education_level",
+              "type": "string",
+              "default_value": "None",
+              "description": "The level of education completed by the individual."
+            },
+            {
+              "name": "job_search_status",
+              "type": "string",
+              "default_value": "not_started",
+              "description": "Status of job search after education completion."
+            }
+          ]
+        }
+      },
+      "3": {
+        "code": "class JobOpportunityFoundEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        job_position: str = 'None',\n        workflow_completion_status: str = 'incomplete',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.job_position = job_position\n        self.workflow_completion_status = workflow_completion_status",
+        "metadata": {
+          "id": 3,
+          "from_agent_type": "IndividualAgent",
+          "from_action_name": "seek_job_opportunities",
+          "to_agent_type": "EnvAgent",
+          "to_action_name": "terminate",
+          "from_action_id": 3,
+          "to_action_id": -1,
+          "event_name": "JobOpportunityFoundEvent",
+          "event_info": "Job opportunity found, workflow completed",
+          "fields": [
+            {
+              "name": "job_position",
+              "type": "string",
+              "default_value": "None",
+              "description": "The job position found by the individual."
+            },
+            {
+              "name": "workflow_completion_status",
+              "type": "string",
+              "default_value": "incomplete",
+              "description": "Status indicating completion of job search workflow."
+            }
+          ]
+        }
+      },
+      "4": {
+        "code": "class SocialClassAssessedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        social_",
+        "metadata": {
+          "id": 4,
+          "from_agent_type": "SocialStructureAgent",
+          "from_action_name": "assess_social_class",
+          "to_agent_type": "IndividualAgent",
+          "to_action_name": "evaluate_cultural_capital",
+          "from_action_id": 4,
+          "to_action_id": 1,
+          "event_name": "SocialClassAssessedEvent",
+          "event_info": "Social class assessment completed, influencing cultural capital evaluation",
+          "fields": [
+            {
+              "name": "social_class",
+              "type": "string",
+              "default_value": "unknown",
+              "description": "The assessed social class of the individual."
+            },
+            {
+              "name": "influence_on_cultural_capital",
+              "type": "string",
+              "default_value": "neutral",
+              "description": "The influence of social class assessment on the individual's cultural capital evaluation."
+            }
+          ]
+        }
+      }
+    }
+  }
+}

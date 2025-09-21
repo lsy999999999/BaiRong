@@ -1,0 +1,206 @@
+{
+    "CommunityCommittee": [
+        {
+            "id": 1,
+            "name": "hold_regular_meeting",
+            "description": "Organizes regular meetings to discuss community issues and gather proposals from stakeholders.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "meeting_schedule",
+                    "type": "datetime",
+                    "context": "env",
+                    "description": "Scheduled time for the meeting"
+                },
+                {
+                    "name": "agenda",
+                    "type": "string",
+                    "context": "env",
+                    "description": "Planned agenda for the meeting"
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "meeting_id",
+                    "type": "string",
+                    "context": "env",
+                    "description": "Unique identifier for the meeting"
+                }
+            ]
+        },
+        {
+            "id": 5,
+            "name": "collect_proposals",
+            "description": "Collects proposals and priorities from residents for discussion in the meeting.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "alliance_id",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Unique identifier for the resident alliance"
+                },
+                {
+                    "name": "priority_issues",
+                    "type": "list",
+                    "context": "event",
+                    "description": "List of issues prioritized by the alliance"
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "collected_proposals",
+                    "type": "list",
+                    "context": "agent",
+                    "description": "List of collected proposals from residents"
+                }
+            ]
+        },
+        {
+            "id": 6,
+            "name": "review_assessments",
+            "description": "Reviews feasibility and policy assessments provided by property management and government representatives.",
+            "type": "AND",
+            "required_variables": [
+                {
+                    "name": "assessment_id",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Unique identifier for the feasibility assessment"
+                },
+                {
+                    "name": "policy_id",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Unique identifier for the policy assessment"
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "review_status",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Status of the review process"
+                }
+            ]
+        },
+        {
+            "id": 7,
+            "name": "conduct_voting",
+            "description": "Facilitates voting on proposals to finalize governance solutions.",
+            "type": "AND",
+            "required_variables": [
+                {
+                    "name": "proposal_ids",
+                    "type": "list",
+                    "context": "event",
+                    "description": "List of proposal IDs collected for voting"
+                },
+                {
+                    "name": "review_status",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Status of assessment review"
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "voting_results",
+                    "type": "string",
+                    "context": "env",
+                    "description": "Summary of the voting results"
+                }
+            ]
+        }
+    ],
+    "Resident": [
+        {
+            "id": 2,
+            "name": "form_alliances",
+            "description": "Forms alliances with other residents to propose issues based on shared priorities.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "resident_interests",
+                    "type": "list",
+                    "context": "agent",
+                    "description": "List of interests and priorities of the resident"
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "alliance_id",
+                    "type": "string",
+                    "context": "env",
+                    "description": "Unique identifier for the resident alliance"
+                },
+                {
+                    "name": "priority_issues",
+                    "type": "list",
+                    "context": "env",
+                    "description": "List of issues prioritized by the alliance"
+                }
+            ]
+        }
+    ],
+    "PropertyManagementCompany": [
+        {
+            "id": 3,
+            "name": "evaluate_feasibility",
+            "description": "Evaluates the feasibility of proposed solutions in terms of operational costs and execution speed.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "meeting_id",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Unique identifier for the meeting"
+                },
+                {
+                    "name": "agenda",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Agenda for the meeting"
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "feasibility_report",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Detailed report on the feasibility of proposed solutions"
+                }
+            ]
+        }
+    ],
+    "GovernmentRepresentative": [
+        {
+            "id": 4,
+            "name": "assess_policy_support",
+            "description": "Assesses the policy support and resource allocation for proposed solutions.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "meeting_id",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Unique identifier for the meeting"
+                },
+                {
+                    "name": "agenda",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Agenda for the meeting"
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "policy_support_status",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Status of policy support for proposed solutions"
+                }
+            ]
+        }
+    ]
+}

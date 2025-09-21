@@ -1,0 +1,138 @@
+{
+    "environment": {
+        "variables": [
+            {
+                "name": "policy_effectiveness",
+                "type": "str",
+                "default_value": null
+            }
+        ]
+    },
+    "agents": {
+        "IndividualAgent": {
+            "variables": [
+                {
+                    "name": "income_level",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "education_level",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "social_support",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "health_decision",
+                    "type": "str",
+                    "default_value": null
+                }
+            ]
+        },
+        "FamilyAgent": {
+            "variables": [
+                {
+                    "name": "family_income",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "nutrition_quality",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "education_investment",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "family_health_status",
+                    "type": "str",
+                    "default_value": null
+                }
+            ]
+        },
+        "CommunityAgent": {
+            "variables": [
+                {
+                    "name": "social_capital",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "public_resources",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "medical_facilities",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "community_health_level",
+                    "type": "str",
+                    "default_value": null
+                }
+            ]
+        },
+        "GovernmentAgent": {
+            "variables": [
+                {
+                    "name": "policy_details",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "target_population",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "resource_distribution",
+                    "type": "float",
+                    "default_value": null
+                }
+            ]
+        },
+        "HealthcareSystemAgent": {
+            "variables": [
+                {
+                    "name": "resource_availability",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "service_quality",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "insurance_coverage",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "allocated_resources",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "individual_health_status",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "service_provision_status",
+                    "type": "str",
+                    "default_value": null
+                }
+            ]
+        }
+    }
+}

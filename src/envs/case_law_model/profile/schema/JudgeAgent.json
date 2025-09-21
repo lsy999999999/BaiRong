@@ -1,0 +1,89 @@
+{
+    "name": {
+        "type": "str",
+        "default": "JudgeAgent",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's identifier in the multi-agent system"
+    },
+    "interpreted_precedents": {
+        "type": "str",
+        "default": "awaiting_input",
+        "private": true,
+        "sampling": "default"
+    },
+    "judgment_result": {
+        "type": "str",
+        "default": "pending_review",
+        "private": false,
+        "sampling": "default"
+    },
+    "legal_experience_years": {
+        "type": "int",
+        "default": 15,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            5,
+            40
+        ]
+    },
+    "specialization_field": {
+        "type": "list",
+        "default": [
+            "criminal law"
+        ],
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "criminal law",
+            "civil law",
+            "contract law",
+            "administrative law"
+        ],
+        "sample_size": 1
+    },
+    "current_case_load": {
+        "type": "int",
+        "default": 5,
+        "private": false,
+        "sampling": "default"
+    },
+    "decision_algorithm_version": {
+        "type": "str",
+        "default": "v1.0",
+        "private": true,
+        "sampling": "random",
+        "choices": [
+            "v1.0",
+            "v1.1",
+            "v2.0"
+        ]
+    },
+    "communication_protocol": {
+        "type": "str",
+        "default": "legal_reasoning",
+        "private": false,
+        "sampling": "llm",
+        "description": "Protocol used for communication between agents"
+    },
+    "socio_political_influence": {
+        "type": "float",
+        "default": 0.5,
+        "private": true,
+        "sampling": "default"
+    },
+    "precedent_reference_count": {
+        "type": "int",
+        "default": 10,
+        "private": false,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

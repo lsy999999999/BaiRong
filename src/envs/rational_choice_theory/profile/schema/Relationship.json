@@ -1,0 +1,12 @@
+[
+    {
+        "source_agent": "RationalDecisionMaker",
+        "target_agent": "UtilityEvaluator",
+        "direction": "bidirectional"
+    },
+    {
+        "source_agent": "RationalDecisionMaker",
+        "target_agent": "SocialNetworkInteractor",
+        "direction": "unidirectional"
+    }
+]

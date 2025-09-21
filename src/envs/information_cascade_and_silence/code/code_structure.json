@@ -1,0 +1,795 @@
+{
+  "agents": {
+    "OrdinaryUser": {
+      "imports": "from typing import Any, List,Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "1": {
+          "code": "async def receive_information(self, event: Event) -> List[Event]:\n        # Extract event data\n        information_content = event.information_content\n        source_user_id = event.source_user_id\n        credibility_score = event.credibility_score\n\n        # Prepare observation and instruction for generate_reaction\n        observation = f\"Received information: '{information_content}' from user '{source_user_id}' with credibility score {credibility_score}.\"\n        instruction = \"\"\"\n        You are an OrdinaryUser in a social network simulation. You have just received information from another user.\n        Your task is to decide which user(s) to forward this information to based on the social network structure and the information's credibility.\n        Please return the response in the following JSON format:\n    \n        {\n            \"target_ids\": [\"<List of target user IDs>\"],\n            \"information_content\": \"<Optional: Modified or validated information content>\",\n            \"credibility_score\": <Optional: Adjusted credibility score as a float>\n        }\n        \"\"\"\n\n        # Generate reaction using LLM\n        result = await self.generate_reaction(instruction, observation)\n\n        # Parse response\n        target_ids = result.get(\"target_ids\", [])\n        information_content = result.get(\"information_content\", information_content)\n        credibility_score = result.get(\"credibility_score\", credibility_score)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Prepare outgoing events\n        events = []\n        for target_id in target_ids:\n            outgoing_event = InformationReceivedEvent(\n                self.profile_id,\n                target_id,\n                information_content=information_content,\n                source_user_id=source_user_id,\n                credibility_score=credibility_score\n            )\n            events.append(outgoing_event)\n    \n        return events",
+          "metadata": {
+            "id": 1,
+            "name": "receive_information",
+            "condition": null,
+            "description": "The action where an ordinary user receives information from their social network or the environment to process further.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "information_content",
+                "type": "str",
+                "context": "event",
+                "description": "The content of the information being received by the user."
+              },
+              {
+                "name": "source_user_id",
+                "type": "str",
+                "context": "event",
+                "description": "The ID of the user who shared the information."
+              },
+              {
+                "name": "credibility_score",
+                "type": "float",
+                "context": "event",
+                "description": "The perceived credibility score of the information."
+              }
+            ],
+            "output_updates": []
+          }
+        },
+        "2": {
+          "code": "async def evaluate_information(self, event: Event) -> List[Event]:\n        # Condition Check: Ensure the event matches the required condition\n        if not event.information_content or event.__class__.__name__ != \"InformationReceivedEvent\":\n            return []\n\n        # Retrieve required variables from agent profile and event\n        information_content = event.information_content\n        credibility_score = event.credibility_score\n        verification_tendency = self.profile.get_data(\"verification_tendency\", 0.0)\n\n        # Prepare observation and instruction for generate_reaction\n        observation = f\"Information content: {information_content}, Credibility score: {credibility_score}, Verification tendency: {verification_tendency}\"\n        instruction = \"\"\"Evaluate the credibility of the received information based on the user's verification tendency and perceived credibility score. \n        Return the evaluation result ('credible', 'not credible', or 'undecided') and the target_ids for the outgoing event in the following JSON format:\n        {\n            \"evaluation_result\": \"<Evaluation result>\",\n            \"expression_willingness\": <A float value indicating willingness to express opinion>,\n            \"target_ids\": [\"<The string ID(s) of the target agent(s)>\"]\n        }\n        \"\"\"\n\n        # Generate reaction using LLM\n        result = await self.generate_reaction(instruction, observation)\n\n        # Parse the result\n        evaluation_result = result.get(\"evaluation_result\", \"undecided\")\n        expression_willingness = result.get(\"expression_willingness\", 0.0)\n        target_ids = result.get(\"target_ids\", [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Update the agent's profile with the evaluation result\n        self.profile.update_data(\"evaluation_result\", evaluation_result)\n\n        # Prepare outgoing events\n        events = []\n        for target_id in target_ids:\n            outgoing_event = EvaluationCompleteEvent(\n                self.profile_id, target_id, evaluation_result, expression_willingness\n            )\n            events.append(outgoing_event)\n\n        return events",
+          "metadata": {
+            "id": 2,
+            "name": "evaluate_information",
+            "condition": "Information received from other users or media",
+            "description": "The action where an ordinary user evaluates the credibility of received information and decides its validity based on their tendencies.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "information_content",
+                "type": "str",
+                "context": "agent",
+                "description": "The content of the information being evaluated by the user."
+              },
+              {
+                "name": "credibility_score",
+                "type": "float",
+                "context": "agent",
+                "description": "The perceived credibility score of the information."
+              },
+              {
+                "name": "verification_tendency",
+                "type": "float",
+                "context": "agent",
+                "description": "The user's tendency to verify information before accepting it."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "evaluation_result",
+                "type": "str",
+                "context": "agent",
+                "description": "The result of the user's evaluation, e.g., 'credible', 'not credible', or 'undecided'."
+              }
+            ]
+          }
+        },
+        "3": {
+          "code": "async def express_opinion(self, event: Event) -> List[Event]:\n        # Check if the condition \"Credibility evaluation and isolation risk assessment complete\" is met\n        evaluation_result = self.profile.get_data(\"evaluation_result\", \"undecided\")\n        isolation_fear = self.profile.get_data(\"isolation_fear\", 0.0)\n        expression_willingness = self.profile.get_data(\"expression_willingness\", 0.0)\n\n        if evaluation_result == \"undecided\" or isolation_fear is None:\n            return []\n\n        # Generate reaction to decide whether to express opinion\n        observation = f\"Evaluation Result: {evaluation_result}, Isolation Fear: {isolation_fear}, Expression Willingness: {expression_willingness}\"\n        instruction = \"\"\"Based on the evaluation result and isolation fear, decide whether to express an opinion publicly. \n        Consider the expression willingness and evaluate the situation. \n        Return the information in the following JSON format:\n        {\n            \"opinion_content\": \"<The content of the opinion expressed>\",\n            \"target_ids\": [\"<The string ID or list of IDs of the target audience>\"]\n        }\n        \"\"\"\n\n        result = await self.generate_reaction(instruction, observation)\n\n        opinion_content = result.get('opinion_content', \"\")\n        target_ids = result.get('target_ids', [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Update the expressed opinion in the agent's profile\n        self.profile.update_data(\"expressed_opinion\", opinion_content)\n\n        # Prepare and send the OpinionExpressedEvent to the target audience\n        events = []\n        for target_id in target_ids:\n            opinion_event = OpinionExpressedEvent(self.profile_id, target_id, opinion_content, target_ids)\n            events.append(opinion_event)\n\n        return events",
+          "metadata": {
+            "id": 3,
+            "name": "express_opinion",
+            "condition": "Credibility evaluation and isolation risk assessment complete",
+            "description": "The action where an ordinary user decides whether to publicly express their opinion based on evaluation results and perceived social pressure.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "evaluation_result",
+                "type": "str",
+                "context": "agent",
+                "description": "The result of the user's evaluation of the information."
+              },
+              {
+                "name": "expression_willingness",
+                "type": "float",
+                "context": "agent",
+                "description": "The willingness of the user to express their opinion publicly."
+              },
+              {
+                "name": "isolation_fear",
+                "type": "float",
+                "context": "agent",
+                "description": "The user's fear of social isolation if their opinion is not aligned with the majority."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "expressed_opinion",
+                "type": "str",
+                "context": "agent",
+                "description": "The opinion expressed by the user based on their evaluation and willingness."
+              }
+            ]
+          }
+        },
+        "4": {
+          "code": "async def spread_information(self, event: Event) -> List[Event]:\n        # Condition check (no specific condition defined, so always proceed)\n    \n        # Access required variables from the event\n        opinion_content = event.opinion_content\n        target_audience = event.target_audience\n\n        # Validate required fields\n        if not opinion_content or not target_audience:\n            return []  # Return empty list if required fields are missing\n\n        # Generate reaction to determine target IDs and outgoing event content\n        observation = f\"Opinion Content: {opinion_content}, Target Audience: {target_audience}\"\n        instruction = \"\"\"You are simulating an Ordinary User spreading information in a social network. \n        Based on the provided opinion content and target audience, decide the appropriate target IDs for spreading the information. \n        The target IDs can be a single ID or a list of IDs. Ensure the information content aligns with the provided opinion content. \n        Return the result in the following JSON format:\n\n        {\n        \"information_content\": \"<The content of the information being spread>\",\n        \"target_ids\": [\"<String ID(s) of the target audience>\"]\n        }\n        \"\"\"\n    \n        result = await self.generate_reaction(instruction, observation)\n    \n        information_content = result.get('information_content', None)\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Prepare and send InformationSpreadEvent to each target\n        events = []\n        for target_id in target_ids:\n            spread_event = InformationSpreadEvent(self.profile_id, target_id, information_content)\n            events.append(spread_event)\n    \n        return events",
+          "metadata": {
+            "id": 4,
+            "name": "spread_information",
+            "condition": null,
+            "description": "The action where an ordinary user spreads information and their expressed opinion to their social network.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "expressed_opinion",
+                "type": "str",
+                "context": "agent",
+                "description": "The opinion expressed by the user that is being shared."
+              },
+              {
+                "name": "target_audience",
+                "type": "list",
+                "context": "agent",
+                "description": "A list of user IDs representing the audience receiving the opinion."
+              }
+            ],
+            "output_updates": []
+          }
+        }
+      }
+    },
+    "OpinionLeader": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "5": {
+          "code": "async def create_content(self, event: Event) -> List[Event]:\n        # Condition check: No condition specified, proceed directly\n\n        # Retrieve the required 'content_creation' variable from agent profile\n        content_creation = self.profile.get_data(\"content_creation\", \"\")\n\n        # Generate content and determine target media organization(s)\n        observation = f\"Agent content creation: {content_creation}\"\n        instruction = \"\"\"You are an opinion leader creating content to influence followers and initiate discussions. \n        Please generate meaningful content for dissemination based on the provided observation. \n        Also, decide which media organization(s) to send the content to for further amplification. \n        Return the information in the following JSON format:\n\n        {\n            \"content\": \"<The content generated by the opinion leader>\",\n            \"target_ids\": [\"<The string ID(s) of the media organization(s)>\"]\n        }\n        Note: target_ids can be a single string ID or a list of IDs.\"\"\"\n    \n        result = await self.generate_reaction(instruction, observation)\n\n        # Extract content and target IDs from the LLM's response\n        content = result.get(\"content\", \"\")\n        target_ids = result.get(\"target_ids\", [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Update the agent's profile with the created content\n        self.profile.update_data(\"created_content\", content)\n\n        # Prepare and send the ContentCreatedEvent to the target media organization(s)\n        events = []\n        for target_id in target_ids:\n            content_event = ContentCreatedEvent(self.profile_id, target_id, content=content, media_org_id=target_id)\n            events.append(content_event)\n\n        return events",
+          "metadata": {
+            "id": 5,
+            "name": "create_content",
+            "condition": null,
+            "description": "The action where an opinion leader creates new content to influence their followers and initiate discussions.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "content_creation",
+                "type": "str",
+                "context": "agent",
+                "description": "The content being created by the opinion leader."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "created_content",
+                "type": "str",
+                "context": "agent",
+                "description": "The content created by the opinion leader for dissemination."
+              }
+            ]
+          }
+        },
+        "6": {
+          "code": "async def amplify_information(self, event: Event) -> List[Event]:\n        # Condition Check: Ensure the information is received from ordinary users\n        if event.from_agent_type != \"OrdinaryUser\":\n            return []\n\n        # Extract required data from the incoming event\n        information_content = getattr(event, \"information_content\", \"\")\n        opinion_leader_id = getattr(event, \"opinion_leader_id\", self.profile_id)\n\n        # Validate the incoming event data\n        if not information_content or opinion_leader_id != self.profile_id:\n            return []\n\n        # Prepare observation and instruction for decision-making\n        observation = f\"Information content received: {information_content}\"\n        instruction = \"\"\"You are an opinion leader in a social network. \n        Your goal is to amplify the information provided in the observation to increase its reach. \n        Please process the information content and decide on the amplified content. \n        Additionally, determine the target media organization(s) to share the amplified content with. \n        Return the results in the following JSON format:\n\n        {\n            \"amplified_content\": \"<Processed and amplified content>\",\n            \"target_ids\": [\"<List of media organization IDs>\"]\n        }\n        \"\"\"\n\n        # Generate reaction using the LLM\n        result = await self.generate_reaction(instruction, observation)\n\n        # Extract amplified content and target IDs from the response\n        amplified_content = result.get(\"amplified_content\", None)\n        target_ids = result.get(\"target_ids\", None)\n        if not amplified_content or not target_ids:\n            return []\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Prepare outgoing events for each target media organization\n        events = []\n        for target_id in target_ids:\n            amplified_event = InformationAmplifiedEvent(\n                from_agent_id=self.profile_id,\n                to_agent_id=target_id,\n                amplified_content=amplified_content\n            )\n            events.append(amplified_event)\n\n        return events",
+          "metadata": {
+            "id": 6,
+            "name": "amplify_information",
+            "condition": "Information received from ordinary users",
+            "description": "The action where an opinion leader amplifies information received from ordinary users or other sources to increase its reach.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "information_content",
+                "type": "str",
+                "context": "event",
+                "description": "The content of the information being amplified."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "amplified_content",
+                "type": "str",
+                "context": "agent",
+                "description": "The content amplified by the opinion leader."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "MediaOrganization": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "7": {
+          "code": "async def select_content(self, event: Event) -> List[Event]:\n        content = None\n\n        # Retrieve required variables based on event type\n        if event.__class__.__name__ == \"ContentCreatedEvent\":\n            content = event.content\n            media_org_id = getattr(event, \"media_org_id\", None)\n        elif event.__class__.__name__ == \"InformationAmplifiedEvent\":\n            content = event.amplified_content\n            media_org_id = getattr(event, \"media_org_id\", None)\n        else:\n            return []  # Ignore events that don't match the expected types\n\n        # Validate the event's target media organization ID\n        if media_org_id and media_org_id != self.profile_id:\n            return []  # Ignore the event if it is not meant for this agent\n\n        # Retrieve the media organization's editorial policy\n        editorial_policy = self.profile.get_data(\"editorial_policy\", \"default\")\n\n        # Generate reaction to select content based on editorial policy\n        observation = f\"Content received: {content}. Editorial policy: {editorial_policy}.\"\n        instruction = \"\"\"Analyze the provided content and editorial policy to determine the selected content and criteria for selection.\n        Please return the information in the following JSON format:\n        {\n            \"selected_content\": \"<The content selected for publication>\",\n            \"selection_criteria\": \"<The criteria used for selecting the content>\",\n            \"target_ids\": [\"<The string ID or list of IDs of the target agents>\"]\n        }\n        \"\"\"\n        result = await self.generate_reaction(instruction, observation)\n\n        # Parse the LLM's response\n        selected_content = result.get(\"selected_content\", None)\n        selection_criteria = result.get(\"selection_criteria\", None)\n        target_ids = result.get(\"target_ids\", None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Update the agent's state with the selected content and criteria\n        self.profile.update_data(\"selected_content\", selected_content)\n        self.profile.update_data(\"selection_criteria\", selection_criteria)\n\n        # Prepare and send the ContentSelectedEvent to the target agents\n        events = []\n        for target_id in target_ids:\n            content_selected_event = ContentSelectedEvent(\n                self.profile_id, target_id, selected_content, selection_criteria\n            )\n            events.append(content_selected_event)\n\n        return events",
+          "metadata": {
+            "id": 7,
+            "name": "select_content",
+            "condition": null,
+            "description": "The action where a media organization selects content for publication based on its editorial policy.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "content",
+                "type": "str",
+                "context": "event",
+                "description": "The content submitted to the media organization for selection."
+              },
+              {
+                "name": "editorial_policy",
+                "type": "str",
+                "context": "agent",
+                "description": "The editorial policy guiding the selection of content."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "selected_content",
+                "type": "str",
+                "context": "agent",
+                "description": "The content selected by the media organization for publication."
+              }
+            ]
+          }
+        },
+        "8": {
+          "code": "async def publish_content(self, event: Event) -> List[Event]:\n        # Condition Check: Ensure \"Content selection complete\"\n        selected_content = self.profile.get_data(\"selected_content\", \"\")\n        if not selected_content:\n            return []\n\n        # Validate that selected_content aligns with incoming event data\n        if event.__class__.__name__ == \"ContentSelectedEvent\":\n            event_selected_content = getattr(event, \"selected_content\", None)\n            if event_selected_content and event_selected_content != selected_content:\n                return []  # Ignore if selected_content does not match the event data\n\n        # Observation and Instruction for LLM\n        observation = f\"Selected content: {selected_content}\"\n        instruction = \"\"\"You are tasked with publishing content selected by a media organization. \n        Use the selected content provided in the observation to generate a JSON response in the following format:\n    \n        {\n            \"published_content\": \"<The content to be published>\",\n            \"target_ids\": [\"<The string ID(s) of the FactCheckOrganization agent(s)>\"]\n        }\n    \n        Ensure that 'published_content' is derived directly from the 'selected_content'. \n        'target_ids' can be a single ID or a list of IDs. Strategically decide which FactCheckOrganization(s) to target \n        based on the context provided in the observation.\"\"\"\n\n        # Generate reaction from LLM\n        result = await self.generate_reaction(instruction, observation)\n\n        # Extract and validate response\n        published_content = result.get(\"published_content\", None)\n        target_ids = result.get(\"target_ids\", None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Update agent profile with published content\n        self.profile.update_data(\"published_content\", published_content)\n\n        # Prepare and send outgoing events\n        events = []\n        for target_id in target_ids:\n            content_published_event = ContentPublishedEvent(\n                self.profile_id, target_id, published_content, target_id\n            )\n            events.append(content_published_event)\n\n        return events",
+          "metadata": {
+            "id": 8,
+            "name": "publish_content",
+            "condition": "Content selection complete",
+            "description": "The action where a media organization publishes selected content for public consumption.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "selected_content",
+                "type": "str",
+                "context": "agent",
+                "description": "The content selected by the media organization for publication."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "published_content",
+                "type": "str",
+                "context": "agent",
+                "description": "The content published by the media organization."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "FactCheckOrganization": {
+      "imports": "from typing import Any, List\nimport asyncio\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "9": {
+          "code": "async def monitor_rumors(self, event: Event) -> List[Event]:\n        observation = \"The fact-check organization is monitoring rumors on the social network. No specific condition is required to trigger this action.\"\n\n        instruction = \"\"\"\n        You are tasked with detecting rumors on the social network as part of a fact-check organization's monitoring process. \n        Please identify the rumors, their content, and the detection confidence. Additionally, determine the appropriate target_ids \n        (other FactCheckOrganization agents) for initiating the verification process. The response must be in the following JSON format:\n\n        {\n            \"detected_rumors\": [ \n                {\"rumor_content\": \"<Content of the detected rumor>\", \"detection_confidence\": <Confidence level as a float>} \n            ],\n            \"target_ids\": [\"<List of target agent IDs to send RumorDetectedEvent>\"]\n        }\n        \"\"\"\n\n        result = await self.generate_reaction(instruction, observation)\n\n        detected_rumors = result.get('detected_rumors', [])\n        target_ids = result.get('target_ids', [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        current_rumors = self.profile.get_data(\"detected_rumors\", [])\n        unique_rumors = []\n        for rumor in detected_rumors:\n            existing_rumor = next((r for r in current_rumors if r['rumor_content'] == rumor['rumor_content']), None)\n            if existing_rumor:\n                existing_rumor.update(rumor)\n            else:\n                unique_rumors.append(rumor)\n\n        self.profile.update_data(\"detected_rumors\", current_rumors + unique_rumors)\n\n        events = []\n        for rumor in unique_rumors:\n            rumor_content = rumor.get(\"rumor_content\", \"\")\n            detection_confidence = rumor.get(\"detection_confidence\", 0.0)\n            for target_id in target_ids:\n                rumor_event = RumorDetectedEvent(\n                    self.profile_id, \n                    target_id, \n                    rumor_content=rumor_content, \n                    detection_confidence=detection_confidence\n                )\n                events.append(rumor_event)\n\n        return events",
+          "metadata": {
+            "id": 9,
+            "name": "monitor_rumors",
+            "condition": null,
+            "description": "The action where a fact-check organization monitors social networks for rumors requiring verification.",
+            "type": "OR",
+            "required_variables": [],
+            "output_updates": [
+              {
+                "name": "detected_rumors",
+                "type": "list",
+                "context": "agent",
+                "description": "The list of rumors detected by the fact-check organization."
+              }
+            ]
+          }
+        },
+        "10": {
+          "code": "async def verify_information(self, event: Event) -> List[Event]:\n        if event.__class__.__name__ not in [\"ContentPublishedEvent\", \"RumorDetectedEvent\"]:\n            return []\n\n        if event.__class__.__name__ == \"ContentPublishedEvent\":\n            observation = f\"Event Type: ContentPublishedEvent; Published content: {event.published_content}; Fact-check organization ID: {event.fact_check_org_id}\"\n        elif event.__class__.__name__ == \"RumorDetectedEvent\":\n            observation = f\"Event Type: RumorDetectedEvent; Rumor content: {event.rumor_content}; Detection confidence: {event.detection_confidence}\"\n\n        instruction = \"\"\"Analyze the given content and detection confidence to verify the accuracy of the information.\n        Based on the analysis, generate a verification result ('verified', 'false', or 'unverified') and decide the target platform regulators to notify.\n        Please return the information in the following JSON format:\n        {\n            \"verification_result\": \"<Result of verification: 'verified', 'false', or 'unverified'>\",\n            \"target_ids\": [\"<The string ID(s) of the PlatformRegulator agents>\"]\n        }\n        \"\"\"\n        result = await self.generate_reaction(instruction, observation)\n\n        verification_result = result.get('verification_result', \"unverified\")\n        target_ids = result.get('target_ids', [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        self.profile.update_data(\"verification_result\", verification_result)\n\n        events = []\n        for target_id in target_ids:\n            verification_event = VerificationCompleteEvent(self.profile_id, target_id, verification_result)\n            events.append(verification_event)\n\n        return events",
+          "metadata": {
+            "id": 10,
+            "name": "verify_information",
+            "condition": "Rumor detected or content published",
+            "description": "The action where a fact-check organization verifies the accuracy of detected rumors.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "rumor_content",
+                "type": "str",
+                "context": "event",
+                "description": "The content of the rumor being verified."
+              },
+              {
+                "name": "detection_confidence",
+                "type": "float",
+                "context": "event",
+                "description": "The confidence level of the rumor detection."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "verification_result",
+                "type": "str",
+                "context": "agent",
+                "description": "The result of the verification process, e.g., 'verified', 'false', or 'unverified'."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "PlatformRegulator": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "11": {
+          "code": "async def monitor_content(self, event: Event) -> List[Event]:\n        # Validate incoming event type\n        if event.__class__.__name__ != \"StartEvent\":\n            return []\n\n        # Generate reaction using LLM for decision making\n        instruction = \"\"\"\n        You are a platform regulator tasked with monitoring content on a social media platform. \n        Your goal is to identify content that violates platform policies or poses risks. \n        Ensure the monitored content aligns with platform policies or previous risk assessments.\n        Based on the provided context, decide which content items to monitor and assess their risk levels.\n        Return the response in the following JSON format:\n\n        {\n            \"monitored_content\": [\"<List of content IDs being monitored>\"],\n            \"risk_levels\": [\"<List of risk levels corresponding to monitored content>\"],\n            \"target_ids\": [\"<List of target agent IDs for the next action>\"]\n        }\n        \"\"\"\n        observation = \"The platform regulator is monitoring content based on the initial trigger event.\"\n        result = await self.generate_reaction(instruction, observation)\n\n        # Extract and validate data from the LLM response\n        monitored_content = result.get(\"monitored_content\", [])\n        risk_levels = result.get(\"risk_levels\", [])\n        target_ids = result.get(\"target_ids\", [])\n\n        if not isinstance(monitored_content, list):\n            monitored_content = [monitored_content]\n        if not isinstance(risk_levels, list):\n            risk_levels = [risk_levels]\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Validate risk levels\n        valid_risk_levels = {\"low\", \"medium\", \"high\"}\n        risk_levels = [rl if rl in valid_risk_levels else \"low\" for rl in risk_levels]\n\n        # Update the agent's state with the monitored content\n        current_monitored_content = self.profile.get_data(\"monitored_content\", [])\n        updated_monitored_content = current_monitored_content + monitored_content\n        self.profile.update_data(\"monitored_content\", updated_monitored_content)\n\n        # Prepare and send ContentMonitoredEvent to the next action\n        events = []\n        for target_id, content, risk_level in zip(target_ids, monitored_content, risk_levels):\n            content_event = ContentMonitoredEvent(\n                self.profile_id, target_id, monitored_content=content, risk_level=risk_level\n            )\n            events.append(content_event)\n\n        return events",
+          "metadata": {
+            "id": 11,
+            "name": "monitor_content",
+            "condition": null,
+            "description": "The action where a platform regulator monitors content on the platform to identify policy violations or risks.",
+            "type": "OR",
+            "required_variables": [],
+            "output_updates": [
+              {
+                "name": "monitored_content",
+                "type": "list",
+                "context": "agent",
+                "description": "The list of content monitored by the platform regulator."
+              }
+            ]
+          }
+        },
+        "12": {
+          "code": "async def intervene_content(self, event: Event) -> List[Event]:\n        # Condition Check: Ensure the action is triggered only if content is monitored or verification results are received\n        verification_result = None\n        monitored_content = None\n        risk_level = None\n\n        if event.__class__.__name__ == \"VerificationCompleteEvent\":\n            verification_result = event.verification_result\n            if verification_result == \"unverified\":\n                return []\n        elif event.__class__.__name__ == \"ContentMonitoredEvent\":\n            monitored_content = event.monitored_content\n            risk_level = event.risk_level\n            if not monitored_content or not risk_level:\n                return []\n        else:\n            return []\n\n        # Ensure both conditions are checked simultaneously\n        if verification_result and monitored_content and risk_level:\n            observation = f\"Verification result: {verification_result}, Monitored content: {monitored_content}, Risk level: {risk_level}\"\n        elif verification_result:\n            observation = f\"Verification result: {verification_result}\"\n        elif monitored_content and risk_level:\n            observation = f\"Monitored content: {monitored_content}, Risk level: {risk_level}\"\n        else:\n            return []\n\n        # Generate reaction using LLM\n        instruction = \"\"\"You are a platform regulator intervening to enforce policies on monitored content. \n        Based on the risk level and verification results, decide the intervention action. \n        If the risk level is 'high' or the verification result is 'false', remove the content. \n        If the risk level is 'medium', tag the content. \n        If the risk level is 'low', take no action. \n        Validate whether the intervention aligns with the risk level and was successful.\n        Return the following JSON format:\n        {\n            \"intervention_status\": \"<completed, failed, or pending>\",\n            \"environment_update\": \"<Updates made to the environment>\",\n            \"target_ids\": [\"<The string ID(s) of affected entities>\"]\n        }\n        \"\"\"\n        result = await self.generate_reaction(instruction, observation)\n\n        # Parse LLM response\n        intervention_status = result.get(\"intervention_status\", \"pending\")\n        environment_update = result.get(\"environment_update\", \"\")\n        target_ids = result.get(\"target_ids\", [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Update agent state\n        self.profile.update_data(\"intervention_status\", intervention_status)\n\n        # Prepare outgoing events\n        events = []\n        for target_id in target_ids:\n            intervention_event = InterventionCompleteEvent(\n                self.profile_id, target_id, intervention_status, environment_update\n            )\n            events.append(intervention_event)\n\n        return events",
+          "metadata": {
+            "id": 12,
+            "name": "intervene_content",
+            "condition": "Content monitored or verification results received",
+            "description": "The action where a platform regulator intervenes to enforce policies by tagging or removing content.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "monitored_content",
+                "type": "str",
+                "context": "agent",
+                "description": "The content being assessed for intervention."
+              },
+              {
+                "name": "risk_level",
+                "type": "str",
+                "context": "agent",
+                "description": "The assessed risk level of the monitored content, e.g., 'low', 'medium', or 'high'."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "intervention_status",
+                "type": "str",
+                "context": "agent",
+                "description": "The status of the intervention, e.g., 'completed', 'failed', or 'pending'."
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "events": {
+    "imports": "from onesim.events import Event\nfrom typing import Any, List, Optional",
+    "definitions": {
+      "-1": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": -1,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "OrdinaryUser",
+          "to_action_name": "receive_information",
+          "from_action_id": 0,
+          "to_action_id": 1,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for users to receive information from the environment",
+          "fields": []
+        }
+      },
+      "-2": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": -2,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "OpinionLeader",
+          "to_action_name": "create_content",
+          "from_action_id": 0,
+          "to_action_id": 5,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for opinion leaders to create new content",
+          "fields": []
+        }
+      },
+      "-3": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": -3,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "MediaOrganization",
+          "to_action_name": "select_content",
+          "from_action_id": 0,
+          "to_action_id": 7,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for media organizations to select and publish content",
+          "fields": []
+        }
+      },
+      "-4": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": -4,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "FactCheckOrganization",
+          "to_action_name": "monitor_rumors",
+          "from_action_id": 0,
+          "to_action_id": 9,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for fact-check organizations to monitor rumors",
+          "fields": []
+        }
+      },
+      "-5": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": -5,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "PlatformRegulator",
+          "to_action_name": "monitor_content",
+          "from_action_id": 0,
+          "to_action_id": 11,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for platform regulators to monitor content on social media",
+          "fields": []
+        }
+      },
+      "1": {
+        "code": "class InformationReceivedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        information_content: str = \"\",\n        source_user_id: str = \"\",\n        credibility_score: float = 0.0,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.information_content = information_content\n        self.source_user_id = source_user_id\n        self.credibility_score = credibility_score",
+        "metadata": {
+          "id": 1,
+          "from_agent_type": "OrdinaryUser",
+          "from_action_name": "receive_information",
+          "to_agent_type": "OrdinaryUser",
+          "to_action_name": "evaluate_information",
+          "from_action_id": 1,
+          "to_action_id": 2,
+          "event_name": "InformationReceivedEvent",
+          "event_info": "User receives information and evaluates its credibility",
+          "fields": [
+            {
+              "name": "information_content",
+              "type": "str",
+              "default_value": "",
+              "description": "The content of the information being received by the user."
+            },
+            {
+              "name": "source_user_id",
+              "type": "str",
+              "default_value": "",
+              "description": "The ID of the user who shared the information."
+            },
+            {
+              "name": "credibility_score",
+              "type": "float",
+              "default_value": 0.0,
+              "description": "The perceived credibility score of the information."
+            }
+          ]
+        }
+      },
+      "2": {
+        "code": "class EvaluationCompleteEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        evaluation_result: str = 'undecided',\n        expression_willingness: float = 0.0,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.evaluation_result = evaluation_result\n        self.expression_willingness = expression_willingness",
+        "metadata": {
+          "id": 2,
+          "from_agent_type": "OrdinaryUser",
+          "from_action_name": "evaluate_information",
+          "to_agent_type": "OrdinaryUser",
+          "to_action_name": "express_opinion",
+          "from_action_id": 2,
+          "to_action_id": 3,
+          "event_name": "EvaluationCompleteEvent",
+          "event_info": "User completes evaluation and decides whether to express an opinion",
+          "fields": [
+            {
+              "name": "evaluation_result",
+              "type": "str",
+              "default_value": "undecided",
+              "description": "The result of the user's evaluation, e.g., 'credible', 'not credible', or 'undecided'."
+            },
+            {
+              "name": "expression_willingness",
+              "type": "float",
+              "default_value": 0.0,
+              "description": "The willingness of the user to express their opinion publicly."
+            }
+          ]
+        }
+      },
+      "3": {
+        "code": "class OpinionExpressedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        opinion_content: str = \"\",\n        target_audience: Optional[List[Any]] = None,\n        **kwargs: Any\n    ) -> None:\n        if target_audience is None:\n            target_audience = []\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.opinion_content = opinion_content\n        self.target_audience = target_audience",
+        "metadata": {
+          "id": 3,
+          "from_agent_type": "OrdinaryUser",
+          "from_action_name": "express_opinion",
+          "to_agent_type": "OrdinaryUser",
+          "to_action_name": "spread_information",
+          "from_action_id": 3,
+          "to_action_id": 4,
+          "event_name": "OpinionExpressedEvent",
+          "event_info": "User expresses an opinion and spreads information to their social network",
+          "fields": [
+            {
+              "name": "opinion_content",
+              "type": "str",
+              "default_value": "",
+              "description": "The content of the opinion expressed by the user."
+            },
+            {
+              "name": "target_audience",
+              "type": "list",
+              "default_value": [],
+              "description": "A list of user IDs representing the audience receiving the opinion."
+            }
+          ]
+        }
+      },
+      "4": {
+        "code": "class InformationSpreadEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        information_content: str = \"\",\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.information_content = information_content",
+        "metadata": {
+          "id": 4,
+          "from_agent_type": "OrdinaryUser",
+          "from_action_name": "spread_information",
+          "to_agent_type": "OpinionLeader",
+          "to_action_name": "amplify_information",
+          "from_action_id": 4,
+          "to_action_id": 6,
+          "event_name": "InformationSpreadEvent",
+          "event_info": "Information is spread to opinion leaders for amplification",
+          "fields": [
+            {
+              "name": "information_content",
+              "type": "str",
+              "default_value": "",
+              "description": "The content of the information being spread."
+            },
+            {
+              "name": "opinion_leader_id",
+              "type": "str",
+              "default_value": "",
+              "description": "The ID of the opinion leader receiving the information."
+            }
+          ]
+        }
+      },
+      "5": {
+        "code": "class ContentCreatedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        content: str = \"\",\n        media_org_id: str = \"\",\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.content = content\n        self.media_org_id = media_org_id",
+        "metadata": {
+          "id": 5,
+          "from_agent_type": "OpinionLeader",
+          "from_action_name": "create_content",
+          "to_agent_type": "MediaOrganization",
+          "to_action_name": "select_content",
+          "from_action_id": 5,
+          "to_action_id": 7,
+          "event_name": "ContentCreatedEvent",
+          "event_info": "Opinion leader creates content and sends it to media organizations for selection",
+          "fields": [
+            {
+              "name": "content",
+              "type": "str",
+              "default_value": "",
+              "description": "The content created by the opinion leader."
+            },
+            {
+              "name": "media_org_id",
+              "type": "str",
+              "default_value": "",
+              "description": "The ID of the media organization to which the content is sent."
+            }
+          ]
+        }
+      },
+      "6": {
+        "code": "class InformationAmplifiedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        amplified_content: str = \"\",\n        media_org_id: str = \"\",\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.amplified_content = amplified_content\n        self.media_org_id = media_org_id",
+        "metadata": {
+          "id": 6,
+          "from_agent_type": "OpinionLeader",
+          "from_action_name": "amplify_information",
+          "to_agent_type": "MediaOrganization",
+          "to_action_name": "select_content",
+          "from_action_id": 6,
+          "to_action_id": 7,
+          "event_name": "InformationAmplifiedEvent",
+          "event_info": "Opinion leader amplifies information and shares it with media organizations",
+          "fields": [
+            {
+              "name": "amplified_content",
+              "type": "str",
+              "default_value": "",
+              "description": "The content amplified by the opinion leader."
+            },
+            {
+              "name": "media_org_id",
+              "type": "str",
+              "default_value": "",
+              "description": "The ID of the media organization receiving the amplified content."
+            }
+          ]
+        }
+      },
+      "7": {
+        "code": "class ContentSelectedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        selected_content: str = \"\",\n        selection_criteria: str = \"\",\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.selected_content = selected_content\n        self.selection_criteria = selection_criteria",
+        "metadata": {
+          "id": 7,
+          "from_agent_type": "MediaOrganization",
+          "from_action_name": "select_content",
+          "to_agent_type": "MediaOrganization",
+          "to_action_name": "publish_content",
+          "from_action_id": 7,
+          "to_action_id": 8,
+          "event_name": "ContentSelectedEvent",
+          "event_info": "Media organization selects content based on editorial policy",
+          "fields": [
+            {
+              "name": "selected_content",
+              "type": "str",
+              "default_value": "",
+              "description": "The content selected by the media organization based on editorial policy."
+            },
+            {
+              "name": "selection_criteria",
+              "type": "str",
+              "default_value": "",
+              "description": "The criteria used by the media organization to select the content."
+            }
+          ]
+        }
+      },
+      "8": {
+        "code": "class ContentPublishedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        published_content: str = \"\",\n        fact_check_org_id: str = \"\",\n        **kwargs: Any\n    ) -> None:\n        if not fact_check_org_id:\n            fact_check_org_id = \"\"  # Default to an empty string for consistency\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.published_content = published_content\n        self.fact_check_org_id = fact_check_org_id",
+        "metadata": {
+          "id": 8,
+          "from_agent_type": "MediaOrganization",
+          "from_action_name": "publish_content",
+          "to_agent_type": "FactCheckOrganization",
+          "to_action_name": "verify_information",
+          "from_action_id": 8,
+          "to_action_id": 10,
+          "event_name": "ContentPublishedEvent",
+          "event_info": "Media organization publishes content for public consumption and fact-checking",
+          "fields": [
+            {
+              "name": "published_content",
+              "type": "str",
+              "default_value": "",
+              "description": "The content published by the media organization."
+            },
+            {
+              "name": "fact_check_org_id",
+              "type": "str",
+              "default_value": "",
+              "description": "The ID of the fact-check organization that receives the published content."
+            }
+          ]
+        }
+      },
+      "9": {
+        "code": "class RumorDetectedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        rumor_content: str = \"\",\n        detection_confidence: float = 0.0,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.rumor_content = rumor_content\n        self.detection_confidence = detection_confidence",
+        "metadata": {
+          "id": 9,
+          "from_agent_type": "FactCheckOrganization",
+          "from_action_name": "monitor_rumors",
+          "to_agent_type": "FactCheckOrganization",
+          "to_action_name": "verify_information",
+          "from_action_id": 9,
+          "to_action_id": 10,
+          "event_name": "RumorDetectedEvent",
+          "event_info": "Fact-check organization detects rumors and initiates verification",
+          "fields": [
+            {
+              "name": "rumor_content",
+              "type": "str",
+              "default_value": "",
+              "description": "The content of the rumor detected by the fact-check organization."
+            },
+            {
+              "name": "detection_confidence",
+              "type": "float",
+              "default_value": 0.0,
+              "description": "The confidence level of the rumor detection."
+            }
+          ]
+        }
+      },
+      "10": {
+        "code": "class VerificationCompleteEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        verification_result: str = 'unverified',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.verification_result = verification_result",
+        "metadata": {
+          "id": 10,
+          "from_agent_type": "FactCheckOrganization",
+          "from_action_name": "verify_information",
+          "to_agent_type": "PlatformRegulator",
+          "to_action_name": "intervene_content",
+          "from_action_id": 10,
+          "to_action_id": 12,
+          "event_name": "VerificationCompleteEvent",
+          "event_info": "Fact-check organization completes verification and sends results to platform regulators",
+          "fields": [
+            {
+              "name": "verification_result",
+              "type": "str",
+              "default_value": "unverified",
+              "description": "The result of the verification process, e.g., 'verified', 'false', or 'unverified'."
+            },
+            {
+              "name": "platform_regulator_id",
+              "type": "str",
+              "default_value": "",
+              "description": "The ID of the platform regulator receiving the verification results."
+            }
+          ]
+        }
+      },
+      "11": {
+        "code": "class ContentMonitoredEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        monitored_content: str = \"\",\n        risk_level: str = 'low',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.monitored_content = monitored_content\n        self.risk_level = risk_level",
+        "metadata": {
+          "id": 11,
+          "from_agent_type": "PlatformRegulator",
+          "from_action_name": "monitor_content",
+          "to_agent_type": "PlatformRegulator",
+          "to_action_name": "intervene_content",
+          "from_action_id": 11,
+          "to_action_id": 12,
+          "event_name": "ContentMonitoredEvent",
+          "event_info": "Platform regulator monitors content for potential intervention",
+          "fields": [
+            {
+              "name": "monitored_content",
+              "type": "str",
+              "default_value": "",
+              "description": "The content being monitored by the platform regulator."
+            },
+            {
+              "name": "risk_level",
+              "type": "str",
+              "default_value": "low",
+              "description": "The assessed risk level of the monitored content, e.g., 'low', 'medium', or 'high'."
+            }
+          ]
+        }
+      },
+      "12": {
+        "code": "class InterventionCompleteEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        intervention_status: str = 'pending',\n        environment_update: str = \"\",\n        **kwargs: Any\n    ) -> None:\n        allowed_statuses = ['completed', 'failed', 'pending']\n        if intervention_status not in allowed_statuses:\n            intervention_status = 'pending'  # Fallback to default status\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.intervention_status = intervention_status\n        self.environment_update = environment_update",
+        "metadata": {
+          "id": 12,
+          "from_agent_type": "PlatformRegulator",
+          "from_action_name": "intervene_content",
+          "to_agent_type": "EnvAgent",
+          "to_action_name": "terminate",
+          "from_action_id": 12,
+          "to_action_id": -1,
+          "event_name": "InterventionCompleteEvent",
+          "event_info": "Platform regulator completes intervention and sends final results to the environment",
+          "fields": [
+            {
+              "name": "intervention_status",
+              "type": "str",
+              "default_value": "pending",
+              "description": "The status of the intervention, e.g., 'completed', 'failed', or 'pending'."
+            },
+            {
+              "name": "environment_update",
+              "type": "str",
+              "default_value": "",
+              "description": "The updates made to the environment as a result of the intervention."
+            }
+          ]
+        }
+      }
+    }
+  }
+}

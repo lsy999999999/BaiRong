@@ -1,0 +1,87 @@
+[
+    {
+        "name": "John Doe",
+        "adoption_decision": false,
+        "social_influence": 0.3599942822080998,
+        "innovation_perceived_advantage": 0.38009094781774444,
+        "current_status": "considering",
+        "trialability": 0.431458543492225,
+        "observability": 0.031994936627434245,
+        "compatibility": 0.8365359024957849,
+        "innovation_complexity": 0.23416948106875857,
+        "agent_type": "EarlyAdopters",
+        "network_connections": [
+            "Innovator1",
+            "Innovator2"
+        ],
+        "id": "5"
+    },
+    {
+        "name": "Jane Smith",
+        "adoption_decision": false,
+        "social_influence": 0.4773702138520357,
+        "innovation_perceived_advantage": 0.7677953790108087,
+        "current_status": "considering",
+        "trialability": 0.6816437478825794,
+        "observability": 0.022625608403889608,
+        "compatibility": 0.18452228689557848,
+        "innovation_complexity": 0.7906144120510793,
+        "agent_type": "EarlyAdopters",
+        "network_connections": [
+            "Innovator1",
+            "Innovator2"
+        ],
+        "id": "6"
+    },
+    {
+        "name": "Alice Johnson",
+        "adoption_decision": false,
+        "social_influence": 0.1521621159761356,
+        "innovation_perceived_advantage": 0.29543650984020775,
+        "current_status": "considering",
+        "trialability": 0.2223650455448497,
+        "observability": 0.6731479286147778,
+        "compatibility": 0.17985483887154863,
+        "innovation_complexity": 0.4388230956762299,
+        "agent_type": "EarlyAdopters",
+        "network_connections": [
+            "Innovator1",
+            "Innovator2"
+        ],
+        "id": "7"
+    },
+    {
+        "name": "Robert Brown",
+        "adoption_decision": false,
+        "social_influence": 0.3517453971017114,
+        "innovation_perceived_advantage": 0.6402342915451124,
+        "current_status": "considering",
+        "trialability": 0.14780571048263225,
+        "observability": 0.667933182129637,
+        "compatibility": 0.8947457088843214,
+        "innovation_complexity": 0.5164653973592003,
+        "agent_type": "EarlyAdopters",
+        "network_connections": [
+            "Innovator1",
+            "Innovator2"
+        ],
+        "id": "8"
+    },
+    {
+        "name": "Emily Davis",
+        "adoption_decision": false,
+        "social_influence": 0.3800108000165987,
+        "innovation_perceived_advantage": 0.9100936986794498,
+        "current_status": "considering",
+        "trialability": 0.8328835272102559,
+        "observability": 0.3035098360016255,
+        "compatibility": 0.76765463612565,
+        "innovation_complexity": 0.6138529929534201,
+        "agent_type": "EarlyAdopters",
+        "network_connections": [
+            "Innovator1",
+            "Innovator2"
+        ],
+        "id": "9"
+    }
+]

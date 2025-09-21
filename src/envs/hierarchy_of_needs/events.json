@@ -1,0 +1,162 @@
+{
+    "-1": {
+        "id": -1,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "PhysiologicalAgent",
+        "to_action_name": "assess_physiological_needs",
+        "from_action_id": 0,
+        "to_action_id": 1,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for physiological needs assessment",
+        "fields": []
+    },
+    "-2": {
+        "id": -2,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "SocialAgent",
+        "to_action_name": "evaluate_social_needs",
+        "from_action_id": 0,
+        "to_action_id": 2,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for social needs evaluation",
+        "fields": []
+    },
+    "-3": {
+        "id": -3,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "SelfActualizationAgent",
+        "to_action_name": "identify_self_actualization_goals",
+        "from_action_id": 0,
+        "to_action_id": 3,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for self-actualization goals identification",
+        "fields": []
+    },
+    "1": {
+        "id": 1,
+        "from_agent_type": "PhysiologicalAgent",
+        "from_action_name": "assess_physiological_needs",
+        "to_agent_type": "FeedbackAgent",
+        "to_action_name": "collect_feedback",
+        "from_action_id": 1,
+        "to_action_id": 4,
+        "event_name": "PhysiologicalNeedsMetEvent",
+        "event_info": "Event indicating physiological needs have been met",
+        "fields": [
+            {
+                "name": "agent_id",
+                "type": "str",
+                "default_value": "",
+                "description": "Identifier for the agent whose physiological needs have been met"
+            },
+            {
+                "name": "resources_provided",
+                "type": "list",
+                "default_value": "[]",
+                "description": "List of resources provided to meet physiological needs"
+            },
+            {
+                "name": "satisfaction_level",
+                "type": "float",
+                "default_value": "0.0",
+                "description": "Degree to which physiological needs have been satisfied"
+            }
+        ]
+    },
+    "2": {
+        "id": 2,
+        "from_agent_type": "SocialAgent",
+        "from_action_name": "evaluate_social_needs",
+        "to_agent_type": "FeedbackAgent",
+        "to_action_name": "collect_feedback",
+        "from_action_id": 2,
+        "to_action_id": 4,
+        "event_name": "SocialNeedsSatisfiedEvent",
+        "event_info": "Event indicating social needs have been satisfied",
+        "fields": [
+            {
+                "name": "agent_id",
+                "type": "str",
+                "default_value": "",
+                "description": "Identifier for the agent whose social needs have been satisfied"
+            },
+            {
+                "name": "social_interactions",
+                "type": "list",
+                "default_value": "[]",
+                "description": "List of social interactions that contributed to need satisfaction"
+            },
+            {
+                "name": "satisfaction_level",
+                "type": "float",
+                "default_value": "0.0",
+                "description": "Degree to which social needs have been satisfied"
+            }
+        ]
+    },
+    "3": {
+        "id": 3,
+        "from_agent_type": "SelfActualizationAgent",
+        "from_action_name": "identify_self_actualization_goals",
+        "to_agent_type": "FeedbackAgent",
+        "to_action_name": "collect_feedback",
+        "from_action_id": 3,
+        "to_action_id": 4,
+        "event_name": "SelfActualizationAchievedEvent",
+        "event_info": "Event indicating self-actualization goals have been achieved",
+        "fields": [
+            {
+                "name": "agent_id",
+                "type": "str",
+                "default_value": "",
+                "description": "Identifier for the agent who achieved self-actualization"
+            },
+            {
+                "name": "goals_achieved",
+                "type": "list",
+                "default_value": "[]",
+                "description": "List of self-actualization goals achieved by the agent"
+            },
+            {
+                "name": "satisfaction_level",
+                "type": "float",
+                "default_value": "0.0",
+                "description": "Degree to which self-actualization needs have been satisfied"
+            }
+        ]
+    },
+    "4": {
+        "id": 4,
+        "from_agent_type": "FeedbackAgent",
+        "from_action_name": "collect_feedback",
+        "to_agent_type": "EnvAgent",
+        "to_action_name": "terminate",
+        "from_action_id": 4,
+        "to_action_id": -1,
+        "event_name": "FeedbackProcessedEvent",
+        "event_info": "Final feedback processed, terminating workflow",
+        "fields": [
+            {
+                "name": "feedback_id",
+                "type": "str",
+                "default_value": "",
+                "description": "Identifier for the feedback processed"
+            },
+            {
+                "name": "completion_status",
+                "type": "str",
+                "default_value": "pending",
+                "description": "Status of the feedback processing, e.g., completed, pending"
+            },
+            {
+                "name": "results",
+                "type": "str",
+                "default_value": "",
+                "description": "Summary of the feedback processing results"
+            }
+        ]
+    }
+}

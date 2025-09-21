@@ -1,0 +1,75 @@
+{
+  "domain": "Economics",
+  "scene_name": "auction_mechanism_simulation",
+  "odd_protocol": {
+    "overview": {
+      "system_goal": "Simulate bidding behavior, information revelation processes, and market efficiency under various auction mechanisms to study strategy evolution among different types of buyers and sellers, and how market design impacts welfare distribution and efficiency.",
+      "agent_types": "Includes Buyers characterized by id, private_value, risk_preference, budget, bidding_strategy, learning_rate, experience, and reputation; Sellers with id, reserve_price, production_cost, auction_preference, reputation, and strategy; Auction Platform with mechanism_type, fee_structure, transparency_level, history, and active_auctions; Speculators with id, capital, strategy, information_level, and risk_tolerance.",
+      "environment_description": "The environment is characterized by market_liquidity, information_asymmetry, market_volatility, and regulation_strictness, affecting agent interactions and decision-making processes."
+    },
+    "design_concepts": {
+      "interaction_patterns": "Buyers and sellers interact through auction mechanisms facilitated by the platform. Speculators influence bidding dynamics and market outcomes.",
+      "communication_protocols": "Information is communicated through auction announcements, bidding processes, and post-auction results. Transparency levels vary based on platform settings.",
+      "decision_mechanisms": "Buyers decide based on adjusted private valuations and auction signals. Sellers set auction parameters based on market analysis. Platforms execute auctions based on predefined mechanisms."
+    },
+    "details": {
+      "agent_behaviors": "Buyers adjust strategies based on risk preferences and market signals. Sellers choose auction types and set reserve prices. Platforms manage auction processes. Speculators manipulate market conditions based on capital and strategy.",
+      "decision_algorithms": "Buyers use valuation adjustments and strategic bidding increments. Sellers evaluate market conditions for auction type and reserve price setting. Platforms follow auction protocols based on mechanism type.",
+      "specific_constraints": "Reserve prices must meet or exceed production costs. Bidding strategies are constrained by budget and risk preferences. Auction outcomes depend on mechanism rules and participant strategies."
+    }
+  },
+  "agent_types": {
+    "Buyer": "An agent characterized by individual attributes such as private value, risk preference, budget, and bidding strategy, responsible for participating in auctions to purchase goods or services.",
+    "Seller": "An agent defined by reserve price, production cost, and auction preference, responsible for offering goods or services in auctions and setting conditions for sales.",
+    "AuctionPlatform": "An agent that manages auction processes, defined by mechanism type, fee structure, and transparency level, facilitating interactions between buyers and sellers.",
+    "Speculator": "An agent with capital and strategy, influencing market dynamics through strategic interventions and information manipulation to capitalize on market fluctuations."
+  },
+  "metrics": [
+    {
+      "id": "Bidding_Decision_Over_Time",
+      "name": "Bidding Decision Over Time",
+      "description": "Measures the average private valuation of buyers participating in auctions, providing insights into the perceived value of auctioned items.",
+      "visualization_type": "line",
+      "update_frequency": 5,
+      "variables": [
+        {
+          "name": "bidding_decision",
+          "source_type": "agent",
+          "agent_type": "Buyer",
+          "path": "profile.bidding_decision",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Aggregate the private values of all buyers. Handle None values by ignoring them in the aggregation. If the list is empty or contains only None values, the average is set to 0. Calculate the average by summing the non-None values and dividing by their count.",
+      "function_name": "Bidding_Decision_Over_Time"
+    },
+    {
+      "id": "Average_Seller_Reserve_Price",
+      "name": "Average Seller Reserve Price" ,
+      "description": "Compares the average reserve price set by sellers to their production costs, indicating pricing strategies and potential profit margins.",
+      "visualization_type": "line",
+      "update_frequency": 5,
+      "variables": [
+        {
+          "name": "reserve_price_decision",
+          "source_type": "agent",
+          "agent_type": "Seller",
+          "path": "profile.reserve_price_decision",
+          "required": true,
+          "is_list": true
+        },
+        {
+          "name": "production_cost",
+          "source_type": "agent",
+          "agent_type": "Seller",
+          "path": "profile.production_cost",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Calculate the average reserve price and production cost for all sellers. Handle None values by ignoring them. If either list is empty or contains only None values, the average is set to 0. Compute the average for each by summing the non-None values and dividing by their count. Compare the two averages to assess pricing strategies.",
+      "function_name": "Average_Seller_Reserve_Price"
+    }
+  ]
+}

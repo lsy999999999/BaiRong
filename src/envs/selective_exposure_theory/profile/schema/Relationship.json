@@ -1,0 +1,7 @@
+[
+    {
+        "source_agent": "VoterAgent",
+        "target_agent": "MediaAgent",
+        "direction": "bidirectional"
+    }
+]

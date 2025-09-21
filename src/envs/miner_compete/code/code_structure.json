@@ -1,0 +1,420 @@
+{
+  "agents": {
+    "ResourceMiner": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import Event\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "1": {
+          "code": "async def start_workflow(self, event: Event) -> List[Event]:\n        # Condition check implementation\n        if self.action_condition is not None and not self.action_condition:\n            return []\n    \n        # Data access\n        miner_id = self.profile.agent_id\n    \n        # Decision Making\n        instruction = f\"\"\"\n        The ResourceMiner with ID {miner_id} is initializing its workflow. \n        Please generate the next step for the ResourceMiner, which involves transitioning to the 'observe_environment' state.\n        Please return the information in the following JSON format:\n    \n        {{\n        \"target_ids\": [\"{miner_id}\"]\n        }}\n        \"\"\"\n        result = await self.generate_reaction(instruction)\n        target_ids = result.get('target_ids', [miner_id])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n    \n        # Response Processing\n        events = []\n        for target_id in target_ids:\n            resource_availability_event = ResourceAvailabilityEvent(self.profile_id, target_id)\n            events.append(resource_availability_event)\n        \n        return events",
+          "metadata": {
+            "id": 1,
+            "name": "start_workflow",
+            "condition": null,
+            "description": "Initializes the workflow for the ResourceMiner, setting up the initial state and preparing for the first round of actions.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "miner_id",
+                "type": "string",
+                "context": "agent",
+                "description": "Unique identifier for the ResourceMiner."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "current_state",
+                "type": "string",
+                "context": "agent",
+                "description": "Initial state of the ResourceMiner, e.g., idle, observing, deciding."
+              }
+            ],
+            "code": ""
+          }
+        },
+        "2": {
+          "code": "async def observe_environment(self, event: Event) -> List[Event]:\n        # No condition check required as the condition is null\n    \n        # Retrieve the global map state from the environment\n        global_map_state = await self.get_env_data(\"global_map_state\", {})\n    \n        # Update the agent's observed state with the current global map state\n        self.profile.update_data(\"observed_state\", global_map_state)\n    \n        # Generate a reaction to decide the next action based on the observed state\n        instruction = f\"\"\"\n        The ResourceMiner has observed the current state of the environment, including resource availability and land ownership.\n        Please decide the next action for the ResourceMiner based on the observed state.\n        The observed state is: {global_map_state}.\n        Please return the information in the following JSON format:\n    \n        {{\n            \"target_ids\": [\"{self.profile.agent_id}\"],\n            \"action\": \"decide_investment_strategy\"\n        }}\n        \"\"\"\n        result = await self.generate_reaction(instruction, observation=str(global_map_state))\n        \n        target_ids = result.get('target_ids', [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n    \n        # Prepare and send the LandOwnershipEvent to the ResourceMiner\n        events = []\n        for target_id in target_ids:\n            land_ownership_event = LandOwnershipEvent(self.profile_id, target_id)\n            events.append(land_ownership_event)\n        \n        return events",
+          "metadata": {
+            "id": 2,
+            "name": "observe_environment",
+            "condition": null,
+            "description": "Observes the current state of the environment, including resource availability and land ownership.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "global_map_state",
+                "type": "object",
+                "context": "env",
+                "description": "Current state of the grid, including resource availability and land ownership."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "observed_state",
+                "type": "object",
+                "context": "agent",
+                "description": "Record of the observed environment state."
+              }
+            ],
+            "code": ""
+          }
+        },
+        "3": {
+          "code": "async def decide_investment_strategy(self, event: Event) -> List[Event]:\n        if event.__class__.__name__ != \"LandOwnershipEvent\":\n            return []\n        \n        observed_state = self.profile.get_data(\"observed_state\", None)\n        if observed_state is None:\n            return []\n        \n        instruction = f\"\"\"\n        Based on the observed environment state: {observed_state}, \n        decide the investment strategy for the ResourceMiner agent. \n        The strategy should include target grid cells and investment amounts.\n        Please return the information in the following JSON format:\n    \n        {{\n        \"investment_strategy\": \"<Decided investment strategy>\",\n        \"target_ids\": [\"<The string ID of the grid cell(s) being contested or maintained>\"],\n        \"miner_id\": \"{self.profile.agent_id}\",\n        \"grid_cell_id\": \"<The string ID of the grid cell being contested or maintained>\",\n        \"investment_amount\": \"<The amount of energy invested>\"\n        }}\n        \"\"\"\n        \n        result = await self.generate_reaction(instruction)\n        investment_strategy = result.get('investment_strategy', None)\n        target_ids = result.get('target_ids', None)\n        miner_id = result.get('miner_id', None)\n        grid_cell_id = result.get('grid_cell_id', None)\n        investment_amount = result.get('investment_amount', 0)\n        \n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n        \n        events = []\n        for target_id in target_ids:\n            investment_strategy_event = InvestmentStrategyEvent(self.profile_id, target_id, miner_id=miner_id, grid_cell_id=grid_cell_id, investment_amount=investment_amount)\n            events.append(investment_strategy_event)\n        \n        return events",
+          "metadata": {
+            "id": 3,
+            "name": "decide_investment_strategy",
+            "condition": null,
+            "description": "Decides the investment strategy based on the observed environment state and strategic goals.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "observed_state",
+                "type": "object",
+                "context": "agent",
+                "description": "Record of the observed environment state."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "investment_strategy",
+                "type": "object",
+                "context": "agent",
+                "description": "Decided investment strategy, including target grid cells and investment amounts."
+              }
+            ],
+            "code": ""
+          }
+        },
+        "6": {
+          "code": "async def process_resolution_outcome(self, event: Event) -> List[Event]:\n        if event.__class__.__name__ == \"ResolutionOutcomeEvent\":\n            winner_id = event.winner_id\n            grid_cell_id = event.grid_cell_id\n            investment_amount = event.investment_amount\n            tie_resolution = event.tie_resolution\n            miner_id = event.miner_id\n    \n            instruction = f\"\"\"\n            Process the outcome of the resolution process for the ResourceMiner with ID {miner_id} based on the event details:\n            - Winner ID: {winner_id}\n            - Grid Cell ID: {grid_cell_id}\n            - Investment Amount: {investment_amount}\n            - Tie Resolution: {tie_resolution}\n            Update the current state of the ResourceMiner accordingly.\n            Please return the updated state in the following JSON format:\n            {{\n                \"current_state\": \"<Updated state of the ResourceMiner>\",\n                \"target_ids\": [\"ENV\"]\n            }}\n            \"\"\"\n            result = await self.generate_reaction(instruction)\n            current_state = result.get('current_state', None)\n            target_ids = result.get('target_ids', None)\n            if not isinstance(target_ids, list):\n                target_ids = [target_ids]\n    \n            self.profile.update_data(\"current_state\", current_state)\n            events = []\n            for target_id in target_ids:\n                completion_status = \"success\" if current_state == \"won\" else \"failure\"\n                activities_completed = \"process_resolution_outcome\"\n                activity_completion_event = ActivityCompletionEvent(self.profile_id, target_id, completion_status, miner_id, activities_completed)\n                events.append(activity_completion_event)\n            return events\n        else:\n            return []",
+          "metadata": {
+            "id": 6,
+            "name": "process_resolution_outcome",
+            "condition": null,
+            "description": "Processes the outcome of the resolution process and updates the state accordingly.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "winner_id",
+                "type": "string",
+                "context": "event",
+                "description": "Unique identifier for the ResourceMiner who won the contest."
+              },
+              {
+                "name": "grid_cell_id",
+                "type": "string",
+                "context": "event",
+                "description": "Unique identifier for the contested or maintained grid cell."
+              },
+              {
+                "name": "investment_amount",
+                "type": "integer",
+                "context": "event",
+                "description": "Amount of energy invested by the winning miner."
+              },
+              {
+                "name": "tie_resolution",
+                "type": "boolean",
+                "context": "event",
+                "description": "Flag indicating if the outcome was resolved due to a tie."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "current_state",
+                "type": "string",
+                "context": "agent",
+                "description": "Updated state of the ResourceMiner based on the resolution outcome."
+              }
+            ],
+            "code": ""
+          }
+        }
+      }
+    },
+    "AdjudicatorAgent": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import Event\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "4": {
+          "code": "async def initiate_resolution(self, event: Event) -> List[Event]:\n        if event.__class__.__name__ == \"StartEvent\":\n            instruction = f\"\"\"\n            The AdjudicatorAgent has received a 'StartEvent' to initiate the resolution process for contested land.\n            The resolution process determines the outcome of land ownership disputes among miners.\n            Please provide the necessary information in the following JSON format:\n            \n            {{\n                \"target_ids\": [\"<The string ID of the ResourceMiner agent(s) to receive the resolution outcome>\"]\n            }}\n            \n            Ensure that 'target_ids' can be a single ID or a list of IDs.\n            \"\"\"\n            result = await self.generate_reaction(instruction)\n            \n            target_ids = result.get('target_ids', [])\n            if not isinstance(target_ids, list):\n                target_ids = [target_ids]\n            \n            events = []\n            for target_id in target_ids:\n                resolution_event = ResolutionOutcomeEvent(self.profile_id, target_id)\n                events.append(resolution_event)\n            \n            return events\n        else:\n            return []",
+          "metadata": {
+            "id": 4,
+            "name": "initiate_resolution",
+            "condition": null,
+            "description": "Initializes the resolution process for contested land.",
+            "type": "OR",
+            "required_variables": [],
+            "output_updates": [
+              {
+                "name": "resolution_status",
+                "type": "string",
+                "context": "agent",
+                "description": "Status of the resolution process, e.g., initiated, ongoing, completed."
+              }
+            ],
+            "code": ""
+          }
+        },
+        "5": {
+          "code": "async def resolve_investment_outcome(self, event: Event) -> List[Event]:\n        if event.__class__.__name__ != \"InvestmentStrategyEvent\":\n            return []\n    \n        miner_id = event.miner_id\n        grid_cell_id = event.grid_cell_id\n        investment_amount = event.investment_amount\n    \n        instruction = f\"\"\"\n        Resolve the investment competition for the grid cell {grid_cell_id} contested by the miner {miner_id}.\n        The investment amount is {investment_amount}. Determine the winner based on the highest investment.\n        In case of a tie, randomly select a winner. Return the resolution outcome in the following JSON format:\n        \n        {{\n            \"resolution_outcome\": {{\n                \"winner_id\": \"<The string ID of the winning miner>\",\n                \"grid_cell_id\": \"<The string ID of the contested grid cell>\",\n                \"investment_amount\": \"<The investment amount of the winning miner>\",\n                \"tie_resolution\": \"<True if the outcome was resolved due to a tie, False otherwise>\"\n            }},\n            \"target_ids\": [\"<The string ID of the ResourceMiner to send the outcome to>\"]\n        }}\n        \"\"\"\n        \n        result = await self.generate_reaction(instruction)\n        resolution_outcome = result.get('resolution_outcome', {})\n        target_ids = result.get('target_ids', [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n    \n        events = []\n        for target_id in target_ids:\n            winner_id = resolution_outcome.get('winner_id', '')\n            investment_amount = resolution_outcome.get('investment_amount', 0)\n            tie_resolution = resolution_outcome.get('tie_resolution', False)\n            resolution_event = ResolutionOutcomeEvent(self.profile_id, target_id, winner_id, grid_cell_id, investment_amount, tie_resolution)\n            events.append(resolution_event)\n        \n        return events",
+          "metadata": {
+            "id": 5,
+            "name": "resolve_investment_outcome",
+            "condition": "Investment data received from ResourceMiner and current grid status",
+            "description": "Resolves the outcome of the investment competition and determines the winner.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "investment_strategy",
+                "type": "object",
+                "context": "event",
+                "description": "Investment strategy submitted by the ResourceMiner, including target grid cells and investment amounts."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "resolution_outcome",
+                "type": "object",
+                "context": "agent",
+                "description": "Outcome of the resolution process, including the winner and investment details."
+              }
+            ],
+            "code": ""
+          }
+        }
+      }
+    }
+  },
+  "events": {
+    "imports": "from onesim.events import Event\nfrom typing import Any, List\nfrom datetime import datetime",
+    "definitions": {
+      "-1": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": -1,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "ResourceMiner",
+          "to_action_name": "start_workflow",
+          "from_action_id": 0,
+          "to_action_id": 1,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for the ResourceMiner workflow branch.",
+          "fields": [],
+          "code": ""
+        }
+      },
+      "-2": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": -2,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "AdjudicatorAgent",
+          "to_action_name": "initiate_resolution",
+          "from_action_id": 0,
+          "to_action_id": 4,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for the AdjudicatorAgent resolution process.",
+          "fields": [],
+          "code": ""
+        }
+      },
+      "1": {
+        "code": "class ResourceAvailabilityEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": 1,
+          "from_agent_type": "ResourceMiner",
+          "from_action_name": "start_workflow",
+          "to_agent_type": "ResourceMiner",
+          "to_action_name": "observe_environment",
+          "from_action_id": 1,
+          "to_action_id": 2,
+          "event_name": "ResourceAvailabilityEvent",
+          "event_info": "Event indicating initial or updated resource availability, prompting the ResourceMiner to observe the global map state.",
+          "fields": [],
+          "code": ""
+        }
+      },
+      "2": {
+        "code": "class LandOwnershipEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": 2,
+          "from_agent_type": "ResourceMiner",
+          "from_action_name": "observe_environment",
+          "to_agent_type": "ResourceMiner",
+          "to_action_name": "decide_investment_strategy",
+          "from_action_id": 2,
+          "to_action_id": 3,
+          "event_name": "LandOwnershipEvent",
+          "event_info": "Event detailing current land ownership status, prompting decision-making on energy investment for land contestation or maintenance.",
+          "fields": [],
+          "code": ""
+        }
+      },
+      "3": {
+        "code": "class InvestmentStrategyEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        miner_id: str = \"\",\n        grid_cell_id: str = \"\",\n        investment_amount: int = 0,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.miner_id = miner_id\n        self.grid_cell_id = grid_cell_id\n        self.investment_amount = investment_amount",
+        "metadata": {
+          "id": 3,
+          "from_agent_type": "ResourceMiner",
+          "from_action_name": "decide_investment_strategy",
+          "to_agent_type": "AdjudicatorAgent",
+          "to_action_name": "resolve_investment_outcome",
+          "from_action_id": 3,
+          "to_action_id": 5,
+          "event_name": "InvestmentStrategyEvent",
+          "event_info": "Event conveying the miner's chosen investment strategy to the adjudicator for outcome determination.",
+          "fields": [
+            {
+              "name": "miner_id",
+              "type": "string",
+              "default_value": "",
+              "description": "Unique identifier for the ResourceMiner making the investment."
+            },
+            {
+              "name": "grid_cell_id",
+              "type": "string",
+              "default_value": "",
+              "description": "Unique identifier for the grid cell being contested or maintained."
+            },
+            {
+              "name": "investment_amount",
+              "type": "integer",
+              "default_value": "0",
+              "description": "Amount of energy invested by the miner."
+            }
+          ],
+          "code": ""
+        }
+      },
+      "4": {
+        "code": "class ResolutionOutcomeEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        miner_id: str = \"\",\n        grid_cell_id: str = \"\",\n        winner_id: str = \"\",\n        investment_amount: int = 0,\n        tie_resolution: bool = False,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.miner_id = miner_id\n        self.grid_cell_id = grid_cell_id\n        self.winner_id = winner_id\n        self.investment_amount = investment_amount\n        self.tie_resolution = tie_resolution",
+        "metadata": {
+          "id": 4,
+          "from_agent_type": "AdjudicatorAgent",
+          "from_action_name": "initiate_resolution",
+          "to_agent_type": "ResourceMiner",
+          "to_action_name": "process_resolution_outcome",
+          "from_action_id": 4,
+          "to_action_id": 6,
+          "event_name": "ResolutionOutcomeEvent",
+          "event_info": "Event indicating the outcome of the resolution process for contested land.",
+          "fields": [
+            {
+              "name": "miner_id",
+              "type": "string",
+              "default_value": "",
+              "description": "Unique identifier for the ResourceMiner receiving the outcome."
+            },
+            {
+              "name": "grid_cell_id",
+              "type": "string",
+              "default_value": "",
+              "description": "Unique identifier for the contested or maintained grid cell."
+            },
+            {
+              "name": "winner_id",
+              "type": "string",
+              "default_value": "",
+              "description": "Unique identifier for the ResourceMiner who won the contest."
+            },
+            {
+              "name": "investment_amount",
+              "type": "integer",
+              "default_value": "0",
+              "description": "Amount of energy invested by the winning miner."
+            },
+            {
+              "name": "tie_resolution",
+              "type": "boolean",
+              "default_value": "false",
+              "description": "Flag indicating if the outcome was resolved due to a tie."
+            }
+          ],
+          "code": ""
+        }
+      },
+      "5": {
+        "code": "class ResolutionOutcomeEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        miner_id: str = \"\",\n        grid_cell_id: str = \"\",\n        winner_id: str = \"\",\n        investment_amount: int = 0,\n        tie_resolution: bool = False,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.miner_id = miner_id\n        self.grid_cell_id = grid_cell_id\n        self.winner_id = winner_id\n        self.investment_amount = investment_amount\n        self.tie_resolution = tie_resolution",
+        "metadata": {
+          "id": 5,
+          "from_agent_type": "AdjudicatorAgent",
+          "from_action_name": "resolve_investment_outcome",
+          "to_agent_type": "ResourceMiner",
+          "to_action_name": "process_resolution_outcome",
+          "from_action_id": 5,
+          "to_action_id": 6,
+          "event_name": "ResolutionOutcomeEvent",
+          "event_info": "Event delivering the adjudication results based on investment competitions.",
+          "fields": [
+            {
+              "name": "miner_id",
+              "type": "string",
+              "default_value": "",
+              "description": "Unique identifier for the ResourceMiner receiving the outcome."
+            },
+            {
+              "name": "grid_cell_id",
+              "type": "string",
+              "default_value": "",
+              "description": "Unique identifier for the contested or maintained grid cell."
+            },
+            {
+              "name": "winner_id",
+              "type": "string",
+              "default_value": "",
+              "description": "Unique identifier for the ResourceMiner who won the contest."
+            },
+            {
+              "name": "investment_amount",
+              "type": "integer",
+              "default_value": "0",
+              "description": "Amount of energy invested by the winning miner."
+            },
+            {
+              "name": "tie_resolution",
+              "type": "boolean",
+              "default_value": "false",
+              "description": "Flag indicating if the outcome was resolved due to a tie."
+            }
+          ],
+          "code": ""
+        }
+      },
+      "6": {
+        "code": "class ActivityCompletionEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        completion_status: str = 'success',\n        miner_id: str = \"\",\n        activities_completed: str = \"\",\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.completion_status = completion_status\n        self.miner_id = miner_id\n        self.activities_completed = activities_completed",
+        "metadata": {
+          "id": 6,
+          "from_agent_type": "ResourceMiner",
+          "from_action_name": "process_resolution_outcome",
+          "to_agent_type": "EnvAgent",
+          "to_action_name": "terminate",
+          "from_action_id": 6,
+          "to_action_id": -1,
+          "event_name": "ActivityCompletionEvent",
+          "event_info": "Event signaling the conclusion of the ResourceMiner's current workflow operations.",
+          "fields": [
+            {
+              "name": "completion_status",
+              "type": "string",
+              "default_value": "success",
+              "description": "Status of the workflow operation completion, e.g., success or failure."
+            },
+            {
+              "name": "miner_id",
+              "type": "string",
+              "default_value": "",
+              "description": "Unique identifier for the ResourceMiner completing the activity."
+            },
+            {
+              "name": "activities_completed",
+              "type": "string",
+              "default_value": "",
+              "description": "Description of activities that were completed during the miner's operation."
+            }
+          ],
+          "code": ""
+        }
+      }
+    }
+  }
+}

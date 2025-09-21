@@ -1,0 +1,97 @@
+[
+    {
+        "name": "Alex Johnson",
+        "reserve_level": 1000000.0,
+        "decision_status": "pending_approval",
+        "lending_capacity": 500000.0,
+        "reserve_requirement": 0.18929081656739905,
+        "loan_approval_rate": 0.75,
+        "customer_interaction_count": 0,
+        "agent_type": "BankAgent",
+        "economic_cycle": "recession",
+        "transaction_history": [
+            {
+                "date": "2025-01-01",
+                "amount": 100000.0,
+                "type": "loan_approved"
+            }
+        ],
+        "id": "0"
+    },
+    {
+        "name": "Taylor Smith",
+        "reserve_level": 1000000.0,
+        "decision_status": "pending_approval",
+        "lending_capacity": 500000.0,
+        "reserve_requirement": 0.05034246344812018,
+        "loan_approval_rate": 0.75,
+        "customer_interaction_count": 0,
+        "agent_type": "BankAgent",
+        "economic_cycle": "growth",
+        "transaction_history": [
+            {
+                "date": "2025-01-01",
+                "amount": 100000.0,
+                "type": "loan_approved"
+            }
+        ],
+        "id": "1"
+    },
+    {
+        "name": "Jordan Lee",
+        "reserve_level": 1000000.0,
+        "decision_status": "pending_approval",
+        "lending_capacity": 500000.0,
+        "reserve_requirement": 0.1763116762414183,
+        "loan_approval_rate": 0.75,
+        "customer_interaction_count": 0,
+        "agent_type": "BankAgent",
+        "economic_cycle": "growth",
+        "transaction_history": [
+            {
+                "date": "2025-01-01",
+                "amount": 100000.0,
+                "type": "loan_approved"
+            }
+        ],
+        "id": "2"
+    },
+    {
+        "name": "Casey Brown",
+        "reserve_level": 1000000.0,
+        "decision_status": "pending_approval",
+        "lending_capacity": 500000.0,
+        "reserve_requirement": 0.19153800975234136,
+        "loan_approval_rate": 0.75,
+        "customer_interaction_count": 0,
+        "agent_type": "BankAgent",
+        "economic_cycle": "recession",
+        "transaction_history": [
+            {
+                "date": "2025-01-01",
+                "amount": 100000.0,
+                "type": "loan_approved"
+            }
+        ],
+        "id": "3"
+    },
+    {
+        "name": "Morgan Davis",
+        "reserve_level": 1000000.0,
+        "decision_status": "pending_approval",
+        "lending_capacity": 500000.0,
+        "reserve_requirement": 0.08704544008556403,
+        "loan_approval_rate": 0.75,
+        "customer_interaction_count": 0,
+        "agent_type": "BankAgent",
+        "economic_cycle": "growth",
+        "transaction_history": [
+            {
+                "date": "2025-01-01",
+                "amount": 100000.0,
+                "type": "loan_approved"
+            }
+        ],
+        "id": "4"
+    }
+]

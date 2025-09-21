@@ -1,0 +1,40 @@
+{
+    "domain": "Economics",
+    "scene_name": "grid_based_gold_mining_competition",
+    "odd_protocol": {
+        "overview": {
+            "system_goal": "Enable agents to strategically exploit grid plots to maximize cumulative gold gains with an infinite resource baseline.",
+            "agent_types": "Initially identical agents that can diversify based on stamina utilization and strategies, with no communication or authoritative control.",
+            "environment_description": "Agents operate in a 10x10 grid with 100 plots, engaging in claiming, raiding, and mining activities. Each plot can have only one owner per round, starting unowned.",
+            "turn_based_sequence": "The system operates in round-based sequences of R = 200 rounds, adaptable to 100/200/500 rounds for robustness."
+        },
+        "design_concepts": {
+            "interaction_patterns": "Agents interact by claiming unowned plots, raiding owned plots, defending plots, and mining actions with specific stamina costs.",
+            "communication_protocols": "Agents operate without communication, and no authoritative judgment or punishment system is in place.",
+            "decision_mechanisms": "Agents decide their actions by allocating stamina to four action buckets using deterministic PRNG, influencing outcomes.",
+            "action_sequence_handling": "Actions submitted by agents are evaluated for legality and within budget limits before decisions, with contested claims decided by RNG.",
+            "claim_process": "Unowned plot claiming is decided by RNG when multiple agents apply; plots have protection from raids for one turn after being claimed."
+        },
+        "details": {
+            "agent_behaviors": "Agents allocate stamina each round to maximize resource acquisition through strategic actions that adapt to grid dynamics and ownership transitions.",
+            "decision_algorithms": "Deterministic PRNG is used based on run-seeded keys, with hash computations and modulus for reproducible outcomes.",
+            "specific_constraints": "Each agent has a fixed stamina budget of S=10 per round; mining yield is capped at 3 per plot per round, regardless of total stamina investment.",
+            "raid_handling": "Plots with both owner and defense commitment repel all raids; raided plots without defense are subject to lottery.",
+            "mining_yield_calculation": "Yield is calculated using min(stamina investment, 3) × 1 gold, adjusted for ownership transitions during rounds.",
+            "logging_and_metrics": "Per-round logs for each plot and agent, with metrics on overall system efficiency, ownership stability, and conflict intensity.",
+            "core_metrics": "Measures include ownership stability and turnover rate, conflict intensity markers like raid rates, and efficiency metrics like total yield versus limits."
+        }
+    },
+    "agent_types": {
+        "ClaimAgent": "Responsible for acquiring unowned plots by submitting claims, utilizing RNG when multiple claims are made.",
+        "RaidAgent": "Engages in raiding actions against owned plots, aiming to disrupt ownership and acquire resources.",
+        "DefenderAgent": "Focuses on protecting owned plots from raids, ensuring stability and minimizing resource loss.",
+        "MiningAgent": "Strategically invests stamina in mining actions on owned plots to maximize resource yield each round."
+    },
+    "portrait": {
+        "ClaimAgent": 4,
+        "RaidAgent": 4,
+        "DefenderAgent": 1,
+        "MiningAgent": 3
+    }
+}

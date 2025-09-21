@@ -1,0 +1,72 @@
+[
+    {
+        "name": "Agent John Smith",
+        "policy_details": "Implemented the Renewable Energy Incentive Program to increase the use of solar and wind energy.",
+        "target_population": "Residential homeowners and small businesses",
+        "resource_distribution": 1000000.0,
+        "policy_impact": 0.0,
+        "current_status": "active",
+        "budget_allocation": 500000.0,
+        "policy_duration": 5,
+        "communication_protocol": "Quarterly newsletters and community workshops",
+        "healthcare_accessibility": 75.0,
+        "agent_type": "GovernmentAgent",
+        "id": "15"
+    },
+    {
+        "name": "Agent Maria Gonzalez",
+        "policy_details": "Developed the Urban Green Spaces Initiative to increase public parks and gardens.",
+        "target_population": "Urban city residents",
+        "resource_distribution": 1000000.0,
+        "policy_impact": 0.0,
+        "current_status": "active",
+        "budget_allocation": 500000.0,
+        "policy_duration": 2,
+        "communication_protocol": "Monthly city council meetings and social media updates",
+        "healthcare_accessibility": 75.0,
+        "agent_type": "GovernmentAgent",
+        "id": "16"
+    },
+    {
+        "name": "Agent Li Wei",
+        "policy_details": "Coordinated the Digital Literacy Campaign to enhance internet skills among the elderly.",
+        "target_population": "Senior citizens aged 65 and above",
+        "resource_distribution": 1000000.0,
+        "policy_impact": 0.0,
+        "current_status": "active",
+        "budget_allocation": 500000.0,
+        "policy_duration": 2,
+        "communication_protocol": "Bi-weekly digital literacy classes and local newspaper articles",
+        "healthcare_accessibility": 75.0,
+        "agent_type": "GovernmentAgent",
+        "id": "17"
+    },
+    {
+        "name": "Agent Fatima Khan",
+        "policy_details": "Led the Health and Wellness Outreach Program to improve public health awareness.",
+        "target_population": "Low-income families",
+        "resource_distribution": 1000000.0,
+        "policy_impact": 0.0,
+        "current_status": "active",
+        "budget_allocation": 500000.0,
+        "policy_duration": 9,
+        "communication_protocol": "Weekly health seminars and informational pamphlets",
+        "healthcare_accessibility": 75.0,
+        "agent_type": "GovernmentAgent",
+        "id": "18"
+    },
+    {
+        "name": "Agent David O'Connor",
+        "policy_details": "Established the Cybersecurity Education Initiative to protect against online threats.",
+        "target_population": "High school and college students",
+        "resource_distribution": 1000000.0,
+        "policy_impact": 0.0,
+        "current_status": "active",
+        "budget_allocation": 500000.0,
+        "policy_duration": 8,
+        "communication_protocol": "Online webinars and interactive workshops",
+        "healthcare_accessibility": 75.0,
+        "agent_type": "GovernmentAgent",
+        "id": "19"
+    }
+]

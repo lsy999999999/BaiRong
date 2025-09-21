@@ -1,0 +1,563 @@
+{
+  "agents": {
+    "IndividualAgent": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "1": {
+          "code": "async def make_health_decision(self, event: Event) -> List[Event]:\n        # Condition Check\n        income_level = self.profile.get_data(\"income_level\", 0.0)\n        education_level = self.profile.get_data(\"education_level\", \"\")\n        social_support = self.profile.get_data(\"social_support\", \"\")\n        \n        if income_level <= 0 and not education_level and not social_support:\n            return []\n    \n        # Decision Making\n        instruction = \"\"\"\n        You are tasked with making health decisions based on socioeconomic status, education, and social support. \n        Consider the individual's income level, education attainment, and available social support networks. \n        Determine the health decision outcome and identify target_ids for sending events. \n        Return the information in the following JSON format:\n    \n        {\n        \"health_decision\": \"<The decision made regarding the individual's health>\",\n        \"target_ids\": [\"<The ID(s) of the target agent(s)>\"]\n        }\n        \"\"\"\n        observation = f\"Income Level: {income_level}, Education Level: {education_level}, Social Support: {social_support}\"\n        \n        result = await self.generate_reaction(instruction, observation)\n        \n        health_decision = result.get('health_decision', None)\n        target_ids = result.get('target_ids', None)\n        if not target_ids:\n            return []\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n    \n        # Update agent data\n        self.profile.update_data(\"health_decision\", health_decision)\n    \n        # Prepare outgoing events\n        events = []\n        for target_id in target_ids:\n            if target_id.startswith(\"FamilyAgent\"):\n                event_to_family = HealthDecisionEvent(self.profile_id, target_id, individual_id=self.profile_id,\n                                                      service_requested=health_decision, priority_level=income_level)\n                events.append(event_to_family)\n            elif target_id.startswith(\"HealthcareSystemAgent\"):\n                event_to_healthcare = HealthDecisionEvent(self.profile_id, target_id, individual_id=self.profile_id,\n                                                          service_requested=health_decision, priority_level=income_level)\n                events.append(event_to_healthcare)\n    \n        return events",
+          "metadata": {
+            "id": 1,
+            "name": "make_health_decision",
+            "condition": "Socioeconomic status, education, and social support available",
+            "description": "This action involves the individual agent making decisions regarding their health based on socioeconomic status, education, and available social support.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "income_level",
+                "type": "float",
+                "context": "agent",
+                "description": "Individual's income level affecting healthcare access."
+              },
+              {
+                "name": "education_level",
+                "type": "str",
+                "context": "agent",
+                "description": "Educational attainment influencing health decisions."
+              },
+              {
+                "name": "social_support",
+                "type": "str",
+                "context": "agent",
+                "description": "Available social support networks for health decision-making."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "health_decision",
+                "type": "str",
+                "context": "agent",
+                "description": "Decision made by the individual regarding their health."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "FamilyAgent": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "2": {
+          "code": "async def influence_family_health(self, event: Event) -> List[Event]:\n        # Condition Check: Ensure family decisions on education, nutrition, and health behaviors\n        family_income = self.profile.get_data(\"family_income\", 0.0)\n        nutrition_quality = self.profile.get_data(\"nutrition_quality\", \"unknown\")\n        education_investment = self.profile.get_data(\"education_investment\", 0.0)\n\n        # Logical change: Use 'OR' condition for each criterion\n        if family_income <= 0 and nutrition_quality == \"unknown\" and education_investment <= 0:\n            return []\n\n        # Prepare observation and instruction for generate_reaction\n        observation = f\"\"\"Family Income: {family_income}, \n                          Nutrition Quality: {nutrition_quality}, \n                          Education Investment: {education_investment}\"\"\"\n        instruction = \"\"\"Please assess the family decisions on education, nutrition, and health behaviors.\n        Determine the overall family health status and select the appropriate community agents to send the FamilyHealthImpactEvent.\n        Return the information in the following JSON format:\n    \n        {\n        \"family_health_status\": \"<Overall health status of the family>\",\n        \"target_ids\": [\"<The string ID(s) of the CommunityAgent(s) impacted>\"]\n        }\n        \"\"\"\n    \n        # Generate reaction to determine family health status and target_ids\n        result = await self.generate_reaction(instruction, observation)\n    \n        family_health_status = result.get('family_health_status', \"unknown\")\n        target_ids = result.get('target_ids', [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n        \n        # Validate target_ids for empty or null values\n        if not target_ids:\n            return []\n\n        # Update the agent's profile with the new family health status\n        self.profile.update_data(\"family_health_status\", family_health_status)\n    \n        # Determine the actual resource change based on family health status\n        resource_change = self.calculate_resource_change(family_health_status)\n    \n        # Prepare and send the FamilyHealthImpactEvent to the selected CommunityAgent(s)\n        events = []\n        for target_id in target_ids:\n            family_health_event = FamilyHealthImpactEvent(\n                self.profile_id,\n                target_id,\n                family_id=self.profile_id,\n                impact_type=\"health_influence\",\n                resource_change=resource_change\n            )\n            events.append(family_health_event)\n    \n        return events\n\n    def calculate_resource_change(self, family_health_status: str) -> float:\n        # Logic to calculate resource change based on family health status\n        if family_health_status == \"excellent\":\n            return 1.0\n        elif family_health_status == \"good\":\n            return 0.5\n        elif family_health_status == \"poor\":\n            return -0.5\n        else:\n            return 0.0",
+          "metadata": {
+            "id": 2,
+            "name": "influence_family_health",
+            "condition": "Family decisions on children's education, nutrition, and health behaviors",
+            "description": "The family agent influences the health of family members through decisions on education, nutrition, and health behaviors.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "family_income",
+                "type": "float",
+                "context": "agent",
+                "description": "Family's income affecting health decisions."
+              },
+              {
+                "name": "nutrition_quality",
+                "type": "str",
+                "context": "agent",
+                "description": "Quality of nutrition provided to family members."
+              },
+              {
+                "name": "education_investment",
+                "type": "float",
+                "context": "agent",
+                "description": "Investment in family members' education."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "family_health_status",
+                "type": "str",
+                "context": "agent",
+                "description": "Overall health status of the family after decisions."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "CommunityAgent": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "3": {
+          "code": "async def provide_community_resources(self, event: Event) -> List[Event]:\n        # Condition Check: Availability of social capital, public resources, and medical facilities\n        social_capital = self.profile.get_data(\"social_capital\", None)\n        public_resources = self.profile.get_data(\"public_resources\", None)\n        medical_facilities = self.profile.get_data(\"medical_facilities\", None)\n        \n        if social_capital is None or public_resources is None or medical_facilities is None:\n            return []  # Condition not met\n    \n        # Event Tracking Strategy: Ensure all required events are received\n        if isinstance(event, StartEvent):\n            self.profile.update_data(\"start_event_received\", True)\n        elif isinstance(event, FamilyHealthImpactEvent):\n            self.profile.update_data(\"family_health_event_received\", True)\n            self.profile.update_data(\"family_id\", event.family_id)\n            self.profile.update_data(\"impact_type\", event.impact_type)\n            self.profile.update_data(\"resource_change\", event.resource_change)\n    \n        start_event_received = self.profile.get_data(\"start_event_received\", False)\n        family_health_event_received = self.profile.get_data(\"family_health_event_received\", False)\n    \n        if not (start_event_received and family_health_event_received):\n            return []  # Not all required events received\n    \n        # Decision Making: Use generate_reaction for decisions\n        observation = f\"Social Capital: {social_capital}, Public Resources: {public_resources}, Medical Facilities: {medical_facilities}, Family Impact: {self.profile.get_data('impact_type', 'unknown')}\"\n        instruction = \"\"\"\n        Based on the available social capital, public resources, and medical facilities, along with the family health impact,\n        calculate the community health level and decide the target_ids for sending CommunityResourceEvent.\n        Return the following JSON format:\n        {\n            \"community_health_level\": \"<calculated health level>\",\n            \"resource_needs\": \"<updated resource needs based on context>\",\n            \"urgency_level\": \"<updated urgency level based on context>\",\n            \"target_ids\": [\"<ID(s) of GovernmentAgent(s)>\"]\n        }\n        \"\"\"\n    \n        result = await self.generate_reaction(instruction, observation)\n    \n        community_health_level = result.get('community_health_level', \"default\")\n        resource_needs = result.get('resource_needs', \"none\")\n        urgency_level = result.get('urgency_level', 0)\n        target_ids = result.get('target_ids', None)\n        \n        if not isinstance(target_ids, list) or not target_ids:\n            return []  # Return empty list if target_ids are invalid\n    \n        # Update community health level\n        self.profile.update_data(\"community_health_level\", community_health_level)\n        self.profile.update_data(\"resource_needs\", resource_needs)\n        self.profile.update_data(\"urgency_level\", urgency_level)\n    \n        # Prepare and send CommunityResourceEvent\n        events = []\n        for target_id in target_ids:\n            community_id = self.profile.get_data(\"community_id\", -1)\n            community_resource_event = CommunityResourceEvent(self.profile_id, target_id, community_id, resource_needs, urgency_level)\n            events.append(community_resource_event)\n    \n        return events",
+          "metadata": {
+            "id": 3,
+            "name": "provide_community_resources",
+            "condition": "Availability of social capital and public resources",
+            "description": "Community agents provide resources and support that influence residents' health through social capital and public facilities.",
+            "type": "AND",
+            "required_variables": [
+              {
+                "name": "social_capital",
+                "type": "str",
+                "context": "agent",
+                "description": "Level of social capital available in the community."
+              },
+              {
+                "name": "public_resources",
+                "type": "str",
+                "context": "agent",
+                "description": "Availability of public resources in the community."
+              },
+              {
+                "name": "medical_facilities",
+                "type": "str",
+                "context": "agent",
+                "description": "Access to medical facilities within the community."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "community_health_level",
+                "type": "str",
+                "context": "agent",
+                "description": "Overall health level of the community after resource provision."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "GovernmentAgent": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "4": {
+          "code": "async def implement_health_policies(self, event: Event) -> List[Event]:\n        # Check if both required events have been received\n        start_event_received = self.profile.get_data(\"start_event_received\", False)\n        community_resource_event_received = self.profile.get_data(\"community_resource_event_received\", False)\n\n        # Update profile based on the event type\n        if event.__class__.__name__ == \"StartEvent\":\n            self.profile.update_data(\"start_event_received\", True)\n            start_event_received = True\n        elif event.__class__.__name__ == \"CommunityResourceEvent\":\n            self.profile.update_data(\"community_resource_event_received\", True)\n            community_resource_event_received = True\n\n        # Proceed only if both events have been received\n        if not (start_event_received and community_resource_event_received):\n            return []\n\n        # Retrieve necessary data for condition check\n        policy_goals = self.profile.get_data(\"policy_goals\", \"\")\n        available_resources = self.profile.get_data(\"available_resources\", 0.0)\n\n        # Implement condition check\n        if not (policy_goals and available_resources > 0):\n            return []\n\n        # Retrieve required variables from agent context\n        policy_details = self.profile.get_data(\"policy_details\", \"\")\n        target_population = self.profile.get_data(\"target_population\", \"\")\n        resource_distribution = self.profile.get_data(\"resource_distribution\", 0.0)\n\n        # Generate reaction using LLM\n        instruction = \"\"\"\n        Process the policy details, target population, and resource distribution.\n        Determine the target healthcare system agents that should receive the policy implementation event.\n        Return the information in the following JSON format:\n\n        {\n        \"policy_effectiveness\": \"<Calculated effectiveness of the policy>\",\n        \"target_ids\": [\"<String ID of the affected healthcare system agents>\"]\n        }\n        \"\"\"\n        observation = f\"Policy Details: {policy_details}, Target Population: {target_population}, Resource Distribution: {resource_distribution}\"\n        result = await self.generate_reaction(instruction, observation)\n\n        # Parse the LLM response\n        policy_effectiveness = result.get('policy_effectiveness', \"\")\n        target_ids = result.get('target_ids', [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Validate policy_effectiveness and target_ids\n        if not policy_effectiveness:\n            logger.error(\"Policy effectiveness is empty or null.\")\n            return []\n\n        if not target_ids or not all(target_ids):\n            logger.error(\"Target IDs are empty or invalid.\")\n            return []\n\n        # Update the environment with policy effectiveness\n        self.env.update_data(\"policy_effectiveness\", policy_effectiveness)\n\n        # Prepare and send the PolicyImplementationEvent to each target\n        events = []\n        for target_id in target_ids:\n            policy_id = self.profile.get_data(\"policy_id\", -1)\n            affected_region = self.profile.get_data(\"affected_region\", \"unknown\")\n            resource_allocation_change = self.profile.get_data(\"resource_allocation_change\", 0.0)\n            policy_event = PolicyImplementationEvent(\n                self.profile_id,\n                target_id,\n                policy_id=policy_id,\n                affected_region=affected_region,\n                resource_allocation_change=resource_allocation_change\n            )\n            events.append(policy_event)\n\n        return events",
+          "metadata": {
+            "id": 4,
+            "name": "implement_health_policies",
+            "condition": "Health policy goals and available resources",
+            "description": "Government agents implement health policies that determine the distribution of resources and opportunities, impacting health inequalities.",
+            "type": "AND",
+            "required_variables": [
+              {
+                "name": "policy_details",
+                "type": "str",
+                "context": "agent",
+                "description": "Details of the health policy being implemented."
+              },
+              {
+                "name": "target_population",
+                "type": "str",
+                "context": "agent",
+                "description": "Population targeted by the health policy."
+              },
+              {
+                "name": "resource_distribution",
+                "type": "float",
+                "context": "agent",
+                "description": "Amount of resources allocated by the policy."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "policy_effectiveness",
+                "type": "str",
+                "context": "env",
+                "description": "Effectiveness of the policy in reducing health inequalities."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "HealthcareSystemAgent": {
+      "imports": "from typing import Any, List\nimport asyncio\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "5": {
+          "code": "async def allocate_healthcare_resources(self, event: Event) -> List[Event]:\n        # Condition Check Implementation\n        healthcare_capacity = self.profile.get_data(\"healthcare_capacity\", 0.0)\n        policy_directives = self.profile.get_data(\"policy_directives\", \"\")\n        if healthcare_capacity <= 0 or not policy_directives:\n            return []\n    \n        # Retrieve required variables\n        resource_availability = self.profile.get_data(\"resource_availability\", 0.0)\n        service_quality = self.profile.get_data(\"service_quality\", \"unknown\")\n        insurance_coverage = self.profile.get_data(\"insurance_coverage\", \"unknown\")\n    \n        # Check if all required events have been received\n        received_events = self.profile.get_data(\"received_events\", set())\n        required_events = {\"StartEvent\", \"PolicyImplementationEvent\"}\n        if not required_events.issubset(received_events):\n            return []\n        \n        # Update profile with received events\n        received_events.update(required_events)\n        self.profile.update_data(\"received_events\", received_events)\n    \n        # Decision Making\n        observation = f\"Resource availability: {resource_availability}, Service quality: {service_quality}, Insurance coverage: {insurance_coverage}\"\n        instruction = \"\"\"Allocate healthcare resources based on the current availability, service quality, and insurance coverage. \n        Ensure to provide the amount of resources allocated and the status of the allocation process.\n        Return the response in the following JSON format:\n    \n        {\n        \"allocated_resources\": \"<Amount of resources allocated>\",\n        \"allocation_status\": \"<Status of the allocation process>\",\n        \"target_ids\": [\"<The string ID of the EnvAgent>\"]\n        }\n        \"\"\"\n    \n        result = await self.generate_reaction(instruction, observation)\n    \n        allocated_resources = result.get('allocated_resources', 0.0)\n        allocation_status = result.get('allocation_status', \"pending\")\n        target_ids = result.get('target_ids', [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n        if not target_ids:\n            return []\n    \n        # Update agent profile with the allocated resources and allocation status\n        self.profile.update_data(\"allocated_resources\", allocated_resources)\n        self.profile.update_data(\"allocation_status\", allocation_status)\n    \n        # Prepare and send the HealthcareResourceAllocationEvent to the EnvAgent\n        events = []\n        for target_id in target_ids:\n            healthcare_event = HealthcareResourceAllocationEvent(self.profile_id, target_id, allocation_status, allocated_resources)\n            events.append(healthcare_event)\n    \n        return events",
+          "metadata": {
+            "id": 5,
+            "name": "allocate_healthcare_resources",
+            "condition": "Healthcare system capacity and policy directives",
+            "description": "Healthcare system agents allocate resources affecting service accessibility and quality, impacting individual health outcomes.",
+            "type": "AND",
+            "required_variables": [
+              {
+                "name": "resource_availability",
+                "type": "float",
+                "context": "agent",
+                "description": "Availability of healthcare resources for allocation."
+              },
+              {
+                "name": "service_quality",
+                "type": "str",
+                "context": "agent",
+                "description": "Quality of healthcare services provided."
+              },
+              {
+                "name": "insurance_coverage",
+                "type": "str",
+                "context": "agent",
+                "description": "Level of insurance coverage affecting resource allocation."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "allocated_resources",
+                "type": "float",
+                "context": "agent",
+                "description": "Amount of healthcare resources allocated."
+              }
+            ]
+          }
+        },
+        "6": {
+          "code": "async def request_healthcare_services(self, event: Event) -> List[Event]:\n        # Condition Check Implementation\n        if event.service_requested not in self.valid_services:\n            return []\n        \n        # Update received events to include HealthDecisionEvent\n        received_events = self.profile.get_data(\"received_events\", set())\n        received_events.add(\"HealthDecisionEvent\")\n        self.profile.update_data(\"received_events\", received_events)\n    \n        # Data Access\n        service_requested = event.service_requested\n        priority_level = event.priority_level\n        individual_health_status = self.profile.get_data(\"individual_health_status\", \"unknown\")\n    \n        # Decision Making\n        instruction = \"\"\"\n        Based on the individual's health status, requested service type, and priority level, \n        determine the healthcare service provision status. Return the decision in the following JSON format:\n    \n        {\n        \"service_provision_status\": \"<Status of healthcare service provision>\",\n        \"target_ids\": [\"<The string ID(s) of the target agent(s)>\"]\n        }\n        \"\"\"\n        observation = f\"Service Requested: {service_requested}, Priority Level: {priority_level}, Health Status: {individual_health_status}\"\n        result = await self.generate_reaction(instruction, observation)\n    \n        # Response Processing\n        service_provision_status = result.get('service_provision_status', \"pending\")\n        target_ids = result.get('target_ids', [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n        if not target_ids:\n            return []\n    \n        # Data Modification\n        self.profile.update_data(\"service_provision_status\", service_provision_status)\n    \n        # Prepare outgoing events\n        events = []\n        for target_id in target_ids:\n            healthcare_event = HealthcareServiceProvidedEvent(self.profile_id, target_id, service_provision_status)\n            events.append(healthcare_event)\n    \n        return events",
+          "metadata": {
+            "id": 6,
+            "name": "request_healthcare_services",
+            "condition": "Individual requests for healthcare services",
+            "description": "Healthcare system agents respond to individual requests for services, determining service provision based on available resources.",
+            "type": "AND",
+            "required_variables": [
+              {
+                "name": "service_requested",
+                "type": "str",
+                "context": "event",
+                "description": "Type of healthcare service requested by the individual."
+              },
+              {
+                "name": "priority_level",
+                "type": "int",
+                "context": "event",
+                "description": "Priority level of the healthcare service request."
+              },
+              {
+                "name": "individual_health_status",
+                "type": "str",
+                "context": "agent",
+                "description": "Health status of the individual requesting services."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "service_provision_status",
+                "type": "str",
+                "context": "agent",
+                "description": "Status of healthcare service provision."
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "events": {
+    "imports": "from onesim.events import Event\nfrom typing import Any",
+    "definitions": {
+      "-1": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": -1,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "IndividualAgent",
+          "to_action_name": "make_health_decision",
+          "from_action_id": 0,
+          "to_action_id": 1,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for individual health decision making",
+          "fields": []
+        }
+      },
+      "-2": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": -2,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "FamilyAgent",
+          "to_action_name": "influence_family_health",
+          "from_action_id": 0,
+          "to_action_id": 2,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for family health influence",
+          "fields": []
+        }
+      },
+      "-3": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": -3,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "CommunityAgent",
+          "to_action_name": "provide_community_resources",
+          "from_action_id": 0,
+          "to_action_id": 3,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for community resource provision",
+          "fields": []
+        }
+      },
+      "-4": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": -4,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "GovernmentAgent",
+          "to_action_name": "implement_health_policies",
+          "from_action_id": 0,
+          "to_action_id": 4,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for government policy implementation",
+          "fields": []
+        }
+      },
+      "-5": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": -5,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "HealthcareSystemAgent",
+          "to_action_name": "allocate_healthcare_resources",
+          "from_action_id": 0,
+          "to_action_id": 5,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for healthcare resource allocation",
+          "fields": []
+        }
+      },
+      "1": {
+        "code": "class HealthDecisionEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        individual_id: int = -1,\n        service_requested: str = \"none\",\n        priority_level: int = 0,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.individual_id = individual_id\n        self.service_requested = service_requested\n        self.priority_level = priority_level",
+        "metadata": {
+          "id": 1,
+          "from_agent_type": "IndividualAgent",
+          "from_action_name": "make_health_decision",
+          "to_agent_type": "FamilyAgent",
+          "to_action_name": "influence_family_health",
+          "from_action_id": 1,
+          "to_action_id": 2,
+          "event_name": "HealthDecisionEvent",
+          "event_info": "Individual health decisions impacting family health",
+          "fields": [
+            {
+              "name": "individual_id",
+              "type": "int",
+              "default_value": -1,
+              "description": "Unique identifier for the individual seeking healthcare services"
+            },
+            {
+              "name": "service_requested",
+              "type": "str",
+              "default_value": "none",
+              "description": "Type of healthcare service requested by the individual"
+            },
+            {
+              "name": "priority_level",
+              "type": "int",
+              "default_value": 0,
+              "description": "Priority level of the healthcare service request"
+            }
+          ]
+        }
+      },
+      "2": {
+        "code": "class HealthDecisionEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        individual_id: int = -1,\n        service_requested: str = \"none\",\n        priority_level: int = 0,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.individual_id = individual_id\n        self.service_requested = service_requested\n        self.priority_level = priority_level",
+        "metadata": {
+          "id": 2,
+          "from_agent_type": "IndividualAgent",
+          "from_action_name": "make_health_decision",
+          "to_agent_type": "HealthcareSystemAgent",
+          "to_action_name": "request_healthcare_services",
+          "from_action_id": 1,
+          "to_action_id": 6,
+          "event_name": "HealthDecisionEvent",
+          "event_info": "Individual seeking healthcare services",
+          "fields": [
+            {
+              "name": "individual_id",
+              "type": "int",
+              "default_value": -1,
+              "description": "Unique identifier for the individual seeking healthcare services"
+            },
+            {
+              "name": "service_requested",
+              "type": "str",
+              "default_value": "none",
+              "description": "Type of healthcare service requested by the individual"
+            },
+            {
+              "name": "priority_level",
+              "type": "int",
+              "default_value": 0,
+              "description": "Priority level of the healthcare service request"
+            }
+          ]
+        }
+      },
+      "3": {
+        "code": "class FamilyHealthImpactEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        family_id: int = -1,\n        impact_type: str = \"unknown\",\n        resource_change: float = 0.0,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.family_id = family_id\n        self.impact_type = impact_type\n        self.resource_change = resource_change",
+        "metadata": {
+          "id": 3,
+          "from_agent_type": "FamilyAgent",
+          "from_action_name": "influence_family_health",
+          "to_agent_type": "CommunityAgent",
+          "to_action_name": "provide_community_resources",
+          "from_action_id": 2,
+          "to_action_id": 3,
+          "event_name": "FamilyHealthImpactEvent",
+          "event_info": "Family health influence affecting community resources",
+          "fields": [
+            {
+              "name": "family_id",
+              "type": "int",
+              "default_value": -1,
+              "description": "Unique identifier for the family influencing community resources"
+            },
+            {
+              "name": "impact_type",
+              "type": "str",
+              "default_value": "unknown",
+              "description": "Type of impact the family health has on community resources"
+            },
+            {
+              "name": "resource_change",
+              "type": "float",
+              "default_value": 0.0,
+              "description": "Amount of change in community resources due to family health"
+            }
+          ]
+        }
+      },
+      "4": {
+        "code": "class CommunityResourceEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        community_id: int = -1,\n        resource_needs: str = \"none\",\n        urgency_level: int = 0,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.community_id = community_id\n        self.resource_needs = resource_needs\n        self.urgency_level = urgency_level",
+        "metadata": {
+          "id": 4,
+          "from_agent_type": "CommunityAgent",
+          "from_action_name": "provide_community_resources",
+          "to_agent_type": "GovernmentAgent",
+          "to_action_name": "implement_health_policies",
+          "from_action_id": 3,
+          "to_action_id": 4,
+          "event_name": "CommunityResourceEvent",
+          "event_info": "Community resource needs informing government policies",
+          "fields": [
+            {
+              "name": "community_id",
+              "type": "int",
+              "default_value": -1,
+              "description": "Unique identifier for the community informing government policies"
+            },
+            {
+              "name": "resource_needs",
+              "type": "str",
+              "default_value": "none",
+              "description": "Description of community resource needs"
+            },
+            {
+              "name": "urgency_level",
+              "type": "int",
+              "default_value": 0,
+              "description": "Urgency level of the resource needs"
+            }
+          ]
+        }
+      },
+      "5": {
+        "code": "class PolicyImplementationEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        policy_id: int = -1,\n        affected_region: str = \"unknown\",\n        resource_allocation_change: float = 0.0,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.policy_id = policy_id\n        self.affected_region = affected_region\n        self.resource_allocation_change = resource_allocation_change",
+        "metadata": {
+          "id": 5,
+          "from_agent_type": "GovernmentAgent",
+          "from_action_name": "implement_health_policies",
+          "to_agent_type": "HealthcareSystemAgent",
+          "to_action_name": "allocate_healthcare_resources",
+          "from_action_id": 4,
+          "to_action_id": 5,
+          "event_name": "PolicyImplementationEvent",
+          "event_info": "Government policies affecting healthcare resource allocation",
+          "fields": [
+            {
+              "name": "policy_id",
+              "type": "int",
+              "default_value": -1,
+              "description": "Unique identifier for the government policy being implemented"
+            },
+            {
+              "name": "affected_region",
+              "type": "str",
+              "default_value": "unknown",
+              "description": "Region affected by the policy implementation"
+            },
+            {
+              "name": "resource_allocation_change",
+              "type": "float",
+              "default_value": 0.0,
+              "description": "Change in healthcare resource allocation due to policy"
+            }
+          ]
+        }
+      },
+      "6": {
+        "code": "class HealthcareResourceAllocationEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        allocation_status: str = \"pending\",\n        allocated_resources: float = 0.0,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.allocation_status = allocation_status\n        self.allocated_resources = allocated_resources",
+        "metadata": {
+          "id": 6,
+          "from_agent_type": "HealthcareSystemAgent",
+          "from_action_name": "allocate_healthcare_resources",
+          "to_agent_type": "EnvAgent",
+          "to_action_name": "terminate",
+          "from_action_id": 5,
+          "to_action_id": -1,
+          "event_name": "HealthcareResourceAllocationEvent",
+          "event_info": "Completion of healthcare resource allocation process",
+          "fields": [
+            {
+              "name": "allocation_status",
+              "type": "str",
+              "default_value": "pending",
+              "description": "Status of the healthcare resource allocation process"
+            },
+            {
+              "name": "allocated_resources",
+              "type": "float",
+              "default_value": 0.0,
+              "description": "Amount of resources allocated in the process"
+            }
+          ]
+        }
+      },
+      "7": {
+        "code": "class HealthcareServiceProvidedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        service_status: str = \"pending\",\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.service_status = service_status",
+        "metadata": {
+          "id": 7,
+          "from_agent_type": "HealthcareSystemAgent",
+          "from_action_name": "request_healthcare_services",
+          "to_agent_type": "EnvAgent",
+          "to_action_name": "terminate",
+          "from_action_id": 6,
+          "to_action_id": -1,
+          "event_name": "HealthcareServiceProvidedEvent",
+          "event_info": "Completion of healthcare service provision",
+          "fields": [
+            {
+              "name": "service_status",
+              "type": "str",
+              "default_value": "pending",
+              "description": "Status of the healthcare service provision"
+            },
+            {
+              "name": "services_provided",
+              "type": "str",
+              "default_value": "none",
+              "description": "List of healthcare services provided"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

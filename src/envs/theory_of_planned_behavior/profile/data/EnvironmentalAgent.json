@@ -1,0 +1,117 @@
+[
+    {
+        "name": "EcoGuardian",
+        "attitude": 0.5,
+        "subjective_norm": 0.5,
+        "perceived_behavioral_control": 0.5,
+        "behavioral_intention": 0.5,
+        "actual_behavior": "undecided",
+        "social_norm_intensity": 0.3727581567778089,
+        "communication_protocol": "Wireless Sensor Network",
+        "agent_type": "EnvironmentalAgent",
+        "resource_availability": 1.0,
+        "situational_constraints": {
+            "constraint_type": "none",
+            "severity": 0
+        },
+        "interaction_history": [
+            {
+                "interaction": "initial",
+                "timestamp": "2025-04-01T00:00:00"
+            }
+        ],
+        "id": "10"
+    },
+    {
+        "name": "GreenSentinel",
+        "attitude": 0.5,
+        "subjective_norm": 0.5,
+        "perceived_behavioral_control": 0.5,
+        "behavioral_intention": 0.5,
+        "actual_behavior": "undecided",
+        "social_norm_intensity": 0.48476406489000146,
+        "communication_protocol": "Bluetooth Low Energy",
+        "agent_type": "EnvironmentalAgent",
+        "resource_availability": 1.0,
+        "situational_constraints": {
+            "constraint_type": "none",
+            "severity": 0
+        },
+        "interaction_history": [
+            {
+                "interaction": "initial",
+                "timestamp": "2025-04-01T00:00:00"
+            }
+        ],
+        "id": "11"
+    },
+    {
+        "name": "NatureWatch",
+        "attitude": 0.5,
+        "subjective_norm": 0.5,
+        "perceived_behavioral_control": 0.5,
+        "behavioral_intention": 0.5,
+        "actual_behavior": "undecided",
+        "social_norm_intensity": 0.51523241257671,
+        "communication_protocol": "Zigbee",
+        "agent_type": "EnvironmentalAgent",
+        "resource_availability": 1.0,
+        "situational_constraints": {
+            "constraint_type": "none",
+            "severity": 0
+        },
+        "interaction_history": [
+            {
+                "interaction": "initial",
+                "timestamp": "2025-04-01T00:00:00"
+            }
+        ],
+        "id": "12"
+    },
+    {
+        "name": "EarthKeeper",
+        "attitude": 0.5,
+        "subjective_norm": 0.5,
+        "perceived_behavioral_control": 0.5,
+        "behavioral_intention": 0.5,
+        "actual_behavior": "undecided",
+        "social_norm_intensity": 0.5976065603127633,
+        "communication_protocol": "Wi-Fi Direct",
+        "agent_type": "EnvironmentalAgent",
+        "resource_availability": 1.0,
+        "situational_constraints": {
+            "constraint_type": "none",
+            "severity": 0
+        },
+        "interaction_history": [
+            {
+                "interaction": "initial",
+                "timestamp": "2025-04-01T00:00:00"
+            }
+        ],
+        "id": "13"
+    },
+    {
+        "name": "EnviroScout",
+        "attitude": 0.5,
+        "subjective_norm": 0.5,
+        "perceived_behavioral_control": 0.5,
+        "behavioral_intention": 0.5,
+        "actual_behavior": "undecided",
+        "social_norm_intensity": 0.9479095648342791,
+        "communication_protocol": "LoRaWAN",
+        "agent_type": "EnvironmentalAgent",
+        "resource_availability": 1.0,
+        "situational_constraints": {
+            "constraint_type": "none",
+            "severity": 0
+        },
+        "interaction_history": [
+            {
+                "interaction": "initial",
+                "timestamp": "2025-04-01T00:00:00"
+            }
+        ],
+        "id": "14"
+    }
+]

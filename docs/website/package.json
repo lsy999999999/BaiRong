@@ -1,0 +1,63 @@
+{
+	"name": "@yulan/onesim-docs",
+	"version": "1.0.0",
+	"description": "Official documentation website for YuLan-OneSim: A Next Generation Social Simulator with LLMs.",
+	"author": {
+		"name": "YuLan-OneSim Team",
+		"email": "team@yulan-onesim.com",
+		"url": "https://github.com/RUC-GSAI/YuLan-OneSim"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/RUC-GSAI/YuLan-OneSim.git"
+	},
+	"keywords": [
+		"social-simulation",
+		"llm",
+		"agents",
+		"social-science",
+		"artificial-intelligence",
+		"research",
+		"simulator"
+	],
+	"bugs": {
+		"url": "https://github.com/RUC-GSAI/YuLan-OneSim/issues"
+	},
+	"scripts": {
+		"docusaurus": "docusaurus",
+		"start": "docusaurus start --host 0.0.0.0 --port 3005",
+		"build": "docusaurus build",
+		"deploy": "docusaurus deploy",
+		"serve": "docusaurus serve",
+		"clear": "docusaurus clear"
+	},
+	"dependencies": {
+		"@docusaurus/core": "^3.8.1",
+		"@docusaurus/preset-classic": "^3.8.1",
+		"@eightshift/ui-components": "^3.0.1",
+		"@infinum/docusaurus-theme": "^0.5.0",
+		"@mdx-js/react": "^3.1.0",
+		"@wp-playground/client": "^1.0.28",
+		"clsx": "^2.1.1",
+		"es-text-loader": "file:plugins/es-text-loader",
+		"prism-react-renderer": "^2.4.1",
+		"react": "^18.3.1",
+		"react-dom": "^18.3.1",
+		"react-scripts": "^0.0.0"
+	},
+	"browserslist": {
+		"production": [
+			">0.5%",
+			"not dead",
+			"not op_mini all"
+		],
+		"development": [
+			"last 1 chrome version",
+			"last 1 firefox version",
+			"last 1 safari version"
+		]
+	},
+	"devDependencies": {
+		"raw-loader": "^4.0.2"
+	}
+}

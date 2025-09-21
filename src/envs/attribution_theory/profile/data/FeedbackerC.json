@@ -1,0 +1,87 @@
+[
+    {
+        "name": "Alex Johnson",
+        "feedback_message": "awaiting_analysis",
+        "analysis_depth": 6,
+        "evaluation_accuracy": 0.8372814350799507,
+        "communication_style": "Direct and concise",
+        "agent_type": "FeedbackerC",
+        "bias_detected": 0,
+        "feedback_history": [
+            {
+                "date": "2023-10-01",
+                "message": "Initial feedback",
+                "bias_level": 0
+            }
+        ],
+        "id": "10"
+    },
+    {
+        "name": "Morgan Lee",
+        "feedback_message": "awaiting_analysis",
+        "analysis_depth": 3,
+        "evaluation_accuracy": 0.8058542610443438,
+        "communication_style": "Empathetic and supportive",
+        "agent_type": "FeedbackerC",
+        "bias_detected": 0,
+        "feedback_history": [
+            {
+                "date": "2023-10-01",
+                "message": "Initial feedback",
+                "bias_level": 0
+            }
+        ],
+        "id": "11"
+    },
+    {
+        "name": "Jordan Smith",
+        "feedback_message": "awaiting_analysis",
+        "analysis_depth": 1,
+        "evaluation_accuracy": 0.6912378163443845,
+        "communication_style": "Analytical and detailed",
+        "agent_type": "FeedbackerC",
+        "bias_detected": 0,
+        "feedback_history": [
+            {
+                "date": "2023-10-01",
+                "message": "Initial feedback",
+                "bias_level": 0
+            }
+        ],
+        "id": "12"
+    },
+    {
+        "name": "Taylor Brown",
+        "feedback_message": "awaiting_analysis",
+        "analysis_depth": 2,
+        "evaluation_accuracy": 0.5677785275413656,
+        "communication_style": "Collaborative and engaging",
+        "agent_type": "FeedbackerC",
+        "bias_detected": 0,
+        "feedback_history": [
+            {
+                "date": "2023-10-01",
+                "message": "Initial feedback",
+                "bias_level": 0
+            }
+        ],
+        "id": "13"
+    },
+    {
+        "name": "Casey Kim",
+        "feedback_message": "awaiting_analysis",
+        "analysis_depth": 6,
+        "evaluation_accuracy": 0.7477391109099367,
+        "communication_style": "Constructive and solution-oriented",
+        "agent_type": "FeedbackerC",
+        "bias_detected": 0,
+        "feedback_history": [
+            {
+                "date": "2023-10-01",
+                "message": "Initial feedback",
+                "bias_level": 0
+            }
+        ],
+        "id": "14"
+    }
+]

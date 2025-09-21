@@ -1,0 +1,101 @@
+{
+    "-1": {
+        "id": -1,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "VoterAgent",
+        "to_action_name": "select_media_source",
+        "from_action_id": 0,
+        "to_action_id": 1,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for voter media selection process",
+        "fields": []
+    },
+    "1": {
+        "id": 1,
+        "from_agent_type": "VoterAgent",
+        "from_action_name": "select_media_source",
+        "to_agent_type": "MediaAgent",
+        "to_action_name": "provide_content",
+        "from_action_id": 1,
+        "to_action_id": 3,
+        "event_name": "MediaSelectionEvent",
+        "event_info": "Voter selects a media source based on bias alignment",
+        "fields": [
+            {
+                "name": "voter_id",
+                "type": "int",
+                "default_value": "0",
+                "description": "Unique identifier for the voter making the selection"
+            },
+            {
+                "name": "selected_media_id",
+                "type": "int",
+                "default_value": "-1",
+                "description": "Unique identifier for the media source selected by the voter"
+            },
+            {
+                "name": "bias_alignment_score",
+                "type": "float",
+                "default_value": "0.0",
+                "description": "Score representing the alignment of media bias with voter's preferences"
+            }
+        ]
+    },
+    "2": {
+        "id": 2,
+        "from_agent_type": "VoterAgent",
+        "from_action_name": "adjust_political_preference",
+        "to_agent_type": "EnvAgent",
+        "to_action_name": "terminate",
+        "from_action_id": 2,
+        "to_action_id": -1,
+        "event_name": "PreferenceAdjustmentEvent",
+        "event_info": "Voter adjusts political preferences after consuming media content",
+        "fields": [
+            {
+                "name": "voter_id",
+                "type": "int",
+                "default_value": "0",
+                "description": "Unique identifier for the voter adjusting preferences"
+            },
+            {
+                "name": "adjusted_preference_score",
+                "type": "float",
+                "default_value": "0.0",
+                "description": "New score representing voter's adjusted political preference"
+            }
+        ]
+    },
+    "3": {
+        "id": 3,
+        "from_agent_type": "MediaAgent",
+        "from_action_name": "provide_content",
+        "to_agent_type": "VoterAgent",
+        "to_action_name": "adjust_political_preference",
+        "from_action_id": 3,
+        "to_action_id": 2,
+        "event_name": "ContentDeliveryEvent",
+        "event_info": "Media provides political content to voter",
+        "fields": [
+            {
+                "name": "media_id",
+                "type": "int",
+                "default_value": "0",
+                "description": "Unique identifier for the media providing content"
+            },
+            {
+                "name": "voter_id",
+                "type": "int",
+                "default_value": "0",
+                "description": "Unique identifier for the voter receiving the content"
+            },
+            {
+                "name": "content_bias_score",
+                "type": "float",
+                "default_value": "0.0",
+                "description": "Score representing the bias of the content delivered"
+            }
+        ]
+    }
+}

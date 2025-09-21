@@ -1,0 +1,144 @@
+{
+    "AntisocialAgent": [
+        {
+            "id": 1,
+            "name": "initiate_interaction",
+            "condition": null,
+            "description": "The agent begins a social interaction with the environment, setting the stage for potential manipulation or disrespect.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "personal_goal",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "The specific personal objective the agent aims to achieve through interaction."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "interaction_status",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Current status of the interaction, initially set to 'initiated'."
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "name": "manipulate_or_disrespect",
+            "condition": "EnvironmentResponseEvent received",
+            "description": "The agent employs manipulative or disrespectful tactics to achieve personal gain within the social interaction.",
+            "type": "XOR",
+            "required_variables": [
+                {
+                    "name": "response_type",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Type of response received from the environment, indicating its nature."
+                },
+                {
+                    "name": "response_intensity",
+                    "type": "integer",
+                    "context": "event",
+                    "description": "Intensity of the environment's response, influencing the agent's strategy."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "manipulation_strategy",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "The chosen strategy for manipulation or disrespect, updated based on interaction."
+                }
+            ]
+        }
+    ],
+    "SocialEnvironmentAgent": [
+        {
+            "id": 2,
+            "name": "engage_with_individual",
+            "condition": null,
+            "description": "The agent responds to the initiation of interaction by the antisocial agent, preparing to handle potential manipulation or disrespect.",
+            "type": "OR",
+            "required_variables": [],
+            "output_updates": [
+                {
+                    "name": "engagement_status",
+                    "type": "string",
+                    "context": "env",
+                    "description": "Status of the engagement, updated to 'active' upon interaction initiation."
+                }
+            ]
+        },
+        {
+            "id": 4,
+            "name": "handle_manipulation",
+            "condition": "ManipulationAttemptEvent received",
+            "description": "The agent processes and responds to manipulation attempts by the antisocial agent.",
+            "type": "XOR",
+            "required_variables": [
+                {
+                    "name": "manipulation_strategy",
+                    "type": "string",
+                    "context": "event",
+                    "description": "The manipulation strategy employed by the antisocial agent."
+                },
+                {
+                    "name": "target_agent",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Identifier of the agent targeted by manipulation."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "handling_method",
+                    "type": "string",
+                    "context": "env",
+                    "description": "The method chosen by the environment to handle the manipulation attempt."
+                },
+                {
+                    "name": "outcome",
+                    "type": "string",
+                    "context": "env",
+                    "description": "Result of the manipulation handling process, updated based on strategy effectiveness."
+                }
+            ]
+        },
+        {
+            "id": 5,
+            "name": "handle_disrespect",
+            "condition": "DisrespectActionEvent received",
+            "description": "The agent processes and responds to disrespectful actions by the antisocial agent.",
+            "type": "XOR",
+            "required_variables": [
+                {
+                    "name": "disrespect_type",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Type of disrespectful action performed by the antisocial agent."
+                },
+                {
+                    "name": "severity_level",
+                    "type": "integer",
+                    "context": "event",
+                    "description": "Severity level of the disrespectful action, guiding the response strategy."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "response_action",
+                    "type": "string",
+                    "context": "env",
+                    "description": "Action taken by the environment in response to the disrespectful behavior."
+                },
+                {
+                    "name": "resolution_status",
+                    "type": "string",
+                    "context": "env",
+                    "description": "Status of the resolution process for the disrespectful behavior, reflecting current progress."
+                }
+            ]
+        }
+    ]
+}

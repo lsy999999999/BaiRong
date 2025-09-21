@@ -1,0 +1,60 @@
+{
+    "environment": {
+        "variables": [
+            {
+                "name": "change_type",
+                "type": "string",
+                "default_value": null
+            },
+            {
+                "name": "change_status",
+                "type": "string",
+                "default_value": null
+            }
+        ]
+    },
+    "agents": {
+        "LeaderAgent": {
+            "variables": [
+                {
+                    "name": "change_goals",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "final_report",
+                    "type": "string",
+                    "default_value": null
+                }
+            ]
+        },
+        "ManagerAgent": {
+            "variables": [
+                {
+                    "name": "execution_status",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "adjusted_strategy",
+                    "type": "string",
+                    "default_value": null
+                }
+            ]
+        },
+        "EmployeeAgent": {
+            "variables": [
+                {
+                    "name": "feedback",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "emotional_response",
+                    "type": "string",
+                    "default_value": null
+                }
+            ]
+        }
+    }
+}

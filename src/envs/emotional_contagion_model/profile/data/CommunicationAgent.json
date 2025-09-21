@@ -1,0 +1,102 @@
+[
+    {
+        "name": "Alex Johnson",
+        "emotional_state": "neutral",
+        "intensity": 0.5,
+        "frequency_of_contact": 10,
+        "susceptibility": 0.24886134219194248,
+        "communication_methods": [
+            "face-to-face",
+            "social media"
+        ],
+        "interaction_pattern": "indirect",
+        "agent_type": "CommunicationAgent",
+        "emotional_history": [
+            {
+                "time": "2025-04-01T10:00:00",
+                "emotion": "joy"
+            }
+        ],
+        "id": "5"
+    },
+    {
+        "name": "Taylor Smith",
+        "emotional_state": "neutral",
+        "intensity": 0.5,
+        "frequency_of_contact": 10,
+        "susceptibility": 0.43603481410198974,
+        "communication_methods": [
+            "face-to-face",
+            "social media"
+        ],
+        "interaction_pattern": "direct",
+        "agent_type": "CommunicationAgent",
+        "emotional_history": [
+            {
+                "time": "2025-04-01T10:00:00",
+                "emotion": "joy"
+            }
+        ],
+        "id": "6"
+    },
+    {
+        "name": "Jordan Lee",
+        "emotional_state": "neutral",
+        "intensity": 0.5,
+        "frequency_of_contact": 10,
+        "susceptibility": 0.36216473855216325,
+        "communication_methods": [
+            "face-to-face",
+            "social media"
+        ],
+        "interaction_pattern": "direct",
+        "agent_type": "CommunicationAgent",
+        "emotional_history": [
+            {
+                "time": "2025-04-01T10:00:00",
+                "emotion": "joy"
+            }
+        ],
+        "id": "7"
+    },
+    {
+        "name": "Morgan Brown",
+        "emotional_state": "neutral",
+        "intensity": 0.5,
+        "frequency_of_contact": 10,
+        "susceptibility": 0.3903425237814703,
+        "communication_methods": [
+            "face-to-face",
+            "social media"
+        ],
+        "interaction_pattern": "indirect",
+        "agent_type": "CommunicationAgent",
+        "emotional_history": [
+            {
+                "time": "2025-04-01T10:00:00",
+                "emotion": "joy"
+            }
+        ],
+        "id": "8"
+    },
+    {
+        "name": "Casey Davis",
+        "emotional_state": "neutral",
+        "intensity": 0.5,
+        "frequency_of_contact": 10,
+        "susceptibility": 0.4141824662009924,
+        "communication_methods": [
+            "face-to-face",
+            "social media"
+        ],
+        "interaction_pattern": "direct",
+        "agent_type": "CommunicationAgent",
+        "emotional_history": [
+            {
+                "time": "2025-04-01T10:00:00",
+                "emotion": "joy"
+            }
+        ],
+        "id": "9"
+    }
+]

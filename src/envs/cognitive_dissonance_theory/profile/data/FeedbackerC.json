@@ -1,0 +1,107 @@
+[
+    {
+        "name": "Cognitive Harmonizer",
+        "completion_status": "not_started",
+        "feedback_quality": 59,
+        "interaction_frequency": 0.37834744495446015,
+        "agent_type": "FeedbackerC",
+        "evaluation_result": "pending_evaluation",
+        "suggestion_list": [
+            {
+                "suggestion": "Consider alternative perspectives",
+                "impact": "medium"
+            }
+        ],
+        "feedback_history": [
+            {
+                "timestamp": "2023-10-01T10:00:00Z",
+                "feedback": "Initial assessment"
+            }
+        ],
+        "id": "10"
+    },
+    {
+        "name": "Dissonance Mediator",
+        "completion_status": "not_started",
+        "feedback_quality": 64,
+        "interaction_frequency": 0.4043376688943834,
+        "agent_type": "FeedbackerC",
+        "evaluation_result": "pending_evaluation",
+        "suggestion_list": [
+            {
+                "suggestion": "Consider alternative perspectives",
+                "impact": "medium"
+            }
+        ],
+        "feedback_history": [
+            {
+                "timestamp": "2023-10-01T10:00:00Z",
+                "feedback": "Initial assessment"
+            }
+        ],
+        "id": "11"
+    },
+    {
+        "name": "Perception Balancer",
+        "completion_status": "not_started",
+        "feedback_quality": 55,
+        "interaction_frequency": 0.5953375412840199,
+        "agent_type": "FeedbackerC",
+        "evaluation_result": "pending_evaluation",
+        "suggestion_list": [
+            {
+                "suggestion": "Consider alternative perspectives",
+                "impact": "medium"
+            }
+        ],
+        "feedback_history": [
+            {
+                "timestamp": "2023-10-01T10:00:00Z",
+                "feedback": "Initial assessment"
+            }
+        ],
+        "id": "12"
+    },
+    {
+        "name": "Conflict Resolver",
+        "completion_status": "not_started",
+        "feedback_quality": 71,
+        "interaction_frequency": 0.8885760204707358,
+        "agent_type": "FeedbackerC",
+        "evaluation_result": "pending_evaluation",
+        "suggestion_list": [
+            {
+                "suggestion": "Consider alternative perspectives",
+                "impact": "medium"
+            }
+        ],
+        "feedback_history": [
+            {
+                "timestamp": "2023-10-01T10:00:00Z",
+                "feedback": "Initial assessment"
+            }
+        ],
+        "id": "13"
+    },
+    {
+        "name": "Equilibrium Facilitator",
+        "completion_status": "not_started",
+        "feedback_quality": 77,
+        "interaction_frequency": 0.9632188364575951,
+        "agent_type": "FeedbackerC",
+        "evaluation_result": "pending_evaluation",
+        "suggestion_list": [
+            {
+                "suggestion": "Consider alternative perspectives",
+                "impact": "medium"
+            }
+        ],
+        "feedback_history": [
+            {
+                "timestamp": "2023-10-01T10:00:00Z",
+                "feedback": "Initial assessment"
+            }
+        ],
+        "id": "14"
+    }
+]

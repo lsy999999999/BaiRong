@@ -1,0 +1,12 @@
+[
+    {
+        "source_agent": "IndividualAgent",
+        "target_agent": "IndividualAgent",
+        "direction": "unidirectional"
+    },
+    {
+        "source_agent": "SocialStructureAgent",
+        "target_agent": "IndividualAgent",
+        "direction": "unidirectional"
+    }
+]

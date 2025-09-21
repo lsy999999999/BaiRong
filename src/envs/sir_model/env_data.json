@@ -1,0 +1,65 @@
+{
+    "variables": [
+        {
+            "name": "population_health_states",
+            "type": "list",
+            "value": [
+                "susceptible",
+                "infected",
+                "recovered",
+                "vaccinated",
+                "quarantined"
+            ]
+        },
+        {
+            "name": "government_policy_effectiveness",
+            "type": "float",
+            "value": 0.87
+        },
+        {
+            "name": "average_daily_contacts",
+            "type": "int",
+            "value": 15
+        },
+        {
+            "name": "social_network_density",
+            "type": "float",
+            "value": 0.45
+        },
+        {
+            "name": "healthcare_capacity_limit",
+            "type": "int",
+            "value": 5000
+        },
+        {
+            "name": "policy_compliance_rate",
+            "type": "float",
+            "value": 0.73
+        },
+        {
+            "name": "infection_probability",
+            "type": "float",
+            "value": 0.12
+        },
+        {
+            "name": "recovery_rate",
+            "type": "float",
+            "value": 0.78
+        },
+        {
+            "name": "government_intervention_type",
+            "type": "str",
+            "value": "regional lockdown"
+        },
+        {
+            "name": "healthcare_resource_distribution",
+            "type": "list",
+            "value": [
+                "ventilators",
+                "ICU beds",
+                "testing kits",
+                "vaccines"
+            ]
+        }
+    ]
+}

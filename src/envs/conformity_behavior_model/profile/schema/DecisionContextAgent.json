@@ -1,0 +1,85 @@
+{
+    "name": {
+        "type": "str",
+        "default": "DecisionContextAgent",
+        "private": false,
+        "sampling": "llm",
+        "description": "A name for the agent representing a decision context in the simulation."
+    },
+    "type": {
+        "type": "str",
+        "choices": [
+            "simple",
+            "complex",
+            "ambiguous"
+        ],
+        "default": "simple",
+        "private": false,
+        "sampling": "random"
+    },
+    "ambiguity": {
+        "type": "float",
+        "default": 0.0,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "stakes": {
+        "type": "int",
+        "default": 1,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            1,
+            10
+        ]
+    },
+    "time_pressure": {
+        "type": "int",
+        "default": 0,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0,
+            100
+        ]
+    },
+    "feedback_immediacy": {
+        "type": "int",
+        "default": 0,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0,
+            100
+        ]
+    },
+    "objective_truth": {
+        "type": "str",
+        "default": "",
+        "private": false,
+        "sampling": "default"
+    },
+    "decision_history": {
+        "type": "list",
+        "default": [],
+        "private": true,
+        "sampling": "default"
+    },
+    "status": {
+        "type": "str",
+        "default": "",
+        "private": false,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "int",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

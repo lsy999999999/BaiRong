@@ -1,0 +1,92 @@
+[
+    {
+        "name": "Alice Johnson",
+        "behavior_tendencies": [
+            "cooperative",
+            "competitive"
+        ],
+        "adjusted_behavior_tendencies": [
+            "neutral"
+        ],
+        "group_pressure": 50.0,
+        "norm_acceptance": 60,
+        "communication_protocol": "active",
+        "decision_algorithm": "interaction_based",
+        "initial_behavior_tendency": "competitive",
+        "agent_type": "IndividualAgent",
+        "interaction_details": "awaiting_interaction",
+        "id": "0"
+    },
+    {
+        "name": "David Smith",
+        "behavior_tendencies": [
+            "neutral",
+            "cooperative"
+        ],
+        "adjusted_behavior_tendencies": [
+            "neutral"
+        ],
+        "group_pressure": 50.0,
+        "norm_acceptance": 60,
+        "communication_protocol": "active",
+        "decision_algorithm": "interaction_based",
+        "initial_behavior_tendency": "cooperative",
+        "agent_type": "IndividualAgent",
+        "interaction_details": "awaiting_interaction",
+        "id": "1"
+    },
+    {
+        "name": "Emma Brown",
+        "behavior_tendencies": [
+            "cooperative",
+            "competitive"
+        ],
+        "adjusted_behavior_tendencies": [
+            "neutral"
+        ],
+        "group_pressure": 50.0,
+        "norm_acceptance": 60,
+        "communication_protocol": "active",
+        "decision_algorithm": "observation_based",
+        "initial_behavior_tendency": "cooperative",
+        "agent_type": "IndividualAgent",
+        "interaction_details": "awaiting_interaction",
+        "id": "2"
+    },
+    {
+        "name": "Michael Williams",
+        "behavior_tendencies": [
+            "cooperative",
+            "neutral"
+        ],
+        "adjusted_behavior_tendencies": [
+            "neutral"
+        ],
+        "group_pressure": 50.0,
+        "norm_acceptance": 60,
+        "communication_protocol": "active",
+        "decision_algorithm": "interaction_based",
+        "initial_behavior_tendency": "competitive",
+        "agent_type": "IndividualAgent",
+        "interaction_details": "awaiting_interaction",
+        "id": "3"
+    },
+    {
+        "name": "Sophia Davis",
+        "behavior_tendencies": [
+            "neutral",
+            "cooperative"
+        ],
+        "adjusted_behavior_tendencies": [
+            "neutral"
+        ],
+        "group_pressure": 50.0,
+        "norm_acceptance": 60,
+        "communication_protocol": "active",
+        "decision_algorithm": "interaction_based",
+        "initial_behavior_tendency": "competitive",
+        "agent_type": "IndividualAgent",
+        "interaction_details": "awaiting_interaction",
+        "id": "4"
+    }
+]

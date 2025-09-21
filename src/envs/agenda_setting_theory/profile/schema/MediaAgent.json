@@ -1,0 +1,88 @@
+{
+    "name": {
+        "type": "str",
+        "default": "MediaAgent",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's designated name"
+    },
+    "selected_topic": {
+        "type": "str",
+        "default": "political_events",
+        "private": false,
+        "sampling": "default"
+    },
+    "reporting_frequency": {
+        "type": "int",
+        "default": 5,
+        "private": false,
+        "sampling": "default"
+    },
+    "emotional_tone": {
+        "type": "str",
+        "default": "neutral",
+        "private": false,
+        "sampling": "default"
+    },
+    "emphasized_topic": {
+        "type": "str",
+        "default": "economic_phenomena",
+        "private": false,
+        "sampling": "default"
+    },
+    "communication_channel": {
+        "type": "str",
+        "default": "social_media",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "social_media",
+            "news_website",
+            "broadcast"
+        ]
+    },
+    "influence_strategy": {
+        "type": "str",
+        "default": "framing",
+        "private": true,
+        "sampling": "llm",
+        "description": "Strategy used by the agent to influence public focus"
+    },
+    "initial_focus_value": {
+        "type": "int",
+        "default": 50,
+        "private": false,
+        "sampling": "default"
+    },
+    "interaction_pattern": {
+        "type": "str",
+        "default": "topic_selection",
+        "private": true,
+        "sampling": "llm",
+        "description": "Pattern of interaction with public agents"
+    },
+    "reporting_style": {
+        "type": "str",
+        "default": "objective",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "objective",
+            "subjective",
+            "sensational"
+        ]
+    },
+    "network_influence": {
+        "type": "float",
+        "default": 0.75,
+        "private": true,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

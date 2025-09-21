@@ -1,0 +1,77 @@
+[
+    {
+        "name": "Global News Network",
+        "information_content": "Breaking news update",
+        "broadcast_frequency": 5.58638977027252,
+        "credibility_rating": 94,
+        "communication_delay": 5,
+        "current_status": "active",
+        "information_type": "International News",
+        "agent_type": "MediaAgent",
+        "target_opinion_leaders": [
+            "OpinionLeader1",
+            "OpinionLeader2"
+        ],
+        "id": "0"
+    },
+    {
+        "name": "Tech Trends Daily",
+        "information_content": "Breaking news update",
+        "broadcast_frequency": 5.546443625817231,
+        "credibility_rating": 98,
+        "communication_delay": 3,
+        "current_status": "active",
+        "information_type": "Technology Updates",
+        "agent_type": "MediaAgent",
+        "target_opinion_leaders": [
+            "OpinionLeader1",
+            "OpinionLeader2"
+        ],
+        "id": "1"
+    },
+    {
+        "name": "Sports Central",
+        "information_content": "Breaking news update",
+        "broadcast_frequency": 5.100767641908451,
+        "credibility_rating": 80,
+        "communication_delay": 2,
+        "current_status": "active",
+        "information_type": "Sports News",
+        "agent_type": "MediaAgent",
+        "target_opinion_leaders": [
+            "OpinionLeader1",
+            "OpinionLeader2"
+        ],
+        "id": "2"
+    },
+    {
+        "name": "Health & Wellness Weekly",
+        "information_content": "Breaking news update",
+        "broadcast_frequency": 7.582813257124377,
+        "credibility_rating": 95,
+        "communication_delay": 4,
+        "current_status": "active",
+        "information_type": "Health Tips and News",
+        "agent_type": "MediaAgent",
+        "target_opinion_leaders": [
+            "OpinionLeader1",
+            "OpinionLeader2"
+        ],
+        "id": "3"
+    },
+    {
+        "name": "Finance Insights",
+        "information_content": "Breaking news update",
+        "broadcast_frequency": 2.77584365390828,
+        "credibility_rating": 93,
+        "communication_delay": 1,
+        "current_status": "active",
+        "information_type": "Financial News and Analysis",
+        "agent_type": "MediaAgent",
+        "target_opinion_leaders": [
+            "OpinionLeader1",
+            "OpinionLeader2"
+        ],
+        "id": "4"
+    }
+]

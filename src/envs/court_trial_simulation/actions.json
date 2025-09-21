@@ -1,0 +1,274 @@
+{
+    "Prosecutor": [
+        {
+            "id": 1,
+            "name": "evaluate_evidence",
+            "condition": "Evidence must be available for evaluation",
+            "description": "The Prosecutor assesses the quality and relevance of the evidence to decide on the feasibility of proceeding with prosecution.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "evidence_quality",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Assessment of the evidence's quality."
+                },
+                {
+                    "name": "conviction_likelihood",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Estimated likelihood of conviction based on evidence."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "prosecution_decision",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Decision on whether to proceed with prosecution."
+                }
+            ]
+        }
+    ],
+    "DefenseLawyer": [
+        {
+            "id": 2,
+            "name": "prepare_defense",
+            "condition": "Case details and evidence must be available",
+            "description": "The Defense Lawyer formulates a strategy to defend the client in court, considering the evidence and legal precedents.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "defense_strategy",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Strategy developed for defending the client."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "prepared_defense",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Completed defense strategy ready for trial."
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "name": "negotiate_plea",
+            "condition": "Prosecution decision received",
+            "description": "The Defense Lawyer engages in negotiations with the Prosecutor to reach a plea agreement favorable to the client.",
+            "type": "AND",
+            "required_variables": [
+                {
+                    "name": "prosecution_decision",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Prosecutor's decision on proceeding with prosecution."
+                },
+                {
+                    "name": "plea_terms",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Proposed terms for the plea agreement."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "negotiated_plea",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Outcome of plea negotiation."
+                }
+            ]
+        }
+    ],
+    "Judge": [
+        {
+            "id": 4,
+            "name": "rule_on_evidence",
+            "condition": "Evaluated evidence presented by prosecutor",
+            "description": "The Judge evaluates the evidence presented by the Prosecutor and decides on its admissibility in court.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "evidence_details",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Details of the evidence presented for ruling."
+                },
+                {
+                    "name": "ruling_request",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Request for ruling on evidence admissibility."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "evidence_admissibility",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Judge's ruling on the admissibility of evidence."
+                }
+            ]
+        },
+        {
+            "id": 5,
+            "name": "manage_trial",
+            "condition": "Defense prepared and evidence ruled admissible",
+            "description": "The Judge oversees the trial proceedings, ensuring adherence to legal protocols and efficient trial management.",
+            "type": "AND",
+            "required_variables": [
+                {
+                    "name": "trial_phase",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Current phase of the trial managed by the Judge."
+                },
+                {
+                    "name": "defense_strategy",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Defense strategy prepared for trial management."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "trial_status",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Status update on trial progress."
+                }
+            ]
+        }
+    ],
+    "Defendant": [
+        {
+            "id": 6,
+            "name": "consider_plea",
+            "condition": "Plea negotiation proposal received",
+            "description": "The Defendant evaluates the plea deal proposed by the Defense Lawyer and decides whether to accept it.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "plea_terms",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Terms of the plea deal proposed to the Defendant."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "plea_acceptance",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Decision on whether to accept the plea deal."
+                }
+            ]
+        }
+    ],
+    "Jury": [
+        {
+            "id": 7,
+            "name": "evaluate_evidence",
+            "condition": "Evidence ruled admissible and presented",
+            "description": "The Jury examines the evidence presented during the trial to form an informed opinion for verdict formation.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "evidence_list",
+                    "type": "list",
+                    "context": "event",
+                    "description": "List of evidence items being evaluated by the Jury."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "evidence_evaluation",
+                    "type": "list",
+                    "context": "agent",
+                    "description": "Evaluation results of evidence items."
+                }
+            ]
+        },
+        {
+            "id": 8,
+            "name": "form_verdict",
+            "condition": "Trial proceedings completed and evidence evaluated",
+            "description": "The Jury deliberates based on evaluated evidence and collective discussion to form the final verdict of the trial.",
+            "type": "AND",
+            "required_variables": [
+                {
+                    "name": "evidence_evaluation",
+                    "type": "list",
+                    "context": "agent",
+                    "description": "Results of evidence evaluation."
+                },
+                {
+                    "name": "trial_phase",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Current phase of the trial overseen by the Judge."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "verdict",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Final verdict formed by the Jury."
+                }
+            ]
+        }
+    ],
+    "Witness": [
+        {
+            "id": 9,
+            "name": "prepare_testimony",
+            "condition": "Witness must prepare for potential testimony",
+            "description": "The Witness prepares the content of their testimony to be presented during the trial.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "testimony_content",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Prepared content of the witness's testimony."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "prepared_testimony",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Finalized testimony content ready for presentation."
+                }
+            ]
+        },
+        {
+            "id": 10,
+            "name": "testify",
+            "condition": "Called upon during trial proceedings",
+            "description": "The Witness provides their testimony during the trial for evaluation by the Jury.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "testimony_details",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Details of the testimony provided by the witness."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "testimony_given",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Confirmation of testimony delivery."
+                }
+            ]
+        }
+    ]
+}

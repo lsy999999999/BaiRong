@@ -1,0 +1,342 @@
+{
+  "agents": {
+    "AntisocialAgent": {
+      "imports": "from typing import Any, List\nimport asyncio\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "1": {
+          "code": "async def initiate_interaction(self, event: Event) -> List[Event]:\n        personal_goal = self.profile.get_data(\"personal_goal\", \"undefined\")\n        instruction = f\"\"\"\n        You are an AntisocialAgent with a personal goal of '{personal_goal}'. \n        You are tasked with initiating a social interaction that aligns with your antisocial personality traits, \n        such as manipulation or disrespect, to achieve your personal gain. \n        Please determine the target_id(s) for this interaction and provide any relevant interaction details. \n        Return the response in the following JSON format:\n    \n        {{\n            \"target_ids\": [\"<Target agent IDs>\"]\n        }}\n        \"\"\"\n        \n        result = await self.generate_reaction(instruction)\n        target_ids = result.get('target_ids', [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n    \n        self.profile.update_data(\"interaction_status\", \"initiated\")\n    \n        events = []\n        for target_id in target_ids:\n            interaction_event = InteractionInitiatedEvent(self.profile_id, target_id)\n            events.append(interaction_event)\n    \n        return events",
+          "metadata": {
+            "id": 1,
+            "name": "initiate_interaction",
+            "condition": null,
+            "description": "The agent begins a social interaction with the environment, setting the stage for potential manipulation or disrespect.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "personal_goal",
+                "type": "string",
+                "context": "agent",
+                "description": "The specific personal objective the agent aims to achieve through interaction."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "interaction_status",
+                "type": "string",
+                "context": "agent",
+                "description": "Current status of the interaction, initially set to 'initiated'."
+              }
+            ]
+          }
+        },
+        "3": {
+          "code": "async def manipulate_or_disrespect(self, event: Event) -> List[Event]:\n        if not isinstance(event, EnvironmentResponseEvent):\n            return []\n        \n        if self.profile.get_data(\"event_processed\", False):\n            return []\n        \n        response_type = event.response_type\n        response_intensity = event.response_intensity\n    \n        instruction = f\"\"\"\n        The agent is interacting within a social environment and has received a response.\n        The response type is '{response_type}' and its intensity is {response_intensity}.\n        The agent needs to decide on a 'manipulation_strategy' to either manipulate or disrespect.\n        Based on the response intensity, for high intensity, prefer manipulation; for low intensity, prefer disrespect.\n        Return the decision in the following JSON format:\n    \n        {{\n            \"manipulation_strategy\": \"<The chosen strategy for manipulation or disrespect>\",\n            \"target_ids\": [\"<List of target agent IDs or a single target ID>\"]\n        }}\n        \"\"\"\n        observation = f\"Response received: Type={response_type}, Intensity={response_intensity}\"\n        result = await self.generate_reaction(instruction, observation)\n    \n        manipulation_strategy = result.get('manipulation_strategy', \"coercion\")\n        target_ids = result.get('target_ids', [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n    \n        events = []\n        if manipulation_strategy == \"manipulation\":\n            for target_id in target_ids:\n                manipulation_event = ManipulationAttemptEvent(\n                    self.profile_id, target_id, manipulation_strategy\n                )\n                events.append(manipulation_event)\n        else:\n            for target_id in target_ids:\n                disrespect_event = DisrespectActionEvent(\n                    self.profile_id, target_id, disrespect_type=\"verbal\", severity_level=1\n                )\n                events.append(disrespect_event)\n        \n        self.profile.update_data(\"event_processed\", False)\n    \n        return events",
+          "metadata": {
+            "id": 3,
+            "name": "manipulate_or_disrespect",
+            "condition": "EnvironmentResponseEvent received",
+            "description": "The agent employs manipulative or disrespectful tactics to achieve personal gain within the social interaction.",
+            "type": "XOR",
+            "required_variables": [
+              {
+                "name": "response_type",
+                "type": "string",
+                "context": "event",
+                "description": "Type of response received from the environment, indicating its nature."
+              },
+              {
+                "name": "response_intensity",
+                "type": "integer",
+                "context": "event",
+                "description": "Intensity of the environment's response, influencing the agent's strategy."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "manipulation_strategy",
+                "type": "string",
+                "context": "agent",
+                "description": "The chosen strategy for manipulation or disrespect, updated based on interaction."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "SocialEnvironmentAgent": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "2": {
+          "code": "async def engage_with_individual(self, event: Event) -> List[Event]:\n        if event.__class__.__name__ != \"InteractionInitiatedEvent\":\n            return []\n\n        self.env.update_data(\"engagement_status\", \"active\")\n\n        instruction = \"\"\"\n        The social environment agent needs to respond to an interaction initiated by an antisocial agent. \n        Consider the context where the antisocial agent might manipulate or disrespect during interaction. \n        Strategize a response including the type and intensity. \n        Provide the result in the following JSON format:\n\n        {\n            \"response_type\": \"<Type of response, e.g., positive, negative, or neutral>\",\n            \"response_intensity\": <Integer indicating the intensity of the response>,\n            \"target_ids\": [\"<The string ID of the Antisocial agent>\"]\n        }\n        \"\"\"\n\n        result = await self.generate_reaction(instruction)\n\n        response_type = result.get('response_type', \"neutral\")\n        response_intensity = result.get('response_intensity', 0)\n        target_ids = result.get('target_ids', None)\n\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        events = []\n        for target_id in target_ids:\n            response_event = EnvironmentResponseEvent(\n                self.profile_id,\n                target_id,\n                response_type=response_type,\n                response_intensity=response_intensity\n            )\n            events.append(response_event)\n\n        return events",
+          "metadata": {
+            "id": 2,
+            "name": "engage_with_individual",
+            "condition": null,
+            "description": "The agent responds to the initiation of interaction by the antisocial agent, preparing to handle potential manipulation or disrespect.",
+            "type": "OR",
+            "required_variables": [],
+            "output_updates": [
+              {
+                "name": "engagement_status",
+                "type": "string",
+                "context": "env",
+                "description": "Status of the engagement, updated to 'active' upon interaction initiation."
+              }
+            ]
+          }
+        },
+        "4": {
+          "code": "async def handle_manipulation(self, event: Event) -> List[Event]:\n        if event.__class__.__name__ != \"ManipulationAttemptEvent\":\n            return []\n\n        manipulation_strategy = event.manipulation_strategy\n        target_agent = event.target_agent\n\n        instruction = f\"\"\"\n        The agent has received a manipulation attempt using the strategy '{manipulation_strategy}' targeting '{target_agent}'.\n        Please decide on the handling method and outcome. Determine the appropriate target_ids for the next step.\n        Return the information in the following JSON format:\n        {{\n            \"handling_method\": \"<The method chosen to handle the manipulation>\",\n            \"outcome\": \"<Result of the handling process>\",\n            \"target_ids\": [\"<The string ID(s) of the target agent(s)>\"]\n        }}\n        \"\"\"\n        observation = f\"Manipulation strategy: {manipulation_strategy}, Target agent: {target_agent}\"\n        result = await self.generate_reaction(instruction, observation)\n\n        handling_method = result.get('handling_method', 'ignore')\n        outcome = result.get('outcome', 'unresolved')\n        target_ids = result.get('target_ids', [])\n\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        self.env.update_data(\"handling_method\", handling_method)\n        self.env.update_data(\"outcome\", outcome)\n\n        events = []\n        for target_id in target_ids:\n            manipulation_handled_event = ManipulationHandledEvent(self.profile_id, target_id, handling_method, outcome)\n            events.append(manipulation_handled_event)\n\n        return events",
+          "metadata": {
+            "id": 4,
+            "name": "handle_manipulation",
+            "condition": "ManipulationAttemptEvent received",
+            "description": "The agent processes and responds to manipulation attempts by the antisocial agent.",
+            "type": "XOR",
+            "required_variables": [
+              {
+                "name": "manipulation_strategy",
+                "type": "string",
+                "context": "event",
+                "description": "The manipulation strategy employed by the antisocial agent."
+              },
+              {
+                "name": "target_agent",
+                "type": "string",
+                "context": "event",
+                "description": "Identifier of the agent targeted by manipulation."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "handling_method",
+                "type": "string",
+                "context": "env",
+                "description": "The method chosen by the environment to handle the manipulation attempt."
+              },
+              {
+                "name": "outcome",
+                "type": "string",
+                "context": "env",
+                "description": "Result of the manipulation handling process, updated based on strategy effectiveness."
+              }
+            ]
+          }
+        },
+        "5": {
+          "code": "async def handle_disrespect(self, event: Event) -> List[Event]:\n        if event.__class__.__name__ != \"DisrespectActionEvent\":\n            return []\n\n        disrespect_type = event.disrespect_type\n        severity_level = event.severity_level\n\n        instruction = \"\"\"\n        Based on the disrespect type and severity level, decide on the appropriate response action and resolution status.\n        Ensure to return the data in the following JSON format:\n        {\n            \"response_action\": \"<Action taken by the environment in response to the disrespectful behavior>\",\n            \"resolution_status\": \"<Status of the resolution process>\",\n            \"target_ids\": [\"<The string ID of the EnvAgent>\"]\n        }\n        \"\"\"\n        observation = f\"Disrespect type: {disrespect_type}, Severity level: {severity_level}\"\n\n        result = await self.generate_reaction(instruction, observation)\n\n        response_action = result.get('response_action', \"reprimand\")\n        resolution_status = result.get('resolution_status', \"pending\")\n        target_ids = result.get('target_ids', [\"ENV\"])\n\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        self.env.update_data(\"response_action\", response_action)\n        self.env.update_data(\"resolution_status\", resolution_status)\n\n        events = []\n        for target_id in target_ids:\n            handled_event = DisrespectHandledEvent(self.profile_id, target_id, response_action, resolution_status)\n            events.append(handled_event)\n\n        return events",
+          "metadata": {
+            "id": 5,
+            "name": "handle_disrespect",
+            "condition": "DisrespectActionEvent received",
+            "description": "The agent processes and responds to disrespectful actions by the antisocial agent.",
+            "type": "XOR",
+            "required_variables": [
+              {
+                "name": "disrespect_type",
+                "type": "string",
+                "context": "event",
+                "description": "Type of disrespectful action performed by the antisocial agent."
+              },
+              {
+                "name": "severity_level",
+                "type": "integer",
+                "context": "event",
+                "description": "Severity level of the disrespectful action, guiding the response strategy."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "response_action",
+                "type": "string",
+                "context": "env",
+                "description": "Action taken by the environment in response to the disrespectful behavior."
+              },
+              {
+                "name": "resolution_status",
+                "type": "string",
+                "context": "env",
+                "description": "Status of the resolution process for the disrespectful behavior, reflecting current progress."
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "events": {
+    "imports": "from onesim.events import Event\nfrom typing import Any",
+    "definitions": {
+      "-1": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": -1,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "AntisocialAgent",
+          "to_action_name": "initiate_interaction",
+          "from_action_id": 0,
+          "to_action_id": 1,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for antisocial behavior simulation",
+          "fields": []
+        }
+      },
+      "1": {
+        "code": "class InteractionInitiatedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": 1,
+          "from_agent_type": "AntisocialAgent",
+          "from_action_name": "initiate_interaction",
+          "to_agent_type": "SocialEnvironmentAgent",
+          "to_action_name": "engage_with_individual",
+          "from_action_id": 1,
+          "to_action_id": 2,
+          "event_name": "InteractionInitiatedEvent",
+          "event_info": "Initiates interaction with the social environment",
+          "fields": []
+        }
+      },
+      "2": {
+        "code": "class EnvironmentResponseEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        response_type: str = 'neutral',\n        response_intensity: int = 0,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.response_type = response_type\n        self.response_intensity = response_intensity",
+        "metadata": {
+          "id": 2,
+          "from_agent_type": "SocialEnvironmentAgent",
+          "from_action_name": "engage_with_individual",
+          "to_agent_type": "AntisocialAgent",
+          "to_action_name": "manipulate_or_disrespect",
+          "from_action_id": 2,
+          "to_action_id": 3,
+          "event_name": "EnvironmentResponseEvent",
+          "event_info": "Response from the social environment to the initial interaction",
+          "fields": [
+            {
+              "name": "response_type",
+              "type": "string",
+              "default_value": "neutral",
+              "description": "Type of response from the environment, e.g., positive, negative, or neutral"
+            },
+            {
+              "name": "response_intensity",
+              "type": "integer",
+              "default_value": 0,
+              "description": "Intensity of the response on a scale, where higher values indicate stronger responses"
+            }
+          ]
+        }
+      },
+      "3": {
+        "code": "class ManipulationAttemptEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        manipulation_strategy: str = 'coercion',\n        target_agent: str = 'unknown',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.manipulation_strategy = manipulation_strategy\n        self.target_agent = target_agent",
+        "metadata": {
+          "id": 3,
+          "from_agent_type": "AntisocialAgent",
+          "from_action_name": "manipulate_or_disrespect",
+          "to_agent_type": "SocialEnvironmentAgent",
+          "to_action_name": "handle_manipulation",
+          "from_action_id": 3,
+          "to_action_id": 4,
+          "event_name": "ManipulationAttemptEvent",
+          "event_info": "Attempts to manipulate or disrespect the social environment",
+          "fields": [
+            {
+              "name": "manipulation_strategy",
+              "type": "string",
+              "default_value": "coercion",
+              "description": "The strategy used by the agent to manipulate the environment"
+            },
+            {
+              "name": "target_agent",
+              "type": "string",
+              "default_value": "unknown",
+              "description": "Identifier of the target agent being manipulated"
+            }
+          ]
+        }
+      },
+      "4": {
+        "code": "class DisrespectActionEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        disrespect_type: str = 'verbal',\n        severity_level: int = 1,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.disrespect_type = disrespect_type\n        self.severity_level = severity_level",
+        "metadata": {
+          "id": 4,
+          "from_agent_type": "AntisocialAgent",
+          "from_action_name": "manipulate_or_disrespect",
+          "to_agent_type": "SocialEnvironmentAgent",
+          "to_action_name": "handle_disrespect",
+          "from_action_id": 3,
+          "to_action_id": 5,
+          "event_name": "DisrespectActionEvent",
+          "event_info": "Engages in disrespectful behavior",
+          "fields": [
+            {
+              "name": "disrespect_type",
+              "type": "string",
+              "default_value": "verbal",
+              "description": "Type of disrespectful action, such as verbal or physical"
+            },
+            {
+              "name": "severity_level",
+              "type": "integer",
+              "default_value": 1,
+              "description": "Severity level of the disrespectful action on a predefined scale"
+            }
+          ]
+        }
+      },
+      "5": {
+        "code": "class ManipulationHandledEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        handling_method: str = 'ignore',\n        outcome: str = 'unresolved',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.handling_method = handling_method\n        self.outcome = outcome",
+        "metadata": {
+          "id": 5,
+          "from_agent_type": "SocialEnvironmentAgent",
+          "from_action_name": "handle_manipulation",
+          "to_agent_type": "EnvAgent",
+          "to_action_name": "terminate",
+          "from_action_id": 4,
+          "to_action_id": -1,
+          "event_name": "ManipulationHandledEvent",
+          "event_info": "Social environment processes manipulation attempt",
+          "fields": [
+            {
+              "name": "handling_method",
+              "type": "string",
+              "default_value": "ignore",
+              "description": "Method used by the environment to handle the manipulation attempt"
+            },
+            {
+              "name": "outcome",
+              "type": "string",
+              "default_value": "unresolved",
+              "description": "Outcome of the handling process, such as resolved or unresolved"
+            }
+          ]
+        }
+      },
+      "6": {
+        "code": "class DisrespectHandledEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        response_action: str = 'reprimand',\n        resolution_status: str = 'pending',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.response_action = response_action\n        self.resolution_status = resolution_status",
+        "metadata": {
+          "id": 6,
+          "from_agent_type": "SocialEnvironmentAgent",
+          "from_action_name": "handle_disrespect",
+          "to_agent_type": "EnvAgent",
+          "to_action_name": "terminate",
+          "from_action_id": 5,
+          "to_action_id": -1,
+          "event_name": "DisrespectHandledEvent",
+          "event_info": "Social environment processes disrespectful behavior",
+          "fields": [
+            {
+              "name": "response_action",
+              "type": "string",
+              "default_value": "reprimand",
+              "description": "Action taken by the environment in response to the disrespectful behavior"
+            },
+            {
+              "name": "resolution_status",
+              "type": "string",
+              "default_value": "pending",
+              "description": "Status of the resolution process for the disrespectful behavior"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

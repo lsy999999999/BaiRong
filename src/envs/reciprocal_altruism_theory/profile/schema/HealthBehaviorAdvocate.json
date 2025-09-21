@@ -1,0 +1,80 @@
+{
+    "name": {
+        "type": "str",
+        "default": "HealthBehaviorAdvocate",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's role in promoting health behaviors"
+    },
+    "behavior_type": {
+        "type": "str",
+        "default": "exercise",
+        "private": false,
+        "sampling": "llm",
+        "description": "Type of health behavior advocated by the agent"
+    },
+    "intensity": {
+        "type": "int",
+        "default": 75,
+        "private": false,
+        "sampling": "default",
+        "range": [
+            0,
+            100
+        ]
+    },
+    "recipient_behavior_change": {
+        "type": "str",
+        "default": "in_progress",
+        "private": false,
+        "sampling": "default"
+    },
+    "social_support_received": {
+        "type": "int",
+        "default": 50,
+        "private": false,
+        "sampling": "default",
+        "range": [
+            0,
+            100
+        ]
+    },
+    "communication_channels": {
+        "type": "list",
+        "default": [
+            "email",
+            "social_media"
+        ],
+        "private": true,
+        "sampling": "llm",
+        "description": "Channels used for communication within the Community Network"
+    },
+    "reciprocal_promises": {
+        "type": "list",
+        "default": [
+            {
+                "promise": "help others",
+                "fulfilled": false
+            }
+        ],
+        "private": true,
+        "sampling": "default"
+    },
+    "community_support_level": {
+        "type": "int",
+        "default": 60,
+        "private": false,
+        "sampling": "default",
+        "range": [
+            0,
+            100
+        ]
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

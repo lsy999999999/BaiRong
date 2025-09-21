@@ -1,0 +1,140 @@
+{
+    "name": {
+        "type": "str",
+        "default": "ACME Corp",
+        "private": false,
+        "sampling": "llm",
+        "description": "A professional company name suitable for an employer in the labor market."
+    },
+    "industry": {
+        "type": "str",
+        "choices": [
+            "technology",
+            "finance",
+            "healthcare",
+            "manufacturing",
+            "retail"
+        ],
+        "default": "technology",
+        "private": false,
+        "sampling": "random"
+    },
+    "size": {
+        "type": "int",
+        "range": [
+            1,
+            10000
+        ],
+        "default": 100,
+        "private": false,
+        "sampling": "random"
+    },
+    "compensation_structure": {
+        "type": "str",
+        "choices": [
+            "fixed",
+            "variable",
+            "mixed"
+        ],
+        "default": "mixed",
+        "private": false,
+        "sampling": "random"
+    },
+    "culture": {
+        "type": "str",
+        "choices": [
+            "innovative",
+            "traditional",
+            "inclusive",
+            "competitive"
+        ],
+        "default": "inclusive",
+        "private": false,
+        "sampling": "random"
+    },
+    "hiring_criteria": {
+        "type": "list",
+        "default": [],
+        "private": false,
+        "sampling": "default"
+    },
+    "screening_methods": {
+        "type": "list",
+        "default": [],
+        "private": false,
+        "sampling": "default"
+    },
+    "bias": {
+        "type": "float",
+        "range": [
+            0.0,
+            1.0
+        ],
+        "default": 0.0,
+        "private": true,
+        "sampling": "random"
+    },
+    "reputation": {
+        "type": "float",
+        "range": [
+            0.0,
+            5.0
+        ],
+        "default": 3.0,
+        "private": false,
+        "sampling": "random"
+    },
+    "historical_hires": {
+        "type": "list",
+        "default": [],
+        "private": true,
+        "sampling": "default"
+    },
+    "turnover_rate": {
+        "type": "float",
+        "range": [
+            0.0,
+            1.0
+        ],
+        "default": 0.1,
+        "private": false,
+        "sampling": "random"
+    },
+    "job_description": {
+        "type": "str",
+        "default": "",
+        "private": false,
+        "sampling": "default"
+    },
+    "required_skills": {
+        "type": "list",
+        "default": [],
+        "private": false,
+        "sampling": "default"
+    },
+    "posted_jobs": {
+        "type": "list",
+        "default": [],
+        "private": false,
+        "sampling": "default"
+    },
+    "screened_candidates": {
+        "type": "list",
+        "default": [],
+        "private": true,
+        "sampling": "default"
+    },
+    "interview_results": {
+        "type": "list",
+        "default": [],
+        "private": true,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "int",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

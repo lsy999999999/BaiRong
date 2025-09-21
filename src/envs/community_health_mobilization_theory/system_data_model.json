@@ -1,0 +1,50 @@
+{
+    "environment": {
+        "variables": [
+            {
+                "name": "community_context",
+                "type": "str",
+                "default_value": null
+            },
+            {
+                "name": "available_resources",
+                "type": "str",
+                "default_value": null
+            }
+        ]
+    },
+    "agents": {
+        "CommunityLeader": {
+            "variables": [
+                {
+                    "name": "mobilization_status",
+                    "type": "str",
+                    "default_value": null
+                }
+            ]
+        },
+        "CommunityMember": {
+            "variables": [
+                {
+                    "name": "participation_status",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "behavior_status",
+                    "type": "str",
+                    "default_value": null
+                }
+            ]
+        },
+        "PublicHealthExpert": {
+            "variables": [
+                {
+                    "name": "guidance_status",
+                    "type": "str",
+                    "default_value": null
+                }
+            ]
+        }
+    }
+}

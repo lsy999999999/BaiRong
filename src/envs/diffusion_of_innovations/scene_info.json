@@ -1,0 +1,138 @@
+{
+  "domain": "Communication",
+  "scene_name": "diffusion_of_innovations",
+  "odd_protocol": {
+    "overview": {
+      "system_goal": "Simulate how innovations spread in a social system, analyze how different types of individuals influence the diffusion process, and validate the basic assumptions of information dissemination models.",
+      "agent_types": "Innovators, Early Adopters, Early Majority, Late Majority, Laggards",
+      "environment_description": "A social system consisting of various individuals connected through a social network where the diffusion of innovation is influenced by network structure, social status, and trust in innovation.",
+      "individual_influence": "Different types of individuals (innovators, early adopters, etc.) affect the speed of innovation acceptance.",
+      "diffusion_factors": "Speed of innovation diffusion depends on network structure, social status, and trust in the innovation."
+    },
+    "design_concepts": {
+      "interaction_patterns": "Innovation spreads from innovators to early adopters, then to early majority, late majority, and finally to laggards through direct or indirect social network connections.",
+      "communication_protocols": "Information about innovation is communicated through interactions within the social network.",
+      "decision_mechanisms": "Agents decide to adopt innovation based on its advantages, costs, and social pressure.",
+      "network_effects": "Interactions among agents influence the adoption process through network effects, where agents are more likely to adopt if others in their social circle have.",
+      "network_structure": "Agents are connected through a social network, and the diffusion is influenced by network density, connectivity, and heterogeneity."
+    },
+    "details": {
+      "agent_behaviors": "Innovators actively spread innovation; early adopters adopt and disseminate innovation after seeing potential; early majority adopt after seeing significant acceptance; late majority join after broad acceptance; laggards adopt only under pressure.",
+      "decision_algorithms": "Agents make adoption decisions based on innovation's relative advantage, compatibility, complexity, trialability, and observability.",
+      "specific_constraints": "Innovation characteristics and social network attributes affect adoption decisions and diffusion speed.",
+      "simulation_process": "Initialize social network with different individual types, start innovation diffusion from innovators, and track through each social group.",
+      "agent_quantities": "Innovators: 1-10, Early Adopters: 10-30, Early Majority: 30-50, Late Majority: 30-50, Laggards: 10-30."
+    }
+  },
+  "agent_types": {
+    "Innovators": "Innovators are agents who actively spread new innovations within the social network, initiating the diffusion process.",
+    "EarlyAdopters": "EarlyAdopters are agents who adopt innovations after recognizing their potential and help disseminate them further in the network.",
+    "EarlyMajority": "EarlyMajority are agents who adopt innovations once they see significant acceptance and validation from early adopters.",
+    "LateMajority": "LateMajority are agents who adopt innovations after they observe broad acceptance within the social system.",
+    "Laggards": "Laggards are agents who adopt innovations only under social pressure, often being the last to integrate new ideas."
+  },
+  "portrait": {
+    "Innovators": 2,
+    "EarlyAdopters": 4,
+    "EarlyMajority": 5,
+    "LateMajority": 3,
+    "Laggards": 5
+  },
+  "metrics": [
+    {
+      "id": "Innovation_Adoption_Rate",
+      "name": "Innovation Adoption Rate",
+      "description": "Measures the percentage of agents who have adopted the innovation across all agent types.",
+      "visualization_type": "line",
+      "update_frequency": 5,
+      "variables": [
+        {
+          "name": "adoption_decision",
+          "source_type": "agent",
+          "agent_type": "EarlyAdopters",
+          "path": "adoption_decision",
+          "required": true,
+          "is_list": true
+        },
+        {
+          "name": "consideration_status",
+          "source_type": "agent",
+          "agent_type": "EarlyMajority",
+          "path": "consideration_status",
+          "required": true,
+          "is_list": true
+        },
+        {
+          "name": "broad_acceptance_evaluation",
+          "source_type": "agent",
+          "agent_type": "LateMajority",
+          "path": "broad_acceptance_evaluation",
+          "required": true,
+          "is_list": true
+        },
+        {
+          "name": "adoption_status",
+          "source_type": "agent",
+          "agent_type": "Laggards",
+          "path": "adoption_status",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Calculate the percentage of agents who have adopted the innovation by aggregating the true values from each agent type's list. Handle None values by treating them as non-adoptions. The total number of agents is the sum of the lengths of all lists, and the number of adopters is the sum of true values across all lists.",
+      "function_name": "Innovation_Adoption_Rate"
+    },
+    {
+      "id": "Network_Connectivity_Impact",
+      "name": "Network Connectivity Impact",
+      "description": "Analyzes the influence of network connections on the spread of innovation.",
+      "visualization_type": "bar",
+      "update_frequency": 5,
+      "variables": [
+        {
+          "name": "network_connections",
+          "source_type": "env",
+          "path": "network_connections",
+          "required": true,
+          "is_list": false
+        },
+        {
+          "name": "spread_status",
+          "source_type": "agent",
+          "agent_type": "Innovators",
+          "path": "spread_status",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Count the number of network connections and the number of innovators who have successfully spread the innovation. Handle None or empty lists by treating them as zero. The bar chart will represent these counts to show the correlation between network size and innovation spread success.",
+      "function_name": "Network_Connectivity_Impact"
+    },
+    {
+      "id": "Relative_Advantage_vs_Adoption",
+      "name": "Relative Advantage vs Adoption",
+      "description": "Compares the relative advantage of the innovation with the adoption status across agent types.",
+      "visualization_type": "pie",
+      "update_frequency": 5,
+      "variables": [
+        {
+          "name": "relative_advantage",
+          "source_type": "env",
+          "path": "relative_advantage",
+          "required": true,
+          "is_list": false
+        },
+        {
+          "name": "adoption_decision",
+          "source_type": "agent",
+          "agent_type": "EarlyAdopters",
+          "path": "adoption_decision",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Calculate the proportion of early adopters who have adopted the innovation relative to its perceived advantage. Handle None values by excluding them from calculations. The pie chart shows the proportion of adopters versus non-adopters, highlighting how perceived advantage influences adoption.",
+      "function_name": "Relative_Advantage_vs_Adoption"
+    }
+  ]
+}

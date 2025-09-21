@@ -1,0 +1,107 @@
+[
+    {
+        "name": "ObserverB-Alpha",
+        "feedback_content": "Initial feedback content",
+        "feedback_quality": 50,
+        "observation_skill_level": 73,
+        "communication_style": "Analytical",
+        "current_status": "observing",
+        "agent_type": "ObserverB",
+        "evaluation_criteria": [
+            "clarity",
+            "relevance",
+            "constructiveness"
+        ],
+        "feedback_history": [
+            {
+                "timestamp": "2025-04-01T12:00:00",
+                "content": "Initial observation feedback"
+            }
+        ],
+        "id": "5"
+    },
+    {
+        "name": "ObserverB-Beta",
+        "feedback_content": "Initial feedback content",
+        "feedback_quality": 50,
+        "observation_skill_level": 93,
+        "communication_style": "Assertive",
+        "current_status": "observing",
+        "agent_type": "ObserverB",
+        "evaluation_criteria": [
+            "clarity",
+            "relevance",
+            "constructiveness"
+        ],
+        "feedback_history": [
+            {
+                "timestamp": "2025-04-01T12:00:00",
+                "content": "Initial observation feedback"
+            }
+        ],
+        "id": "6"
+    },
+    {
+        "name": "ObserverB-Gamma",
+        "feedback_content": "Initial feedback content",
+        "feedback_quality": 50,
+        "observation_skill_level": 57,
+        "communication_style": "Amiable",
+        "current_status": "observing",
+        "agent_type": "ObserverB",
+        "evaluation_criteria": [
+            "clarity",
+            "relevance",
+            "constructiveness"
+        ],
+        "feedback_history": [
+            {
+                "timestamp": "2025-04-01T12:00:00",
+                "content": "Initial observation feedback"
+            }
+        ],
+        "id": "7"
+    },
+    {
+        "name": "ObserverB-Delta",
+        "feedback_content": "Initial feedback content",
+        "feedback_quality": 50,
+        "observation_skill_level": 83,
+        "communication_style": "Expressive",
+        "current_status": "observing",
+        "agent_type": "ObserverB",
+        "evaluation_criteria": [
+            "clarity",
+            "relevance",
+            "constructiveness"
+        ],
+        "feedback_history": [
+            {
+                "timestamp": "2025-04-01T12:00:00",
+                "content": "Initial observation feedback"
+            }
+        ],
+        "id": "8"
+    },
+    {
+        "name": "ObserverB-Epsilon",
+        "feedback_content": "Initial feedback content",
+        "feedback_quality": 50,
+        "observation_skill_level": 86,
+        "communication_style": "Reflective",
+        "current_status": "observing",
+        "agent_type": "ObserverB",
+        "evaluation_criteria": [
+            "clarity",
+            "relevance",
+            "constructiveness"
+        ],
+        "feedback_history": [
+            {
+                "timestamp": "2025-04-01T12:00:00",
+                "content": "Initial observation feedback"
+            }
+        ],
+        "id": "9"
+    }
+]

@@ -1,0 +1,95 @@
+{
+  "domain": "Sociology",
+  "scene_name": "norm_formation_theory",
+  "odd_protocol": {
+    "overview": {
+      "system_goal": "To study how group norms form through interaction and observation, and to explore how these norms are maintained or changed.",
+      "agent_types": "Entities (Agents) include Individuals, which are intelligent agents with different behavior tendencies, and Social Groups, which are interactive units composed of multiple individuals.",
+      "environment_description": "The environment consists of multiple individuals with varying behavior tendencies randomly assigned to different social groups, where they interact and observe each other to form or adapt to group norms."
+    },
+    "design_concepts": {
+      "interaction_patterns": "Individuals interact with each other within their assigned social groups. Through these interactions and observations, individuals adjust their behaviors to align with the dominant group norms.",
+      "communication_protocols": "Communication occurs implicitly through observation and interaction, influencing individuals' behavior tendencies and norm acceptance.",
+      "decision_mechanisms": "Individuals decide to adjust their behavior based on the level of group pressure they experience, which affects their acceptance of group norms."
+    },
+    "details": {
+      "agent_behaviors": "Agents are initialized with distinct behavior tendencies. Over time, they adjust these tendencies to align with group norms, influenced by the strength of group pressure.",
+      "decision_algorithms": "Agents use a process of observation and interaction to decide whether to conform to group norms. The likelihood of conformity increases with the intensity of group pressure.",
+      "specific_constraints": "The model includes constraints such as varying initial behavior tendencies, random assignment to groups, and the impact of group pressure on norm acceptance."
+    }
+  },
+  "agent_types": {
+    "IndividualAgent": "An intelligent agent with distinct behavior tendencies that interacts with others to form or adapt to group norms.",
+    "SocialGroupAgent": "An interactive unit composed of multiple IndividualAgents, facilitating the formation and maintenance of group norms through member interactions."
+  },
+  "portrait": {
+    "IndividualAgent": 5,
+    "SocialGroupAgent": 1
+  },
+  "metrics": [
+    {
+      "id": "average_group_norm_conformity",
+      "name": "average_group_norm_conformity",
+      "description": "Measures the average level of conformity to group norms across all individual agents.",
+      "visualization_type": "line",
+      "update_frequency": 5,
+      "variables": [
+        {
+          "name": "adjusted_behavior_tendencies",
+          "source_type": "agent",
+          "agent_type": "IndividualAgent",
+          "path": "profile.adjusted_behavior_tendencies",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "To calculate the average group norm conformity, we first ensure that the 'adjusted_behavior_tendencies' list is not None or empty. If it is, we skip the calculation for that agent. We then average the values within each agent's 'adjusted_behavior_tendencies' list. Finally, we compute the overall average across all agents by summing these averages and dividing by the number of agents with valid data.",
+      "function_name": "average_group_norm_conformity"
+    },
+    {
+      "id": "group_pressure_distribution",
+      "name": "group_pressure_distribution",
+      "description": "Shows the distribution of group pressure experienced by individual agents, indicating how pressure is spread across different groups.",
+      "visualization_type": "bar",
+      "update_frequency": 5,
+      "variables": [
+        {
+          "name": "group_pressure",
+          "source_type": "env",
+          "path": "data.group_pressure",
+          "required": true,
+          "is_list": false
+        },
+        {
+          "name": "group_id",
+          "source_type": "agent",
+          "agent_type": "IndividualAgent",
+          "path": "profile.group_id",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "For each unique 'group_id', calculate the average 'group_pressure' experienced by the agents in that group. Handle None or empty lists by excluding those agents from the calculation. Use a dictionary to map 'group_id' to the sum of 'group_pressure' values and count of agents, then compute the average pressure for each group. Visualize the result as a bar chart with 'group_id' on the x-axis and average group pressure on the y-axis.",
+      "function_name": "group_pressure_distribution"
+    },
+    {
+      "id": "average_norm_acceptance",
+      "name": "average_norm_acceptance",
+      "description": "Represents the proportion of social groups that have undergone norm changes.",
+      "visualization_type": "line",
+      "update_frequency": 5,
+      "variables": [
+        {
+          "name": "norm_acceptance",
+          "source_type": "agent",
+          "agent_type": "IndividualAgent",
+          "path": "profile.norm_acceptance",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Determine the proportion of social groups that have 'updated_norms'. Iterate over the 'updated_norms' list for each SocialGroupAgent and count how many have non-None and non-empty lists. Calculate the proportion by dividing the number of groups with updated norms by the total number of groups. Handle None values and empty lists by assuming no change in norms for those groups. Visualize the result with a pie chart showing the proportion of groups with and without norm changes.",
+      "function_name": "average_norm_acceptance"
+    }
+  ]
+}

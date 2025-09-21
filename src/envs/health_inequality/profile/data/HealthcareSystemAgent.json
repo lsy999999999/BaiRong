@@ -1,0 +1,102 @@
+[
+    {
+        "name": "HealthConnect Agent",
+        "resource_availability": 70.0,
+        "service_quality": "standard",
+        "insurance_coverage": "basic",
+        "allocated_resources": 50.0,
+        "service_provision_status": "operational",
+        "policy_impact_assessment": "pending",
+        "healthcare_accessibility": 75.0,
+        "health_policy_effectiveness": 60.0,
+        "agent_type": "HealthcareSystemAgent",
+        "individual_health_status": "stable",
+        "regional_health_disparities": [
+            {
+                "region": "urban",
+                "disparity_level": "medium"
+            }
+        ],
+        "id": "20"
+    },
+    {
+        "name": "MediCare Assistant",
+        "resource_availability": 70.0,
+        "service_quality": "standard",
+        "insurance_coverage": "basic",
+        "allocated_resources": 50.0,
+        "service_provision_status": "operational",
+        "policy_impact_assessment": "pending",
+        "healthcare_accessibility": 75.0,
+        "health_policy_effectiveness": 60.0,
+        "agent_type": "HealthcareSystemAgent",
+        "individual_health_status": "stable",
+        "regional_health_disparities": [
+            {
+                "region": "urban",
+                "disparity_level": "medium"
+            }
+        ],
+        "id": "21"
+    },
+    {
+        "name": "Wellness Advisor",
+        "resource_availability": 70.0,
+        "service_quality": "standard",
+        "insurance_coverage": "basic",
+        "allocated_resources": 50.0,
+        "service_provision_status": "operational",
+        "policy_impact_assessment": "pending",
+        "healthcare_accessibility": 75.0,
+        "health_policy_effectiveness": 60.0,
+        "agent_type": "HealthcareSystemAgent",
+        "individual_health_status": "stable",
+        "regional_health_disparities": [
+            {
+                "region": "urban",
+                "disparity_level": "medium"
+            }
+        ],
+        "id": "22"
+    },
+    {
+        "name": "CareNavigator Pro",
+        "resource_availability": 70.0,
+        "service_quality": "standard",
+        "insurance_coverage": "basic",
+        "allocated_resources": 50.0,
+        "service_provision_status": "operational",
+        "policy_impact_assessment": "pending",
+        "healthcare_accessibility": 75.0,
+        "health_policy_effectiveness": 60.0,
+        "agent_type": "HealthcareSystemAgent",
+        "individual_health_status": "stable",
+        "regional_health_disparities": [
+            {
+                "region": "urban",
+                "disparity_level": "medium"
+            }
+        ],
+        "id": "23"
+    },
+    {
+        "name": "HealthGuardian AI",
+        "resource_availability": 70.0,
+        "service_quality": "standard",
+        "insurance_coverage": "basic",
+        "allocated_resources": 50.0,
+        "service_provision_status": "operational",
+        "policy_impact_assessment": "pending",
+        "healthcare_accessibility": 75.0,
+        "health_policy_effectiveness": 60.0,
+        "agent_type": "HealthcareSystemAgent",
+        "individual_health_status": "stable",
+        "regional_health_disparities": [
+            {
+                "region": "urban",
+                "disparity_level": "medium"
+            }
+        ],
+        "id": "24"
+    }
+]

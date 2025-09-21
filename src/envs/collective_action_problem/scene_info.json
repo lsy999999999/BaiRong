@@ -1,0 +1,93 @@
+{
+  "domain": "Economics",
+  "scene_name": "collective_action_problem",
+  "odd_protocol": {
+    "overview": {
+      "system_goal": "Simulate individual decision-making in collective action scenarios to analyze conflicts between individual and collective interests and explore solutions to collective action dilemmas.",
+      "agent_types": "Individual: Each individual decides whether to cooperate in collective actions based on personal cost and benefit. Group: Evaluates whether collective goals are met based on individual behaviors.",
+      "environment_description": "The environment consists of multiple individuals and a group, with individuals having random cooperation willingness and the group having set goals and benefits."
+    },
+    "design_concepts": {
+      "interaction_patterns": "Individuals interact with the group by making cooperation decisions, which collectively impact the group’s ability to achieve its goals.",
+      "communication_protocols": "Implicit communication through actions; individuals signal cooperation willingness by their decisions, affecting group evaluations.",
+      "decision_mechanisms": "Individuals calculate cooperation willingness based on personal cost and benefit, influencing their decision to participate in collective action."
+    },
+    "details": {
+      "agent_behaviors": "Individuals decide on cooperation based on cost and benefit analysis. The group assesses collective action success based on individual cooperation levels.",
+      "decision_algorithms": "Individuals use a cost-benefit analysis algorithm to determine cooperation willingness. The group aggregates individual decisions to evaluate collective benefit.",
+      "specific_constraints": "Individual cooperation willingness is influenced by costs incurred and benefits received. The group’s goal is to maximize public benefit, contingent on individual cooperation."
+    }
+  },
+  "agent_types": {
+    "Individual": "An agent that decides whether to cooperate in collective actions based on personal cost and benefit analysis.",
+    "Group": "An agent that evaluates whether collective goals are met by aggregating individual cooperation decisions and assessing collective action success."
+  },
+  "portrait": {
+    "Individual": 5,
+    "Group": 1
+  },
+  "metrics": [
+    {
+      "id": "Average_Cooperation_Willingness",
+      "name": "Average Cooperation Willingness",
+      "description": "Measures the average willingness of individuals to cooperate in collective actions.",
+      "visualization_type": "line",
+      "update_frequency": 5,
+      "variables": [
+        {
+          "name": "cooperation_willingness",
+          "source_type": "agent",
+          "agent_type": "Individual",
+          "path": "profile.cooperation_willingness",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Calculate the average of cooperation_willingness values across all individuals. Handle None values by excluding them from the calculation. If the list is empty or all values are None, return a default value of 0.0.",
+      "function_name": "Average_Cooperation_Willingness"
+    },
+    {
+      "id": "Collective_Action_Success_Rate",
+      "name": "Collective Action Success Rate",
+      "description": "Indicates the proportion of time the collective action is successful.",
+      "visualization_type": "line",
+      "update_frequency": 5,
+      "variables": [
+        {
+          "name": "collective_success",
+          "source_type": "env",
+          "path": "data.collective_success",
+          "required": true,
+          "is_list": false
+        }
+      ],
+      "calculation_logic": "Track the number of times collective_success is True over a period and divide by the total number of observations. Handle None values by excluding them from the count. If no valid data is available, return a default success rate of 0.0.",
+      "function_name": "Collective_Action_Success_Rate"
+    },
+    {
+      "id": "Total_Group_Benefit",
+      "name": "Total Group Benefit",
+      "description": "Represents the total benefit achieved by the group from individual cooperation.",
+      "visualization_type": "line",
+      "update_frequency": 5,
+      "variables": [
+        {
+          "name": "group_benefit",
+          "source_type": "env",
+          "path": "data.group_benefit",
+          "required": true,
+          "is_list": false
+        },
+        {
+          "name": "total_cooperation",
+          "source_type": "env",
+          "path": "data.total_cooperation",
+          "required": true,
+          "is_list": false
+        }
+      ],
+      "calculation_logic": "Use the group_benefit value directly as it represents the benefit achieved. If group_benefit is None, use a default value of 0.0. This metric helps to understand the effectiveness of cooperation in achieving group goals.",
+      "function_name": "Total_Group_Benefit"
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+    "decision_options": [
+        {
+            "option_name": "Invest in Stock Market",
+            "cost": 5000,
+            "benefit": 7500,
+            "risk": 0.15
+        },
+        {
+            "option_name": "Start a Small Business",
+            "cost": 15000,
+            "benefit": 25000,
+            "risk": 0.3
+        },
+        {
+            "option_name": "Save in High-Interest Account",
+            "cost": 0,
+            "benefit": 2000,
+            "risk": 0.05
+        },
+        {
+            "option_name": "Purchase Real Estate",
+            "cost": 30000,
+            "benefit": 45000,
+            "risk": 0.25
+        },
+        {
+            "option_name": "Invest in Cryptocurrency",
+            "cost": 2000,
+            "benefit": 10000,
+            "risk": 0.4
+        }
+    ]
+}

@@ -1,0 +1,46 @@
+{
+    "environment": {
+        "variables": [
+            {
+                "name": "topic_library",
+                "type": "list",
+                "default_value": null
+            }
+        ]
+    },
+    "agents": {
+        "MediaAgent": {
+            "variables": [
+                {
+                    "name": "selected_topic",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "reporting_frequency",
+                    "type": "int",
+                    "default_value": null
+                },
+                {
+                    "name": "emotional_tone",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "emphasized_topic",
+                    "type": "string",
+                    "default_value": null
+                }
+            ]
+        },
+        "PublicAgent": {
+            "variables": [
+                {
+                    "name": "focus_value",
+                    "type": "float",
+                    "default_value": null
+                }
+            ]
+        }
+    }
+}

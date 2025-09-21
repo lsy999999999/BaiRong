@@ -1,0 +1,24 @@
+{
+    "available_media_sources": [
+        {
+            "name": "The Progressive Times",
+            "bias": "liberal"
+        },
+        {
+            "name": "Conservative Daily",
+            "bias": "conservative"
+        },
+        {
+            "name": "Neutral News Network",
+            "bias": "neutral"
+        },
+        {
+            "name": "Liberty Voice",
+            "bias": "libertarian"
+        },
+        {
+            "name": "Green World Gazette",
+            "bias": "environmentalist"
+        }
+    ]
+}

@@ -1,0 +1,17 @@
+[
+    {
+        "source_agent": "JobSeeker",
+        "target_agent": "RecruitmentChannel",
+        "direction": "bidirectional"
+    },
+    {
+        "source_agent": "JobSeeker",
+        "target_agent": "Employer",
+        "direction": "bidirectional"
+    },
+    {
+        "source_agent": "Employer",
+        "target_agent": "RecruitmentChannel",
+        "direction": "unidirectional"
+    }
+]

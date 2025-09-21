@@ -1,0 +1,67 @@
+[
+    {
+        "name": "Alex Harper",
+        "reserve_price": 80.0,
+        "auction_preference": "sealed_bid",
+        "strategy": "conservative",
+        "agent_type": "Seller",
+        "production_cost": 30.0,
+        "reputation": 0.0,
+        "reserve_price_decision": 0.0,
+        "market_analysis": [],
+        "auction_history": [],
+        "id": "5"
+    },
+    {
+        "name": "Jordan Blake",
+        "reserve_price": 150.0,
+        "auction_preference": "first_price",
+        "strategy": "aggressive",
+        "agent_type": "Seller",
+        "production_cost": 83.04,
+        "reputation": 0.0,
+        "reserve_price_decision": 0.0,
+        "market_analysis": [],
+        "auction_history": [],
+        "id": "6"
+    },
+    {
+        "name": "Taylor Morgan",
+        "reserve_price": 30,
+        "auction_preference": "second_price",
+        "strategy": "aggressive",
+        "agent_type": "Seller",
+        "production_cost": 7.0,
+        "reputation": 0.0,
+        "reserve_price_decision": 0.0,
+        "market_analysis": [],
+        "auction_history": [],
+        "id": "7"
+    },
+    {
+        "name": "Casey Sutton",
+        "reserve_price": 50.0,
+        "auction_preference": "first_price",
+        "strategy": "aggressive",
+        "agent_type": "Seller",
+        "production_cost": 12.5,
+        "reputation": 0.0,
+        "reserve_price_decision": 0.0,
+        "market_analysis": [],
+        "auction_history": [],
+        "id": "8"
+    },
+    {
+        "name": "Riley Vaughn",
+        "reserve_price": 90.0,
+        "auction_preference": "sealed_bid",
+        "strategy": "balanced",
+        "agent_type": "Seller",
+        "production_cost": 30.0,
+        "reputation": 0.0,
+        "reserve_price_decision": 0.0,
+        "market_analysis": [],
+        "auction_history": [],
+        "id": "9"
+    }
+]

@@ -1,0 +1,87 @@
+[
+    {
+        "name": "Alex Johnson",
+        "social_needs_status": "active",
+        "social_interactions_needed": [
+            "team_meeting",
+            "casual_chat"
+        ],
+        "current_need_level": 1,
+        "motivation_focus": "esteem",
+        "leadership_influence": 0.474805466402087,
+        "work_performance": 70,
+        "cultural_adaptation": 0.2780077873583453,
+        "agent_type": "SocialAgent",
+        "emotional_state": "neutral",
+        "interaction_count": 0,
+        "id": "5"
+    },
+    {
+        "name": "Maria Gonzalez",
+        "social_needs_status": "active",
+        "social_interactions_needed": [
+            "team_meeting",
+            "casual_chat"
+        ],
+        "current_need_level": 1,
+        "motivation_focus": "esteem",
+        "leadership_influence": 0.3226110003869821,
+        "work_performance": 70,
+        "cultural_adaptation": 0.14926321943037468,
+        "agent_type": "SocialAgent",
+        "emotional_state": "neutral",
+        "interaction_count": 0,
+        "id": "6"
+    },
+    {
+        "name": "Chen Wei",
+        "social_needs_status": "active",
+        "social_interactions_needed": [
+            "team_meeting",
+            "casual_chat"
+        ],
+        "current_need_level": 1,
+        "motivation_focus": "social",
+        "leadership_influence": 0.4473843409530932,
+        "work_performance": 70,
+        "cultural_adaptation": 0.06958559307549617,
+        "agent_type": "SocialAgent",
+        "emotional_state": "neutral",
+        "interaction_count": 0,
+        "id": "7"
+    },
+    {
+        "name": "Fatima Al-Mansouri",
+        "social_needs_status": "active",
+        "social_interactions_needed": [
+            "team_meeting",
+            "casual_chat"
+        ],
+        "current_need_level": 1,
+        "motivation_focus": "esteem",
+        "leadership_influence": 0.06001866138508749,
+        "work_performance": 70,
+        "cultural_adaptation": 0.670497694040129,
+        "agent_type": "SocialAgent",
+        "emotional_state": "neutral",
+        "interaction_count": 0,
+        "id": "8"
+    },
+    {
+        "name": "Liam O'Connor",
+        "social_needs_status": "active",
+        "social_interactions_needed": [
+            "team_meeting",
+            "casual_chat"
+        ],
+        "current_need_level": 1,
+        "motivation_focus": "social",
+        "leadership_influence": 0.2513193858271163,
+        "work_performance": 70,
+        "cultural_adaptation": 0.29427176375858033,
+        "agent_type": "SocialAgent",
+        "emotional_state": "neutral",
+        "interaction_count": 0,
+        "id": "9"
+    }
+]

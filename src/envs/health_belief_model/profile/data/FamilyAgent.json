@@ -1,0 +1,102 @@
+[
+    {
+        "name": "Smith",
+        "family_health_priorities": [
+            "exercise",
+            "balanced diet"
+        ],
+        "support_provided": "emotional",
+        "influence_level": 48,
+        "communication_style": "collaborative",
+        "health_education_level": 5,
+        "decision_making_speed": 1.103396860374872,
+        "social_support_network": [
+            "community center",
+            "local health group"
+        ],
+        "perceived_health_threat": 50,
+        "agent_type": "FamilyAgent",
+        "financial_resources": 1000.0,
+        "id": "5"
+    },
+    {
+        "name": "Johnson",
+        "family_health_priorities": [
+            "exercise",
+            "balanced diet"
+        ],
+        "support_provided": "emotional",
+        "influence_level": 62,
+        "communication_style": "collaborative",
+        "health_education_level": 2,
+        "decision_making_speed": 1.5766173470113807,
+        "social_support_network": [
+            "community center",
+            "local health group"
+        ],
+        "perceived_health_threat": 50,
+        "agent_type": "FamilyAgent",
+        "financial_resources": 1000.0,
+        "id": "6"
+    },
+    {
+        "name": "Williams",
+        "family_health_priorities": [
+            "exercise",
+            "balanced diet"
+        ],
+        "support_provided": "emotional",
+        "influence_level": 65,
+        "communication_style": "supportive",
+        "health_education_level": 5,
+        "decision_making_speed": 0.7518047573048863,
+        "social_support_network": [
+            "community center",
+            "local health group"
+        ],
+        "perceived_health_threat": 50,
+        "agent_type": "FamilyAgent",
+        "financial_resources": 1000.0,
+        "id": "7"
+    },
+    {
+        "name": "Brown",
+        "family_health_priorities": [
+            "exercise",
+            "balanced diet"
+        ],
+        "support_provided": "emotional",
+        "influence_level": 82,
+        "communication_style": "directive",
+        "health_education_level": 4,
+        "decision_making_speed": 2.0503921754752126,
+        "social_support_network": [
+            "community center",
+            "local health group"
+        ],
+        "perceived_health_threat": 50,
+        "agent_type": "FamilyAgent",
+        "financial_resources": 1000.0,
+        "id": "8"
+    },
+    {
+        "name": "Jones",
+        "family_health_priorities": [
+            "exercise",
+            "balanced diet"
+        ],
+        "support_provided": "emotional",
+        "influence_level": 51,
+        "communication_style": "collaborative",
+        "health_education_level": 2,
+        "decision_making_speed": 1.526968104289574,
+        "social_support_network": [
+            "community center",
+            "local health group"
+        ],
+        "perceived_health_threat": 50,
+        "agent_type": "FamilyAgent",
+        "financial_resources": 1000.0,
+        "id": "9"
+    }
+]

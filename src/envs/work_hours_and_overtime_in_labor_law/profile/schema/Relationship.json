@@ -1,0 +1,12 @@
+[
+    {
+        "source_agent": "Employee",
+        "target_agent": "Employer",
+        "direction": "unidirectional"
+    },
+    {
+        "source_agent": "Employer",
+        "target_agent": "Judge",
+        "direction": "unidirectional"
+    }
+]

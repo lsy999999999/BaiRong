@@ -1,0 +1,84 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Acme Corp",
+        "private": false,
+        "sampling": "llm",
+        "description": "The name of the employer entity"
+    },
+    "defense_arguments": {
+        "type": "str",
+        "default": "All overtime was paid according to contract terms.",
+        "private": true,
+        "sampling": "default"
+    },
+    "evidence_documents": {
+        "type": "list",
+        "default": [
+            "contract_agreement.pdf",
+            "timesheets.xlsx"
+        ],
+        "private": true,
+        "sampling": "default",
+        "sample_size": 2
+    },
+    "business_sector": {
+        "type": "str",
+        "default": "Manufacturing",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "Manufacturing",
+            "Retail",
+            "Technology",
+            "Healthcare"
+        ]
+    },
+    "financial_status": {
+        "type": "float",
+        "default": 1000000.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "current_case_status": {
+        "type": "str",
+        "default": "awaiting_judgment",
+        "private": false,
+        "sampling": "default"
+    },
+    "legal_team_size": {
+        "type": "int",
+        "default": 5,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            1,
+            10
+        ]
+    },
+    "overtime_policy": {
+        "type": "str",
+        "default": "Standard overtime paid after 40 hours per week.",
+        "private": false,
+        "sampling": "llm",
+        "description": "Description of the employer's overtime policy"
+    },
+    "remote_work_impact": {
+        "type": "str",
+        "default": "minimal",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "minimal",
+            "moderate",
+            "significant"
+        ]
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

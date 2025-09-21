@@ -1,0 +1,77 @@
+{
+    "name": {
+        "type": "str",
+        "default": "ParticipantA",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's identifier in the simulation"
+    },
+    "behavior_description": {
+        "type": "str",
+        "default": "observing_behavior",
+        "private": false,
+        "sampling": "default"
+    },
+    "observation_context": {
+        "type": "str",
+        "default": "initial_context",
+        "private": false,
+        "sampling": "default"
+    },
+    "attribution_type": {
+        "type": "str",
+        "default": "undetermined",
+        "private": false,
+        "sampling": "default"
+    },
+    "reasoning": {
+        "type": "str",
+        "default": "awaiting_analysis",
+        "private": false,
+        "sampling": "default"
+    },
+    "interaction_count": {
+        "type": "int",
+        "default": 0,
+        "private": false,
+        "sampling": "default"
+    },
+    "bias_detection_score": {
+        "type": "float",
+        "default": 0.0,
+        "private": true,
+        "sampling": "default"
+    },
+    "task_difficulty_level": {
+        "type": "int",
+        "default": 5,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            1,
+            10
+        ]
+    },
+    "feedback_received": {
+        "type": "list",
+        "default": [
+            "awaiting_feedback"
+        ],
+        "private": true,
+        "sampling": "default",
+        "sample_size": 1
+    },
+    "decision_confidence": {
+        "type": "float",
+        "default": 50.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

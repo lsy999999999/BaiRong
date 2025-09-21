@@ -1,0 +1,181 @@
+{
+    "Innovators": [
+        {
+            "id": 1,
+            "name": "initiate_innovation_spread",
+            "condition": null,
+            "description": "Initiate the spread of innovation by introducing it into the social network and influencing early adopters.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "innovation_id",
+                    "type": "str",
+                    "context": "env",
+                    "description": "Unique identifier for the innovation being introduced"
+                },
+                {
+                    "name": "network_connections",
+                    "type": "list",
+                    "context": "env",
+                    "description": "List of social network connections for spreading innovation"
+                },
+                {
+                    "name": "relative_advantage",
+                    "type": "float",
+                    "context": "env",
+                    "description": "Perceived relative advantage of the innovation"
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "spread_status",
+                    "type": "bool",
+                    "context": "agent",
+                    "description": "Status indicating whether the innovation spread has been initiated"
+                }
+            ]
+        }
+    ],
+    "EarlyAdopters": [
+        {
+            "id": 2,
+            "name": "evaluate_and_adopt_innovation",
+            "condition": "Innovation has relative advantage and compatibility",
+            "description": "Evaluate the innovation based on its attributes and decide whether to adopt and further disseminate it to the early majority.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "innovation_id",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Unique identifier for the innovation being evaluated"
+                },
+                {
+                    "name": "relative_advantage",
+                    "type": "float",
+                    "context": "event",
+                    "description": "Perceived relative advantage of the innovation"
+                },
+                {
+                    "name": "network_connections",
+                    "type": "list",
+                    "context": "event",
+                    "description": "List of social network connections through which the innovation is spread"
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "adoption_decision",
+                    "type": "bool",
+                    "context": "agent",
+                    "description": "Decision status of whether the innovation is adopted"
+                }
+            ]
+        }
+    ],
+    "EarlyMajority": [
+        {
+            "id": 3,
+            "name": "consider_adoption",
+            "condition": "Significant acceptance among early adopters",
+            "description": "Consider adopting the innovation based on the influence from early adopters and the observed social pressure.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "innovation_id",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Unique identifier for the innovation being considered"
+                },
+                {
+                    "name": "adoption_rate",
+                    "type": "float",
+                    "context": "event",
+                    "description": "Rate at which early adopters are passing the innovation"
+                },
+                {
+                    "name": "social_pressure",
+                    "type": "float",
+                    "context": "event",
+                    "description": "Level of social pressure influencing adoption"
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "consideration_status",
+                    "type": "bool",
+                    "context": "agent",
+                    "description": "Status indicating whether the early majority is considering adoption"
+                }
+            ]
+        }
+    ],
+    "LateMajority": [
+        {
+            "id": 4,
+            "name": "evaluate_broad_acceptance",
+            "condition": "Broad acceptance and social pressure",
+            "description": "Evaluate the broad acceptance of the innovation by the early majority and decide on adoption based on acceptance thresholds.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "innovation_id",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Unique identifier for the innovation being evaluated"
+                },
+                {
+                    "name": "acceptance_threshold",
+                    "type": "float",
+                    "context": "event",
+                    "description": "Threshold of acceptance needed to influence late majority"
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "broad_acceptance_evaluation",
+                    "type": "bool",
+                    "context": "agent",
+                    "description": "Evaluation result indicating whether broad acceptance is met"
+                }
+            ]
+        }
+    ],
+    "Laggards": [
+        {
+            "id": 5,
+            "name": "adopt_under_pressure",
+            "condition": "Social pressure and necessity",
+            "description": "Adopt the innovation under pressure from the late majority and complete the diffusion process.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "innovation_id",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Unique identifier for the innovation being adopted"
+                },
+                {
+                    "name": "influence_factor",
+                    "type": "float",
+                    "context": "event",
+                    "description": "Factor indicating the influence on laggards"
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "adoption_status",
+                    "type": "bool",
+                    "context": "agent",
+                    "description": "Status indicating whether the innovation has been adopted by laggards"
+                },
+                {
+                    "name": "completion_status",
+                    "type": "bool",
+                    "context": "env",
+                    "description": "Indicates whether the diffusion process is completed"
+                }
+            ]
+        }
+    ]
+}

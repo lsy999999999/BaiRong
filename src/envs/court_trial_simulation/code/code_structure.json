@@ -1,0 +1,683 @@
+{
+  "agents": {
+    "Prosecutor": {
+      "imports": "from typing import Any, List,Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "1": {
+          "code": "async def evaluate_evidence(self, event: Event) -> List[Event]:\n        # Condition check: Ensure evidence is available for evaluation\n        evidence_quality = self.profile.get_data(\"evidence_quality\", None)\n        conviction_likelihood = self.profile.get_data(\"conviction_likelihood\", None)\n\n        if evidence_quality is None or conviction_likelihood is None:\n            return []  # Condition not met, return empty list\n\n        # Craft instruction for generating prosecution decision and target_ids\n        instruction = \"\"\"Evaluate the 'evidence_quality' and 'conviction_likelihood' to determine the 'prosecution_decision'.\n        Return the decision in the following JSON format:\n        {\n            \"prosecution_decision\": \"<Decision on whether to proceed with prosecution>\",\n            \"target_ids\": [\"<ID(s) of the agents to whom the event should be sent>\"]\n        }\n        \"\"\"\n\n        observation = f\"Evidence Quality: {evidence_quality}, Conviction Likelihood: {conviction_likelihood}\"\n        result = await self.generate_reaction(instruction, observation)\n\n        prosecution_decision = result.get('prosecution_decision', \"undecided\")\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Update agent's profile with the prosecution decision\n        self.profile.update_data(\"prosecution_decision\", prosecution_decision)\n\n        # Prepare outgoing events based on prosecution decision\n        events = []\n        for target_id in target_ids:\n            if prosecution_decision == \"proceed\":\n                evidence_event = EvidenceEvaluatedEvent(self.profile_id, target_id, evidence_details=\"\", ruling_request=\"pending\", prosecution_decision=prosecution_decision)\n                events.append(evidence_event)\n            else:\n                decision_event = ProsecutionDecisionEvent(self.profile_id, target_id, prosecution_decision=prosecution_decision, evidence_quality=evidence_quality, conviction_likelihood=conviction_likelihood)\n                events.append(decision_event)\n\n        return events",
+          "metadata": {
+            "id": 1,
+            "name": "evaluate_evidence",
+            "condition": "Evidence must be available for evaluation",
+            "description": "The Prosecutor assesses the quality and relevance of the evidence to decide on the feasibility of proceeding with prosecution.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "evidence_quality",
+                "type": "float",
+                "context": "agent",
+                "description": "Assessment of the evidence's quality."
+              },
+              {
+                "name": "conviction_likelihood",
+                "type": "float",
+                "context": "agent",
+                "description": "Estimated likelihood of conviction based on evidence."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "prosecution_decision",
+                "type": "string",
+                "context": "agent",
+                "description": "Decision on whether to proceed with prosecution."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "DefenseLawyer": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "2": {
+          "code": "async def prepare_defense(self, event: Event) -> List[Event]:\n        # Check if the case details and evidence are available\n        case_details = self.profile.get_data(\"case_details\", None)\n        evidence = self.profile.get_data(\"evidence\", None)\n    \n        if case_details is None or evidence is None:\n            return []  # Condition not met, exit handler\n    \n        # Retrieve the current defense strategy if available\n        defense_strategy = self.profile.get_data(\"defense_strategy\", \"\")\n\n        # Prepare the observation and instruction for the LLM\n        observation = f\"Case details: {case_details}, Evidence: {evidence}, Defense strategy: {defense_strategy}\"\n        instruction = \"\"\"\n        Formulate a comprehensive defense strategy for the client based on the available case details and evidence.\n        Ensure that the strategy considers all relevant legal precedents and procedural rules.\n        Please return the information in the following JSON format:\n    \n        {\n        \"prepared_defense\": \"<The completed defense strategy>\",\n        \"target_ids\": [\"<The string ID of the Judge agent>\"]\n        }\n        \"\"\"\n\n        # Generate the reaction using the LLM\n        result = await self.generate_reaction(instruction, observation)\n\n        # Extract the prepared defense strategy and target IDs from the LLM's response\n        prepared_defense = result.get('prepared_defense', None)\n        target_ids = result.get('target_ids', None)\n    \n        # Ensure target_ids is a list\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Update the agent's profile with the prepared defense strategy\n        self.profile.update_data(\"prepared_defense\", prepared_defense)\n\n        # Prepare and send the DefensePreparedEvent to the Judge\n        events = []\n        for target_id in target_ids:\n            defense_prepared_event = DefensePreparedEvent(self.profile_id, target_id, prepared_defense)\n            events.append(defense_prepared_event)\n\n        return events",
+          "metadata": {
+            "id": 2,
+            "name": "prepare_defense",
+            "condition": "Case details and evidence must be available",
+            "description": "The Defense Lawyer formulates a strategy to defend the client in court, considering the evidence and legal precedents.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "defense_strategy",
+                "type": "string",
+                "context": "agent",
+                "description": "Strategy developed for defending the client."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "prepared_defense",
+                "type": "string",
+                "context": "agent",
+                "description": "Completed defense strategy ready for trial."
+              }
+            ]
+          }
+        },
+        "3": {
+          "code": "async def negotiate_plea(self, event: Event) -> List[Event]:\n        # Condition Check: Ensure Prosecution decision received\n        prosecution_decision = event.prosecution_decision\n        if prosecution_decision == \"undecided\":\n            return []\n\n        # Access required variables\n        plea_terms = self.profile.get_data(\"plea_terms\", \"\")\n    \n        # Prepare observation and instruction for decision making\n        observation = f\"Prosecution decision: {prosecution_decision}, Plea terms: {plea_terms}\"\n        instruction = \"\"\"Engage in plea negotiation based on the prosecution decision and proposed plea terms.\n        Please return the information in the following JSON format:\n\n        {\n        \"negotiated_plea\": \"<Outcome of the plea negotiation>\",\n        \"target_ids\": [\"<The string ID(s) of the Defendant agent>\"]\n        }\n        \"\"\"\n\n        # Generate reaction using LLM\n        result = await self.generate_reaction(instruction, observation)\n    \n        negotiated_plea = result.get('negotiated_plea', \"\")\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Update agent state with negotiated plea\n        self.profile.update_data(\"negotiated_plea\", negotiated_plea)\n\n        # Prepare and send PleaNegotiationEvent to Defendant\n        events = []\n        for target_id in target_ids:\n            plea_event = PleaNegotiationEvent(self.profile_id, target_id, negotiated_plea)\n            events.append(plea_event)\n\n        return events",
+          "metadata": {
+            "id": 3,
+            "name": "negotiate_plea",
+            "condition": "Prosecution decision received",
+            "description": "The Defense Lawyer engages in negotiations with the Prosecutor to reach a plea agreement favorable to the client.",
+            "type": "AND",
+            "required_variables": [
+              {
+                "name": "prosecution_decision",
+                "type": "string",
+                "context": "event",
+                "description": "Prosecutor's decision on proceeding with prosecution."
+              },
+              {
+                "name": "plea_terms",
+                "type": "string",
+                "context": "agent",
+                "description": "Proposed terms for the plea agreement."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "negotiated_plea",
+                "type": "string",
+                "context": "agent",
+                "description": "Outcome of plea negotiation."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "Judge": {
+      "imports": "from typing import Any, List\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "4": {
+          "code": "async def rule_on_evidence(self, event: Event) -> List[Event]:\n        # Check if the condition \"Evaluated evidence presented by prosecutor\" is met\n        if not event.evidence_details:\n            return []\n\n        # Access the required variables from the event\n        evidence_details = event.evidence_details\n        ruling_request = event.ruling_request\n\n        # Construct the observation and instruction for generate_reaction\n        observation = f\"Evidence Details: {evidence_details}, Ruling Request: {ruling_request}\"\n        instruction = \"\"\"Evaluate the presented evidence and decide on its admissibility in court.\n        Consider the details and request provided. Return the ruling decision and target_ids in the following JSON format:\n\n        {\n        \"evidence_admissibility\": \"<Admissibility decision of the evidence>\",\n        \"target_ids\": [\"<The string ID(s) of the Jury agent(s)>\"]\n        }\n        \"\"\"\n\n        # Generate a reaction using the LLM\n        result = await self.generate_reaction(instruction, observation)\n    \n        # Extract the admissibility decision and target_ids from the result\n        evidence_admissibility = result.get('evidence_admissibility', None)\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Update the agent's profile with the new evidence admissibility\n        self.profile.update_data(\"evidence_admissibility\", evidence_admissibility)\n\n        # Prepare and send the EvidenceRulingEvent to the target(s)\n        events = []\n        for target_id in target_ids:\n            ruling_event = EvidenceRulingEvent(self.profile_id, target_id, evidence_admissibility)\n            events.append(ruling_event)\n\n        return events",
+          "metadata": {
+            "id": 4,
+            "name": "rule_on_evidence",
+            "condition": "Evaluated evidence presented by prosecutor",
+            "description": "The Judge evaluates the evidence presented by the Prosecutor and decides on its admissibility in court.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "evidence_details",
+                "type": "string",
+                "context": "event",
+                "description": "Details of the evidence presented for ruling."
+              },
+              {
+                "name": "ruling_request",
+                "type": "string",
+                "context": "event",
+                "description": "Request for ruling on evidence admissibility."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "evidence_admissibility",
+                "type": "string",
+                "context": "agent",
+                "description": "Judge's ruling on the admissibility of evidence."
+              }
+            ]
+          }
+        },
+        "5": {
+          "code": "async def manage_trial(self, event: Event) -> List[Event]:\n        # Condition Check: \"Defense prepared and evidence ruled admissible\"\n        defense_strategy = self.profile.get_data(\"defense_strategy\", None)\n        evidence_admissible = self.profile.get_data(\"evidence_admissibility\", \"pending\")\n    \n        if not (defense_strategy and evidence_admissible == \"admissible\"):\n            return []\n\n        # Retrieve trial phase from agent profile\n        trial_phase = self.profile.get_data(\"trial_phase\", \"initiation\")\n\n        # Generate reaction with instruction and observation\n        instruction = \"\"\"Please decide on the appropriate targets for managing the trial proceedings. \n        Ensure the trial phase is updated correctly and return the target_ids in a JSON format:\n    \n        {\n        \"trial_phase\": \"<Updated trial phase>\",\n        \"trial_status\": \"<Current status of the trial>\",\n        \"target_ids\": [\"<List of target agent IDs>\"]\n        }\n        \"\"\"\n        observation = f\"Current trial phase: {trial_phase}, Defense strategy: {defense_strategy}, Evidence admissible: {evidence_admissible}\"\n    \n        result = await self.generate_reaction(instruction, observation)\n\n        # Extracting results\n        trial_phase = result.get('trial_phase', trial_phase)\n        trial_status = result.get('trial_status', \"ongoing\")\n        target_ids = result.get('target_ids', [])\n\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Update agent profile with new trial phase and status\n        self.profile.update_data(\"trial_phase\", trial_phase)\n        self.profile.update_data(\"trial_status\", trial_status)\n\n        # Prepare outgoing events based on the updated trial phase and target IDs\n        events = []\n        for target_id in target_ids:\n            if trial_phase == \"ongoing\":\n                trial_event = TrialManagementEvent(self.profile_id, target_id, trial_phase)\n                events.append(trial_event)\n            elif trial_phase == \"witness_call\":\n                witness_event = WitnessCallEvent(self.profile_id, target_id, \"\")\n                events.append(witness_event)\n\n        return events",
+          "metadata": {
+            "id": 5,
+            "name": "manage_trial",
+            "condition": "Defense prepared and evidence ruled admissible",
+            "description": "The Judge oversees the trial proceedings, ensuring adherence to legal protocols and efficient trial management.",
+            "type": "AND",
+            "required_variables": [
+              {
+                "name": "trial_phase",
+                "type": "string",
+                "context": "agent",
+                "description": "Current phase of the trial managed by the Judge."
+              },
+              {
+                "name": "defense_strategy",
+                "type": "string",
+                "context": "event",
+                "description": "Defense strategy prepared for trial management."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "trial_status",
+                "type": "string",
+                "context": "agent",
+                "description": "Status update on trial progress."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "Defendant": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "6": {
+          "code": "async def consider_plea(self, event: Event) -> List[Event]:\n        # Condition Check\n        if event.__class__.__name__ != \"PleaNegotiationEvent\":\n            return []\n\n        # Retrieve plea terms from event\n        plea_terms = event.plea_terms\n\n        # Generate decision using LLM\n        instruction = f\"\"\"\n        You are the Defendant in a court trial simulation. The Defense Lawyer has proposed a plea deal with the following terms: {plea_terms}.\n        Please evaluate these terms and decide whether to accept the plea deal. Your decision should be based on the favorability of the terms.\n        Return the decision in the following JSON format:\n        {{\n            \"plea_acceptance\": \"<accepted or rejected>\",\n            \"target_ids\": [\"<The string ID of the Judge agent>\"]\n        }}\n        \"\"\"\n\n        observation = f\"Current plea terms: {plea_terms}\"\n\n        result = await self.generate_reaction(instruction, observation)\n\n        plea_acceptance = result.get('plea_acceptance', \"undecided\")\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Update Defendant's profile with plea acceptance decision\n        self.profile.update_data(\"plea_acceptance\", plea_acceptance)\n\n        # Create and send PleaDecisionEvent to the Judge\n        events = []\n        for target_id in target_ids:\n            plea_decision_event = PleaDecisionEvent(self.profile_id, target_id, plea_acceptance)\n            events.append(plea_decision_event)\n\n        return events",
+          "metadata": {
+            "id": 6,
+            "name": "consider_plea",
+            "condition": "Plea negotiation proposal received",
+            "description": "The Defendant evaluates the plea deal proposed by the Defense Lawyer and decides whether to accept it.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "plea_terms",
+                "type": "string",
+                "context": "event",
+                "description": "Terms of the plea deal proposed to the Defendant."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "plea_acceptance",
+                "type": "string",
+                "context": "agent",
+                "description": "Decision on whether to accept the plea deal."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "Jury": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "7": {
+          "code": "async def evaluate_evidence(self, event: Event) -> List[Event]:\n        evidence_admissibility = None\n        testimony_details = None\n\n        if event.__class__.__name__ == \"EvidenceRulingEvent\":\n            evidence_admissibility = event.evidence_admissibility\n            if evidence_admissibility != \"admissible\":\n                return []\n        elif event.__class__.__name__ == \"TestimonyEvent\":\n            testimony_details = event.testimony_details\n            if not testimony_details:\n                return []\n        else:\n            return []\n\n        instruction = \"\"\"Evaluate the evidence provided during the trial. Consider the credibility and relevance of each item. \n        Return the evaluation results in the following JSON format:\n        {\n        \"evidence_evaluation\": [\"<Evaluation result for each evidence item>\"],\n        \"target_ids\": [\"<ID(s) of the agent(s) for the form_verdict action>\"]\n        }\n        \"\"\"\n        observation = f\"Testimony Details: {testimony_details}\" if testimony_details else f\"Evidence Admissibility: {evidence_admissibility}\"\n    \n        result = await self.generate_reaction(instruction, observation)\n    \n        evidence_evaluation = result.get('evidence_evaluation', [])\n        target_ids = result.get('target_ids', [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        self.profile.update_data(\"evidence_evaluation\", evidence_evaluation)\n\n        events = []\n        for target_id in target_ids:\n            evaluation_event = EvidenceEvaluationEvent(self.profile_id, target_id, evidence_evaluation)\n            events.append(evaluation_event)\n    \n        return events",
+          "metadata": {
+            "id": 7,
+            "name": "evaluate_evidence",
+            "condition": "Evidence ruled admissible and presented",
+            "description": "The Jury examines the evidence presented during the trial to form an informed opinion for verdict formation.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "evidence_list",
+                "type": "list",
+                "context": "event",
+                "description": "List of evidence items being evaluated by the Jury."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "evidence_evaluation",
+                "type": "list",
+                "context": "agent",
+                "description": "Evaluation results of evidence items."
+              }
+            ]
+          }
+        },
+        "8": {
+          "code": "async def form_verdict(self, event: Event) -> List[Event]:\n        trial_phase = event.trial_phase if event.__class__.__name__ == \"TrialManagementEvent\" else self.profile.get_data(\"trial_phase\", \"ongoing\")\n        evidence_evaluation = event.evidence_evaluation if event.__class__.__name__ == \"EvidenceEvaluationEvent\" else self.profile.get_data(\"evidence_evaluation\", [])\n\n        if trial_phase != \"completed\" or not evidence_evaluation:\n            return []\n\n        self.profile.update_data(\"trial_phase\", trial_phase)\n        self.profile.update_data(\"evidence_evaluation\", evidence_evaluation)\n\n        instruction = \"\"\"Based on the evaluated evidence and the completed trial phase, form the final verdict for the trial.\n        Please return the information in the following JSON format:\n    \n        {\n        \"verdict\": \"<The final verdict formed by the Jury>\",\n        \"completion_status\": \"complete\",\n        \"target_ids\": [\"ENV\"]\n        }\n        \"\"\"\n        observation = f\"Trial Phase: {trial_phase}, Evidence Evaluation: {evidence_evaluation}\"\n        result = await self.generate_reaction(instruction, observation)\n\n        verdict = result.get('verdict', \"undecided\")\n        completion_status = result.get('completion_status', \"complete\")\n        target_ids = result.get('target_ids', [\"ENV\"])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        self.profile.update_data(\"verdict\", verdict)\n\n        events = []\n        for target_id in target_ids:\n            verdict_event = VerdictFormedEvent(self.profile_id, target_id, verdict=verdict, completion_status=completion_status)\n            events.append(verdict_event)\n\n        return events",
+          "metadata": {
+            "id": 8,
+            "name": "form_verdict",
+            "condition": "Trial proceedings completed and evidence evaluated",
+            "description": "The Jury deliberates based on evaluated evidence and collective discussion to form the final verdict of the trial.",
+            "type": "AND",
+            "required_variables": [
+              {
+                "name": "evidence_evaluation",
+                "type": "list",
+                "context": "agent",
+                "description": "Results of evidence evaluation."
+              },
+              {
+                "name": "trial_phase",
+                "type": "string",
+                "context": "event",
+                "description": "Current phase of the trial overseen by the Judge."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "verdict",
+                "type": "string",
+                "context": "agent",
+                "description": "Final verdict formed by the Jury."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "Witness": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "9": {
+          "code": "async def prepare_testimony(self, event: Event) -> List[Event]:\n        # Condition check: Witness must prepare for potential testimony\n        if not self.profile.get_data(\"must_prepare_testimony\", False):\n            return []\n\n        # Observation context for generating reaction\n        observation = self.profile.get_data(\"testimony_content\", \"\")\n\n        # Generate reaction using LLM to prepare the testimony content\n        instruction = \"\"\"Please prepare the content for the witness's testimony. \n        The testimony should be finalized and ready for presentation during the trial.\n        Ensure the response includes the target_ids for the Judge.\n        Return the information in the following JSON format:\n\n        {\n        \"prepared_testimony\": \"<Finalized testimony content>\",\n        \"target_ids\": [\"<The string ID of the Judge>\"]\n        }\n        \"\"\"\n    \n        result = await self.generate_reaction(instruction, observation)\n    \n        # Extract prepared testimony and target_ids from the LLM's response\n        prepared_testimony = result.get('prepared_testimony', \"\")\n        target_ids = result.get('target_ids', [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Update the agent's profile with the prepared testimony\n        self.profile.update_data(\"prepared_testimony\", prepared_testimony)\n\n        # Create and send the TestimonyPreparedEvent to the Judge\n        events = []\n        for target_id in target_ids:\n            testimony_event = TestimonyPreparedEvent(self.profile_id, target_id, prepared_testimony)\n            events.append(testimony_event)\n\n        return events",
+          "metadata": {
+            "id": 9,
+            "name": "prepare_testimony",
+            "condition": "Witness must prepare for potential testimony",
+            "description": "The Witness prepares the content of their testimony to be presented during the trial.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "testimony_content",
+                "type": "string",
+                "context": "agent",
+                "description": "Prepared content of the witness's testimony."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "prepared_testimony",
+                "type": "string",
+                "context": "agent",
+                "description": "Finalized testimony content ready for presentation."
+              }
+            ]
+          }
+        },
+        "10": {
+          "code": "async def testify(self, event: Event) -> List[Event]:\n        # Condition Check: Ensure the action is called during trial proceedings\n        trial_phase = self.profile.get_data(\"trial_phase\", \"ongoing\")\n        if trial_phase != \"ongoing\":\n            return []\n\n        # Access required event data\n        witness_id = event.witness_id\n\n        # Prepare instruction for the LLM\n        instruction = \"\"\"\n        The Witness is called upon to testify during the trial proceedings. \n        Please generate the testimony details and specify the target IDs for sending the testimony event. \n        The response should be in the following JSON format:\n\n        {\n        \"testimony_details\": \"<Details of the testimony provided by the witness>\",\n        \"target_ids\": [\"<The string ID(s) of the Jury agent(s)>\"]\n        }\n        \"\"\"\n        observation = f\"Witness ID: {witness_id}, Trial Phase: {trial_phase}\"\n\n        # Generate reaction using the LLM\n        result = await self.generate_reaction(instruction, observation)\n\n        # Parse the LLM's JSON response\n        testimony_details = result.get('testimony_details', \"\")\n        target_ids = result.get('target_ids', [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Update agent state to reflect testimony delivery\n        self.profile.update_data(\"testimony_given\", \"yes\")\n\n        # Prepare and send TestimonyEvent to the Jury\n        events = []\n        for target_id in target_ids:\n            testimony_event = TestimonyEvent(self.profile_id, target_id, testimony_details)\n            events.append(testimony_event)\n\n        return events",
+          "metadata": {
+            "id": 10,
+            "name": "testify",
+            "condition": "Called upon during trial proceedings",
+            "description": "The Witness provides their testimony during the trial for evaluation by the Jury.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "testimony_details",
+                "type": "string",
+                "context": "event",
+                "description": "Details of the testimony provided by the witness."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "testimony_given",
+                "type": "string",
+                "context": "agent",
+                "description": "Confirmation of testimony delivery."
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "events": {
+    "imports": "from onesim.events import Event\nfrom typing import Dict, List, Any        \nfrom datetime import datetime\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event",
+    "definitions": {
+      "-1": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event",
+        "metadata": {
+          "id": -1,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "Prosecutor",
+          "to_action_name": "evaluate_evidence",
+          "from_action_id": 0,
+          "to_action_id": 1,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for evidence evaluation",
+          "fields": []
+        }
+      },
+      "-2": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event",
+        "metadata": {
+          "id": -2,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "DefenseLawyer",
+          "to_action_name": "prepare_defense",
+          "from_action_id": 0,
+          "to_action_id": 2,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for defense preparation",
+          "fields": []
+        }
+      },
+      "-3": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event",
+        "metadata": {
+          "id": -3,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "Judge",
+          "to_action_name": "manage_trial",
+          "from_action_id": 0,
+          "to_action_id": 5,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for trial management",
+          "fields": []
+        }
+      },
+      "-4": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event",
+        "metadata": {
+          "id": -4,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "Witness",
+          "to_action_name": "prepare_testimony",
+          "from_action_id": 0,
+          "to_action_id": 9,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for witness testimony preparation",
+          "fields": []
+        }
+      },
+      "1": {
+        "code": "class EvidenceEvaluatedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        evidence_details: str = \"\",\n        ruling_request: str = 'pending',\n        prosecution_decision: str = 'undecided',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.evidence_details = evidence_details\n        self.ruling_request = ruling_request\n        self.prosecution_decision = prosecution_decision\n\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event",
+        "metadata": {
+          "id": 1,
+          "from_agent_type": "Prosecutor",
+          "from_action_name": "evaluate_evidence",
+          "to_agent_type": "Judge",
+          "to_action_name": "rule_on_evidence",
+          "from_action_id": 1,
+          "to_action_id": 4,
+          "event_name": "EvidenceEvaluatedEvent",
+          "event_info": "Prosecutor presents evaluated evidence for ruling",
+          "fields": [
+            {
+              "name": "evidence_details",
+              "type": "string",
+              "default_value": "",
+              "description": "Details of the evidence presented by the Prosecutor."
+            },
+            {
+              "name": "ruling_request",
+              "type": "string",
+              "default_value": "pending",
+              "description": "Request for Judge's ruling on the evidence admissibility."
+            },
+            {
+              "name": "prosecution_decision",
+              "type": "string",
+              "default_value": "undecided",
+              "description": "Decision made by the Prosecutor on whether to prosecute."
+            }
+          ]
+        }
+      },
+      "2": {
+        "code": "class ProsecutionDecisionEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        prosecution_decision: str = 'undecided',\n        evidence_quality: float = 0.0,\n        conviction_likelihood: float = 0.0,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.prosecution_decision = prosecution_decision\n        self.evidence_quality = evidence_quality\n        self.conviction_likelihood = conviction_likelihood\n\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event",
+        "metadata": {
+          "id": 2,
+          "from_agent_type": "Prosecutor",
+          "from_action_name": "evaluate_evidence",
+          "to_agent_type": "DefenseLawyer",
+          "to_action_name": "negotiate_plea",
+          "from_action_id": 1,
+          "to_action_id": 3,
+          "event_name": "ProsecutionDecisionEvent",
+          "event_info": "Decision to prosecute prompts plea negotiation",
+          "fields": [
+            {
+              "name": "prosecution_decision",
+              "type": "string",
+              "default_value": "undecided",
+              "description": "Decision made by the Prosecutor on whether to prosecute."
+            },
+            {
+              "name": "evidence_quality",
+              "type": "float",
+              "default_value": 0.0,
+              "description": "Quality assessment of the evidence influencing the decision."
+            },
+            {
+              "name": "conviction_likelihood",
+              "type": "float",
+              "default_value": 0.0,
+              "description": "Likelihood of conviction influencing the decision."
+            }
+          ]
+        }
+      },
+      "3": {
+        "code": "class DefensePreparedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        defense_strategy: str = \"\",\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.defense_strategy = defense_strategy\n\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event",
+        "metadata": {
+          "id": 3,
+          "from_agent_type": "DefenseLawyer",
+          "from_action_name": "prepare_defense",
+          "to_agent_type": "Judge",
+          "to_action_name": "manage_trial",
+          "from_action_id": 2,
+          "to_action_id": 5,
+          "event_name": "DefensePreparedEvent",
+          "event_info": "Defense strategy prepared for trial management",
+          "fields": [
+            {
+              "name": "defense_strategy",
+              "type": "string",
+              "default_value": "",
+              "description": "Prepared defense strategy for trial."
+            }
+          ]
+        }
+      },
+      "4": {
+        "code": "class PleaNegotiationEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        plea_terms: str = \"\",\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.plea_terms = plea_terms\n\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event",
+        "metadata": {
+          "id": 4,
+          "from_agent_type": "DefenseLawyer",
+          "from_action_name": "negotiate_plea",
+          "to_agent_type": "Defendant",
+          "to_action_name": "consider_plea",
+          "from_action_id": 3,
+          "to_action_id": 6,
+          "event_name": "PleaNegotiationEvent",
+          "event_info": "Defense lawyer proposes plea deal to defendant",
+          "fields": [
+            {
+              "name": "plea_terms",
+              "type": "string",
+              "default_value": "",
+              "description": "Terms of the plea deal proposed to the Defendant."
+            }
+          ]
+        }
+      },
+      "5": {
+        "code": "class EvidenceRulingEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        evidence_admissibility: str = 'pending',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.evidence_admissibility = evidence_admissibility\n\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event",
+        "metadata": {
+          "id": 5,
+          "from_agent_type": "Judge",
+          "from_action_name": "rule_on_evidence",
+          "to_agent_type": "Jury",
+          "to_action_name": "evaluate_evidence",
+          "from_action_id": 4,
+          "to_action_id": 7,
+          "event_name": "EvidenceRulingEvent",
+          "event_info": "Judge rules on evidence admissibility for jury evaluation",
+          "fields": [
+            {
+              "name": "evidence_admissibility",
+              "type": "string",
+              "default_value": "pending",
+              "description": "Judge's ruling on the admissibility of evidence."
+            }
+          ]
+        }
+      },
+      "6": {
+        "code": "class TrialManagementEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        trial_phase: str = 'ongoing',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.trial_phase = trial_phase",
+        "metadata": {
+          "id": 6,
+          "from_agent_type": "Judge",
+          "from_action_name": "manage_trial",
+          "to_agent_type": "Jury",
+          "to_action_name": "form_verdict",
+          "from_action_id": 5,
+          "to_action_id": 8,
+          "event_name": "TrialManagementEvent",
+          "event_info": "Judge oversees trial proceedings for jury verdict formation",
+          "fields": [
+            {
+              "name": "trial_phase",
+              "type": "string",
+              "default_value": "ongoing",
+              "description": "Current phase of the trial overseen by the Judge."
+            }
+          ]
+        }
+      },
+      "7": {
+        "code": "class WitnessCallEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        witness_id: str = \"\",\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.witness_id = witness_id\n\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event",
+        "metadata": {
+          "id": 7,
+          "from_agent_type": "Judge",
+          "from_action_name": "manage_trial",
+          "to_agent_type": "Witness",
+          "to_action_name": "testify",
+          "from_action_id": 5,
+          "to_action_id": 10,
+          "event_name": "WitnessCallEvent",
+          "event_info": "Judge calls witness to testify during trial",
+          "fields": [
+            {
+              "name": "witness_id",
+              "type": "string",
+              "default_value": "",
+              "description": "Identifier for the witness called to testify."
+            }
+          ]
+        }
+      },
+      "8": {
+        "code": "class PleaDecisionEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        plea_acceptance: str = 'undecided',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.plea_acceptance = plea_acceptance\n\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event",
+        "metadata": {
+          "id": 8,
+          "from_agent_type": "Defendant",
+          "from_action_name": "consider_plea",
+          "to_agent_type": "Judge",
+          "to_action_name": "manage_trial",
+          "from_action_id": 6,
+          "to_action_id": 5,
+          "event_name": "PleaDecisionEvent",
+          "event_info": "Defendant decides on plea deal affecting trial management",
+          "fields": [
+            {
+              "name": "plea_acceptance",
+              "type": "string",
+              "default_value": "undecided",
+              "description": "Decision on whether the Defendant accepts the plea deal."
+            }
+          ]
+        }
+      },
+      "9": {
+        "code": "class EvidenceEvaluationEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        evidence_evaluation: List[Any] = [],\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.evidence_evaluation = evidence_evaluation\n\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event",
+        "metadata": {
+          "id": 9,
+          "from_agent_type": "Jury",
+          "from_action_name": "evaluate_evidence",
+          "to_agent_type": "Jury",
+          "to_action_name": "form_verdict",
+          "from_action_id": 7,
+          "to_action_id": 8,
+          "event_name": "EvidenceEvaluationEvent",
+          "event_info": "Jury evaluates evidence as part of verdict formation",
+          "fields": [
+            {
+              "name": "evidence_evaluation",
+              "type": "list",
+              "default_value": [],
+              "description": "Evaluation results of evidence items."
+            }
+          ]
+        }
+      },
+      "10": {
+        "code": "class VerdictFormedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        verdict: str = 'undecided',\n        completion_status: str = 'complete',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.verdict = verdict\n        self.completion_status = completion_status\n\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event",
+        "metadata": {
+          "id": 10,
+          "from_agent_type": "Jury",
+          "from_action_name": "form_verdict",
+          "to_agent_type": "EnvAgent",
+          "to_action_name": "terminate",
+          "from_action_id": 8,
+          "to_action_id": -1,
+          "event_name": "VerdictFormedEvent",
+          "event_info": "Jury forms verdict, completing trial process",
+          "fields": [
+            {
+              "name": "verdict",
+              "type": "string",
+              "default_value": "undecided",
+              "description": "Final verdict formed by the Jury."
+            },
+            {
+              "name": "completion_status",
+              "type": "string",
+              "default_value": "complete",
+              "description": "Status indicating the trial process completion."
+            }
+          ]
+        }
+      },
+      "11": {
+        "code": "class TestimonyPreparedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        testimony_content: str = \"\",\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.testimony_content = testimony_content\n\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event",
+        "metadata": {
+          "id": 11,
+          "from_agent_type": "Witness",
+          "from_action_name": "prepare_testimony",
+          "to_agent_type": "Judge",
+          "to_action_name": "manage_trial",
+          "from_action_id": 9,
+          "to_action_id": 5,
+          "event_name": "TestimonyPreparedEvent",
+          "event_info": "Witness prepared for testimony during trial",
+          "fields": [
+            {
+              "name": "testimony_content",
+              "type": "string",
+              "default_value": "",
+              "description": "Prepared content of the witness's testimony."
+            }
+          ]
+        }
+      },
+      "12": {
+        "code": "class TestimonyEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        testimony_details: str = \"\",\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.testimony_details = testimony_details\n\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event",
+        "metadata": {
+          "id": 12,
+          "from_agent_type": "Witness",
+          "from_action_name": "testify",
+          "to_agent_type": "Jury",
+          "to_action_name": "evaluate_evidence",
+          "from_action_id": 10,
+          "to_action_id": 7,
+          "event_name": "TestimonyEvent",
+          "event_info": "Witness testimony provided for jury evaluation",
+          "fields": [
+            {
+              "name": "testimony_details",
+              "type": "string",
+              "default_value": "",
+              "description": "Details of the testimony provided by the witness."
+            }
+          ]
+        }
+      }
+    }
+  }
+}

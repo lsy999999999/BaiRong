@@ -1,0 +1,74 @@
+{
+    "environment": {
+        "variables": []
+    },
+    "agents": {
+        "Aggressor": {
+            "variables": [
+                {
+                    "name": "threat_level",
+                    "type": "int",
+                    "default_value": null
+                },
+                {
+                    "name": "aggressor_id",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "defender_id",
+                    "type": "str",
+                    "default_value": null
+                }
+            ]
+        },
+        "Defender": {
+            "variables": [
+                {
+                    "name": "defensive_action_type",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "defense_intensity",
+                    "type": "int",
+                    "default_value": null
+                },
+                {
+                    "name": "evidence_collected",
+                    "type": "list",
+                    "default_value": null
+                }
+            ]
+        },
+        "Judge": {
+            "variables": [
+                {
+                    "name": "judgment_result",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "legal_reasons",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "threat_assessment",
+                    "type": "int",
+                    "default_value": null
+                },
+                {
+                    "name": "defense_assessment",
+                    "type": "int",
+                    "default_value": null
+                },
+                {
+                    "name": "completion_status",
+                    "type": "str",
+                    "default_value": null
+                }
+            ]
+        }
+    }
+}

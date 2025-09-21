@@ -1,0 +1,156 @@
+{
+    "IndividualAgent": [
+        {
+            "id": 1,
+            "name": "initialize_behavior_tendencies",
+            "condition": null,
+            "description": "Sets initial behavior tendencies for the individual agent based on environmental factors and agent characteristics.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "behavior_tendencies",
+                    "type": "list",
+                    "context": "env",
+                    "description": "Initial behavior tendencies derived from environmental settings."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "behavior_tendencies",
+                    "type": "list",
+                    "context": "agent",
+                    "description": "Updated initial behavior tendencies stored within the agent."
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "name": "assign_to_social_group",
+            "condition": "BehaviorTendenciesInitializedEvent received",
+            "description": "Assigns the individual agent to a social group based on random selection or predefined criteria.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "individual_id",
+                    "type": "int",
+                    "context": "agent",
+                    "description": "Unique identifier for the individual agent."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "group_id",
+                    "type": "int",
+                    "context": "agent",
+                    "description": "Identifier of the social group to which the agent is assigned."
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "name": "observe_and_interact",
+            "condition": "Individual is part of a social group",
+            "description": "Allows the individual agent to observe interactions within the social group and engage with other members.",
+            "type": "AND",
+            "required_variables": [
+                {
+                    "name": "individual_id",
+                    "type": "int",
+                    "context": "agent",
+                    "description": "Unique identifier for the individual agent."
+                },
+                {
+                    "name": "group_id",
+                    "type": "int",
+                    "context": "event",
+                    "description": "Identifier of the social group the agent is observing."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "interaction_details",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Details of observed interactions stored within the agent."
+                }
+            ]
+        },
+        {
+            "id": 4,
+            "name": "adjust_behavior",
+            "condition": "InteractionObservedEvent received",
+            "description": "Adjusts the individual agent's behavior tendencies based on observed interactions and group norms.",
+            "type": "AND",
+            "required_variables": [
+                {
+                    "name": "interaction_details",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Details of interactions observed by the agent."
+                },
+                {
+                    "name": "group_pressure",
+                    "type": "float",
+                    "context": "env",
+                    "description": "Level of pressure exerted by the group to conform."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "adjusted_behavior_tendencies",
+                    "type": "list",
+                    "context": "agent",
+                    "description": "New behavior tendencies after adjustment."
+                }
+            ]
+        }
+    ],
+    "SocialGroupAgent": [
+        {
+            "id": 5,
+            "name": "add_member",
+            "condition": "AssignedToGroupEvent received",
+            "description": "Incorporates a new individual agent into the social group, updating group composition.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "individual_id",
+                    "type": "int",
+                    "context": "event",
+                    "description": "Unique identifier for the individual agent being added."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "members",
+                    "type": "list",
+                    "context": "agent",
+                    "description": "Updated list of members in the social group."
+                }
+            ]
+        },
+        {
+            "id": 6,
+            "name": "update_group_norms",
+            "condition": "BehaviorAdjustedEvent received",
+            "description": "Reassesses and updates the social group's norms based on the collective behavior adjustments of its members.",
+            "type": "AND",
+            "required_variables": [
+                {
+                    "name": "adjusted_behavior_tendencies",
+                    "type": "list",
+                    "context": "event",
+                    "description": "Behavior tendencies of individuals after adjustment."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "updated_norms",
+                    "type": "list",
+                    "context": "agent",
+                    "description": "Revised norms of the social group."
+                }
+            ]
+        }
+    ]
+}

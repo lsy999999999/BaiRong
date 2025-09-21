@@ -1,0 +1,56 @@
+{
+  "domain": "Politics",
+  "scene_name": "selective_exposure_theory",
+  "odd_protocol": {
+    "overview": {
+      "system_goal": "Simulate voter behavior in choosing specific news sources based on personal preferences to study how selective exposure leads to political polarization among groups, analyzing information bubbles and echo chamber effects.",
+      "agent_types": "Voters who select media sources and adjust political preferences; Media entities providing political content with potential biases.",
+      "environment_description": "The environment consists of voters and various media sources with different political biases, where voters can choose which media to consume.",
+      "political_polarization_analysis": "Analyze how selective exposure contributes to increased political polarization among voter groups.",
+      "impact_of_media_bias": "Study the influence of media bias on voter political preferences and the resulting societal polarization."
+    },
+    "design_concepts": {
+      "interaction_patterns": "Voters interact with media by selecting sources that align with their political leanings, potentially reinforcing existing biases.",
+      "communication_protocols": "Media communicate political content to voters, who then interpret and adjust their preferences based on this information.",
+      "decision_mechanisms": "Voters decide which media to consume based on their current political leanings and perceived media bias.",
+      "selective_exposure_mechanism": "Mechanism where voters prefer media that supports their existing political views, leading to reinforcement of biases.",
+      "political_preference_adjustment": "Voters adjust their political preferences after consuming content from chosen media sources."
+    },
+    "details": {
+      "agent_behaviors": "Voters select media sources and adjust their political preferences; Media provide biased political content to influence voter preferences.",
+      "decision_algorithms": "Algorithms determine voter media selection based on political leaning and media bias, and adjust political preferences accordingly.",
+      "specific_constraints": "Voter media selection is constrained by available media biases and their own initial political preferences.",
+      "initialization_process": "Create voters and media sources with predefined political leanings and biases.",
+      "polarization_evolution": "Track how voter political preferences evolve over time due to media consumption, leading to potential polarization."
+    }
+  },
+  "agent_types": {
+    "VoterAgent": "Simulates voter behavior by selecting media sources based on personal political preferences and adjusting those preferences according to consumed content.",
+    "MediaAgent": "Provides political content with potential biases, influencing voter preferences and contributing to the formation of information bubbles and echo chamber effects."
+  },
+  "portrait": {
+    "VoterAgent": 5,
+    "MediaAgent": 2
+  },
+  "metrics": [
+    {
+      "id": "media_bias_distribution",
+      "name": "media_bias_distribution",
+      "description": "Shows the distribution of media bias scores across available media sources.",
+      "visualization_type": "bar",
+      "update_interval": 5,
+      "variables": [
+        {
+          "name": "media_bias_score",
+          "source_type": "agent",
+          "agent_type": "MediaAgent",
+          "path": "media_bias_score",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Aggregate media_bias_score values by counting occurrences within predefined bias categories (e.g., low, medium, high). Handle None values by excluding them from category counts. Return a dictionary with category names as keys and counts as values.",
+      "function_name": "media_bias_distribution"
+    }
+  ]
+}

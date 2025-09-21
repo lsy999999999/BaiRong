@@ -1,0 +1,88 @@
+{
+  "domain": "Economics",
+  "scene_name": "customer_satisfaction_and_loyalty_model",
+  "odd_protocol": {
+    "overview": {
+      "system_goal": "Observe how dynamic changes in service quality and product experience impact customer satisfaction, loyalty, and purchasing decisions.",
+      "agent_types": "Customers are the core simulation objects, each with attributes: perceived service quality (range [0,1]), product experience score (range [0,1]), satisfaction (calculated from service and product experience), loyalty (accumulated based on historical satisfaction), purchase probability (determined by loyalty and current satisfaction).",
+      "environment_description": "Merchant system with baseline service quality and product quality as system-level variables influencing all customers' perceptions. The system operates on discrete time steps, each representing a standardized decision cycle over 10 periods."
+    },
+    "design_concepts": {
+      "interaction_patterns": "Customers form subjective perceptions from objective service quality and product experience, influenced by random factors. Satisfaction is a combination of immediate experience and personal preference, with service quality typically having higher weight. Loyalty accumulates slowly over time based on satisfaction trends and is not easily reversed. Purchasing decisions are influenced by current satisfaction and accumulated loyalty, with old customers being more forgiving and new customers more cautious.",
+      "communication_protocols": "Customers indirectly communicate feedback to the merchant system through their purchasing decisions, which reflect their satisfaction and loyalty levels.",
+      "decision_mechanisms": "Customers adjust their loyalty based on historical satisfaction. Merchants periodically adjust quality levels based on average customer feedback. Perceived service quality and product experience are influenced by baseline levels and sensitivity coefficients, with added random noise. Satisfaction is evaluated based on a weighted average of perceived service quality and product experience, with random fluctuations. Loyalty is updated based on satisfaction deviation from a neutral value, applying a decay factor. Purchase probability is calculated using a sigmoid function with inputs from loyalty and satisfaction."
+    },
+    "details": {
+      "agent_behaviors": "Customers perceive service quality and product experience, evaluate satisfaction, adjust loyalty, and make purchasing decisions. Merchants periodically adjust service and product quality based on customer feedback.",
+      "decision_algorithms": "Perceived service quality = baseline service level * service sensitivity coefficient ± 10% noise. Product experience = baseline product quality * product sensitivity coefficient ± 10% noise. Satisfaction = 60% perceived service quality + 40% product experience ± 5% random fluctuation. Loyalty is updated based on satisfaction deviation from 0.5 with a decay factor of 0.1. Purchase probability is calculated using the sigmoid function with inputs 2 * loyalty + 1.5 * satisfaction. If a random number is less than the purchase probability, the customer makes a purchase.",
+      "specific_constraints": "Simulation runs for 10 time steps. Merchant's baseline service level and product quality are initialized with random values between 0.3 and 0.7. Customers' service and product sensitivity coefficients are initialized with random values between 0.8 and 1.2. Initial loyalty is set to 0. Merchant may adjust quality levels every 3 time steps based on average customer feedback."
+    }
+  },
+  "agent_types": {
+    "CustomerAgent": "Represents individual customers who perceive service quality and product experience, evaluate satisfaction, adjust loyalty, and make purchasing decisions based on these factors.",
+    "MerchantAgent": "Manages the baseline service and product quality levels, periodically adjusts them based on average customer feedback, and influences customer perceptions through these adjustments."
+  },
+  "portrait": {
+    "CustomerAgent": 5,
+    "MerchantAgent": 4
+  },
+  "metrics": [
+    {
+      "id": "Average_Customer_Satisfaction",
+      "name": "Average Customer Satisfaction",
+      "description": "Measures the average satisfaction level of all customers in the system, indicating overall customer contentment with service and product quality.",
+      "visualization_type": "line",
+      "update_frequency": 1,
+      "variables": [
+        {
+          "name": "satisfaction",
+          "source_type": "agent",
+          "agent_type": "CustomerAgent",
+          "path": "profile.satisfaction",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Calculate the average of all satisfaction scores from CustomerAgent profiles. Handle edge cases by skipping None values and returning None if the list is empty or contains only None values.",
+      "function_name": "Average_Customer_Satisfaction"
+    },
+    {
+      "id": "Customer_Loyalty_Distribution",
+      "name": "Customer Loyalty Distribution",
+      "description": "Shows the distribution of customer loyalty levels, helping to understand how many customers are loyal versus those who are not.",
+      "visualization_type": "bar",
+      "update_frequency": 5,
+      "variables": [
+        {
+          "name": "loyalty",
+          "source_type": "agent",
+          "agent_type": "CustomerAgent",
+          "path": "profile.loyalty",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Aggregate loyalty scores from CustomerAgent profiles into bins (e.g., 0-0.2, 0.2-0.4, etc.). Handle edge cases by ignoring None values and ensuring bins are created only if there are valid values.",
+      "function_name": "Customer_Loyalty_Distribution"
+    },
+    {
+      "id": "Purchase_Decision_Rate",
+      "name": "Purchase Decision Rate",
+      "description": "Tracks the proportion of customers making a purchase decision, providing insight into the effectiveness of service and product quality.",
+      "visualization_type": "line",
+      "update_frequency": 1,
+      "variables": [
+        {
+          "name": "purchase_decision",
+          "source_type": "agent",
+          "agent_type": "CustomerAgent",
+          "path": "profile.purchase_decision",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Calculate the percentage of True values in the purchase_decision list from CustomerAgent profiles. Handle edge cases by skipping None values and returning None if the list is empty or consists solely of None values.",
+      "function_name": "Purchase_Decision_Rate"
+    }
+  ]
+}

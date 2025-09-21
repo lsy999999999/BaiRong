@@ -1,0 +1,107 @@
+[
+    {
+        "name": "Alice Johnson",
+        "current_needs": [
+            "entertainment",
+            "information"
+        ],
+        "selected_media": 1,
+        "satisfaction_level": 50,
+        "age": 26,
+        "media_dependency": 0.5,
+        "preferred_media_type": "news",
+        "social_influence_factor": 0.24702581542886182,
+        "agent_type": "AudienceAgent",
+        "feedback_history": [
+            {
+                "media_id": 1,
+                "satisfaction": 50
+            }
+        ],
+        "id": "0"
+    },
+    {
+        "name": "Michael Smith",
+        "current_needs": [
+            "entertainment",
+            "information"
+        ],
+        "selected_media": 1,
+        "satisfaction_level": 50,
+        "age": 24,
+        "media_dependency": 0.5,
+        "preferred_media_type": "news",
+        "social_influence_factor": 0.07141249307609088,
+        "agent_type": "AudienceAgent",
+        "feedback_history": [
+            {
+                "media_id": 1,
+                "satisfaction": 50
+            }
+        ],
+        "id": "1"
+    },
+    {
+        "name": "Emily Davis",
+        "current_needs": [
+            "entertainment",
+            "information"
+        ],
+        "selected_media": 1,
+        "satisfaction_level": 50,
+        "age": 28,
+        "media_dependency": 0.5,
+        "preferred_media_type": "social",
+        "social_influence_factor": 0.0686964023520642,
+        "agent_type": "AudienceAgent",
+        "feedback_history": [
+            {
+                "media_id": 1,
+                "satisfaction": 50
+            }
+        ],
+        "id": "2"
+    },
+    {
+        "name": "Christopher Brown",
+        "current_needs": [
+            "entertainment",
+            "information"
+        ],
+        "selected_media": 1,
+        "satisfaction_level": 50,
+        "age": 37,
+        "media_dependency": 0.5,
+        "preferred_media_type": "entertainment",
+        "social_influence_factor": 0.05818081387226348,
+        "agent_type": "AudienceAgent",
+        "feedback_history": [
+            {
+                "media_id": 1,
+                "satisfaction": 50
+            }
+        ],
+        "id": "3"
+    },
+    {
+        "name": "Jessica Wilson",
+        "current_needs": [
+            "entertainment",
+            "information"
+        ],
+        "selected_media": 1,
+        "satisfaction_level": 50,
+        "age": 47,
+        "media_dependency": 0.5,
+        "preferred_media_type": "social",
+        "social_influence_factor": 0.45271791038065534,
+        "agent_type": "AudienceAgent",
+        "feedback_history": [
+            {
+                "media_id": 1,
+                "satisfaction": 50
+            }
+        ],
+        "id": "4"
+    }
+]

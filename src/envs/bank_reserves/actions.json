@@ -1,0 +1,139 @@
+{
+    "CustomerAgent": [
+        {
+            "id": 1,
+            "name": "apply_for_loan",
+            "condition": null,
+            "description": "The customer initiates a request for a loan based on their personal financial needs and prevailing economic conditions.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "customer_id",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Unique identifier for the customer applying for the loan"
+                },
+                {
+                    "name": "loan_amount",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "The amount of money the customer is applying for"
+                },
+                {
+                    "name": "economic_conditions",
+                    "type": "str",
+                    "context": "env",
+                    "description": "Current economic conditions affecting the loan application"
+                }
+            ],
+            "output_updates": []
+        },
+        {
+            "id": 2,
+            "name": "receive_loan_decision",
+            "condition": "Customer must have received a LoanApprovalEvent or LoanRejectionEvent",
+            "description": "The customer receives and processes the bank's decision on their loan application, updating their financial status accordingly.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "customer_id",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Unique identifier for the customer processing the loan decision"
+                },
+                {
+                    "name": "loan_status",
+                    "type": "str",
+                    "context": "event",
+                    "description": "The status of the loan after processing (e.g., approved, rejected)"
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "financial_status",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Updated financial status of the customer after loan decision"
+                }
+            ]
+        }
+    ],
+    "BankAgent": [
+        {
+            "id": 3,
+            "name": "evaluate_loan_application",
+            "condition": "Bank must have received a LoanApplicationEvent",
+            "description": "The bank assesses the loan application based on its reserve levels and decides whether to approve or reject the loan.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "customer_id",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Unique identifier for the customer whose loan application is being evaluated"
+                },
+                {
+                    "name": "loan_amount",
+                    "type": "float",
+                    "context": "event",
+                    "description": "The amount of money the customer is applying for"
+                },
+                {
+                    "name": "reserve_level",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Current reserve level of the bank"
+                },
+                {
+                    "name": "reserve_requirement",
+                    "type": "float",
+                    "context": "env",
+                    "description": "Minimum reserve requirement imposed on the bank"
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "decision_status",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "The decision status of the loan application (approved or rejected)"
+                }
+            ]
+        },
+        {
+            "id": 4,
+            "name": "manage_reserves",
+            "condition": "Bank must adjust reserves post loan decision",
+            "description": "The bank adjusts its reserve levels after processing loan applications to ensure compliance with reserve requirements.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "bank_id",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Unique identifier for the bank adjusting its reserves"
+                },
+                {
+                    "name": "adjustment_amount",
+                    "type": "float",
+                    "context": "event",
+                    "description": "The amount by which the bank's reserves are adjusted"
+                },
+                {
+                    "name": "new_reserve_level",
+                    "type": "float",
+                    "context": "event",
+                    "description": "The new reserve level after adjustment"
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "reserve_level",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Updated reserve level of the bank after adjustment"
+                }
+            ]
+        }
+    ]
+}

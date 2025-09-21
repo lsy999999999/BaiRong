@@ -1,0 +1,508 @@
+{
+  "agents": {
+    "CompanyAgent": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "1": {
+          "code": "async def evaluate_cash_flow(self, event: Event) -> List[Event]:\n        # Condition Check: Company has cash reserves to evaluate\n        cash_reserves = self.profile.get_data(\"cash_reserves\", 0.0)\n        if cash_reserves <= 0:\n            return []\n    \n        # Access required agent data\n        debt_levels = self.profile.get_data(\"debt_levels\", 0.0)\n        credit_rating = self.profile.get_data(\"credit_rating\", \"unrated\")\n    \n        # Generate reaction using LLM\n        observation = f\"Cash reserves: {cash_reserves}, Debt levels: {debt_levels}, Credit rating: {credit_rating}\"\n        instruction = \"\"\"Evaluate the company's cash flow status and determine its readiness for loan applications. \n        Provide the updated cash_flow_status and any changes to the credit_rating. \n        Additionally, specify the target_ids for the BankAgent(s) to send the CashFlowEvaluatedEvent. \n        Return the information in the following JSON format:\n        \n        {\n        \"cash_flow_status\": \"<Updated cash flow status>\",\n        \"credit_rating\": \"<Updated credit rating>\",\n        \"target_ids\": [\"<List of BankAgent IDs>\"]\n        }\n        \"\"\"\n        \n        result = await self.generate_reaction(instruction, observation)\n        \n        # Parse the LLM's JSON response\n        cash_flow_status = result.get('cash_flow_status', 'unknown')\n        updated_credit_rating = result.get('credit_rating', credit_rating)\n        target_ids = result.get('target_ids', [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n    \n        # Update agent's profile\n        self.profile.update_data(\"cash_flow_status\", cash_flow_status)\n        self.profile.update_data(\"credit_rating\", updated_credit_rating)\n    \n        # Prepare outgoing events\n        events = []\n        for target_id in target_ids:\n            cash_flow_event = CashFlowEvaluatedEvent(\n                self.profile_id,\n                target_id,\n                company_id=self.profile_id,\n                cash_flow_status=cash_flow_status,\n                credit_rating=updated_credit_rating\n            )\n            events.append(cash_flow_event)\n    \n        return events",
+          "metadata": {
+            "id": 1,
+            "name": "evaluate_cash_flow",
+            "condition": "Company has cash reserves to evaluate",
+            "description": "Assess the company's current cash flow status to determine financial health and readiness for loan applications.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "cash_reserves",
+                "type": "float",
+                "context": "agent",
+                "description": "Current cash reserves held by the company."
+              },
+              {
+                "name": "debt_levels",
+                "type": "float",
+                "context": "agent",
+                "description": "Total outstanding debt of the company."
+              },
+              {
+                "name": "credit_rating",
+                "type": "str",
+                "context": "agent",
+                "description": "Current credit rating of the company."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "cash_flow_status",
+                "type": "str",
+                "context": "agent",
+                "description": "Updated status of the company's cash flow after evaluation."
+              }
+            ]
+          }
+        },
+        "2": {
+          "code": "async def apply_for_loan(self, event: Event) -> List[Event]:\n        # Check if the condition to apply for a loan is met\n        credit_rating = event.credit_rating\n        if credit_rating == \"unrated\":\n            return []\n    \n        # Retrieve necessary data from the agent's profile and event\n        company_id = event.company_id\n        loan_amount = self.profile.get_data(\"loan_amount\", 0.0)\n    \n        # Generate reaction for decision making with instructions for target_ids\n        instruction = \"\"\"\n        Please determine the target bank agent(s) for the loan application based on the company's assessed credit rating and financial needs.\n        Return the result in the following JSON format:\n        {\n            \"loan_application_status\": \"<Status of the loan application>\",\n            \"target_ids\": [\"<The string ID(s) of the BankAgent(s)>\"]\n        }\n        \"\"\"\n        observation = f\"Company ID: {company_id}, Credit Rating: {credit_rating}, Loan Amount: {loan_amount}\"\n        result = await self.generate_reaction(instruction, observation)\n    \n        # Extract results from the LLM's response\n        loan_application_status = result.get('loan_application_status', \"pending\")\n        target_ids = result.get('target_ids', [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n    \n        # Update the loan application status in the agent's profile\n        self.profile.update_data(\"loan_application_status\", loan_application_status)\n    \n        # Prepare and send LoanApplicationEvent to each target bank agent\n        events = []\n        for target_id in target_ids:\n            loan_application_event = LoanApplicationEvent(\n                from_agent_id=self.profile_id,\n                to_agent_id=target_id,\n                company_id=company_id,\n                loan_amount=loan_amount,\n                credit_rating=credit_rating\n            )\n            events.append(loan_application_event)\n    \n        return events",
+          "metadata": {
+            "id": 2,
+            "name": "apply_for_loan",
+            "condition": "Company has evaluated cash flow and received assessed credit rating",
+            "description": "Submit a loan application to the bank based on the company's financial assessment and credit rating.",
+            "type": "AND",
+            "required_variables": [
+              {
+                "name": "company_id",
+                "type": "str",
+                "context": "event",
+                "description": "Unique identifier for the company applying for the loan."
+              },
+              {
+                "name": "loan_amount",
+                "type": "float",
+                "context": "agent",
+                "description": "Desired loan amount based on financial needs."
+              },
+              {
+                "name": "credit_rating",
+                "type": "str",
+                "context": "event",
+                "description": "Assessed credit rating of the company."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "loan_application_status",
+                "type": "str",
+                "context": "agent",
+                "description": "Status of the loan application process."
+              }
+            ]
+          }
+        },
+        "3": {
+          "code": "async def manage_expenses(self, event: Event) -> List[Event]:\n        # Condition check: Ensure company has revenue from consumer spending\n        incoming_revenue = event.revenue_amount if event.__class__.__name__ == \"RevenueGeneratedEvent\" else 0.0\n        if incoming_revenue <= 0:\n            return []\n    \n        # Access required data\n        total_expenses = self.profile.get_data(\"total_expenses\", 0.0)\n        cash_reserves = self.profile.get_data(\"cash_reserves\", 0.0)\n        \n        # Prepare observation and instruction for decision making\n        observation = f\"Incoming revenue: {incoming_revenue}, Total expenses: {total_expenses}, Cash reserves: {cash_reserves}\"\n        instruction = \"\"\"Handle the company's expenses including debts and taxes to ensure financial stability. \n        Based on the incoming revenue and current financial status, decide the updated cash reserves and completion status.\n        Return the information in the following JSON format:\n    \n        {\n        \"cash_reserves\": <Updated cash reserves after managing expenses>,\n        \"completion_status\": \"<Status indicating completion of expense management>\",\n        \"target_ids\": [\"ENV\"]\n        }\n        \"\"\"\n    \n        # Generate reaction using LLM\n        result = await self.generate_reaction(instruction, observation)\n        \n        # Parse the LLM response\n        updated_cash_reserves = result.get('cash_reserves', cash_reserves)\n        completion_status = result.get('completion_status', \"completed\")\n        target_ids = result.get('target_ids', \"ENV\")\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n    \n        # Update agent data\n        self.profile.update_data(\"cash_reserves\", updated_cash_reserves)\n        self.profile.update_data(\"completion_status\", completion_status)\n    \n        # Prepare and send ExpensesManagedEvent to EnvAgent\n        events = []\n        for target_id in target_ids:\n            expenses_event = ExpensesManagedEvent(\n                self.profile_id, target_id, \n                company_id=self.profile_id,\n                total_expenses=total_expenses,\n                completion_status=completion_status\n            )\n            events.append(expenses_event)\n        \n        return events",
+          "metadata": {
+            "id": 3,
+            "name": "manage_expenses",
+            "condition": "Company has revenue from consumer spending",
+            "description": "Handle the company's expenses, including paying debts and taxes, to ensure financial stability.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "total_expenses",
+                "type": "float",
+                "context": "agent",
+                "description": "Total expenses the company needs to manage."
+              },
+              {
+                "name": "incoming_revenue",
+                "type": "float",
+                "context": "event",
+                "description": "Revenue generated from consumer spending."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "cash_reserves",
+                "type": "float",
+                "context": "agent",
+                "description": "Updated cash reserves after managing expenses."
+              },
+              {
+                "name": "completion_status",
+                "type": "str",
+                "context": "agent",
+                "description": "Status indicating completion of expense management."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "BankAgent": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "4": {
+          "code": "async def assess_credit_rating(self, event: Event) -> List[Event]:\n        # Condition Check\n        if event.__class__.__name__ != \"CashFlowEvaluatedEvent\":\n            return []\n\n        # Retrieve required variables from the event\n        company_id = event.company_id\n        cash_flow_status = event.cash_flow_status\n\n        # Generate reaction to assess credit rating\n        observation = f\"Company ID: {company_id}, Cash Flow Status: {cash_flow_status}\"\n        instruction = \"\"\"\n        Assess the creditworthiness of the company based on its cash flow status.\n        Determine the appropriate credit rating and identify the company or companies to notify.\n        Please return the information in the following JSON format:\n\n        {\n        \"credit_rating\": \"<Determined credit rating>\",\n        \"target_ids\": [\"<The string ID(s) of the CompanyAgent(s)>\"]\n        }\n        \"\"\"\n\n        result = await self.generate_reaction(instruction, observation)\n\n        # Extract results from the LLM's response\n        credit_rating = result.get('credit_rating', 'unrated')\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Prepare and send the CreditRatingAssessedEvent to the relevant CompanyAgent(s)\n        events = []\n        for target_id in target_ids:\n            credit_rating_event = CreditRatingAssessedEvent(self.profile_id, target_id, company_id=company_id, credit_rating=credit_rating)\n            events.append(credit_rating_event)\n\n        return events",
+          "metadata": {
+            "id": 4,
+            "name": "assess_credit_rating",
+            "condition": "Received cash flow evaluation from company",
+            "description": "Evaluate the creditworthiness of a company to determine eligibility and terms for loan offerings.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "company_id",
+                "type": "str",
+                "context": "event",
+                "description": "Unique identifier for the company whose credit rating is being assessed."
+              },
+              {
+                "name": "cash_flow_status",
+                "type": "str",
+                "context": "event",
+                "description": "Status of the company's cash flow."
+              },
+              {
+                "name": "debt_levels",
+                "type": "float",
+                "context": "event",
+                "description": "Current debt levels of the company."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "credit_rating",
+                "type": "str",
+                "context": "event",
+                "description": "Determined credit rating of the company."
+              }
+            ]
+          }
+        },
+        "5": {
+          "code": "async def process_loan_application(self, event: Event) -> List[Event]:\n        # Condition Check\n        if event.__class__.__name__ != \"LoanApplicationEvent\":\n            return []\n\n        # Extract required variables from the event\n        company_id = event.company_id\n        loan_amount = event.loan_amount\n        credit_rating = event.credit_rating\n\n        # Construct observation for the LLM\n        observation = f\"Company ID: {company_id}, Loan Amount: {loan_amount}, Credit Rating: {credit_rating}\"\n\n        # Instruction for the LLM\n        instruction = \"\"\"Review the loan application details and decide whether to approve or reject the loan based on the credit rating and financial health assessment. \n        Please return the decision in the following JSON format:\n\n        {\n        \"loan_decision\": \"<approved or rejected>\",\n        \"approved_loan_amount\": \"<float value of approved loan amount if applicable>\",\n        \"interest_rate\": \"<float value of interest rate if loan is approved>\",\n        \"rejection_reason\": \"<reason for rejection if applicable>\",\n        \"target_ids\": [\"<The string ID of the CompanyAgent or 'ENV' for terminal events>\"]\n        }\n        \"\"\"\n\n        # Generate reaction from LLM\n        result = await self.generate_reaction(instruction, observation)\n\n        loan_decision = result.get('loan_decision', None)\n        approved_loan_amount = result.get('approved_loan_amount', 0.0)\n        interest_rate = result.get('interest_rate', 0.0)\n        rejection_reason = result.get('rejection_reason', \"unknown\")\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Update agent's state based on the decision\n        self.profile.update_data(\"loan_decision\", loan_decision)\n        self.profile.update_data(\"approved_loan_amount\", approved_loan_amount)\n\n        # Prepare outgoing events\n        events = []\n        if loan_decision == \"approved\":\n            for target_id in target_ids:\n                loan_approved_event = LoanApprovedEvent(self.profile_id, target_id, company_id, approved_loan_amount, interest_rate)\n                events.append(loan_approved_event)\n        elif loan_decision == \"rejected\":\n            for target_id in target_ids:\n                loan_rejected_event = LoanRejectedEvent(self.profile_id, target_id, company_id, rejection_reason)\n                events.append(loan_rejected_event)\n\n        return events",
+          "metadata": {
+            "id": 5,
+            "name": "process_loan_application",
+            "condition": "Received loan application from company",
+            "description": "Review and decide on the loan application submitted by a company, considering credit rating and financial health.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "company_id",
+                "type": "str",
+                "context": "event",
+                "description": "Unique identifier for the company applying for the loan."
+              },
+              {
+                "name": "loan_amount",
+                "type": "float",
+                "context": "event",
+                "description": "Amount of loan requested by the company."
+              },
+              {
+                "name": "credit_rating",
+                "type": "str",
+                "context": "event",
+                "description": "Credit rating of the company at the time of application."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "loan_decision",
+                "type": "str",
+                "context": "agent",
+                "description": "Decision on the loan application, either approved or rejected."
+              },
+              {
+                "name": "approved_loan_amount",
+                "type": "float",
+                "context": "agent",
+                "description": "Amount of loan approved for the company, if applicable."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "ConsumerAgent": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "6": {
+          "code": "async def spend_money(self, event: Event) -> List[Event]:\n        # Check if the consumer has available funds to spend\n        available_funds = self.profile.get_data(\"available_funds\", 0.0)\n        spending_amount = self.profile.get_data(\"spending_amount\", 0.0)\n    \n        if available_funds < spending_amount:\n            return []\n    \n        # Generate reaction to determine target_ids and revenue_amount\n        observation = f\"Consumer ID: {self.profile.get_data('consumer_id', '')}, Spending Amount: {spending_amount}\"\n        instruction = \"\"\"Please analyze the consumer's spending behavior and determine which companies are affected by this spending.\n        Return the data in the following JSON format:\n        \n        {\n            \"target_ids\": [\"<List of company IDs affected by the spending>\"],\n            \"revenue_amount\": <Amount of revenue generated from the consumer spending>\n        }\n        \"\"\"\n    \n        result = await self.generate_reaction(instruction, observation)\n    \n        target_ids = result.get('target_ids', [])\n        revenue_amount = result.get('revenue_amount', 0.0)\n    \n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n    \n        # Update consumer's available funds\n        new_available_funds = available_funds - spending_amount\n        self.profile.update_data(\"available_funds\", new_available_funds)\n    \n        # Create events for each target company\n        events = []\n        consumer_id = self.profile.get_data(\"consumer_id\", \"\")\n        from_agent_id = self.profile.get_data(\"agent_id\", \"\")  # Assuming agent_id is stored in profile\n        for company_id in target_ids:\n            revenue_event = RevenueGeneratedEvent(from_agent_id=from_agent_id, to_agent_id=company_id, consumer_id=consumer_id, company_id=company_id, revenue_amount=revenue_amount)\n            events.append(revenue_event)\n    \n        return events",
+          "metadata": {
+            "id": 6,
+            "name": "spend_money",
+            "condition": "Consumers have available funds to spend",
+            "description": "Engage in purchasing activities that generate revenue for companies, affecting their cash flow.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "consumer_id",
+                "type": "str",
+                "context": "agent",
+                "description": "Unique identifier for the consumer spending money."
+              },
+              {
+                "name": "spending_amount",
+                "type": "float",
+                "context": "agent",
+                "description": "Amount of money the consumer is spending."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "generated_revenue",
+                "type": "float",
+                "context": "event",
+                "description": "Revenue generated for companies from consumer spending."
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "events": {
+    "imports": "from onesim.events import Event\nfrom typing import Dict, List, Any        \nfrom datetime import datetime\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event",
+    "definitions": {
+      "-1": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event",
+        "metadata": {
+          "id": -1,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "CompanyAgent",
+          "to_action_name": "evaluate_cash_flow",
+          "from_action_id": 0,
+          "to_action_id": 1,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger to evaluate cash flow",
+          "fields": []
+        }
+      },
+      "-2": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event",
+        "metadata": {
+          "id": -2,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "ConsumerAgent",
+          "to_action_name": "spend_money",
+          "from_action_id": 0,
+          "to_action_id": 6,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for consumer spending",
+          "fields": []
+        }
+      },
+      "1": {
+        "code": "class CashFlowEvaluatedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        company_id: str = \"\",\n        cash_flow_status: str = 'unknown',\n        credit_rating: str = 'unrated',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.company_id = company_id\n        self.cash_flow_status = cash_flow_status\n        self.credit_rating = credit_rating\n\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event",
+        "metadata": {
+          "id": 1,
+          "from_agent_type": "CompanyAgent",
+          "from_action_name": "evaluate_cash_flow",
+          "to_agent_type": "BankAgent",
+          "to_action_name": "assess_credit_rating",
+          "from_action_id": 1,
+          "to_action_id": 4,
+          "event_name": "CashFlowEvaluatedEvent",
+          "event_info": "Company cash flow evaluated for credit rating assessment",
+          "fields": [
+            {
+              "name": "company_id",
+              "type": "str",
+              "default_value": "",
+              "description": "Unique identifier for the company whose cash flow is evaluated"
+            },
+            {
+              "name": "cash_flow_status",
+              "type": "str",
+              "default_value": "unknown",
+              "description": "Status of the company's cash flow, e.g., 'positive', 'negative'"
+            },
+            {
+              "name": "credit_rating",
+              "type": "str",
+              "default_value": "unrated",
+              "description": "Assessed credit rating of the company"
+            }
+          ]
+        }
+      },
+      "2": {
+        "code": "class LoanApplicationEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        company_id: str = \"\",\n        loan_amount: float = 0.0,\n        credit_rating: str = 'unrated',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.company_id = company_id\n        self.loan_amount = loan_amount\n        self.credit_rating = credit_rating\n\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event",
+        "metadata": {
+          "id": 2,
+          "from_agent_type": "CompanyAgent",
+          "from_action_name": "apply_for_loan",
+          "to_agent_type": "BankAgent",
+          "to_action_name": "process_loan_application",
+          "from_action_id": 2,
+          "to_action_id": 5,
+          "event_name": "LoanApplicationEvent",
+          "event_info": "Application for loan based on assessed credit rating",
+          "fields": [
+            {
+              "name": "company_id",
+              "type": "str",
+              "default_value": "",
+              "description": "Unique identifier for the company applying for the loan"
+            },
+            {
+              "name": "loan_amount",
+              "type": "float",
+              "default_value": 0.0,
+              "description": "Amount of loan the company is applying for"
+            },
+            {
+              "name": "credit_rating",
+              "type": "str",
+              "default_value": "unrated",
+              "description": "Credit rating of the company at the time of application"
+            }
+          ]
+        }
+      },
+      "3": {
+        "code": "class ExpensesManagedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        company_id: str = \"\",\n        total_expenses: float = 0.0,\n        completion_status: str = 'completed',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.company_id = company_id\n        self.total_expenses = total_expenses\n        self.completion_status = completion_status\n\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event",
+        "metadata": {
+          "id": 3,
+          "from_agent_type": "CompanyAgent",
+          "from_action_name": "manage_expenses",
+          "to_agent_type": "EnvAgent",
+          "to_action_name": "terminate",
+          "from_action_id": 3,
+          "to_action_id": -1,
+          "event_name": "ExpensesManagedEvent",
+          "event_info": "Company has managed expenses and workflow terminates",
+          "fields": [
+            {
+              "name": "company_id",
+              "type": "str",
+              "default_value": "",
+              "description": "Unique identifier for the company managing expenses"
+            },
+            {
+              "name": "total_expenses",
+              "type": "float",
+              "default_value": 0.0,
+              "description": "Total amount of expenses managed by the company"
+            },
+            {
+              "name": "completion_status",
+              "type": "str",
+              "default_value": "completed",
+              "description": "Status indicating the completion of expense management"
+            }
+          ]
+        }
+      },
+      "4": {
+        "code": "class CreditRatingAssessedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        company_id: str = \"\",\n        credit_rating: str = 'unrated',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.company_id = company_id\n        self.credit_rating = credit_rating\n\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event",
+        "metadata": {
+          "id": 4,
+          "from_agent_type": "BankAgent",
+          "from_action_name": "assess_credit_rating",
+          "to_agent_type": "CompanyAgent",
+          "to_action_name": "apply_for_loan",
+          "from_action_id": 4,
+          "to_action_id": 2,
+          "event_name": "CreditRatingAssessedEvent",
+          "event_info": "Credit rating assessed for loan application",
+          "fields": [
+            {
+              "name": "company_id",
+              "type": "str",
+              "default_value": "",
+              "description": "Unique identifier for the company whose credit rating is assessed"
+            },
+            {
+              "name": "credit_rating",
+              "type": "str",
+              "default_value": "unrated",
+              "description": "Assessed credit rating of the company"
+            }
+          ]
+        }
+      },
+      "5": {
+        "code": "class LoanApprovedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        company_id: str = \"\",\n        approved_loan_amount: float = 0.0,\n        interest_rate: float = 0.0,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.company_id = company_id\n        self.approved_loan_amount = approved_loan_amount\n        self.interest_rate = interest_rate\n\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event",
+        "metadata": {
+          "id": 5,
+          "from_agent_type": "BankAgent",
+          "from_action_name": "process_loan_application",
+          "to_agent_type": "CompanyAgent",
+          "to_action_name": "manage_expenses",
+          "from_action_id": 5,
+          "to_action_id": 3,
+          "event_name": "LoanApprovedEvent",
+          "event_info": "Loan approved and funds transferred",
+          "fields": [
+            {
+              "name": "company_id",
+              "type": "str",
+              "default_value": "",
+              "description": "Unique identifier for the company whose loan is approved"
+            },
+            {
+              "name": "approved_loan_amount",
+              "type": "float",
+              "default_value": 0.0,
+              "description": "Amount of loan approved for the company"
+            },
+            {
+              "name": "interest_rate",
+              "type": "float",
+              "default_value": 0.0,
+              "description": "Interest rate applied to the approved loan"
+            }
+          ]
+        }
+      },
+      "6": {
+        "code": "class LoanRejectedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        company_id: str = \"\",\n        rejection_reason: str = 'unknown',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.company_id = company_id\n        self.rejection_reason = rejection_reason",
+        "metadata": {
+          "id": 6,
+          "from_agent_type": "BankAgent",
+          "from_action_name": "process_loan_application",
+          "to_agent_type": "EnvAgent",
+          "to_action_name": "terminate",
+          "from_action_id": 5,
+          "to_action_id": -1,
+          "event_name": "LoanRejectedEvent",
+          "event_info": "Loan application rejected and workflow terminates",
+          "fields": [
+            {
+              "name": "company_id",
+              "type": "str",
+              "default_value": "",
+              "description": "Unique identifier for the company whose loan application is rejected"
+            },
+            {
+              "name": "rejection_reason",
+              "type": "str",
+              "default_value": "unknown",
+              "description": "Reason for the loan application rejection"
+            }
+          ]
+        }
+      },
+      "7": {
+        "code": "class RevenueGeneratedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        consumer_id: str = \"\",\n        company_id: str = \"\",\n        revenue_amount: float = 0.0,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.consumer_id = consumer_id\n        self.company_id = company_id\n        self.revenue_amount = revenue_amount\n\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event",
+        "metadata": {
+          "id": 7,
+          "from_agent_type": "ConsumerAgent",
+          "from_action_name": "spend_money",
+          "to_agent_type": "CompanyAgent",
+          "to_action_name": "manage_expenses",
+          "from_action_id": 6,
+          "to_action_id": 3,
+          "event_name": "RevenueGeneratedEvent",
+          "event_info": "Revenue generated from consumer spending",
+          "fields": [
+            {
+              "name": "consumer_id",
+              "type": "str",
+              "default_value": "",
+              "description": "Unique identifier for the consumer generating revenue"
+            },
+            {
+              "name": "company_id",
+              "type": "str",
+              "default_value": "",
+              "description": "Unique identifier for the company receiving revenue"
+            },
+            {
+              "name": "revenue_amount",
+              "type": "float",
+              "default_value": 0.0,
+              "description": "Amount of revenue generated by the consumer"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

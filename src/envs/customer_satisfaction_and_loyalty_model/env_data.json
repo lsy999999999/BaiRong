@@ -1,0 +1,6 @@
+{
+    "service_sensitivity_coefficient": 1.05,
+    "product_sensitivity_coefficient": 0.92,
+    "baseline_service_quality": 0.65,
+    "baseline_product_quality": 0.58
+}

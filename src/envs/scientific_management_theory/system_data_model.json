@@ -1,0 +1,60 @@
+{
+    "environment": {
+        "variables": []
+    },
+    "agents": {
+        "ManagerAgent": {
+            "variables": [
+                {
+                    "name": "workflow_design_status",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "worker_skills",
+                    "type": "list",
+                    "default_value": null
+                },
+                {
+                    "name": "task_allocation_status",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "worker_performance",
+                    "type": "list",
+                    "default_value": null
+                },
+                {
+                    "name": "incentive_plan",
+                    "type": "list",
+                    "default_value": null
+                },
+                {
+                    "name": "performance_evaluation",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "workflow_final_status",
+                    "type": "str",
+                    "default_value": null
+                }
+            ]
+        },
+        "WorkerAgent": {
+            "variables": [
+                {
+                    "name": "task_completion_status",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "performance_adjustment_status",
+                    "type": "str",
+                    "default_value": null
+                }
+            ]
+        }
+    }
+}

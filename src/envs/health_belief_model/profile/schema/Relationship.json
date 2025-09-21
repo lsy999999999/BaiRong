@@ -1,0 +1,22 @@
+[
+    {
+        "source_agent": "IndividualAgent",
+        "target_agent": "FamilyAgent",
+        "direction": "bidirectional"
+    },
+    {
+        "source_agent": "IndividualAgent",
+        "target_agent": "CommunityAgent",
+        "direction": "bidirectional"
+    },
+    {
+        "source_agent": "GovernmentAgent",
+        "target_agent": "CommunityAgent",
+        "direction": "unidirectional"
+    },
+    {
+        "source_agent": "GovernmentAgent",
+        "target_agent": "IndividualAgent",
+        "direction": "unidirectional"
+    }
+]

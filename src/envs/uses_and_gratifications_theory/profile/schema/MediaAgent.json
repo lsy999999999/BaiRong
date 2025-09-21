@@ -1,0 +1,90 @@
+{
+    "name": {
+        "type": "str",
+        "default": "MediaAgent",
+        "private": false,
+        "sampling": "llm",
+        "description": "The name of the media agent"
+    },
+    "content_type": {
+        "type": "str",
+        "default": "news",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "news",
+            "entertainment",
+            "education",
+            "social"
+        ],
+        "description": "The type of content the media agent provides"
+    },
+    "target_need": {
+        "type": "str",
+        "default": "information",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "entertainment",
+            "information",
+            "social_interaction"
+        ],
+        "description": "The primary audience need the media content targets"
+    },
+    "delivered_content": {
+        "type": "dict",
+        "default": {
+            "headline": "Breaking News",
+            "body": "Details of the news..."
+        },
+        "private": true,
+        "sampling": "default"
+    },
+    "feedback_records": {
+        "type": "list",
+        "default": [
+            {
+                "user_id": 1,
+                "feedback": "positive",
+                "timestamp": "2025-04-01T10:00:00Z"
+            }
+        ],
+        "private": true,
+        "sampling": "default"
+    },
+    "satisfaction_level": {
+        "type": "float",
+        "default": 50.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "interaction_count": {
+        "type": "int",
+        "default": 0,
+        "private": false,
+        "sampling": "default"
+    },
+    "availability_status": {
+        "type": "str",
+        "default": "active",
+        "private": false,
+        "sampling": "default"
+    },
+    "social_influence_factor": {
+        "type": "float",
+        "default": 1.0,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.5,
+            1.5
+        ]
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

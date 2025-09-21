@@ -1,0 +1,56 @@
+{
+  "domain": "Psychology",
+  "scene_name": "metacognition_theory",
+  "odd_protocol": {
+    "overview": {
+      "system_goal": "Simulate multiple LLM agents using metacognition to monitor and regulate their cognitive processes while executing tasks.",
+      "agent_types": "Three agents: Task Executor, Monitor, Evaluator.",
+      "environment_description": "The environment involves executing tasks that require reflection on cognitive processes, such as solving complex math problems or writing essays.",
+      "metacognitive_focus": "Focus on metacognitive knowledge, monitoring, and regulation to understand their impact on task success."
+    },
+    "design_concepts": {
+      "interaction_patterns": "Task Executor reflects on its process, Monitor observes and provides feedback, Evaluator analyzes and summarizes the effectiveness of strategies.",
+      "communication_protocols": "Agents communicate through dialogue, with Task Executor seeking feedback from Monitor and Evaluator providing a summary post-task.",
+      "decision_mechanisms": "Agents use metacognitive strategies to decide on task strategies and adjustments based on feedback.",
+      "task_structure": "Tasks include multiple sub-tasks or steps requiring reflection and strategy adjustment at each stage.",
+      "feedback_mechanism": "Feedback is provided through dialogue between agents, with Monitor evaluating progress and suggesting adjustments."
+    },
+    "details": {
+      "agent_behaviors": "Task Executor performs tasks and reflects on cognitive processes, Monitor observes and provides feedback, Evaluator assesses overall performance and strategy effectiveness.",
+      "decision_algorithms": "Agents use metacognitive knowledge to select initial strategies and adjust based on feedback and self-reflection.",
+      "specific_constraints": "Agents must evaluate task difficulties and choose appropriate cognitive strategies, adjusting methods when encountering challenges.",
+      "simulation_steps": "Task initiation, self-reflection and strategy adjustment, feedback from Monitor, task completion and evaluation by Evaluator."
+    }
+  },
+  "agent_types": {
+    "TaskExecutor": "Performs tasks and reflects on its cognitive processes, adjusting strategies based on self-reflection and feedback.",
+    "Monitor": "Observes the Task Executor and provides feedback to help improve task performance and cognitive strategy.",
+    "Evaluator": "Analyzes and summarizes the effectiveness of strategies and overall performance after tasks are completed."
+  },
+  "portrait": {
+    "TaskExecutor": 3,
+    "Monitor": 2,
+    "Evaluator": 2
+  },
+  "metrics": [
+    {
+      "id": "Average_Strategy_Adjustments",
+      "name": "Average Strategy Adjustments",
+      "description": "Calculates the average number of strategy changes made by Task Executor agents during task execution.",
+      "visualization_type": "line",
+      "update_interval": 5,
+      "variables": [
+        {
+          "name": "strategy_changes",
+          "source_type": "agent",
+          "agent_type": "TaskExecutor",
+          "path": "strategy_changes",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "This metric aggregates the number of strategy changes reported by each Task Executor agent. For each non-None strategy change entry, the count of changes is summed. The average is calculated by dividing the total count by the number of non-None entries. If the list is empty or contains only None values, the metric defaults to an average of 0. The bar chart will represent the average number of adjustments made.",
+      "function_name": "Average_Strategy_Adjustments"
+    }
+  ]
+}

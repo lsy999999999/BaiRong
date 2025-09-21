@@ -1,0 +1,61 @@
+{
+    "environment": {
+        "variables": [
+            {
+                "name": "behavior_tendencies",
+                "type": "list",
+                "default_value": null
+            },
+            {
+                "name": "group_pressure",
+                "type": "float",
+                "default_value": null
+            }
+        ]
+    },
+    "agents": {
+        "IndividualAgent": {
+            "variables": [
+                {
+                    "name": "behavior_tendencies",
+                    "type": "list",
+                    "default_value": null
+                },
+                {
+                    "name": "individual_id",
+                    "type": "int",
+                    "default_value": null
+                },
+                {
+                    "name": "group_id",
+                    "type": "int",
+                    "default_value": null
+                },
+                {
+                    "name": "interaction_details",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "adjusted_behavior_tendencies",
+                    "type": "list",
+                    "default_value": null
+                }
+            ]
+        },
+        "SocialGroupAgent": {
+            "variables": [
+                {
+                    "name": "members",
+                    "type": "list",
+                    "default_value": null
+                },
+                {
+                    "name": "updated_norms",
+                    "type": "list",
+                    "default_value": null
+                }
+            ]
+        }
+    }
+}

@@ -1,0 +1,82 @@
+[
+    {
+        "name": "Jury",
+        "verdict": "awaiting_verdict",
+        "decision_mechanism": "Consensus-based deliberation, where jurors discuss evidence collectively until a unanimous decision is reached.",
+        "jury_size": 6,
+        "precedent_strength": 88,
+        "agent_type": "Jury",
+        "evidence_evaluation": [
+            {
+                "evidence_strength": 75,
+                "credibility": "high"
+            }
+        ],
+        "public_attention": 50.0,
+        "id": "20"
+    },
+    {
+        "name": "Jury",
+        "verdict": "awaiting_verdict",
+        "decision_mechanism": "Majority vote, where jurors cast their votes after evaluating the evidence, and the majority verdict is adopted.",
+        "jury_size": 10,
+        "precedent_strength": 25,
+        "agent_type": "Jury",
+        "evidence_evaluation": [
+            {
+                "evidence_strength": 75,
+                "credibility": "high"
+            }
+        ],
+        "public_attention": 50.0,
+        "id": "21"
+    },
+    {
+        "name": "Jury",
+        "verdict": "awaiting_verdict",
+        "decision_mechanism": "Sequential voting, where jurors sequentially present their views and vote, refining the verdict through iterative discussion.",
+        "jury_size": 9,
+        "precedent_strength": 17,
+        "agent_type": "Jury",
+        "evidence_evaluation": [
+            {
+                "evidence_strength": 75,
+                "credibility": "high"
+            }
+        ],
+        "public_attention": 50.0,
+        "id": "22"
+    },
+    {
+        "name": "Jury",
+        "verdict": "awaiting_verdict",
+        "decision_mechanism": "Evidence-weighted scoring, where jurors assign scores to evidence pieces and calculate a weighted decision based on cumulative scores.",
+        "jury_size": 12,
+        "precedent_strength": 73,
+        "agent_type": "Jury",
+        "evidence_evaluation": [
+            {
+                "evidence_strength": 75,
+                "credibility": "high"
+            }
+        ],
+        "public_attention": 50.0,
+        "id": "23"
+    },
+    {
+        "name": "Jury",
+        "verdict": "awaiting_verdict",
+        "decision_mechanism": "Anonymous ballot, where jurors submit their verdict anonymously, and the final decision is based on the aggregate of all ballots.",
+        "jury_size": 6,
+        "precedent_strength": 91,
+        "agent_type": "Jury",
+        "evidence_evaluation": [
+            {
+                "evidence_strength": 75,
+                "credibility": "high"
+            }
+        ],
+        "public_attention": 50.0,
+        "id": "24"
+    }
+]

@@ -1,0 +1,94 @@
+{
+  "domain": "Sociology",
+  "scene_name": "social_capital_theory",
+  "odd_protocol": {
+    "overview": {
+      "system_goal": "Study how social capital flows between individuals and influences cooperation, trust, and resource access.",
+      "agent_types": "Individuals with varying levels of social capital; Social Network representing relationships between individuals.",
+      "environment_description": "A social network environment where individuals interact based on their social capital and relationships.",
+      "social_capital_importance": "Social capital is crucial for accessing resources and forming new connections.",
+      "research_applications": "The model can be applied to analyze social media, corporate management, and development in impoverished communities."
+    },
+    "design_concepts": {
+      "interaction_patterns": "Individuals with high social capital are more likely to gain resources and establish new connections.",
+      "communication_protocols": "Cooperation increases social capital and trust levels among individuals.",
+      "decision_mechanisms": "Individuals decide to cooperate or not, impacting their social capital and trust levels.",
+      "network_evolution": "Highly cooperative networks may develop tighter social relationships, enhancing overall social capital.",
+      "social_isolation_risk": "Low cooperation can lead to the breakdown of social capital, resulting in social isolation."
+    },
+    "details": {
+      "agent_behaviors": "Agents with high social capital are more resourceful; agents choose whether to cooperate, impacting their social capital and trust.",
+      "decision_algorithms": "Random assignment of social capital values; decision to cooperate based on social capital and trust levels.",
+      "specific_constraints": "Low social capital individuals may be excluded from resource flow.",
+      "initialization_process": "Generate multiple individuals with random social capital values and form a random social network with connections.",
+      "termination_conditions": "Analyze changes in social capital distribution and cooperation network structure after a set number of time steps."
+    }
+  },
+  "agent_types": {
+    "IndividualAgent": "Represents a person within the social network, possessing varying levels of social capital that influence their ability to gain resources and establish connections.",
+    "SocialNetworkAgent": "Acts as the framework representing relationships between individuals, facilitating interactions and the flow of social capital."
+  },
+  "portrait": {
+    "IndividualAgent": 5,
+    "SocialNetworkAgent": 2
+  },
+  "metrics": [
+    {
+      "id": "Average_Social_Capital",
+      "name": "Average Social Capital",
+      "description": "Measures the average social capital of all individual agents in the system.",
+      "visualization_type": "line",
+      "update_interval": 5,
+      "variables": [
+        {
+          "name": "social_capital_value",
+          "source_type": "agent",
+          "agent_type": "IndividualAgent",
+          "path": "social_capital_value",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Calculate the average of all non-None social capital values. If the list is empty or all values are None, return 0. Handle any type errors by skipping invalid entries.",
+      "function_name": "Average_Social_Capital"
+    },
+    {
+      "id": "Cooperation_Rate",
+      "name": "Cooperation Rate",
+      "description": "Represents the proportion of individual agents that have a positive cooperation potential.",
+      "visualization_type": "pie",
+      "update_interval": 5,
+      "variables": [
+        {
+          "name": "cooperation_potential",
+          "source_type": "agent",
+          "agent_type": "IndividualAgent",
+          "path": "cooperation_potential",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Count the number of True values in the cooperation_potential list and divide by the total number of valid (non-None) entries. If the list is empty or all values are None, return 0 for both cooperative and non-cooperative proportions.",
+      "function_name": "Cooperation_Rate"
+    },
+    {
+      "id": "Resource_Access_Decisions",
+      "name": "Resource Access Decisions",
+      "description": "Tracks the number of agents making each type of decision regarding resource access.",
+      "visualization_type": "bar",
+      "update_interval": 5,
+      "variables": [
+        {
+          "name": "decision",
+          "source_type": "agent",
+          "agent_type": "IndividualAgent",
+          "path": "decision",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Create a dictionary with decision types as keys and their counts as values. Ignore None values and handle type errors by skipping invalid entries. If the list is empty, return an empty dictionary.",
+      "function_name": "Resource_Access_Decisions"
+    }
+  ]
+}

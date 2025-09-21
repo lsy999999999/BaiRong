@@ -1,0 +1,126 @@
+{
+    "-1": {
+        "id": -1,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "Government",
+        "to_action_name": "execute_policy",
+        "from_action_id": 0,
+        "to_action_id": 1,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for policy execution",
+        "fields": []
+    },
+    "-2": {
+        "id": -2,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "Citizens",
+        "to_action_name": "decide_compliance",
+        "from_action_id": 0,
+        "to_action_id": 3,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for citizen compliance decision",
+        "fields": []
+    },
+    "1": {
+        "id": 1,
+        "from_agent_type": "Government",
+        "from_action_name": "execute_policy",
+        "to_agent_type": "Government",
+        "to_action_name": "adjust_policy_strength",
+        "from_action_id": 1,
+        "to_action_id": 2,
+        "event_name": "PolicyExecutedEvent",
+        "event_info": "Results of policy execution, including efficiency metrics",
+        "fields": [
+            {
+                "name": "efficiency_metrics",
+                "type": "float",
+                "default_value": 0.0,
+                "description": "Efficiency of the policy execution ranging from 0 to 1"
+            },
+            {
+                "name": "policy_id",
+                "type": "string",
+                "default_value": "",
+                "description": "Identifier for the executed policy"
+            }
+        ]
+    },
+    "2": {
+        "id": 2,
+        "from_agent_type": "Government",
+        "from_action_name": "adjust_policy_strength",
+        "to_agent_type": "EnvAgent",
+        "to_action_name": "terminate",
+        "from_action_id": 2,
+        "to_action_id": -1,
+        "event_name": "PolicyStrengthAdjustedEvent",
+        "event_info": "Final adjustment results of policy strength",
+        "fields": [
+            {
+                "name": "new_strength",
+                "type": "float",
+                "default_value": 0.0,
+                "description": "Adjusted strength of the policy ranging from 0 to 1"
+            },
+            {
+                "name": "adjustment_reason",
+                "type": "string",
+                "default_value": "",
+                "description": "Reason for the policy strength adjustment"
+            }
+        ]
+    },
+    "3": {
+        "id": 3,
+        "from_agent_type": "Citizens",
+        "from_action_name": "decide_compliance",
+        "to_agent_type": "Citizens",
+        "to_action_name": "adjust_satisfaction",
+        "from_action_id": 3,
+        "to_action_id": 4,
+        "event_name": "ComplianceDecisionEvent",
+        "event_info": "Citizen compliance decision outcome",
+        "fields": [
+            {
+                "name": "compliance_level",
+                "type": "float",
+                "default_value": 0.0,
+                "description": "Level of citizen compliance ranging from 0 to 1"
+            },
+            {
+                "name": "policy_id",
+                "type": "string",
+                "default_value": "",
+                "description": "Identifier for the policy being complied with"
+            }
+        ]
+    },
+    "4": {
+        "id": 4,
+        "from_agent_type": "Citizens",
+        "from_action_name": "adjust_satisfaction",
+        "to_agent_type": "EnvAgent",
+        "to_action_name": "terminate",
+        "from_action_id": 4,
+        "to_action_id": -1,
+        "event_name": "SatisfactionAdjustedEvent",
+        "event_info": "Final satisfaction level of citizens",
+        "fields": [
+            {
+                "name": "satisfaction_level",
+                "type": "float",
+                "default_value": 0.0,
+                "description": "Final satisfaction level of citizens ranging from 0 to 1"
+            },
+            {
+                "name": "adjustment_reason",
+                "type": "string",
+                "default_value": "",
+                "description": "Reason for the satisfaction level adjustment"
+            }
+        ]
+    }
+}

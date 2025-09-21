@@ -1,0 +1,110 @@
+{
+  "domain": "Demographics",
+  "scene_name": "health_inequality",
+  "odd_protocol": {
+    "overview": {
+      "system_goal": "Simulate and understand the causes and mechanisms behind health inequalities by modeling complex interactions between individuals, families, communities, and societal institutions. Use simulations to predict how health policies, education, and healthcare services impact health inequalities among different groups such as low-income populations, minority groups, rural and urban residents. Provide effective policy recommendations to reduce health inequalities by analyzing the combined effects of social determinants.",
+      "agent_types": "The agents in the model represent different individuals and groups in society, making health-related decisions based on socioeconomic conditions, education levels, and health behaviors. Individual agents simulate people of different genders, ages, socioeconomic backgrounds, cultures, and ethnicities, with their health influenced by living conditions, education, income, and healthcare resource availability. Family agents play a crucial role in health decisions, affecting family members' health through decisions on nutrition, education, and health behaviors. Community agents, as basic social structure units, influence residents' health levels through social capital, public resources, and medical facilities. Government agents determine the distribution of health resources and opportunities through health policies, medical security systems, and educational policies. Healthcare system agents simulate how healthcare systems in different regions affect individual health, including service accessibility, quality, and insurance.",
+      "environment_description": "The environment includes various socioeconomic conditions and healthcare systems that influence health inequalities. It involves different groups such as low-income populations, minority groups, rural and urban residents, and factors like income level, education level, social capital, health behaviors, and healthcare accessibility. The simulation environment evolves through stages: initial state with significant health inequalities, social intervention phase with policy introductions, and long-term effects phase to evaluate the impact of policies on health inequalities."
+    },
+    "design_concepts": {
+      "interaction_patterns": "Interactions occur between individual, family, community, government, and healthcare system agents. Individuals make health decisions based on socioeconomic status, education, and social support. Families influence health through decisions on children's education, nutrition, and health behaviors. Communities affect health through social capital and resources. Governments implement policies affecting health opportunities. Healthcare systems allocate resources impacting health accessibility.",
+      "communication_protocols": "Agents communicate through policy implementations, resource allocations, and social interactions. Government agents disseminate policies to other agents. Healthcare system agents convey resource availability and service quality information. Community agents share social support and network information influencing health behaviors.",
+      "decision_mechanisms": "Agents make decisions based on socioeconomic conditions, education levels, and available healthcare resources. Individual decisions include seeking medical care and participating in health education programs. Family decisions involve children's education and nutrition. Government decisions focus on policy implementations like health insurance and education projects. Healthcare system decisions involve resource distribution and service accessibility."
+    },
+    "details": {
+      "agent_behaviors": "Individual agents make health decisions based on socioeconomic status, education, and social support. Family agents influence health through decisions on children's education, nutrition, and health behaviors. Government agents implement policies like health insurance and education projects. Healthcare system agents allocate resources affecting service accessibility.",
+      "decision_algorithms": "Decisions are influenced by factors like income, education, healthcare accessibility, and social capital. Algorithms simulate health differences widening or narrowing based on these factors. Without intervention, health inequalities worsen as affluent groups access more resources, while impoverished groups face poorer conditions. Policy interventions simulate government, community, and healthcare system efforts to reduce inequalities.",
+      "specific_constraints": "Constraints include initial conditions reflecting significant health inequalities, with poorer health among low-income and low-education groups. The model simulates different scenarios like increasing education levels, expanding healthcare resources, and strengthening health promotion projects to evaluate policy effects over time."
+    }
+  },
+  "agent_types": {
+    "IndividualAgent": "Represents individual people with varying genders, ages, socioeconomic backgrounds, cultures, and ethnicities, making health-related decisions based on living conditions, education, income, and healthcare resource availability.",
+    "FamilyAgent": "Represents family units that influence individual health through decisions on nutrition, education, and health behaviors, particularly impacting children's health outcomes.",
+    "CommunityAgent": "Represents communities as social structure units that affect residents' health through social capital, public resources, and access to medical facilities.",
+    "GovernmentAgent": "Represents government entities responsible for implementing health policies, distributing healthcare resources, and creating opportunities to reduce health inequalities.",
+    "HealthcareSystemAgent": "Represents healthcare systems that allocate resources, determine service accessibility, and influence the quality of healthcare available to individuals and communities."
+  },
+  "portrait": {
+    "IndividualAgent": 5,
+    "FamilyAgent": 5,
+    "CommunityAgent": 5,
+    "GovernmentAgent": 1,
+    "HealthcareSystemAgent": 1
+  },
+  "metrics": [
+    {
+      "id": "Average_Income_Level_by_Education",
+      "name": "Average Income Level by Education",
+      "description": "This metric measures the average income level of individuals categorized by their education level. It provides insight into how income varies with education, which is a key factor in health inequalities.",
+      "visualization_type": "bar",
+      "update_frequency": 5,
+      "variables": [
+        {
+          "name": "income_level",
+          "source_type": "agent",
+          "agent_type": "IndividualAgent",
+          "path": "income_level",
+          "required": true,
+          "is_list": true
+        },
+        {
+          "name": "education_level",
+          "source_type": "agent",
+          "agent_type": "IndividualAgent",
+          "path": "education_level",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Group individuals by their education level and calculate the average income for each group. Handle edge cases by ignoring agents with None or non-numeric income levels, and ensure education levels are valid strings. Return a dictionary where keys are education levels and values are average incomes.",
+      "function_name": "Average_Income_Level_by_Education"
+    },
+    {
+      "id": "Resource_Distribution_Efficiency",
+      "name": "Resource Distribution Efficiency",
+      "description": "This metric evaluates how efficiently government resources are being distributed across different target populations. It helps identify disparities in resource allocation.",
+      "visualization_type": "pie",
+      "update_frequency": 5,
+      "variables": [
+        {
+          "name": "resource_distribution",
+          "source_type": "agent",
+          "agent_type": "GovernmentAgent",
+          "path": "resource_distribution",
+          "required": true,
+          "is_list": true
+        },
+        {
+          "name": "target_population",
+          "source_type": "agent",
+          "agent_type": "GovernmentAgent",
+          "path": "target_population",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Sum the total resources distributed to each target population. Handle edge cases by ignoring entries with None or non-numeric resource distributions. Return a dictionary where keys are target populations and values are the total resources distributed as proportions of the whole.",
+      "function_name": "Resource_Distribution_Efficiency"
+    },
+    {
+      "id": "Healthcare_Accessibility_Impact",
+      "name": "Healthcare Accessibility Impact",
+      "description": "This metric tracks changes in healthcare accessibility by analyzing the average resource availability in healthcare systems over time. It indicates the impact of policy interventions on healthcare access.",
+      "visualization_type": "line",
+      "update_frequency": 5,
+      "variables": [
+        {
+          "name": "resource_availability",
+          "source_type": "agent",
+          "agent_type": "HealthcareSystemAgent",
+          "path": "resource_availability",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Calculate the average resource availability across all healthcare system agents for each time point. Handle edge cases by excluding None or non-numeric values from the calculation. Return a single series with time points as keys and average resource availability as values.",
+      "function_name": "Healthcare_Accessibility_Impact"
+    }
+  ]
+}

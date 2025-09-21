@@ -1,0 +1,92 @@
+[
+    {
+        "name": "PrecedentAgent_LegalArchiver",
+        "legal_field": "administrative law",
+        "precedent_count": 100,
+        "influence_factor": 0.75,
+        "interpretation_method": "expert consultation",
+        "active_status": "active",
+        "agent_type": "PrecedentAgent",
+        "stored_principles": "Principles regarding case law precedents and legal interpretations",
+        "historical_data": [
+            {
+                "year": 2020,
+                "case": "Smith vs. Jones",
+                "outcome": "favorable"
+            }
+        ],
+        "id": "10"
+    },
+    {
+        "name": "PrecedentAgent_JudicialHistorian",
+        "legal_field": "criminal law",
+        "precedent_count": 100,
+        "influence_factor": 0.75,
+        "interpretation_method": "statistical modeling",
+        "active_status": "active",
+        "agent_type": "PrecedentAgent",
+        "stored_principles": "Principles regarding case law precedents and legal interpretations",
+        "historical_data": [
+            {
+                "year": 2020,
+                "case": "Smith vs. Jones",
+                "outcome": "favorable"
+            }
+        ],
+        "id": "11"
+    },
+    {
+        "name": "PrecedentAgent_CaseCompiler",
+        "legal_field": "administrative law",
+        "precedent_count": 100,
+        "influence_factor": 0.75,
+        "interpretation_method": "statistical modeling",
+        "active_status": "active",
+        "agent_type": "PrecedentAgent",
+        "stored_principles": "Principles regarding case law precedents and legal interpretations",
+        "historical_data": [
+            {
+                "year": 2020,
+                "case": "Smith vs. Jones",
+                "outcome": "favorable"
+            }
+        ],
+        "id": "12"
+    },
+    {
+        "name": "PrecedentAgent_RulingRepository",
+        "legal_field": "criminal law",
+        "precedent_count": 100,
+        "influence_factor": 0.75,
+        "interpretation_method": "statistical modeling",
+        "active_status": "active",
+        "agent_type": "PrecedentAgent",
+        "stored_principles": "Principles regarding case law precedents and legal interpretations",
+        "historical_data": [
+            {
+                "year": 2020,
+                "case": "Smith vs. Jones",
+                "outcome": "favorable"
+            }
+        ],
+        "id": "13"
+    },
+    {
+        "name": "PrecedentAgent_LawChronicle",
+        "legal_field": "contract law",
+        "precedent_count": 100,
+        "influence_factor": 0.75,
+        "interpretation_method": "textual analysis",
+        "active_status": "active",
+        "agent_type": "PrecedentAgent",
+        "stored_principles": "Principles regarding case law precedents and legal interpretations",
+        "historical_data": [
+            {
+                "year": 2020,
+                "case": "Smith vs. Jones",
+                "outcome": "favorable"
+            }
+        ],
+        "id": "14"
+    }
+]

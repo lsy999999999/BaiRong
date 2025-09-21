@@ -1,0 +1,62 @@
+[
+    {
+        "name": "Maxwell Bidwell",
+        "capital": 0.0,
+        "influence_strategy": "",
+        "strategy": "balanced",
+        "information_level": 5,
+        "risk_tolerance": 0.01204104613768775,
+        "performance_score": 0.0,
+        "agent_type": "Speculator",
+        "market_influence": [],
+        "id": "15"
+    },
+    {
+        "name": "Aurelia Gamble",
+        "capital": 0.0,
+        "influence_strategy": "",
+        "strategy": "conservative",
+        "information_level": 1,
+        "risk_tolerance": 0.19674661099122404,
+        "performance_score": 0.0,
+        "agent_type": "Speculator",
+        "market_influence": [],
+        "id": "16"
+    },
+    {
+        "name": "Silas Venture",
+        "capital": 0.0,
+        "influence_strategy": "",
+        "strategy": "aggressive",
+        "information_level": 10,
+        "risk_tolerance": 0.841613273638903,
+        "performance_score": 0.0,
+        "agent_type": "Speculator",
+        "market_influence": [],
+        "id": "17"
+    },
+    {
+        "name": "Clara Wager",
+        "capital": 0.0,
+        "influence_strategy": "",
+        "strategy": "balanced",
+        "information_level": 3,
+        "risk_tolerance": 0.8488978806836368,
+        "performance_score": 0.0,
+        "agent_type": "Speculator",
+        "market_influence": [],
+        "id": "18"
+    },
+    {
+        "name": "Darius Swift",
+        "capital": 0.0,
+        "influence_strategy": "",
+        "strategy": "conservative",
+        "information_level": 6,
+        "risk_tolerance": 0.5628057243475112,
+        "performance_score": 0.0,
+        "agent_type": "Speculator",
+        "market_influence": [],
+        "id": "19"
+    }
+]

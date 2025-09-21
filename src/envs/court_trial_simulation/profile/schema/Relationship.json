@@ -1,0 +1,47 @@
+[
+    {
+        "source_agent": "Prosecutor",
+        "target_agent": "Judge",
+        "direction": "unidirectional"
+    },
+    {
+        "source_agent": "Prosecutor",
+        "target_agent": "DefenseLawyer",
+        "direction": "unidirectional"
+    },
+    {
+        "source_agent": "DefenseLawyer",
+        "target_agent": "Judge",
+        "direction": "unidirectional"
+    },
+    {
+        "source_agent": "DefenseLawyer",
+        "target_agent": "Defendant",
+        "direction": "unidirectional"
+    },
+    {
+        "source_agent": "Judge",
+        "target_agent": "Jury",
+        "direction": "unidirectional"
+    },
+    {
+        "source_agent": "Judge",
+        "target_agent": "Witness",
+        "direction": "bidirectional"
+    },
+    {
+        "source_agent": "Defendant",
+        "target_agent": "Judge",
+        "direction": "unidirectional"
+    },
+    {
+        "source_agent": "Jury",
+        "target_agent": "Jury",
+        "direction": "unidirectional"
+    },
+    {
+        "source_agent": "Witness",
+        "target_agent": "Jury",
+        "direction": "unidirectional"
+    }
+]

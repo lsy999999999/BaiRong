@@ -1,0 +1,17 @@
+[
+    {
+        "source_agent": "CustomerAgent",
+        "target_agent": "MerchantAgent",
+        "direction": "bidirectional"
+    },
+    {
+        "source_agent": "CustomerAgent",
+        "target_agent": "CustomerAgent",
+        "direction": "unidirectional"
+    },
+    {
+        "source_agent": "MerchantAgent",
+        "target_agent": "MerchantAgent",
+        "direction": "unidirectional"
+    }
+]

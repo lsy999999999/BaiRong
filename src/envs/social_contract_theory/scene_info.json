@@ -1,0 +1,100 @@
+{
+  "domain": "Politics",
+  "scene_name": "social_contract_theory",
+  "odd_protocol": {
+    "overview": {
+      "system_goal": "Use large language models to simulate social contract theory and explore its effects on individual freedom, government power, and social order.",
+      "agent_types": "Individual agents, government agents, social group agents, contract breakdown agents, public policy agents.",
+      "environment_description": "Simulated environments based on different social contract theories such as Hobbes, Locke, and Rousseau, exploring individual and government interactions.",
+      "focus_on_conflict_resolution": "Examine how social contracts address social conflicts, public welfare, rights protection, and government governance.",
+      "impact_analysis": "Analyze how social contracts affect law, government governance, and social stability across different political systems and social structures."
+    },
+    "design_concepts": {
+      "interaction_patterns": "Agents interact by forming contracts, negotiating rights and obligations, and responding to government actions.",
+      "communication_protocols": "Use LLMs to simulate dialogue and negotiation processes between agents for contract formation and execution.",
+      "decision_mechanisms": "Agents decide based on historical case data, social contract theory, and current social context inputs.",
+      "contract_forms": "Simulate Hobbes' absolute sovereignty contract, Locke's limited government contract, and Rousseau's collective will contract.",
+      "balance_of_interests": "Explore tension between individual freedom and collective welfare in resource allocation and public policy."
+    },
+    "details": {
+      "agent_behaviors": "Individual agents negotiate contracts, government agents enforce laws, social group agents express collective interests, contract breakdown agents simulate conflicts, and public policy agents evaluate policy impacts.",
+      "decision_algorithms": "Algorithms based on social contract theory texts, historical case analysis, and simulated social context data.",
+      "specific_constraints": "Constraints include initial natural state conditions, government legitimacy, and social contract adaptability.",
+      "simulation_steps": "Data collection, contract setting, natural state simulation, government function simulation, contract breakdown scenarios, societal feedback mechanisms.",
+      "feedback_mechanisms": "Simulate reactions from different social groups to contract execution and government performance."
+    }
+  },
+  "agent_types": {
+    "IndividualAgent": "Negotiates contracts and explores the effects of social contract theory on personal freedom within the simulated environment.",
+    "GovernmentAgent": "Enforces laws and represents government power, interacting with other agents to maintain social order according to different social contract theories.",
+    "SocialGroupAgent": "Expresses collective interests and negotiates rights and obligations within the social contract framework.",
+    "ContractBreakdownAgent": "Simulates conflicts and breakdowns in contracts, analyzing the impact on social order and individual freedom.",
+    "PublicPolicyAgent": "Evaluates policy impacts and adapts strategies based on social contract theory and historical case analysis."
+  },
+  "portrait": {
+    "IndividualAgent": 2,
+    "GovernmentAgent": 1,
+    "SocialGroupAgent": 5,
+    "ContractBreakdownAgent": 3,
+    "PublicPolicyAgent": 4
+  },
+  "metrics": [
+    {
+      "id": "Agent_Negotiation_Success_Rate",
+      "name": "Agent Negotiation Success Rate",
+      "description": "Measures the proportion of successful negotiations by Individual Agents.",
+      "visualization_type": "pie",
+      "update_frequency": 5,
+      "variables": [
+        {
+          "name": "negotiation_status",
+          "source_type": "agent",
+          "agent_type": "IndividualAgent",
+          "path": "negotiation_status",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Calculate the percentage of Individual Agents whose negotiation_status is 'successful'. Handle None values and unexpected types by treating them as unsuccessful negotiations. Use a pie chart to show the proportion of successful vs unsuccessful negotiations.",
+      "function_name": "Agent_Negotiation_Success_Rate"
+    },
+    {
+      "id": "Government_Enforcement_Rate",
+      "name": "Government Enforcement Rate",
+      "description": "Tracks the enforcement status of laws by Government Agents over time.",
+      "visualization_type": "line",
+      "update_frequency": 5,
+      "variables": [
+        {
+          "name": "enforcement_status",
+          "source_type": "agent",
+          "agent_type": "GovernmentAgent",
+          "path": "enforcement_status",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Aggregate the count of 'enforced' statuses from Government Agents' enforcement_status. Handle None values and empty lists by assuming no enforcement occurred. Use a line chart to show changes in enforcement rates over time.",
+      "function_name": "Government_Enforcement_Rate"
+    },
+    {
+      "id": "Public_Policy_Impact_Analysis",
+      "name": "Public Policy Impact Analysis",
+      "description": "Evaluates the results of impact analyses conducted by Public Policy Agents.",
+      "visualization_type": "bar",
+      "update_frequency": 5,
+      "variables": [
+        {
+          "name": "impact_analysis_results",
+          "source_type": "agent",
+          "agent_type": "PublicPolicyAgent",
+          "path": "impact_analysis_results",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Sum up key impact metrics from impact_analysis_results dictionaries. Handle None values by skipping them. Use a bar chart to compare different impact metrics across various policies.",
+      "function_name": "Public_Policy_Impact_Analysis"
+    }
+  ]
+}

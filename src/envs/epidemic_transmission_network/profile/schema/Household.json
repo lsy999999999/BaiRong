@@ -1,0 +1,69 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Household Name",
+        "private": false,
+        "sampling": "llm",
+        "description": "A meaningful name for the household."
+    },
+    "members": {
+        "type": "list",
+        "default": [],
+        "private": false,
+        "sampling": "default"
+    },
+    "location": {
+        "type": "str",
+        "default": "",
+        "private": false,
+        "sampling": "llm",
+        "description": "The geographic location of the household."
+    },
+    "size": {
+        "type": "int",
+        "range": [
+            1,
+            10
+        ],
+        "default": 1,
+        "private": false,
+        "sampling": "random"
+    },
+    "quarantine_status": {
+        "type": "str",
+        "default": "",
+        "private": false,
+        "sampling": "default"
+    },
+    "infection_risk": {
+        "type": "float",
+        "default": 0.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "economic_pressure": {
+        "type": "float",
+        "default": 0.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "communication_channels": {
+        "type": "list",
+        "default": [],
+        "private": false,
+        "sampling": "default"
+    },
+    "trust_in_authorities": {
+        "type": "float",
+        "default": 0.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "int",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

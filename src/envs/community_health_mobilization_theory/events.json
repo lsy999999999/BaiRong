@@ -1,0 +1,188 @@
+{
+    "-1": {
+        "id": -1,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "CommunityLeader",
+        "to_action_name": "initiate_mobilization",
+        "from_action_id": 0,
+        "to_action_id": 1,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for community health mobilization process",
+        "fields": []
+    },
+    "-2": {
+        "id": -2,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "PublicHealthExpert",
+        "to_action_name": "provide_guidance",
+        "from_action_id": 0,
+        "to_action_id": 4,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for public health guidance dissemination",
+        "fields": []
+    },
+    "1": {
+        "id": 1,
+        "from_agent_type": "CommunityLeader",
+        "from_action_name": "initiate_mobilization",
+        "to_agent_type": "CommunityMember",
+        "to_action_name": "engage_in_mobilization",
+        "from_action_id": 1,
+        "to_action_id": 2,
+        "event_name": "MobilizationEvent",
+        "event_info": "Community leaders organize health mobilization activities",
+        "fields": [
+            {
+                "name": "activity_details",
+                "type": "str",
+                "default_value": "None",
+                "description": "Description of the health mobilization activity."
+            },
+            {
+                "name": "leader_id",
+                "type": "str",
+                "default_value": "unknown",
+                "description": "Identifier for the community leader organizing the event."
+            }
+        ]
+    },
+    "2": {
+        "id": 2,
+        "from_agent_type": "CommunityMember",
+        "from_action_name": "engage_in_mobilization",
+        "to_agent_type": "CommunityMember",
+        "to_action_name": "influence_peer_behavior",
+        "from_action_id": 2,
+        "to_action_id": 3,
+        "event_name": "BehaviorChangeEvent",
+        "event_info": "Community members influence each other's health behaviors",
+        "fields": [
+            {
+                "name": "influencing_member_id",
+                "type": "str",
+                "default_value": "unknown",
+                "description": "Identifier for the community member influencing behavior."
+            },
+            {
+                "name": "influenced_member_id",
+                "type": "str",
+                "default_value": "unknown",
+                "description": "Identifier for the community member whose behavior is influenced."
+            },
+            {
+                "name": "behavior_change",
+                "type": "str",
+                "default_value": "None",
+                "description": "Description of the health behavior change."
+            }
+        ]
+    },
+    "3": {
+        "id": 3,
+        "from_agent_type": "CommunityMember",
+        "from_action_name": "engage_in_mobilization",
+        "to_agent_type": "EnvAgent",
+        "to_action_name": "terminate",
+        "from_action_id": 2,
+        "to_action_id": -1,
+        "event_name": "MobilizationCompletedEvent",
+        "event_info": "Completion of community mobilization efforts",
+        "fields": [
+            {
+                "name": "completion_status",
+                "type": "str",
+                "default_value": "success",
+                "description": "Status of the mobilization effort completion."
+            },
+            {
+                "name": "summary",
+                "type": "str",
+                "default_value": "None",
+                "description": "Summary of mobilization outcomes."
+            }
+        ]
+    },
+    "4": {
+        "id": 4,
+        "from_agent_type": "CommunityMember",
+        "from_action_name": "influence_peer_behavior",
+        "to_agent_type": "CommunityMember",
+        "to_action_name": "engage_in_mobilization",
+        "from_action_id": 3,
+        "to_action_id": 2,
+        "event_name": "PeerInfluenceEvent",
+        "event_info": "Peer influence triggers further engagement",
+        "fields": [
+            {
+                "name": "peer_id",
+                "type": "str",
+                "default_value": "unknown",
+                "description": "Identifier for the peer influencing engagement."
+            },
+            {
+                "name": "target_member_id",
+                "type": "str",
+                "default_value": "unknown",
+                "description": "Identifier for the member being influenced."
+            },
+            {
+                "name": "influence_type",
+                "type": "str",
+                "default_value": "None",
+                "description": "Type of influence exerted by the peer."
+            }
+        ]
+    },
+    "5": {
+        "id": 5,
+        "from_agent_type": "PublicHealthExpert",
+        "from_action_name": "provide_guidance",
+        "to_agent_type": "CommunityLeader",
+        "to_action_name": "initiate_mobilization",
+        "from_action_id": 4,
+        "to_action_id": 1,
+        "event_name": "GuidanceEvent",
+        "event_info": "Public health experts provide guidance and resources",
+        "fields": [
+            {
+                "name": "guidance_details",
+                "type": "str",
+                "default_value": "None",
+                "description": "Details of the guidance provided."
+            },
+            {
+                "name": "expert_id",
+                "type": "str",
+                "default_value": "unknown",
+                "description": "Identifier for the public health expert providing guidance."
+            }
+        ]
+    },
+    "6": {
+        "id": 6,
+        "from_agent_type": "PublicHealthExpert",
+        "from_action_name": "provide_guidance",
+        "to_agent_type": "EnvAgent",
+        "to_action_name": "terminate",
+        "from_action_id": 4,
+        "to_action_id": -1,
+        "event_name": "GuidanceCompletedEvent",
+        "event_info": "Completion of guidance dissemination",
+        "fields": [
+            {
+                "name": "completion_status",
+                "type": "str",
+                "default_value": "completed",
+                "description": "Status of the guidance dissemination completion."
+            },
+            {
+                "name": "results_summary",
+                "type": "str",
+                "default_value": "None",
+                "description": "Summary of the guidance dissemination results."
+            }
+        ]
+    }
+}

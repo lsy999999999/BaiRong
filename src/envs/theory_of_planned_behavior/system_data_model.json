@@ -1,0 +1,80 @@
+{
+    "environment": {
+        "variables": [
+            {
+                "name": "resource_availability",
+                "type": "float",
+                "default_value": null
+            },
+            {
+                "name": "situational_factors",
+                "type": "dict",
+                "default_value": null
+            }
+        ]
+    },
+    "agents": {
+        "CognitiveAgent": {
+            "variables": [
+                {
+                    "name": "attitude",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "subjective_norm",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "perceived_behavioral_control",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "behavioral_intentions",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "final_behavior",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "completion_status",
+                    "type": "string",
+                    "default_value": null
+                }
+            ]
+        },
+        "SocialNormAgent": {
+            "variables": [
+                {
+                    "name": "social_norms_score",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "adjusted_subjective_norms",
+                    "type": "dict",
+                    "default_value": null
+                }
+            ]
+        },
+        "EnvironmentalAgent": {
+            "variables": [
+                {
+                    "name": "resource_availability",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "situational_constraints",
+                    "type": "dict",
+                    "default_value": null
+                }
+            ]
+        }
+    }
+}

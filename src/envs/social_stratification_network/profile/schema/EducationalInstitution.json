@@ -1,0 +1,82 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Elite Academy",
+        "private": false,
+        "sampling": "llm",
+        "description": "A prestigious name for an educational institution."
+    },
+    "type": {
+        "type": "str",
+        "choices": [
+            "university",
+            "college",
+            "high school",
+            "trade school"
+        ],
+        "default": "university",
+        "private": false,
+        "sampling": "random"
+    },
+    "quality": {
+        "type": "int",
+        "default": 80,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            50,
+            100
+        ]
+    },
+    "admission_criteria": {
+        "type": "dict",
+        "default": {},
+        "private": true,
+        "sampling": "default"
+    },
+    "applications_received": {
+        "type": "list",
+        "default": [],
+        "private": true,
+        "sampling": "default"
+    },
+    "selected_students": {
+        "type": "list",
+        "default": [],
+        "private": true,
+        "sampling": "default"
+    },
+    "tuition_fees": {
+        "type": "float",
+        "default": 10000.0,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            5000.0,
+            50000.0
+        ]
+    },
+    "prestige": {
+        "type": "int",
+        "default": 75,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            50,
+            100
+        ]
+    },
+    "alumni_network": {
+        "type": "list",
+        "default": [],
+        "private": false,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "int",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

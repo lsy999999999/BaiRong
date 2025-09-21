@@ -1,0 +1,76 @@
+{
+    "name": {
+        "type": "str",
+        "default": "John Doe",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's full name"
+    },
+    "mobilization_status": {
+        "type": "str",
+        "default": "planning",
+        "private": false,
+        "sampling": "default"
+    },
+    "influence_level": {
+        "type": "int",
+        "default": 50,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0,
+            100
+        ]
+    },
+    "community_engagements": {
+        "type": "list",
+        "default": [
+            "initial_meeting"
+        ],
+        "private": true,
+        "sampling": "default"
+    },
+    "experience_years": {
+        "type": "int",
+        "default": 5,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            1,
+            30
+        ]
+    },
+    "communication_channels": {
+        "type": "list",
+        "default": [
+            "social_media",
+            "community_meetings"
+        ],
+        "private": false,
+        "sampling": "llm",
+        "description": "Preferred communication channels used by the agent"
+    },
+    "resource_allocated": {
+        "type": "float",
+        "default": 1000.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "cultural_context_awareness": {
+        "type": "int",
+        "default": 70,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0,
+            100
+        ]
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

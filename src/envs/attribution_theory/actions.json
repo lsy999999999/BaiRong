@@ -1,0 +1,135 @@
+{
+    "ParticipantA": [
+        {
+            "id": 1,
+            "name": "observe_behavior",
+            "condition": "Behavior displayed by Participant B",
+            "description": "Participant A observes the behavior displayed by Participant B in the given interaction scenario.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "behavior_type",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Type of behavior displayed by Participant B"
+                },
+                {
+                    "name": "intended_outcome",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Intended outcome of the behavior displayed by Participant B"
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "behavior_description",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Description of the behavior observed by Participant A"
+                },
+                {
+                    "name": "observation_context",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Context in which the behavior was observed"
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "name": "attribute_behavior",
+            "condition": "Behavior observed from Participant B",
+            "description": "Participant A attributes the observed behavior to internal or external causes based on attribution theory principles.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "behavior_description",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Description of the behavior observed by Participant A"
+                },
+                {
+                    "name": "observation_context",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Context in which the behavior was observed"
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "attribution_type",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Type of attribution decided by Participant A: internal or external"
+                },
+                {
+                    "name": "reasoning",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Reasoning behind Participant A's attribution decision"
+                }
+            ]
+        }
+    ],
+    "ParticipantB": [
+        {
+            "id": 3,
+            "name": "display_behavior",
+            "condition": null,
+            "description": "Participant B displays a specific behavior intended for observation by Participant A.",
+            "type": "OR",
+            "required_variables": [],
+            "output_updates": [
+                {
+                    "name": "behavior_type",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Type of behavior displayed by Participant B"
+                },
+                {
+                    "name": "intended_outcome",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Intended outcome of the behavior displayed by Participant B"
+                }
+            ]
+        }
+    ],
+    "FeedbackerC": [
+        {
+            "id": 4,
+            "name": "evaluate_attribution",
+            "condition": "Attribution decision received from Participant A",
+            "description": "Feedbacker C evaluates the attribution decision made by Participant A, assessing any bias present.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "attribution_type",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Type of attribution decided by Participant A: internal or external"
+                },
+                {
+                    "name": "reasoning",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Reasoning behind Participant A's attribution decision"
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "bias_detected",
+                    "type": "boolean",
+                    "context": "agent",
+                    "description": "Indicates whether an attribution bias was detected by Feedbacker C"
+                },
+                {
+                    "name": "feedback_message",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Feedback provided by Feedbacker C regarding the attribution decision"
+                }
+            ]
+        }
+    ]
+}

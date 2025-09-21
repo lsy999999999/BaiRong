@@ -1,0 +1,178 @@
+{
+  "agents": {
+    "Individual": {
+      "imports": "from typing import Any, List,Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "1": {
+          "code": "async def calculate_cooperation_willingness(self, event: Event) -> List[Event]:\n        # No condition to check, proceed directly with the handler logic\n\n        # Retrieve personal_cost and personal_benefit from agent's profile\n        personal_cost = self.profile.get_data(\"personal_cost\", 0.0)\n        personal_benefit = self.profile.get_data(\"personal_benefit\", 0.0)\n\n        # Craft instruction for generating cooperation willingness\n        instruction = \"\"\"\n        Calculate the cooperation willingness based on a cost-benefit analysis.\n        Please return the information in the following JSON format:\n\n        {\n        \"cooperation_willingness\": \"<Calculated willingness to cooperate>\",\n        \"target_ids\": [\"<The string ID(s) of the Group agent(s)>\"]\n        }\n        \"\"\"\n\n        # Observation context\n        observation = f\"Personal cost: {personal_cost}, Personal benefit: {personal_benefit}\"\n\n        # Generate reaction using the LLM\n        result = await self.generate_reaction(instruction, observation)\n\n        # Extract cooperation willingness and target_ids from the result\n        cooperation_willingness = result.get('cooperation_willingness', 0.0)\n        target_ids = result.get('target_ids', [])\n\n        # Ensure target_ids is a list\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Update agent's state with the calculated cooperation_willingness\n        self.profile.update_data(\"cooperation_willingness\", cooperation_willingness)\n\n        # Prepare and send CooperationDecisionEvent to each target_id\n        events = []\n        for target_id in target_ids:\n            cooperation_event = CooperationDecisionEvent(\n                self.profile_id, target_id,\n                individual_id=self.profile_id,\n                cooperation_willingness=cooperation_willingness,\n                personal_cost=personal_cost,\n                personal_benefit=personal_benefit\n            )\n            events.append(cooperation_event)\n\n        return events",
+          "metadata": {
+            "id": 1,
+            "name": "calculate_cooperation_willingness",
+            "condition": "null",
+            "description": "This action involves an individual agent calculating its willingness to cooperate in a collective action. The decision is based on a cost-benefit analysis where the agent evaluates the personal cost of participating against the benefits received.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "personal_cost",
+                "type": "float",
+                "context": "agent",
+                "description": "The cost incurred by the individual for participating in the collective action."
+              },
+              {
+                "name": "personal_benefit",
+                "type": "float",
+                "context": "agent",
+                "description": "The benefit received by the individual from participating in the collective action."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "cooperation_willingness",
+                "type": "float",
+                "context": "agent",
+                "description": "The degree to which the individual is willing to cooperate, calculated based on cost-benefit analysis."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "Group": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "2": {
+          "code": "async def evaluate_collective_action_success(self, event: Event) -> List[Event]:\n        # Check if all individual cooperation decisions have been received\n        expected_individuals = await self.get_env_data(\"expected_individuals\", 1)  # Ensure a valid default\n        received_decisions = self.profile.get_data(\"received_decisions\", [])\n\n        # Add the decision if it's not already recorded\n        individual_id = event.individual_id\n        cooperation_willingness = event.cooperation_willingness\n\n        if individual_id not in received_decisions:\n            received_decisions.append(individual_id)\n            self.profile.update_data(\"received_decisions\", received_decisions)\n\n        # Aggregate cooperation willingness\n        total_cooperation = self.profile.get_data(\"total_cooperation\", 0.0)\n        total_cooperation += cooperation_willingness\n        self.profile.update_data(\"total_cooperation\", total_cooperation)\n\n        # Check if all decisions are received\n        if len(received_decisions) < expected_individuals:\n            return []  # Not all decisions received yet\n\n        # Once all decisions are received, evaluate collective action success\n        group_goal = await self.get_env_data(\"group_goal\", 0.0)\n\n        instruction = \"\"\"Evaluate the success of the collective action based on the aggregated cooperation level.\n        Determine if the collective action was successful, calculate the total cooperation, and the group benefit.\n        Return the information in the following JSON format:\n\n        {\n        \"collective_success\": <bool indicating success>,\n        \"total_cooperation\": <aggregated cooperation level>,\n        \"group_benefit\": <calculated group benefit>,\n        \"target_ids\": [\"ENV\"]\n        }\n        \"\"\"\n\n        observation = f\"Total cooperation: {total_cooperation}, Group goal: {group_goal}\"\n        result = await self.generate_reaction(instruction, observation)\n\n        collective_success = result.get('collective_success', False)\n        total_cooperation = result.get('total_cooperation', 0.0)\n        group_benefit = result.get('group_benefit', 0.0)\n        target_ids = result.get('target_ids', [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Update environment with the results\n        self.env.update_data(\"collective_success\", collective_success)\n        self.env.update_data(\"total_cooperation\", total_cooperation)\n        self.env.update_data(\"group_benefit\", group_benefit)\n\n        # Create and send the CollectiveActionResultEvent to the environment\n        events = []\n        for target_id in target_ids:\n            result_event = CollectiveActionResultEvent(self.profile_id, target_id, collective_success, total_cooperation, group_benefit)\n            events.append(result_event)\n\n        return events",
+          "metadata": {
+            "id": 2,
+            "name": "evaluate_collective_action_success",
+            "condition": "All individual cooperation decisions received",
+            "description": "This action involves the group agent evaluating the overall success of the collective action based on the cooperation willingness of individual agents. The group aggregates individual decisions to determine whether the collective action goals are met.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "cooperation_willingness",
+                "type": "float",
+                "context": "event",
+                "description": "The degree to which an individual is willing to cooperate, as calculated and sent by the individual agent."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "collective_success",
+                "type": "bool",
+                "context": "env",
+                "description": "Indicates whether the collective action was successful based on individual cooperation levels."
+              },
+              {
+                "name": "total_cooperation",
+                "type": "float",
+                "context": "env",
+                "description": "The aggregated cooperation level of all individuals, used to evaluate the success of the collective action."
+              },
+              {
+                "name": "group_benefit",
+                "type": "float",
+                "context": "env",
+                "description": "The overall benefit achieved by the group as a result of the collective action."
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "events": {
+    "imports": "from onesim.events import Event\nfrom typing import Dict, List, Any        \nfrom datetime import datetime\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event",
+    "definitions": {
+      "-1": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event",
+        "metadata": {
+          "id": -1,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "Individual",
+          "to_action_name": "calculate_cooperation_willingness",
+          "from_action_id": 0,
+          "to_action_id": 1,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for individual decision-making process",
+          "fields": []
+        }
+      },
+      "1": {
+        "code": "class CooperationDecisionEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        individual_id: str = \"\",\n        cooperation_willingness: float = 0.0,\n        personal_cost: float = 0.0,\n        personal_benefit: float = 0.0,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.individual_id = individual_id\n        self.cooperation_willingness = cooperation_willingness\n        self.personal_cost = personal_cost\n        self.personal_benefit = personal_benefit\n\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event",
+        "metadata": {
+          "id": 1,
+          "from_agent_type": "Individual",
+          "from_action_name": "calculate_cooperation_willingness",
+          "to_agent_type": "Group",
+          "to_action_name": "evaluate_collective_action_success",
+          "from_action_id": 1,
+          "to_action_id": 2,
+          "event_name": "CooperationDecisionEvent",
+          "event_info": "Individual decision on cooperation sent to group for evaluation",
+          "fields": [
+            {
+              "name": "individual_id",
+              "type": "string",
+              "default_value": "",
+              "description": "Unique identifier for the individual making the cooperation decision"
+            },
+            {
+              "name": "cooperation_willingness",
+              "type": "float",
+              "default_value": 0.0,
+              "description": "The degree to which the individual is willing to cooperate, calculated based on cost-benefit analysis"
+            },
+            {
+              "name": "personal_cost",
+              "type": "float",
+              "default_value": 0.0,
+              "description": "The cost incurred by the individual for participating in the collective action"
+            },
+            {
+              "name": "personal_benefit",
+              "type": "float",
+              "default_value": 0.0,
+              "description": "The benefit received by the individual from participating in the collective action"
+            }
+          ]
+        }
+      },
+      "2": {
+        "code": "class CollectiveActionResultEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        collective_success: bool = False,\n        total_cooperation: float = 0.0,\n        group_benefit: float = 0.0,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.collective_success = collective_success\n        self.total_cooperation = total_cooperation\n        self.group_benefit = group_benefit",
+        "metadata": {
+          "id": 2,
+          "from_agent_type": "Group",
+          "from_action_name": "evaluate_collective_action_success",
+          "to_agent_type": "EnvAgent",
+          "to_action_name": "terminate",
+          "from_action_id": 2,
+          "to_action_id": -1,
+          "event_name": "CollectiveActionResultEvent",
+          "event_info": "Final evaluation of collective action success sent to environment for termination",
+          "fields": [
+            {
+              "name": "collective_success",
+              "type": "bool",
+              "default_value": false,
+              "description": "Indicates whether the collective action was successful based on individual cooperation levels"
+            },
+            {
+              "name": "total_cooperation",
+              "type": "float",
+              "default_value": 0.0,
+              "description": "The aggregated cooperation level of all individuals, used to evaluate the success of the collective action"
+            },
+            {
+              "name": "group_benefit",
+              "type": "float",
+              "default_value": 0.0,
+              "description": "The overall benefit achieved by the group as a result of the collective action"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

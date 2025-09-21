@@ -1,0 +1,222 @@
+{
+    "IndividualAgent": [
+        {
+            "id": 1,
+            "name": "make_health_decision",
+            "condition": "Socioeconomic status, education, and social support available",
+            "description": "This action involves the individual agent making decisions regarding their health based on socioeconomic status, education, and available social support.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "income_level",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Individual's income level affecting healthcare access."
+                },
+                {
+                    "name": "education_level",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Educational attainment influencing health decisions."
+                },
+                {
+                    "name": "social_support",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Available social support networks for health decision-making."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "health_decision",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Decision made by the individual regarding their health."
+                }
+            ]
+        }
+    ],
+    "FamilyAgent": [
+        {
+            "id": 2,
+            "name": "influence_family_health",
+            "condition": "Family decisions on children's education, nutrition, and health behaviors",
+            "description": "The family agent influences the health of family members through decisions on education, nutrition, and health behaviors.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "family_income",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Family's income affecting health decisions."
+                },
+                {
+                    "name": "nutrition_quality",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Quality of nutrition provided to family members."
+                },
+                {
+                    "name": "education_investment",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Investment in family members' education."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "family_health_status",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Overall health status of the family after decisions."
+                }
+            ]
+        }
+    ],
+    "CommunityAgent": [
+        {
+            "id": 3,
+            "name": "provide_community_resources",
+            "condition": "Availability of social capital and public resources",
+            "description": "Community agents provide resources and support that influence residents' health through social capital and public facilities.",
+            "type": "AND",
+            "required_variables": [
+                {
+                    "name": "social_capital",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Level of social capital available in the community."
+                },
+                {
+                    "name": "public_resources",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Availability of public resources in the community."
+                },
+                {
+                    "name": "medical_facilities",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Access to medical facilities within the community."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "community_health_level",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Overall health level of the community after resource provision."
+                }
+            ]
+        }
+    ],
+    "GovernmentAgent": [
+        {
+            "id": 4,
+            "name": "implement_health_policies",
+            "condition": "Health policy goals and available resources",
+            "description": "Government agents implement health policies that determine the distribution of resources and opportunities, impacting health inequalities.",
+            "type": "AND",
+            "required_variables": [
+                {
+                    "name": "policy_details",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Details of the health policy being implemented."
+                },
+                {
+                    "name": "target_population",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Population targeted by the health policy."
+                },
+                {
+                    "name": "resource_distribution",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Amount of resources allocated by the policy."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "policy_effectiveness",
+                    "type": "str",
+                    "context": "env",
+                    "description": "Effectiveness of the policy in reducing health inequalities."
+                }
+            ]
+        }
+    ],
+    "HealthcareSystemAgent": [
+        {
+            "id": 5,
+            "name": "allocate_healthcare_resources",
+            "condition": "Healthcare system capacity and policy directives",
+            "description": "Healthcare system agents allocate resources affecting service accessibility and quality, impacting individual health outcomes.",
+            "type": "AND",
+            "required_variables": [
+                {
+                    "name": "resource_availability",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Availability of healthcare resources for allocation."
+                },
+                {
+                    "name": "service_quality",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Quality of healthcare services provided."
+                },
+                {
+                    "name": "insurance_coverage",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Level of insurance coverage affecting resource allocation."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "allocated_resources",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Amount of healthcare resources allocated."
+                }
+            ]
+        },
+        {
+            "id": 6,
+            "name": "request_healthcare_services",
+            "condition": "Individual requests for healthcare services",
+            "description": "Healthcare system agents respond to individual requests for services, determining service provision based on available resources.",
+            "type": "AND",
+            "required_variables": [
+                {
+                    "name": "service_requested",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Type of healthcare service requested by the individual."
+                },
+                {
+                    "name": "priority_level",
+                    "type": "int",
+                    "context": "event",
+                    "description": "Priority level of the healthcare service request."
+                },
+                {
+                    "name": "individual_health_status",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Health status of the individual requesting services."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "service_provision_status",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Status of healthcare service provision."
+                }
+            ]
+        }
+    ]
+}

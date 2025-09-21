@@ -1,0 +1,194 @@
+{
+    "-1": {
+        "id": -1,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "IndividualAgent",
+        "to_action_name": "initiate_contract_negotiation",
+        "from_action_id": 0,
+        "to_action_id": 1,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for contract negotiation workflow",
+        "fields": []
+    },
+    "-2": {
+        "id": -2,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "GovernmentAgent",
+        "to_action_name": "enforce_laws",
+        "from_action_id": 0,
+        "to_action_id": 3,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for law enforcement workflow",
+        "fields": []
+    },
+    "1": {
+        "id": 1,
+        "from_agent_type": "IndividualAgent",
+        "from_action_name": "initiate_contract_negotiation",
+        "to_agent_type": "SocialGroupAgent",
+        "to_action_name": "evaluate_collective_interests",
+        "from_action_id": 1,
+        "to_action_id": 2,
+        "event_name": "ContractProposalEvent",
+        "event_info": "Proposal for contract negotiation based on individual interests",
+        "fields": [
+            {
+                "name": "individual_interests",
+                "type": "list",
+                "default_value": "[]",
+                "description": "List of individual interests driving the contract proposal"
+            },
+            {
+                "name": "proposal_details",
+                "type": "string",
+                "default_value": "",
+                "description": "Detailed description of the contract proposal"
+            },
+            {
+                "name": "negotiation_terms",
+                "type": "dict",
+                "default_value": "{}",
+                "description": "Terms proposed for negotiation in the contract"
+            }
+        ]
+    },
+    "2": {
+        "id": 2,
+        "from_agent_type": "SocialGroupAgent",
+        "from_action_name": "evaluate_collective_interests",
+        "to_agent_type": "GovernmentAgent",
+        "to_action_name": "review_social_contract",
+        "from_action_id": 2,
+        "to_action_id": 4,
+        "event_name": "CollectiveInterestEvent",
+        "event_info": "Evaluation of collective interests for contract formation",
+        "fields": [
+            {
+                "name": "collective_interests",
+                "type": "list",
+                "default_value": "[]",
+                "description": "List of collective interests of the social group"
+            },
+            {
+                "name": "evaluation_criteria",
+                "type": "string",
+                "default_value": "",
+                "description": "Criteria used for evaluating collective interests"
+            }
+        ]
+    },
+    "3": {
+        "id": 3,
+        "from_agent_type": "GovernmentAgent",
+        "from_action_name": "enforce_laws",
+        "to_agent_type": "ContractBreakdownAgent",
+        "to_action_name": "simulate_conflict",
+        "from_action_id": 3,
+        "to_action_id": 5,
+        "event_name": "LawEnforcementEvent",
+        "event_info": "Enforcement of laws triggering potential conflicts",
+        "fields": [
+            {
+                "name": "law_details",
+                "type": "string",
+                "default_value": "",
+                "description": "Details of the law being enforced"
+            },
+            {
+                "name": "conflict_trigger",
+                "type": "boolean",
+                "default_value": "false",
+                "description": "Indicates if the law enforcement triggers a conflict"
+            }
+        ]
+    },
+    "4": {
+        "id": 4,
+        "from_agent_type": "GovernmentAgent",
+        "from_action_name": "review_social_contract",
+        "to_agent_type": "PublicPolicyAgent",
+        "to_action_name": "evaluate_policy_impacts",
+        "from_action_id": 4,
+        "to_action_id": 6,
+        "event_name": "SocialContractApprovalEvent",
+        "event_info": "Approval and review of social contract terms",
+        "fields": [
+            {
+                "name": "contract_terms",
+                "type": "dict",
+                "default_value": "{}",
+                "description": "Terms of the social contract being approved"
+            },
+            {
+                "name": "approval_status",
+                "type": "string",
+                "default_value": "pending",
+                "description": "Current status of the contract approval process"
+            }
+        ]
+    },
+    "5": {
+        "id": 5,
+        "from_agent_type": "ContractBreakdownAgent",
+        "from_action_name": "simulate_conflict",
+        "to_agent_type": "EnvAgent",
+        "to_action_name": "terminate",
+        "from_action_id": 5,
+        "to_action_id": -1,
+        "event_name": "ConflictResolutionEvent",
+        "event_info": "Resolution of contract breakdown or conflict",
+        "fields": [
+            {
+                "name": "conflict_details",
+                "type": "string",
+                "default_value": "",
+                "description": "Details of the conflict being resolved"
+            },
+            {
+                "name": "resolution_method",
+                "type": "string",
+                "default_value": "",
+                "description": "Method used for resolving the conflict"
+            },
+            {
+                "name": "resolution_status",
+                "type": "string",
+                "default_value": "in_progress",
+                "description": "Status of the conflict resolution process"
+            }
+        ]
+    },
+    "6": {
+        "id": 6,
+        "from_agent_type": "PublicPolicyAgent",
+        "from_action_name": "evaluate_policy_impacts",
+        "to_agent_type": "EnvAgent",
+        "to_action_name": "terminate",
+        "from_action_id": 6,
+        "to_action_id": -1,
+        "event_name": "PolicyImpactAnalysisEvent",
+        "event_info": "Analysis of policy impacts following social contract approval",
+        "fields": [
+            {
+                "name": "policy_details",
+                "type": "string",
+                "default_value": "",
+                "description": "Details of the policy being analyzed"
+            },
+            {
+                "name": "impact_analysis_results",
+                "type": "dict",
+                "default_value": "{}",
+                "description": "Results of the policy impact analysis"
+            },
+            {
+                "name": "analysis_status",
+                "type": "string",
+                "default_value": "completed",
+                "description": "Status of the policy impact analysis"
+            }
+        ]
+    }
+}

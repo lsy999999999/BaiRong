@@ -1,0 +1,90 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Social Structure Agent",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's role within the societal system"
+    },
+    "social_class": {
+        "type": "str",
+        "default": "middle",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "lower",
+            "middle",
+            "upper"
+        ]
+    },
+    "influence_on_cultural_capital": {
+        "type": "str",
+        "default": "moderate",
+        "private": true,
+        "sampling": "random",
+        "choices": [
+            "low",
+            "moderate",
+            "high"
+        ]
+    },
+    "cultural_capital": {
+        "type": "int",
+        "default": 50,
+        "private": false,
+        "sampling": "default"
+    },
+    "economic_capital": {
+        "type": "float",
+        "default": 1000.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "social_capital": {
+        "type": "int",
+        "default": 30,
+        "private": false,
+        "sampling": "default"
+    },
+    "education_level": {
+        "type": "str",
+        "default": "bachelor",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "high_school",
+            "bachelor",
+            "master",
+            "doctorate"
+        ]
+    },
+    "job_opportunities": {
+        "type": "list",
+        "default": [
+            "entry_level",
+            "mid_level"
+        ],
+        "private": false,
+        "sampling": "default",
+        "sample_size": 2
+    },
+    "networking_efforts": {
+        "type": "int",
+        "default": 5,
+        "private": true,
+        "sampling": "default"
+    },
+    "mobility_barriers": {
+        "type": "int",
+        "default": 3,
+        "private": true,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

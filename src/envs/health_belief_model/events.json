@@ -1,0 +1,243 @@
+{
+    "-1": {
+        "id": -1,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "IndividualAgent",
+        "to_action_name": "evaluate_health_threat",
+        "from_action_id": 0,
+        "to_action_id": 1,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for individual decision-making process",
+        "fields": []
+    },
+    "-2": {
+        "id": -2,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "FamilyAgent",
+        "to_action_name": "provide_support",
+        "from_action_id": 0,
+        "to_action_id": 3,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for family support process",
+        "fields": []
+    },
+    "-3": {
+        "id": -3,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "CommunityAgent",
+        "to_action_name": "establish_norms",
+        "from_action_id": 0,
+        "to_action_id": 4,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for community norms establishment",
+        "fields": []
+    },
+    "-4": {
+        "id": -4,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "GovernmentAgent",
+        "to_action_name": "implement_policy",
+        "from_action_id": 0,
+        "to_action_id": 5,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for government policy implementation",
+        "fields": []
+    },
+    "1": {
+        "id": 1,
+        "from_agent_type": "IndividualAgent",
+        "from_action_name": "evaluate_health_threat",
+        "to_agent_type": "FamilyAgent",
+        "to_action_name": "provide_support",
+        "from_action_id": 1,
+        "to_action_id": 3,
+        "event_name": "HealthThreatEvaluatedEvent",
+        "event_info": "Individual's perception of health threat evaluated",
+        "fields": [
+            {
+                "name": "threat_level",
+                "type": "float",
+                "default_value": 0.0,
+                "description": "The perceived level of health threat by the individual"
+            },
+            {
+                "name": "susceptibility",
+                "type": "float",
+                "default_value": 0.0,
+                "description": "Perceived susceptibility to the health threat"
+            },
+            {
+                "name": "severity",
+                "type": "float",
+                "default_value": 0.0,
+                "description": "Perceived severity of the health threat"
+            }
+        ]
+    },
+    "2": {
+        "id": 2,
+        "from_agent_type": "IndividualAgent",
+        "from_action_name": "evaluate_health_threat",
+        "to_agent_type": "CommunityAgent",
+        "to_action_name": "establish_norms",
+        "from_action_id": 1,
+        "to_action_id": 4,
+        "event_name": "HealthThreatEvaluatedEvent",
+        "event_info": "Individual's perception of health threat shared with community",
+        "fields": [
+            {
+                "name": "threat_level",
+                "type": "float",
+                "default_value": 0.0,
+                "description": "The perceived level of health threat by the individual"
+            },
+            {
+                "name": "susceptibility",
+                "type": "float",
+                "default_value": 0.0,
+                "description": "Perceived susceptibility to the health threat"
+            },
+            {
+                "name": "severity",
+                "type": "float",
+                "default_value": 0.0,
+                "description": "Perceived severity of the health threat"
+            }
+        ]
+    },
+    "3": {
+        "id": 3,
+        "from_agent_type": "IndividualAgent",
+        "from_action_name": "adopt_health_behavior",
+        "to_agent_type": "EnvAgent",
+        "to_action_name": "terminate",
+        "from_action_id": 2,
+        "to_action_id": -1,
+        "event_name": "HealthBehaviorAdoptedEvent",
+        "event_info": "Individual adopts a health behavior",
+        "fields": [
+            {
+                "name": "behavior_type",
+                "type": "string",
+                "default_value": "unknown",
+                "description": "Type of health behavior adopted by the individual"
+            },
+            {
+                "name": "success",
+                "type": "bool",
+                "default_value": false,
+                "description": "Indicates if the behavior adoption was successful"
+            },
+            {
+                "name": "barriers_overcome",
+                "type": "list",
+                "default_value": [],
+                "description": "List of barriers that were overcome to adopt the behavior"
+            }
+        ]
+    },
+    "4": {
+        "id": 4,
+        "from_agent_type": "FamilyAgent",
+        "from_action_name": "provide_support",
+        "to_agent_type": "IndividualAgent",
+        "to_action_name": "adopt_health_behavior",
+        "from_action_id": 3,
+        "to_action_id": 2,
+        "event_name": "SupportProvidedEvent",
+        "event_info": "Family provides support for health behavior adoption",
+        "fields": [
+            {
+                "name": "support_type",
+                "type": "string",
+                "default_value": "emotional",
+                "description": "Type of support provided by the family"
+            },
+            {
+                "name": "intensity",
+                "type": "int",
+                "default_value": 1,
+                "description": "Intensity level of the support provided"
+            }
+        ]
+    },
+    "5": {
+        "id": 5,
+        "from_agent_type": "CommunityAgent",
+        "from_action_name": "establish_norms",
+        "to_agent_type": "IndividualAgent",
+        "to_action_name": "adopt_health_behavior",
+        "from_action_id": 4,
+        "to_action_id": 2,
+        "event_name": "NormsEstablishedEvent",
+        "event_info": "Community establishes norms supporting health behavior",
+        "fields": [
+            {
+                "name": "norm_description",
+                "type": "string",
+                "default_value": "undefined",
+                "description": "Description of the norm established by the community"
+            },
+            {
+                "name": "acceptance_level",
+                "type": "float",
+                "default_value": 0.0,
+                "description": "Level of acceptance of the norm within the community"
+            }
+        ]
+    },
+    "6": {
+        "id": 6,
+        "from_agent_type": "GovernmentAgent",
+        "from_action_name": "implement_policy",
+        "to_agent_type": "CommunityAgent",
+        "to_action_name": "establish_norms",
+        "from_action_id": 5,
+        "to_action_id": 4,
+        "event_name": "PolicyImplementedEvent",
+        "event_info": "Government policy influences community norms",
+        "fields": [
+            {
+                "name": "policy_name",
+                "type": "string",
+                "default_value": "unknown",
+                "description": "Name of the policy implemented by the government"
+            },
+            {
+                "name": "impact_level",
+                "type": "float",
+                "default_value": 0.0,
+                "description": "Expected impact level of the policy on the community or individual"
+            }
+        ]
+    },
+    "7": {
+        "id": 7,
+        "from_agent_type": "GovernmentAgent",
+        "from_action_name": "implement_policy",
+        "to_agent_type": "IndividualAgent",
+        "to_action_name": "adopt_health_behavior",
+        "from_action_id": 5,
+        "to_action_id": 2,
+        "event_name": "PolicyImplementedEvent",
+        "event_info": "Government policy supports individual health behavior adoption",
+        "fields": [
+            {
+                "name": "policy_name",
+                "type": "string",
+                "default_value": "unknown",
+                "description": "Name of the policy implemented by the government"
+            },
+            {
+                "name": "impact_level",
+                "type": "float",
+                "default_value": 0.0,
+                "description": "Expected impact level of the policy on the community or individual"
+            }
+        ]
+    }
+}

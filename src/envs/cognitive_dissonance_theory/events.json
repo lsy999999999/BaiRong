@@ -1,0 +1,114 @@
+{
+    "-1": {
+        "id": -1,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "ActorA",
+        "to_action_name": "experience_dissonance",
+        "from_action_id": 0,
+        "to_action_id": 1,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for Actor A to experience cognitive dissonance",
+        "fields": []
+    },
+    "1": {
+        "id": 1,
+        "from_agent_type": "ActorA",
+        "from_action_name": "experience_dissonance",
+        "to_agent_type": "ObserverB",
+        "to_action_name": "observe_and_provide_feedback",
+        "from_action_id": 1,
+        "to_action_id": 3,
+        "event_name": "DissonanceExperiencedEvent",
+        "event_info": "Actor A experiences cognitive dissonance and this event is observed by Observer B",
+        "fields": [
+            {
+                "name": "dissonance_level",
+                "type": "float",
+                "default_value": "0.0",
+                "description": "The intensity of cognitive dissonance experienced by Actor A"
+            },
+            {
+                "name": "dissonance_cause",
+                "type": "str",
+                "default_value": "",
+                "description": "The reason or scenario causing the cognitive dissonance"
+            }
+        ]
+    },
+    "2": {
+        "id": 2,
+        "from_agent_type": "ActorA",
+        "from_action_name": "decide_strategy",
+        "to_agent_type": "FeedbackerC",
+        "to_action_name": "evaluate_outcome",
+        "from_action_id": 2,
+        "to_action_id": 4,
+        "event_name": "StrategyDecidedEvent",
+        "event_info": "Actor A decides on a strategy to reduce dissonance and sends it to Feedbacker C for evaluation",
+        "fields": [
+            {
+                "name": "strategy_type",
+                "type": "str",
+                "default_value": "none",
+                "description": "The type of strategy Actor A decides to use (belief change, behavior change, rationalization)"
+            },
+            {
+                "name": "expected_outcome",
+                "type": "str",
+                "default_value": "",
+                "description": "The expected outcome of the strategy chosen by Actor A"
+            }
+        ]
+    },
+    "3": {
+        "id": 3,
+        "from_agent_type": "ObserverB",
+        "from_action_name": "observe_and_provide_feedback",
+        "to_agent_type": "ActorA",
+        "to_action_name": "decide_strategy",
+        "from_action_id": 3,
+        "to_action_id": 2,
+        "event_name": "FeedbackProvidedEvent",
+        "event_info": "Observer B provides feedback to Actor A on the dissonance experienced",
+        "fields": [
+            {
+                "name": "feedback_content",
+                "type": "str",
+                "default_value": "",
+                "description": "The content of the feedback provided by Observer B to Actor A"
+            },
+            {
+                "name": "feedback_quality",
+                "type": "int",
+                "default_value": "0",
+                "description": "A rating of the quality of feedback given, ranging from 1 to 5"
+            }
+        ]
+    },
+    "4": {
+        "id": 4,
+        "from_agent_type": "FeedbackerC",
+        "from_action_name": "evaluate_outcome",
+        "to_agent_type": "EnvAgent",
+        "to_action_name": "terminate",
+        "from_action_id": 4,
+        "to_action_id": -1,
+        "event_name": "EvaluationCompletedEvent",
+        "event_info": "Feedbacker C evaluates the outcome of Actor A's strategy and completes the process",
+        "fields": [
+            {
+                "name": "evaluation_result",
+                "type": "str",
+                "default_value": "",
+                "description": "The result of the evaluation performed by Feedbacker C"
+            },
+            {
+                "name": "completion_status",
+                "type": "str",
+                "default_value": "incomplete",
+                "description": "The status of the evaluation process, e.g., complete or incomplete"
+            }
+        ]
+    }
+}

@@ -1,0 +1,92 @@
+[
+    {
+        "name": "Alice Johnson",
+        "loan_amount": 5000.0,
+        "financial_status": "stable",
+        "economic_conditions": "growth",
+        "loan_request_status": "pending",
+        "credit_score": 310,
+        "agent_type": "CustomerAgent",
+        "loan_history": [
+            {
+                "date": "2025-04-01",
+                "amount": 10000.0,
+                "status": "approved"
+            }
+        ],
+        "risk_tolerance": "medium",
+        "id": "5"
+    },
+    {
+        "name": "Bob Smith",
+        "loan_amount": 5000.0,
+        "financial_status": "in debt",
+        "economic_conditions": "recession",
+        "loan_request_status": "pending",
+        "credit_score": 837,
+        "agent_type": "CustomerAgent",
+        "loan_history": [
+            {
+                "date": "2025-04-01",
+                "amount": 10000.0,
+                "status": "approved"
+            }
+        ],
+        "risk_tolerance": "low",
+        "id": "6"
+    },
+    {
+        "name": "Charlie Brown",
+        "loan_amount": 5000.0,
+        "financial_status": "wealthy",
+        "economic_conditions": "growth",
+        "loan_request_status": "pending",
+        "credit_score": 530,
+        "agent_type": "CustomerAgent",
+        "loan_history": [
+            {
+                "date": "2025-04-01",
+                "amount": 10000.0,
+                "status": "approved"
+            }
+        ],
+        "risk_tolerance": "high",
+        "id": "7"
+    },
+    {
+        "name": "Diana Prince",
+        "loan_amount": 5000.0,
+        "financial_status": "stable",
+        "economic_conditions": "recession",
+        "loan_request_status": "pending",
+        "credit_score": 818,
+        "agent_type": "CustomerAgent",
+        "loan_history": [
+            {
+                "date": "2025-04-01",
+                "amount": 10000.0,
+                "status": "approved"
+            }
+        ],
+        "risk_tolerance": "medium",
+        "id": "8"
+    },
+    {
+        "name": "Edward Green",
+        "loan_amount": 5000.0,
+        "financial_status": "in debt",
+        "economic_conditions": "growth",
+        "loan_request_status": "pending",
+        "credit_score": 348,
+        "agent_type": "CustomerAgent",
+        "loan_history": [
+            {
+                "date": "2025-04-01",
+                "amount": 10000.0,
+                "status": "approved"
+            }
+        ],
+        "risk_tolerance": "low",
+        "id": "9"
+    }
+]

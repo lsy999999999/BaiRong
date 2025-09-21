@@ -1,0 +1,75 @@
+{
+    "name": {
+        "type": "str",
+        "default": "MediaAgent",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's name representing a media source"
+    },
+    "information_content": {
+        "type": "str",
+        "default": "Breaking news update",
+        "private": false,
+        "sampling": "default"
+    },
+    "target_opinion_leaders": {
+        "type": "list",
+        "default": [
+            "OpinionLeader1",
+            "OpinionLeader2"
+        ],
+        "private": true,
+        "sampling": "default",
+        "sample_size": 2
+    },
+    "broadcast_frequency": {
+        "type": "float",
+        "default": 5.0,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            1.0,
+            10.0
+        ]
+    },
+    "credibility_rating": {
+        "type": "int",
+        "default": 80,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            50,
+            100
+        ]
+    },
+    "communication_delay": {
+        "type": "int",
+        "default": 2,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            1,
+            5
+        ]
+    },
+    "current_status": {
+        "type": "str",
+        "default": "active",
+        "private": false,
+        "sampling": "default"
+    },
+    "information_type": {
+        "type": "str",
+        "default": "news",
+        "private": false,
+        "sampling": "llm",
+        "description": "Type of information being broadcasted"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

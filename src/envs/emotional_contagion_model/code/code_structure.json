@@ -1,0 +1,284 @@
+{
+  "agents": {
+    "IndividualAgent": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "1": {
+          "code": "async def initialize_emotional_state(self, event: Event) -> List[Event]:\n        # Retrieve initial emotional state from environment settings\n        initial_emotional_state = await self.get_env_data(\"initial_emotional_state\", \"neutral\")\n    \n        # Update agent's emotional state based on the initial value\n        self.profile.update_data(\"emotional_state\", initial_emotional_state)\n        \n        # Prepare instruction for generating reaction\n        instruction = \"\"\"\n        You are tasked with initializing the emotional state of an agent based on predefined or random values.\n        The agent's initial emotional state has been set to: {initial_emotional_state}.\n        Please return the information in the following JSON format:\n    \n        {\n        \"target_ids\": [\"<The string ID(s) of the CommunicationAgent(s)>\"],\n        \"emotional_state\": \"<The emotional state initialized>\"\n        }\n        \"\"\"\n        \n        # Generate reaction using the instruction and current context\n        observation = f\"Initial emotional state: {initial_emotional_state}\"\n        result = await self.generate_reaction(instruction.format(initial_emotional_state=initial_emotional_state), observation)\n    \n        # Extract target_ids and emotional_state from the result\n        target_ids = result.get('target_ids', [])\n        emotional_state = result.get('emotional_state', initial_emotional_state)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n    \n        # Create and send EmotionalStateInitializedEvent to each target_id\n        events = []\n        for target_id in target_ids:\n            emotional_event = EmotionalStateInitializedEvent(self.profile_id, target_id, emotional_state)\n            events.append(emotional_event)\n        \n        return events",
+          "metadata": {
+            "id": 1,
+            "name": "initialize_emotional_state",
+            "condition": null,
+            "description": "Sets the initial emotional state of the agent based on predefined or random values.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "initial_emotional_state",
+                "type": "string",
+                "context": "env",
+                "description": "The starting emotional state of the agent, sourced from environment settings."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "emotional_state",
+                "type": "string",
+                "context": "agent",
+                "description": "The current emotional state of the agent after initialization."
+              }
+            ]
+          }
+        },
+        "4": {
+          "code": "async def adjust_emotional_state(self, event: Event) -> List[Event]:\n        # Condition Check: Ensure the event is of type EmotionalInfluenceEvaluatedEvent\n        if not isinstance(event, EmotionalInfluenceEvaluatedEvent):\n            return []\n    \n        # Retrieve necessary data from the event\n        evaluation_result = event.evaluation_result\n        adjustment_factor = event.adjustment_factor\n    \n        # Access current emotional state from agent's profile\n        current_emotional_state = self.profile.get_data(\"emotional_state\", \"neutral\")\n    \n        # Decision Making: Generate reaction based on evaluation result\n        observation = f\"Current emotional state: {current_emotional_state}, Evaluation result: {evaluation_result}, Adjustment factor: {adjustment_factor}\"\n        instruction = \"\"\"Based on the evaluation result and adjustment factor, decide the new emotional state. \n        If 'evaluation_result' is 'positive', increase emotional state by 'adjustment_factor'. \n        If 'negative', decrease it. Otherwise, maintain current state. \n        Return the updated emotional state and target_ids in the following JSON format:\n        {\n            \"emotional_state\": \"<Updated emotional state>\",\n            \"completion_status\": \"<Status indicating successful adjustment>\",\n            \"target_ids\": [\"<Target ID(s) for the outgoing event>\"]\n        }\n        \"\"\"\n        \n        result = await self.generate_reaction(instruction, observation)\n    \n        # Parse the LLM's response\n        updated_emotional_state = result.get('emotional_state', current_emotional_state)\n        completion_status = result.get('completion_status', \"success\")\n        target_ids = result.get('target_ids', \"ENV\")\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n    \n        # Update the agent's emotional state in the profile\n        self.profile.update_data(\"emotional_state\", updated_emotional_state)\n    \n        # Prepare and send EmotionalStateAdjustedEvent to the target(s)\n        events = []\n        for target_id in target_ids:\n            adjusted_event = EmotionalStateAdjustedEvent(self.profile_id, target_id, completion_status, updated_emotional_state)\n            events.append(adjusted_event)\n    \n        return events",
+          "metadata": {
+            "id": 4,
+            "name": "adjust_emotional_state",
+            "condition": "EmotionalInfluenceEvaluatedEvent received",
+            "description": "Modifies the agent's emotional state based on evaluated emotional influences.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "evaluation_result",
+                "type": "string",
+                "context": "event",
+                "description": "Result of the emotional influence evaluation received from DecisionAgent."
+              },
+              {
+                "name": "adjustment_factor",
+                "type": "float",
+                "context": "event",
+                "description": "Factor indicating the degree of change needed for the emotional state."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "emotional_state",
+                "type": "string",
+                "context": "agent",
+                "description": "Updated emotional state of the agent after adjustment."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "CommunicationAgent": {
+      "imports": "from typing import Any, List\nimport asyncio\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import Event\nfrom onesim.relationship import RelationshipManager\nfrom .events import EmotionalStateInitializedEvent, EmotionTransmittedEvent",
+      "handlers": {
+        "2": {
+          "code": "async def transmit_emotion(self, event: Event) -> List[Event]:\n        # Condition check: Ensure the event is of type 'EmotionalStateInitializedEvent'\n        if not isinstance(event, EmotionalStateInitializedEvent):\n            return []\n\n        # Retrieve required variables from the event\n        emotional_state = event.emotional_state\n        intensity = 1.0  # Default value as per event definition\n        frequency_of_contact = 1  # Default value as per event definition\n\n        # Craft the instruction for generate_reaction\n        instruction = \"\"\"\n        The agent needs to transmit its current emotional state to other agents. \n        Please determine the target agent(s) for this transmission based on the current context. \n        Ensure to return the response in the following JSON format:\n\n        {\n        \"target_ids\": [\"<The string ID(s) of the target agent(s)>\"]\n        }\n        \"\"\"\n\n        # Observation context for the LLM\n        observation = f\"Emotional State: {emotional_state}, Intensity: {intensity}, Frequency of Contact: {frequency_of_contact}\"\n\n        # Generate reaction to determine target_ids\n        result = await self.generate_reaction(instruction, observation)\n\n        # Extract target_ids from the result\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Prepare and send EmotionTransmittedEvent to each target\n        events = []\n        for target_id in target_ids:\n            emotion_event = EmotionTransmittedEvent(self.profile_id, target_id, emotion_type=emotional_state, intensity=intensity, frequency_of_contact=frequency_of_contact)\n            events.append(emotion_event)\n\n        return events",
+          "metadata": {
+            "id": 2,
+            "name": "transmit_emotion",
+            "condition": "EmotionalStateInitializedEvent received",
+            "description": "Conveys the current emotional state of the agent to other agents for evaluation.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "emotional_state",
+                "type": "string",
+                "context": "agent",
+                "description": "The current emotional state of the agent to be transmitted."
+              },
+              {
+                "name": "intensity",
+                "type": "float",
+                "context": "agent",
+                "description": "The intensity level of the emotion being transmitted."
+              },
+              {
+                "name": "frequency_of_contact",
+                "type": "int",
+                "context": "agent",
+                "description": "Frequency of interaction between agents affecting transmission."
+              }
+            ],
+            "output_updates": []
+          }
+        }
+      }
+    },
+    "DecisionAgent": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "3": {
+          "code": "async def evaluate_emotional_influence(self, event: Event) -> List[Event]:\n        # Condition Check Implementation\n        if not isinstance(event, EmotionTransmittedEvent):\n            return []\n\n        # Data Access\n        emotion_type = event.emotion_type\n        intensity = event.intensity\n        frequency_of_contact = event.frequency_of_contact\n\n        # Decision Making\n        instruction = \"\"\"\n        Evaluate the emotional influence based on the following parameters:\n        - Emotion Type: {emotion_type}\n        - Intensity: {intensity}\n        - Frequency of Contact: {frequency_of_contact}\n\n        Please return the evaluation result and adjustment factor in the following JSON format:\n        {\n            \"evaluation_result\": \"<Result of the emotional influence evaluation>\",\n            \"adjustment_factor\": <Factor by which emotional state needs adjustment>,\n            \"target_ids\": [\"<The ID or list of IDs of the target agents>\"]\n        }\n        \"\"\".format(emotion_type=emotion_type, intensity=intensity, frequency_of_contact=frequency_of_contact)\n\n        observation = f\"Emotion Type: {emotion_type}, Intensity: {intensity}, Frequency of Contact: {frequency_of_contact}\"\n\n        result = await self.generate_reaction(instruction, observation)\n\n        # Response Processing\n        evaluation_result = result.get('evaluation_result', \"neutral\")\n        adjustment_factor = result.get('adjustment_factor', 0.0)\n        target_ids = result.get('target_ids', [])\n\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Prepare and send EmotionalInfluenceEvaluatedEvent to the target(s)\n        events = []\n        for target_id in target_ids:\n            emotional_influence_event = EmotionalInfluenceEvaluatedEvent(\n                self.profile_id, target_id, evaluation_result, adjustment_factor\n            )\n            events.append(emotional_influence_event)\n\n        return events",
+          "metadata": {
+            "id": 3,
+            "name": "evaluate_emotional_influence",
+            "condition": "EmotionTransmittedEvent received",
+            "description": "Assesses the impact of received emotions on the agent's emotional state.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "emotion_type",
+                "type": "string",
+                "context": "event",
+                "description": "Type of emotion received from CommunicationAgent."
+              },
+              {
+                "name": "intensity",
+                "type": "float",
+                "context": "event",
+                "description": "Intensity level of the emotion received."
+              },
+              {
+                "name": "frequency_of_contact",
+                "type": "int",
+                "context": "event",
+                "description": "Frequency of interaction with the transmitting agent."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "evaluation_result",
+                "type": "string",
+                "context": "agent",
+                "description": "Result of the emotional influence evaluation."
+              },
+              {
+                "name": "adjustment_factor",
+                "type": "float",
+                "context": "agent",
+                "description": "Factor by which emotional state needs adjustment."
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "events": {
+    "imports": "from onesim.events import Event\nfrom typing import Dict, List, Any        \nfrom datetime import datetime\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event",
+    "definitions": {
+      "-1": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event",
+        "metadata": {
+          "id": -1,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "IndividualAgent",
+          "to_action_name": "initialize_emotional_state",
+          "from_action_id": 0,
+          "to_action_id": 1,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for setting up individual emotional states",
+          "fields": []
+        }
+      },
+      "1": {
+        "code": "class EmotionalStateInitializedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        emotional_state: str = 'joy',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.emotional_state = emotional_state\n\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event",
+        "metadata": {
+          "id": 1,
+          "from_agent_type": "IndividualAgent",
+          "from_action_name": "initialize_emotional_state",
+          "to_agent_type": "CommunicationAgent",
+          "to_action_name": "transmit_emotion",
+          "from_action_id": 1,
+          "to_action_id": 2,
+          "event_name": "EmotionalStateInitializedEvent",
+          "event_info": "Emotional state set and ready for transmission",
+          "fields": [
+            {
+              "name": "emotional_state",
+              "type": "string",
+              "default_value": "joy",
+              "description": "Initial emotional state of the IndividualAgent"
+            }
+          ]
+        }
+      },
+      "2": {
+        "code": "class EmotionTransmittedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        emotion_type: str = 'joy',\n        intensity: float = 1.0,\n        frequency_of_contact: int = 1,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.emotion_type = emotion_type\n        self.intensity = intensity\n        self.frequency_of_contact = frequency_of_contact\n\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event",
+        "metadata": {
+          "id": 2,
+          "from_agent_type": "CommunicationAgent",
+          "from_action_name": "transmit_emotion",
+          "to_agent_type": "DecisionAgent",
+          "to_action_name": "evaluate_emotional_influence",
+          "from_action_id": 2,
+          "to_action_id": 3,
+          "event_name": "EmotionTransmittedEvent",
+          "event_info": "Emotion transmitted to another agent for evaluation",
+          "fields": [
+            {
+              "name": "emotion_type",
+              "type": "string",
+              "default_value": "joy",
+              "description": "Type of emotion being transmitted"
+            },
+            {
+              "name": "intensity",
+              "type": "float",
+              "default_value": 1.0,
+              "description": "Intensity level of the transmitted emotion"
+            },
+            {
+              "name": "frequency_of_contact",
+              "type": "int",
+              "default_value": 1,
+              "description": "Frequency of interaction between agents"
+            }
+          ]
+        }
+      },
+      "3": {
+        "code": "class EmotionalInfluenceEvaluatedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        evaluation_result: str = 'neutral',\n        adjustment_factor: float = 0.0,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.evaluation_result = evaluation_result\n        self.adjustment_factor = adjustment_factor",
+        "metadata": {
+          "id": 3,
+          "from_agent_type": "DecisionAgent",
+          "from_action_name": "evaluate_emotional_influence",
+          "to_agent_type": "IndividualAgent",
+          "to_action_name": "adjust_emotional_state",
+          "from_action_id": 3,
+          "to_action_id": 4,
+          "event_name": "EmotionalInfluenceEvaluatedEvent",
+          "event_info": "Evaluation of emotional influence complete, ready to adjust emotional state",
+          "fields": [
+            {
+              "name": "evaluation_result",
+              "type": "string",
+              "default_value": "neutral",
+              "description": "Result of the emotional influence evaluation"
+            },
+            {
+              "name": "adjustment_factor",
+              "type": "float",
+              "default_value": 0.0,
+              "description": "Factor by which emotional state needs adjustment"
+            }
+          ]
+        }
+      },
+      "4": {
+        "code": "class EmotionalStateAdjustedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        completion_status: str = 'success',\n        final_emotional_state: str = 'joy',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.completion_status = completion_status\n        self.final_emotional_state = final_emotional_state\n\nfrom typing import Any, List\nfrom datetime import datetime\nfrom onesim.events import Event",
+        "metadata": {
+          "id": 4,
+          "from_agent_type": "IndividualAgent",
+          "from_action_name": "adjust_emotional_state",
+          "to_agent_type": "EnvAgent",
+          "to_action_name": "terminate",
+          "from_action_id": 4,
+          "to_action_id": -1,
+          "event_name": "EmotionalStateAdjustedEvent",
+          "event_info": "Emotional state adjusted, ending this workflow branch",
+          "fields": [
+            {
+              "name": "completion_status",
+              "type": "string",
+              "default_value": "success",
+              "description": "Status indicating if the emotional state adjustment was completed successfully"
+            },
+            {
+              "name": "final_emotional_state",
+              "type": "string",
+              "default_value": "joy",
+              "description": "Final emotional state after adjustment"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

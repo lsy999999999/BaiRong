@@ -1,0 +1,87 @@
+[
+    {
+        "name": "Johnathan Doe",
+        "legal_knowledge_level": 63,
+        "communication_style": "aggressive",
+        "strategy_type": "negotiative",
+        "reputation_score": 11.322509459603348,
+        "agent_type": "Defendant",
+        "liability_reduction_argument": "awaiting_input",
+        "counter_evidence_list": [
+            {
+                "evidence_type": "document",
+                "details": "Initial evidence details"
+            }
+        ],
+        "defense_prepared": false,
+        "id": "5"
+    },
+    {
+        "name": "Emily Smith",
+        "legal_knowledge_level": 92,
+        "communication_style": "aggressive",
+        "strategy_type": "aggressive",
+        "reputation_score": 64.6797647690444,
+        "agent_type": "Defendant",
+        "liability_reduction_argument": "awaiting_input",
+        "counter_evidence_list": [
+            {
+                "evidence_type": "document",
+                "details": "Initial evidence details"
+            }
+        ],
+        "defense_prepared": false,
+        "id": "6"
+    },
+    {
+        "name": "Michael Johnson",
+        "legal_knowledge_level": 73,
+        "communication_style": "informal",
+        "strategy_type": "negotiative",
+        "reputation_score": 65.72942487519022,
+        "agent_type": "Defendant",
+        "liability_reduction_argument": "awaiting_input",
+        "counter_evidence_list": [
+            {
+                "evidence_type": "document",
+                "details": "Initial evidence details"
+            }
+        ],
+        "defense_prepared": false,
+        "id": "7"
+    },
+    {
+        "name": "Sophia Brown",
+        "legal_knowledge_level": 42,
+        "communication_style": "conciliatory",
+        "strategy_type": "defensive",
+        "reputation_score": 69.01231828782122,
+        "agent_type": "Defendant",
+        "liability_reduction_argument": "awaiting_input",
+        "counter_evidence_list": [
+            {
+                "evidence_type": "document",
+                "details": "Initial evidence details"
+            }
+        ],
+        "defense_prepared": false,
+        "id": "8"
+    },
+    {
+        "name": "William Taylor",
+        "legal_knowledge_level": 76,
+        "communication_style": "aggressive",
+        "strategy_type": "negotiative",
+        "reputation_score": 36.204916600649014,
+        "agent_type": "Defendant",
+        "liability_reduction_argument": "awaiting_input",
+        "counter_evidence_list": [
+            {
+                "evidence_type": "document",
+                "details": "Initial evidence details"
+            }
+        ],
+        "defense_prepared": false,
+        "id": "9"
+    }
+]

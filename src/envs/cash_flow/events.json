@@ -1,0 +1,231 @@
+{
+    "-1": {
+        "id": -1,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "CompanyAgent",
+        "to_action_name": "evaluate_cash_flow",
+        "from_action_id": 0,
+        "to_action_id": 1,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger to evaluate cash flow",
+        "fields": []
+    },
+    "-2": {
+        "id": -2,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "ConsumerAgent",
+        "to_action_name": "spend_money",
+        "from_action_id": 0,
+        "to_action_id": 6,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for consumer spending",
+        "fields": []
+    },
+    "1": {
+        "id": 1,
+        "from_agent_type": "CompanyAgent",
+        "from_action_name": "evaluate_cash_flow",
+        "to_agent_type": "BankAgent",
+        "to_action_name": "assess_credit_rating",
+        "from_action_id": 1,
+        "to_action_id": 4,
+        "event_name": "CashFlowEvaluatedEvent",
+        "event_info": "Company cash flow evaluated for credit rating assessment",
+        "fields": [
+            {
+                "name": "company_id",
+                "type": "str",
+                "default_value": "",
+                "description": "Unique identifier for the company whose cash flow is evaluated"
+            },
+            {
+                "name": "cash_flow_status",
+                "type": "str",
+                "default_value": "unknown",
+                "description": "Status of the company's cash flow, e.g., 'positive', 'negative'"
+            },
+            {
+                "name": "credit_rating",
+                "type": "str",
+                "default_value": "unrated",
+                "description": "Assessed credit rating of the company"
+            }
+        ]
+    },
+    "2": {
+        "id": 2,
+        "from_agent_type": "CompanyAgent",
+        "from_action_name": "apply_for_loan",
+        "to_agent_type": "BankAgent",
+        "to_action_name": "process_loan_application",
+        "from_action_id": 2,
+        "to_action_id": 5,
+        "event_name": "LoanApplicationEvent",
+        "event_info": "Application for loan based on assessed credit rating",
+        "fields": [
+            {
+                "name": "company_id",
+                "type": "str",
+                "default_value": "",
+                "description": "Unique identifier for the company applying for the loan"
+            },
+            {
+                "name": "loan_amount",
+                "type": "float",
+                "default_value": 0.0,
+                "description": "Amount of loan the company is applying for"
+            },
+            {
+                "name": "credit_rating",
+                "type": "str",
+                "default_value": "unrated",
+                "description": "Credit rating of the company at the time of application"
+            }
+        ]
+    },
+    "3": {
+        "id": 3,
+        "from_agent_type": "CompanyAgent",
+        "from_action_name": "manage_expenses",
+        "to_agent_type": "EnvAgent",
+        "to_action_name": "terminate",
+        "from_action_id": 3,
+        "to_action_id": -1,
+        "event_name": "ExpensesManagedEvent",
+        "event_info": "Company has managed expenses and workflow terminates",
+        "fields": [
+            {
+                "name": "company_id",
+                "type": "str",
+                "default_value": "",
+                "description": "Unique identifier for the company managing expenses"
+            },
+            {
+                "name": "total_expenses",
+                "type": "float",
+                "default_value": 0.0,
+                "description": "Total amount of expenses managed by the company"
+            },
+            {
+                "name": "completion_status",
+                "type": "str",
+                "default_value": "completed",
+                "description": "Status indicating the completion of expense management"
+            }
+        ]
+    },
+    "4": {
+        "id": 4,
+        "from_agent_type": "BankAgent",
+        "from_action_name": "assess_credit_rating",
+        "to_agent_type": "CompanyAgent",
+        "to_action_name": "apply_for_loan",
+        "from_action_id": 4,
+        "to_action_id": 2,
+        "event_name": "CreditRatingAssessedEvent",
+        "event_info": "Credit rating assessed for loan application",
+        "fields": [
+            {
+                "name": "company_id",
+                "type": "str",
+                "default_value": "",
+                "description": "Unique identifier for the company whose credit rating is assessed"
+            },
+            {
+                "name": "credit_rating",
+                "type": "str",
+                "default_value": "unrated",
+                "description": "Assessed credit rating of the company"
+            }
+        ]
+    },
+    "5": {
+        "id": 5,
+        "from_agent_type": "BankAgent",
+        "from_action_name": "process_loan_application",
+        "to_agent_type": "CompanyAgent",
+        "to_action_name": "manage_expenses",
+        "from_action_id": 5,
+        "to_action_id": 3,
+        "event_name": "LoanApprovedEvent",
+        "event_info": "Loan approved and funds transferred",
+        "fields": [
+            {
+                "name": "company_id",
+                "type": "str",
+                "default_value": "",
+                "description": "Unique identifier for the company whose loan is approved"
+            },
+            {
+                "name": "approved_loan_amount",
+                "type": "float",
+                "default_value": 0.0,
+                "description": "Amount of loan approved for the company"
+            },
+            {
+                "name": "interest_rate",
+                "type": "float",
+                "default_value": 0.0,
+                "description": "Interest rate applied to the approved loan"
+            }
+        ]
+    },
+    "6": {
+        "id": 6,
+        "from_agent_type": "BankAgent",
+        "from_action_name": "process_loan_application",
+        "to_agent_type": "EnvAgent",
+        "to_action_name": "terminate",
+        "from_action_id": 5,
+        "to_action_id": -1,
+        "event_name": "LoanRejectedEvent",
+        "event_info": "Loan application rejected and workflow terminates",
+        "fields": [
+            {
+                "name": "company_id",
+                "type": "str",
+                "default_value": "",
+                "description": "Unique identifier for the company whose loan application is rejected"
+            },
+            {
+                "name": "rejection_reason",
+                "type": "str",
+                "default_value": "unknown",
+                "description": "Reason for the loan application rejection"
+            }
+        ]
+    },
+    "7": {
+        "id": 7,
+        "from_agent_type": "ConsumerAgent",
+        "from_action_name": "spend_money",
+        "to_agent_type": "CompanyAgent",
+        "to_action_name": "manage_expenses",
+        "from_action_id": 6,
+        "to_action_id": 3,
+        "event_name": "RevenueGeneratedEvent",
+        "event_info": "Revenue generated from consumer spending",
+        "fields": [
+            {
+                "name": "consumer_id",
+                "type": "str",
+                "default_value": "",
+                "description": "Unique identifier for the consumer generating revenue"
+            },
+            {
+                "name": "company_id",
+                "type": "str",
+                "default_value": "",
+                "description": "Unique identifier for the company receiving revenue"
+            },
+            {
+                "name": "revenue_amount",
+                "type": "float",
+                "default_value": 0.0,
+                "description": "Amount of revenue generated by the consumer"
+            }
+        ]
+    }
+}

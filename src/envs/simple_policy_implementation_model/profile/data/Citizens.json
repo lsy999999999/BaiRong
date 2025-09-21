@@ -1,0 +1,87 @@
+[
+    {
+        "name": "John Doe",
+        "acceptance_level": 0.5,
+        "compliance_level": 0.5,
+        "satisfaction_level": 0.5,
+        "political_views": "progressive",
+        "economic_status": "middle_class",
+        "age_group": 63,
+        "agent_type": "Citizens",
+        "adjustment_reason": "initial_policy",
+        "daily_activity_pattern": [
+            "morning_news",
+            "work",
+            "evening_discussion"
+        ],
+        "id": "5"
+    },
+    {
+        "name": "Jane Smith",
+        "acceptance_level": 0.5,
+        "compliance_level": 0.5,
+        "satisfaction_level": 0.5,
+        "political_views": "progressive",
+        "economic_status": "middle_class",
+        "age_group": 56,
+        "agent_type": "Citizens",
+        "adjustment_reason": "initial_policy",
+        "daily_activity_pattern": [
+            "morning_news",
+            "work",
+            "evening_discussion"
+        ],
+        "id": "6"
+    },
+    {
+        "name": "Michael Johnson",
+        "acceptance_level": 0.5,
+        "compliance_level": 0.5,
+        "satisfaction_level": 0.5,
+        "political_views": "neutral",
+        "economic_status": "middle_class",
+        "age_group": 54,
+        "agent_type": "Citizens",
+        "adjustment_reason": "initial_policy",
+        "daily_activity_pattern": [
+            "morning_news",
+            "work",
+            "evening_discussion"
+        ],
+        "id": "7"
+    },
+    {
+        "name": "Emily Davis",
+        "acceptance_level": 0.5,
+        "compliance_level": 0.5,
+        "satisfaction_level": 0.5,
+        "political_views": "liberal",
+        "economic_status": "middle_class",
+        "age_group": 49,
+        "agent_type": "Citizens",
+        "adjustment_reason": "initial_policy",
+        "daily_activity_pattern": [
+            "morning_news",
+            "work",
+            "evening_discussion"
+        ],
+        "id": "8"
+    },
+    {
+        "name": "Christopher Brown",
+        "acceptance_level": 0.5,
+        "compliance_level": 0.5,
+        "satisfaction_level": 0.5,
+        "political_views": "progressive",
+        "economic_status": "high_income",
+        "age_group": 64,
+        "agent_type": "Citizens",
+        "adjustment_reason": "initial_policy",
+        "daily_activity_pattern": [
+            "morning_news",
+            "work",
+            "evening_discussion"
+        ],
+        "id": "9"
+    }
+]

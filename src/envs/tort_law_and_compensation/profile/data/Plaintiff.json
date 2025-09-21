@@ -1,0 +1,87 @@
+[
+    {
+        "name": "Johnathan Smith",
+        "compensation_amount": 10000.0,
+        "damage_description": "Physical injury due to negligence",
+        "compensation_request_submitted": false,
+        "legal_experience": 1,
+        "communication_style": "assertive",
+        "agent_type": "Plaintiff",
+        "evidence_list": [
+            {
+                "type": "medical_report",
+                "date": "2023-05-15"
+            }
+        ],
+        "initial_strategy": "Negotiation and mediation to reach a settlement",
+        "id": "0"
+    },
+    {
+        "name": "Emily Johnson",
+        "compensation_amount": 10000.0,
+        "damage_description": "Physical injury due to negligence",
+        "compensation_request_submitted": false,
+        "legal_experience": 18,
+        "communication_style": "assertive",
+        "agent_type": "Plaintiff",
+        "evidence_list": [
+            {
+                "type": "medical_report",
+                "date": "2023-05-15"
+            }
+        ],
+        "initial_strategy": "Aggressive litigation to establish a strong position",
+        "id": "1"
+    },
+    {
+        "name": "Michael Brown",
+        "compensation_amount": 10000.0,
+        "damage_description": "Physical injury due to negligence",
+        "compensation_request_submitted": false,
+        "legal_experience": 9,
+        "communication_style": "assertive",
+        "agent_type": "Plaintiff",
+        "evidence_list": [
+            {
+                "type": "medical_report",
+                "date": "2023-05-15"
+            }
+        ],
+        "initial_strategy": "Gathering evidence to build a solid case before proceeding",
+        "id": "2"
+    },
+    {
+        "name": "Sophia Martinez",
+        "compensation_amount": 10000.0,
+        "damage_description": "Physical injury due to negligence",
+        "compensation_request_submitted": false,
+        "legal_experience": 4,
+        "communication_style": "aggressive",
+        "agent_type": "Plaintiff",
+        "evidence_list": [
+            {
+                "type": "medical_report",
+                "date": "2023-05-15"
+            }
+        ],
+        "initial_strategy": "Seeking a temporary injunction to prevent further harm",
+        "id": "3"
+    },
+    {
+        "name": "David Lee",
+        "compensation_amount": 10000.0,
+        "damage_description": "Physical injury due to negligence",
+        "compensation_request_submitted": false,
+        "legal_experience": 12,
+        "communication_style": "aggressive",
+        "agent_type": "Plaintiff",
+        "evidence_list": [
+            {
+                "type": "medical_report",
+                "date": "2023-05-15"
+            }
+        ],
+        "initial_strategy": "Exploring alternative dispute resolution to avoid lengthy court proceedings",
+        "id": "4"
+    }
+]

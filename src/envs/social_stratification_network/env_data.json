@@ -1,0 +1,23 @@
+{
+    "Family": {
+        "id": "1",
+        "members": [
+            "parent1",
+            "parent2",
+            "child1"
+        ],
+        "collective_resources": "wealthy",
+        "inheritance_rules": "equal",
+        "education_investment": "high",
+        "social_status": "upper",
+        "residential_area": "urban"
+    },
+    "EducationalInstitution": {
+        "type": "university",
+        "quality": "prestigious",
+        "admission_criteria": "strict",
+        "tuition_fees": "high",
+        "prestige": "elite",
+        "alumni_network": "strong"
+    }
+}

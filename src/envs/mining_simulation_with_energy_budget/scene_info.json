@@ -1,0 +1,34 @@
+{
+    "domain": "Economics",
+    "scene_name": "mining_simulation_with_energy_budget",
+    "odd_protocol": {
+        "overview": {
+            "system_goal": "Maximize global and individual cumulative gold production through strategic mining, occupying, and defending land in a 10x10 grid.",
+            "agent_types": "N miners (N=10 or 20, two options).",
+            "environment_description": "A 10x10 grid (100 plots) with homogeneous properties. Each plot can produce gold linearly up to a maximum of 3 units of mining effort per plot. Total gold stock remains constant, but there is a fixed limit on gold extraction per round. Each plot can produce up to 3 units of gold per round.",
+            "key1": "Each miner has a fixed energy budget of S (S=10) per round, which resets at the end of each round.",
+            "key2": "Miners can occupy, mine, and defend plots. Occupying a plot costs 1 energy, mining costs up to 3 energy per plot, and defending a plot costs 1 energy."
+        },
+        "design_concepts": {
+            "interaction_patterns": "Miners interact through occupying, mining, and defending plots. They can also challenge other miners for control of plots.",
+            "communication_protocols": "No direct communication between miners. Miners can only observe the grid state, their own energy, and the mining function.",
+            "decision_mechanisms": "Miners make decisions based on the current grid state, their own energy, and the mining function. They allocate energy to occupying, mining, and defending plots.",
+            "key1": "Miners can challenge other miners for control of plots, but the defender can prevent challenges by spending 1 energy on defense.",
+            "key2": "If a defender does not spend energy on defense, a random challenger becomes the new occupier."
+        },
+        "details": {
+            "agent_behaviors": "Miners observe the grid, allocate energy to occupying, mining, and defending plots, and challenge other miners for control of plots. They can also mine gold from their occupied plots.",
+            "decision_algorithms": "Miners decide how to allocate their energy budget (S) among occupying, mining, and defending plots. They also decide whether to challenge other miners for control of plots.",
+            "specific_constraints": "Each plot can only be occupied by one miner at a time. Each miner can only occupy up to 10 plots (the total number of plots is 100). Miners can only mine up to 3 units of energy per plot per round. Any excess energy spent on mining is wasted.",
+            "key1": "Miners can only occupy, mine, and defend plots within their energy budget (S)."
+        }
+    },
+    "agent_types": {
+        "MinerAgent": "Responsible for occupying, mining, and defending plots to maximize gold production within the energy budget constraints.",
+        "PlotManager": "Manages the state of each plot, including gold production, occupation status, and defense status."
+    },
+    "portrait": {
+        "MinerAgent": 3,
+        "PlotManager": 1
+    }
+}

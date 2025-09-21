@@ -1,0 +1,19 @@
+{
+    "policy_strength": 0.75,
+    "government_efficiency": 0.85,
+    "citizen_acceptance": 0.65,
+    "citizen_satisfaction": 0.7,
+    "government_entities": [
+        "Ministry of Health",
+        "Department of Education",
+        "Environmental Agency"
+    ],
+    "citizen_reactions": [
+        "Protests in City Square",
+        "Online Petition Against Policy",
+        "Community Support Initiatives"
+    ],
+    "daily_policy_execution": true,
+    "policy_adjustment_decision": "Increase policy strength due to high efficiency",
+    "citizen_compliance_decision": "Comply with policy due to moderate acceptance"
+}

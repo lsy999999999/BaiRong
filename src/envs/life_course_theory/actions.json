@@ -1,0 +1,261 @@
+{
+    "IndividualAgent": [
+        {
+            "id": 1,
+            "name": "begin_life_stage",
+            "condition": null,
+            "description": "Initiates the simulation of an individual's new life stage, setting initial conditions for education, health, and policy adaptation.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "socioeconomic_status",
+                    "type": "string",
+                    "context": "env",
+                    "description": "The individual's socioeconomic status at the beginning of the life stage."
+                },
+                {
+                    "name": "initial_health_status",
+                    "type": "string",
+                    "context": "env",
+                    "description": "The individual's health status at the beginning of the life stage."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "current_life_stage",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "The life stage that the individual is currently in."
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "name": "receive_family_support",
+            "condition": null,
+            "description": "Processes and integrates family support into the individual's life, affecting health and educational outcomes.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "support_type",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Type of family support provided to the individual."
+                },
+                {
+                    "name": "support_level",
+                    "type": "float",
+                    "context": "event",
+                    "description": "Quantitative level of support provided."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "family_support_status",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Status of family support integration."
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "name": "adapt_to_education_outcome",
+            "condition": null,
+            "description": "Adjusts the individual's behavior and decisions based on the educational outcomes received.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "education_outcome",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Description of the educational outcome for the individual."
+                },
+                {
+                    "name": "adaptation_level",
+                    "type": "float",
+                    "context": "event",
+                    "description": "Quantitative measure of adaptation to educational outcomes."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "education_adaptation_status",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Status of the individual's adaptation to educational outcomes."
+                }
+            ]
+        },
+        {
+            "id": 4,
+            "name": "integrate_health_outcome",
+            "condition": null,
+            "description": "Incorporates health service outcomes into the individual's life, influencing future health decisions.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "health_outcome",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Description of the healthcare service outcome for the individual."
+                },
+                {
+                    "name": "service_quality",
+                    "type": "float",
+                    "context": "event",
+                    "description": "Quantitative measure of healthcare service quality."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "health_integration_status",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Status of health service outcome integration."
+                }
+            ]
+        },
+        {
+            "id": 5,
+            "name": "adjust_to_policy_changes",
+            "condition": null,
+            "description": "Modifies the individual's decisions and behaviors in response to government policy changes.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "policy_effect",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Description of the policy impact on the individual."
+                },
+                {
+                    "name": "impact_level",
+                    "type": "float",
+                    "context": "event",
+                    "description": "Quantitative measure of the policy impact level."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "policy_adjustment_status",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Status of the individual's adjustment to policy changes."
+                }
+            ]
+        }
+    ],
+    "FamilyAgent": [
+        {
+            "id": 6,
+            "name": "initiate_family_influence",
+            "condition": null,
+            "description": "Begins the process of providing support and influence to individual agents, impacting their health and education.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "family_resources",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Available resources for supporting individual agents."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "family_support_provided",
+                    "type": "boolean",
+                    "context": "agent",
+                    "description": "Indicates whether family support has been initiated."
+                }
+            ]
+        }
+    ],
+    "EducationSystemAgent": [
+        {
+            "id": 7,
+            "name": "assess_education_impact",
+            "condition": "IndividualAgent's current life stage and socioeconomic background",
+            "description": "Evaluates the impact of educational systems on individual agents, influencing their adaptation and future opportunities.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "educational_resources",
+                    "type": "float",
+                    "context": "env",
+                    "description": "Resources available in the educational system."
+                },
+                {
+                    "name": "current_life_stage",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Current life stage of the individual."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "education_impact_assessed",
+                    "type": "boolean",
+                    "context": "agent",
+                    "description": "Indicates whether the educational impact has been assessed."
+                }
+            ]
+        }
+    ],
+    "HealthcareSystemAgent": [
+        {
+            "id": 8,
+            "name": "evaluate_health_services",
+            "condition": "IndividualAgent's health status and accessibility to healthcare",
+            "description": "Analyzes the effectiveness of healthcare services provided to individual agents, affecting their health outcomes.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "healthcare_resources",
+                    "type": "float",
+                    "context": "env",
+                    "description": "Resources available in the healthcare system."
+                },
+                {
+                    "name": "current_health_status",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Current health status of the individual."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "health_services_evaluated",
+                    "type": "boolean",
+                    "context": "agent",
+                    "description": "Indicates whether the health services have been evaluated."
+                }
+            ]
+        }
+    ],
+    "GovernmentAgent": [
+        {
+            "id": 9,
+            "name": "implement_policy",
+            "condition": "Current socioeconomic conditions and policy requirements",
+            "description": "Enacts government policies that influence the socioeconomic environment and individual agent decisions.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "policy_details",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Details of the policy to be implemented."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "policy_implemented",
+                    "type": "boolean",
+                    "context": "agent",
+                    "description": "Indicates whether the policy has been successfully implemented."
+                }
+            ]
+        }
+    ]
+}

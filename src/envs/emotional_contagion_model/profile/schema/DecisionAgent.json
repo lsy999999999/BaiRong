@@ -1,0 +1,83 @@
+{
+    "name": {
+        "type": "str",
+        "default": "DecisionAgent",
+        "private": false,
+        "sampling": "llm",
+        "description": "The unique name identifier for the agent"
+    },
+    "evaluation_result": {
+        "type": "str",
+        "default": "pending_evaluation",
+        "private": true,
+        "sampling": "default"
+    },
+    "adjustment_factor": {
+        "type": "float",
+        "default": 1.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "emotional_state": {
+        "type": "str",
+        "default": "neutral",
+        "private": false,
+        "sampling": "llm",
+        "description": "The current emotional state of the agent, such as joy, sadness, or anger"
+    },
+    "sensitivity_to_emotional_contagion": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "interaction_frequency": {
+        "type": "int",
+        "default": 10,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            1,
+            20
+        ]
+    },
+    "emotional_intensity": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "default"
+    },
+    "social_network_connections": {
+        "type": "list",
+        "default": [
+            "AgentA",
+            "AgentB"
+        ],
+        "private": true,
+        "sampling": "default",
+        "sample_size": 2
+    },
+    "communication_mode": {
+        "type": "str",
+        "default": "face-to-face",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "face-to-face",
+            "social media",
+            "email",
+            "text"
+        ]
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

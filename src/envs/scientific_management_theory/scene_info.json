@@ -1,0 +1,104 @@
+{
+  "domain": "Organization",
+  "scene_name": "scientific_management_theory",
+  "odd_protocol": {
+    "overview": {
+      "system_goal": "The goal of the simulation is to explore Taylor's scientific management principles by simulating task allocation, standardized operations, and incentive measures to enhance work efficiency and productivity. The simulation includes interactions between workers and managers, analyzing how managers optimize workflows through scientific analysis and decision-making, and motivate employees for higher productivity.",
+      "agent_types": "Agents represent employees or managers within an organization. Worker Agents execute specific tasks influenced by task allocation, standardized workflows, and incentive mechanisms. Manager Agents design workflows, allocate tasks, set incentives, and supervise workers to enhance efficiency.",
+      "environment_description": "The environment models a workplace where interactions between workers and managers occur, focusing on task distribution, workflow standardization, and incentive implementation to improve productivity."
+    },
+    "design_concepts": {
+      "interaction_patterns": "Workers and managers interact through task assignments, feedback, and incentive mechanisms. Workers follow standardized workflows and respond to manager directives and incentives.",
+      "communication_protocols": "Communication occurs through LLM-generated dialogues between workers and managers, simulating task instructions, feedback, and motivation strategies.",
+      "decision_mechanisms": "Agents make decisions based on scientific management principles, where managers use scientific analysis for task allocation and workflow optimization, and workers respond to incentives and task directives."
+    },
+    "details": {
+      "agent_behaviors": "Worker Agents perform tasks according to standardized processes and respond to incentives. Manager Agents allocate tasks, implement standardized workflows, and provide feedback and incentives based on worker performance.",
+      "decision_algorithms": "Managers use scientific methods like time and motion studies to analyze and optimize task execution. Tasks are allocated based on worker skills and capabilities to maximize efficiency.",
+      "specific_constraints": "Minimum of 3 agents required: 1 manager and 2 workers. Recommended to use at least 10 agents for simulating team environments and complex task allocations. Agents must adhere to standardized workflows and incentive structures."
+    }
+  },
+  "agent_types": {
+    "WorkerAgent": "Executes specific tasks within the organization, influenced by task allocation, standardized workflows, and incentive mechanisms to enhance productivity.",
+    "ManagerAgent": "Designs workflows, allocates tasks, sets incentives, and supervises workers to optimize efficiency and productivity using scientific management principles."
+  },
+  "portrait": {
+    "WorkerAgent": 3,
+    "ManagerAgent": 1
+  },
+  "metrics": [
+    {
+      "id": "Average_Worker_Performance",
+      "name": "Average Worker Performance",
+      "description": "Measures the average performance of WorkerAgents based on their task completion and performance adjustment statuses.",
+      "visualization_type": "line",
+      "update_interval": 5,
+      "variables": [
+        {
+          "name": "worker_performance",
+          "source_type": "agent",
+          "agent_type": "ManagerAgent",
+          "path": "profile.worker_performance",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "This metric calculates the average performance of all workers. It iterates over the 'worker_performance' list from ManagerAgents. For each entry, if the value is None or not a number, it is skipped. The average is calculated by summing valid performance values and dividing by the count of valid entries. If the list is empty or all values are None, the metric defaults to 0.",
+      "function_name": "Average_Worker_Performance"
+    },
+    {
+      "id": "Task_Allocation_Effectiveness",
+      "name": "Task Allocation Effectiveness",
+      "description": "Evaluates how effectively tasks are allocated by comparing task allocation status with worker performance.",
+      "visualization_type": "pie",
+      "update_interval": 5,
+      "variables": [
+        {
+          "name": "task_allocation_status",
+          "source_type": "agent",
+          "agent_type": "ManagerAgent",
+          "path": "profile.task_allocation_status",
+          "required": true,
+          "is_list": true
+        },
+        {
+          "name": "worker_performance",
+          "source_type": "agent",
+          "agent_type": "ManagerAgent",
+          "path": "profile.worker_performance",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "This metric compares task allocation status with worker performance. It checks if tasks allocated (status) correspond to high performance (above a threshold). The number of successful allocations (where high performance matches allocated tasks) is divided by the total number of allocations to get a proportion. Handles None and empty values by excluding them from calculations. If no valid data is available, the metric defaults to 'N/A'.",
+      "function_name": "Task_Allocation_Effectiveness"
+    },
+    {
+      "id": "Incentive_Plan_Utilization",
+      "name": "Incentive Plan Utilization",
+      "description": "Assesses how well the incentive plans are being utilized by comparing the number of incentives planned versus those applied.",
+      "visualization_type": "line",
+      "update_interval": 5,
+      "variables": [
+        {
+          "name": "incentive_plan",
+          "source_type": "agent",
+          "agent_type": "ManagerAgent",
+          "path": "profile.incentive_plan",
+          "required": true,
+          "is_list": true
+        },
+        {
+          "name": "performance_adjustment_status",
+          "source_type": "agent",
+          "agent_type": "WorkerAgent",
+          "path": "profile.performance_adjustment_status",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "This metric tracks the number of incentives planned against those that are actually applied (performance adjustments). It counts entries in 'incentive_plan' and compares with 'performance_adjustment_status' where adjustments are made. Handles None and empty lists by treating them as zero. If no data is available, the metric defaults to 0. The metric is plotted over time to show trends in incentive application.",
+      "function_name": "Incentive_Plan_Utilization"
+    }
+  ]
+}

@@ -1,0 +1,72 @@
+[
+    {
+        "name": "LegalExpertAgent_Alpha",
+        "expertise_field": "administrative law",
+        "interpretation_skill": 62,
+        "precedent_referencing_ability": 60.97018895325958,
+        "communication_protocol": "Protocol_Standard_Law",
+        "agent_type": "LegalExpertAgent",
+        "outcome_analysis": "awaiting_analysis",
+        "socio_political_influence": [
+            "neutral",
+            "balanced"
+        ],
+        "id": "20"
+    },
+    {
+        "name": "LegalExpertAgent_Beta",
+        "expertise_field": "administrative law",
+        "interpretation_skill": 54,
+        "precedent_referencing_ability": 72.9903623380499,
+        "communication_protocol": "Protocol_Advanced_Legal",
+        "agent_type": "LegalExpertAgent",
+        "outcome_analysis": "awaiting_analysis",
+        "socio_political_influence": [
+            "neutral",
+            "balanced"
+        ],
+        "id": "21"
+    },
+    {
+        "name": "LegalExpertAgent_Gamma",
+        "expertise_field": "contract law",
+        "interpretation_skill": 50,
+        "precedent_referencing_ability": 78.81890653871578,
+        "communication_protocol": "Protocol_International_Law",
+        "agent_type": "LegalExpertAgent",
+        "outcome_analysis": "awaiting_analysis",
+        "socio_political_influence": [
+            "neutral",
+            "balanced"
+        ],
+        "id": "22"
+    },
+    {
+        "name": "LegalExpertAgent_Delta",
+        "expertise_field": "criminal law",
+        "interpretation_skill": 57,
+        "precedent_referencing_ability": 60.70686326398544,
+        "communication_protocol": "Protocol_Corporate_Law",
+        "agent_type": "LegalExpertAgent",
+        "outcome_analysis": "awaiting_analysis",
+        "socio_political_influence": [
+            "neutral",
+            "balanced"
+        ],
+        "id": "23"
+    },
+    {
+        "name": "LegalExpertAgent_Epsilon",
+        "expertise_field": "administrative law",
+        "interpretation_skill": 95,
+        "precedent_referencing_ability": 77.92695101079974,
+        "communication_protocol": "Protocol_Civil_Litigation",
+        "agent_type": "LegalExpertAgent",
+        "outcome_analysis": "awaiting_analysis",
+        "socio_political_influence": [
+            "neutral",
+            "balanced"
+        ],
+        "id": "24"
+    }
+]

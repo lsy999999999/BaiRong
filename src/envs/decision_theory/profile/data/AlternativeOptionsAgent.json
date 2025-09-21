@@ -1,0 +1,87 @@
+[
+    {
+        "name": "Flexible Schedule Implementation",
+        "cost": 431.62376431995244,
+        "utility": 3.97416039915095,
+        "risk": 0.5451401980762494,
+        "status": "awaiting_evaluation",
+        "decision_impact": "Enhances employee productivity and satisfaction by allowing flexible working hours.",
+        "agent_type": "AlternativeOptionsAgent",
+        "presented_alternatives": null,
+        "evaluation_feedback": [
+            {
+                "aspect": "cost",
+                "feedback": "reasonable"
+            }
+        ],
+        "id": "10"
+    },
+    {
+        "name": "Remote Work Expansion",
+        "cost": 463.4284985501424,
+        "utility": 2.267944928753085,
+        "risk": 0.8851180143360655,
+        "status": "awaiting_evaluation",
+        "decision_impact": "Reduces overhead costs and increases access to a wider talent pool.",
+        "agent_type": "AlternativeOptionsAgent",
+        "presented_alternatives": null,
+        "evaluation_feedback": [
+            {
+                "aspect": "cost",
+                "feedback": "reasonable"
+            }
+        ],
+        "id": "11"
+    },
+    {
+        "name": "Sustainable Resource Utilization",
+        "cost": 88.01714064978853,
+        "utility": 84.99885296261223,
+        "risk": 0.4030268444622038,
+        "status": "awaiting_evaluation",
+        "decision_impact": "Promotes long-term environmental benefits and improves corporate social responsibility.",
+        "agent_type": "AlternativeOptionsAgent",
+        "presented_alternatives": null,
+        "evaluation_feedback": [
+            {
+                "aspect": "cost",
+                "feedback": "reasonable"
+            }
+        ],
+        "id": "12"
+    },
+    {
+        "name": "AI-Powered Customer Service",
+        "cost": 372.6011338305612,
+        "utility": 86.96452484070647,
+        "risk": 0.37143850324686656,
+        "status": "awaiting_evaluation",
+        "decision_impact": "Increases efficiency and customer satisfaction through faster response times and personalized interactions.",
+        "agent_type": "AlternativeOptionsAgent",
+        "presented_alternatives": null,
+        "evaluation_feedback": [
+            {
+                "aspect": "cost",
+                "feedback": "reasonable"
+            }
+        ],
+        "id": "13"
+    },
+    {
+        "name": "Diversity and Inclusion Initiative",
+        "cost": 357.70086476127824,
+        "utility": 35.96453397658752,
+        "risk": 0.9789546823671799,
+        "status": "awaiting_evaluation",
+        "decision_impact": "Fosters a more innovative and collaborative workplace by embracing diverse perspectives.",
+        "agent_type": "AlternativeOptionsAgent",
+        "presented_alternatives": null,
+        "evaluation_feedback": [
+            {
+                "aspect": "cost",
+                "feedback": "reasonable"
+            }
+        ],
+        "id": "14"
+    }
+]

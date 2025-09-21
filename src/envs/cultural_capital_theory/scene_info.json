@@ -1,0 +1,93 @@
+{
+  "domain": "Sociology",
+  "scene_name": "cultural_capital_theory",
+  "odd_protocol": {
+    "overview": {
+      "system_goal": "To study how cultural capital influences individual social mobility and to explore the effects of education and distribution of social resources.",
+      "agent_types": "Individuals with varying levels of cultural capital and social structures representing different social classes.",
+      "environment_description": "A societal system with different social classes where individuals possess varying levels of cultural, economic, and social capital.",
+      "agents_initialization": "Individuals are created within different social classes and assigned varying levels of cultural capital.",
+      "social_rules": "High cultural capital individuals are more likely to access social resources."
+    },
+    "design_concepts": {
+      "interaction_patterns": "Individuals interact within social structures, influencing their ability to gain social resources based on cultural capital.",
+      "communication_protocols": "Interactions are influenced by the individual's cultural, economic, and social capital levels.",
+      "decision_mechanisms": "Individuals make decisions to enhance their cultural capital through education, aiming for better job opportunities.",
+      "social_mobility": "High cultural capital individuals can achieve high-income jobs, increasing economic capital, while low cultural capital individuals face more challenges."
+    },
+    "details": {
+      "agent_behaviors": "Individuals strive to improve their cultural capital through education and networking to enhance their social and economic status.",
+      "decision_algorithms": "Algorithms determine social mobility based on cultural capital levels and access to education and high-income jobs.",
+      "specific_constraints": "Low cultural capital individuals have limited mobility due to fewer opportunities and greater obstacles.",
+      "termination_conditions": "After a set number of time steps, analyze the impact of cultural capital on social mobility.",
+      "research_value": "The model can be used to study issues related to educational equity and social class rigidity."
+    }
+  },
+  "agent_types": {
+    "IndividualAgent": "Represents an individual with varying levels of cultural capital, striving to improve their social mobility through education and networking.",
+    "SocialStructureAgent": "Embodies different social classes that influence individuals' access to resources and opportunities based on their cultural capital."
+  },
+  "portrait": {
+    "IndividualAgent": 5,
+    "SocialStructureAgent": 1
+  },
+  "metrics": [
+    {
+      "id": "Average_Cultural_Capital_Level",
+      "name": "Average Cultural Capital Level",
+      "description": "This metric measures the average level of cultural capital among all IndividualAgents.",
+      "visualization_type": "line",
+      "update_interval": 5,
+      "variables": [
+        {
+          "name": "cultural_capital_level",
+          "source_type": "agent",
+          "agent_type": "IndividualAgent",
+          "path": "cultural_capital_level",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Calculate the average cultural capital level by summing all non-None cultural capital values and dividing by the count of non-None values. If the list is empty or all values are None, the average is set to 0.0.",
+      "function_name": "Average_Cultural_Capital_Level"
+    },
+    {
+      "id": "Education_Decision_Rate",
+      "name": "Education Decision Rate",
+      "description": "This metric measures the proportion of IndividualAgents who have decided to pursue education.",
+      "visualization_type": "pie",
+      "update_interval": 5,
+      "variables": [
+        {
+          "name": "education_decision",
+          "source_type": "agent",
+          "agent_type": "IndividualAgent",
+          "path": "education_decision",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Count the number of True values in the education_decision list. Divide this count by the total number of non-None values to get the proportion. If the list is empty or all values are None, the proportion is set to 0.0.",
+      "function_name": "Education_Decision_Rate"
+    },
+    {
+      "id": "Job_Search_Status_Distribution",
+      "name": "Job Search Status Distribution",
+      "description": "This metric shows the distribution of IndividualAgents across different job search statuses.",
+      "visualization_type": "bar",
+      "update_interval": 5,
+      "variables": [
+        {
+          "name": "job_search_status",
+          "source_type": "agent",
+          "agent_type": "IndividualAgent",
+          "path": "job_search_status",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Create a dictionary counting occurrences of each job search status, excluding None values. The keys are the different statuses and values are the counts. If the list is empty, return an empty dictionary.",
+      "function_name": "Job_Search_Status_Distribution"
+    }
+  ]
+}

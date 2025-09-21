@@ -1,0 +1,137 @@
+{
+    "-1": {
+        "id": -1,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "Aggressor",
+        "to_action_name": "initiate_threat",
+        "from_action_id": 0,
+        "to_action_id": 1,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for aggressor to start threatening",
+        "fields": []
+    },
+    "1": {
+        "id": 1,
+        "from_agent_type": "Aggressor",
+        "from_action_name": "initiate_threat",
+        "to_agent_type": "Defender",
+        "to_action_name": "react_to_threat",
+        "from_action_id": 1,
+        "to_action_id": 2,
+        "event_name": "ThreatEvent",
+        "event_info": "Aggressor threatens defender",
+        "fields": [
+            {
+                "name": "threat_level",
+                "type": "int",
+                "default_value": "1",
+                "description": "Indicates the severity of the threat posed by the aggressor, with higher values indicating more severe threats."
+            },
+            {
+                "name": "aggressor_id",
+                "type": "str",
+                "default_value": "",
+                "description": "Unique identifier for the aggressor agent."
+            },
+            {
+                "name": "defender_id",
+                "type": "str",
+                "default_value": "",
+                "description": "Unique identifier for the defender agent."
+            }
+        ]
+    },
+    "2": {
+        "id": 2,
+        "from_agent_type": "Defender",
+        "from_action_name": "react_to_threat",
+        "to_agent_type": "Judge",
+        "to_action_name": "evaluate_defense",
+        "from_action_id": 2,
+        "to_action_id": 3,
+        "event_name": "DefenseActionEvent",
+        "event_info": "Defender takes defensive action",
+        "fields": [
+            {
+                "name": "defensive_action_type",
+                "type": "str",
+                "default_value": "basic",
+                "description": "Type of defensive action taken by the defender, e.g., 'block', 'retreat', 'counterattack'."
+            },
+            {
+                "name": "defense_intensity",
+                "type": "int",
+                "default_value": "1",
+                "description": "Intensity level of the defense action, with higher numbers indicating more forceful actions."
+            },
+            {
+                "name": "evidence_collected",
+                "type": "list",
+                "default_value": "[]",
+                "description": "List of evidence items collected during the defense action."
+            },
+            {
+                "name": "defender_id",
+                "type": "str",
+                "default_value": "",
+                "description": "Unique identifier for the defender agent."
+            },
+            {
+                "name": "judge_id",
+                "type": "str",
+                "default_value": "",
+                "description": "Unique identifier for the judge agent."
+            }
+        ]
+    },
+    "3": {
+        "id": 3,
+        "from_agent_type": "Judge",
+        "from_action_name": "evaluate_defense",
+        "to_agent_type": "EnvAgent",
+        "to_action_name": "terminate",
+        "from_action_id": 3,
+        "to_action_id": -1,
+        "event_name": "JudgmentEvent",
+        "event_info": "Judge renders decision on defense justification",
+        "fields": [
+            {
+                "name": "judgment_result",
+                "type": "str",
+                "default_value": "undecided",
+                "description": "Outcome of the judge's decision, e.g., 'justified', 'excessive', 'unjustified'."
+            },
+            {
+                "name": "legal_reasons",
+                "type": "str",
+                "default_value": "",
+                "description": "Legal rationale provided by the judge for the decision."
+            },
+            {
+                "name": "threat_assessment",
+                "type": "int",
+                "default_value": "0",
+                "description": "Judge's assessment of the initial threat level."
+            },
+            {
+                "name": "defense_assessment",
+                "type": "int",
+                "default_value": "0",
+                "description": "Judge's assessment of the defense action's proportionality and necessity."
+            },
+            {
+                "name": "judge_id",
+                "type": "str",
+                "default_value": "",
+                "description": "Unique identifier for the judge agent."
+            },
+            {
+                "name": "completion_status",
+                "type": "str",
+                "default_value": "pending",
+                "description": "Status of the judgment process, e.g., 'completed', 'pending'."
+            }
+        ]
+    }
+}

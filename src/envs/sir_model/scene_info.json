@@ -1,0 +1,111 @@
+{
+  "domain": "Demographics",
+  "scene_name": "sir_model",
+  "odd_protocol": {
+    "overview": {
+      "system_goal": "To extend the SIR model using large language models (LLM) to simulate complex disease transmission processes, incorporating social factors such as government interventions, public health policies, and social network structures to better describe disease spread within populations.",
+      "agent_types": "Individual agents representing people with health states of susceptible (S), infected (I), or recovered (R); group agents representing social groups like families or communities; government agents implementing policies; healthcare system agents managing treatment and recovery.",
+      "environment_description": "The environment includes social interactions within and between groups, government policy impacts, healthcare infrastructure, and public health behaviors affecting disease transmission.",
+      "policy_evaluation": "Researchers can evaluate the impact of different preventive policies like isolation, vaccination, and social distancing on disease spread and explore strategies for epidemic control in dynamic social environments."
+    },
+    "design_concepts": {
+      "interaction_patterns": "Agents interact through social contacts, affecting disease spread. Individual agents change health states based on interactions, while group agents influence transmission speed within defined social structures.",
+      "communication_protocols": "Government agents communicate policies affecting agent interactions, while healthcare system agents provide feedback on treatment effectiveness impacting recovery rates.",
+      "decision_mechanisms": "Individual agents decide on behaviors like mask-wearing or social distancing based on infection risk, while government agents decide on interventions like lockdowns or travel restrictions.",
+      "key_variables": "Contact rate (β) affecting interaction frequency; recovery rate (γ) influencing recovery speed; social behavior impacting contact rate; government interventions modifying interaction patterns; herd immunity reducing transmission potential."
+    },
+    "details": {
+      "agent_behaviors": "Individual agents transition between health states based on contact and infection probability; group agents simulate intra-group contact patterns; government agents implement policies affecting social behavior; healthcare system agents manage resource distribution and treatment efficiency.",
+      "decision_algorithms": "Probabilistic models for infection and recovery transitions; policy impact assessments on contact rates and social behaviors; dynamic adjustment of agent states based on time-evolved simulation data.",
+      "specific_constraints": "Constraints include healthcare system capacity, policy compliance levels, and social network structures affecting agent interactions.",
+      "simulation_steps": "Initialization of agent states; simulation of social interactions; implementation of policy interventions; tracking of health state transitions over time; data collection on infection, recovery, and intervention outcomes."
+    }
+  },
+  "agent_types": {
+    "IndividualAgent": "Represents people with health states of susceptible, infected, or recovered, transitioning between states based on social interactions and infection probabilities.",
+    "GroupAgent": "Simulates social groups like families or communities, influencing disease transmission speed within defined social structures through intra-group contact patterns.",
+    "GovernmentAgent": "Implements policies affecting social behavior, such as lockdowns and travel restrictions, to control disease spread and manage public health interventions.",
+    "HealthcareSystemAgent": "Manages treatment and recovery processes, distributing resources efficiently and providing feedback on treatment effectiveness to impact recovery rates."
+  },
+  "portrait": {
+    "IndividualAgent": 5,
+    "GroupAgent": 5,
+    "GovernmentAgent": 1,
+    "HealthcareSystemAgent": 2
+  },
+  "metrics": [
+    {
+      "id": "infection_rate_over_time",
+      "name": "infection_rate_over_time",
+      "description": "Tracks the percentage of IndividualAgents currently infected (I) over time to monitor disease spread.",
+      "visualization_type": "line",
+      "update_frequency": 5,
+      "variables": [
+        {
+          "name": "current_health_state",
+          "source_type": "agent",
+          "agent_type": "IndividualAgent",
+          "path": "current_health_state",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Calculate the percentage of IndividualAgents whose current_health_state is 'I'. Handle None values and empty lists by treating them as non-infected. Return a dictionary with the series name 'infection_rate' and the calculated percentage. If the list is empty, return 0% infection rate.",
+      "function_name": "infection_rate_over_time"
+    },
+    {
+      "id": "policy_effectiveness",
+      "name": "policy_effectiveness",
+      "description": "Evaluates the effectiveness of government policies based on the proportion of policies that are active and their reported effects.",
+      "visualization_type": "bar",
+      "update_frequency": 10,
+      "variables": [
+        {
+          "name": "policy_status",
+          "source_type": "agent",
+          "agent_type": "GovernmentAgent",
+          "path": "policy_status",
+          "required": true,
+          "is_list": true
+        },
+        {
+          "name": "policy_effect",
+          "source_type": "agent",
+          "agent_type": "GovernmentAgent",
+          "path": "policy_effect",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Count the number of policies with status 'active' and categorize them by their effect (e.g., 'positive', 'neutral', 'negative'). Handle None values and empty lists by skipping them in calculations. Return a dictionary with categories as keys (e.g., 'positive', 'neutral', 'negative') and the count of active policies in each category as values. If lists are empty, return counts as 0.",
+      "function_name": "policy_effectiveness"
+    },
+    {
+      "id": "healthcare_treatment_success_rate",
+      "name": "healthcare_treatment_success_rate",
+      "description": "Monitors the success rate of treatments managed by HealthcareSystemAgents based on recovery statuses.",
+      "visualization_type": "pie",
+      "update_frequency": 10,
+      "variables": [
+        {
+          "name": "treatment_status",
+          "source_type": "agent",
+          "agent_type": "HealthcareSystemAgent",
+          "path": "treatment_status",
+          "required": true,
+          "is_list": true
+        },
+        {
+          "name": "recovery_status",
+          "source_type": "agent",
+          "agent_type": "HealthcareSystemAgent",
+          "path": "recovery_status",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Calculate the proportion of treatments that resulted in 'recovered' status. Handle None values and empty lists by treating them as unsuccessful treatments. Return a dictionary with slice names 'successful' and 'unsuccessful' and their respective proportions. If lists are empty, assume 100% unsuccessful.",
+      "function_name": "healthcare_treatment_success_rate"
+    }
+  ]
+}

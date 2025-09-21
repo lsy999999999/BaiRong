@@ -1,0 +1,151 @@
+{
+    "-1": {
+        "id": -1,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "CognitiveAgent",
+        "to_action_name": "initialize_intentions",
+        "from_action_id": 0,
+        "to_action_id": 1,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for CognitiveAgent to start processing behavioral intentions",
+        "fields": []
+    },
+    "-2": {
+        "id": -2,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "SocialNormAgent",
+        "to_action_name": "evaluate_social_norms",
+        "from_action_id": 0,
+        "to_action_id": 4,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for SocialNormAgent to start assessing social norms influence",
+        "fields": []
+    },
+    "1": {
+        "id": 1,
+        "from_agent_type": "CognitiveAgent",
+        "from_action_name": "initialize_intentions",
+        "to_agent_type": "SocialNormAgent",
+        "to_action_name": "adjust_subjective_norms",
+        "from_action_id": 1,
+        "to_action_id": 5,
+        "event_name": "IntentionInitializedEvent",
+        "event_info": "CognitiveAgent initializes intentions and informs SocialNormAgent to adjust subjective norms",
+        "fields": []
+    },
+    "2": {
+        "id": 2,
+        "from_agent_type": "CognitiveAgent",
+        "from_action_name": "calculate_behavioral_intentions",
+        "to_agent_type": "EnvironmentalAgent",
+        "to_action_name": "assess_environmental_constraints",
+        "from_action_id": 2,
+        "to_action_id": 6,
+        "event_name": "BehavioralIntentionCalculatedEvent",
+        "event_info": "Calculated behavioral intentions are sent to EnvironmentalAgent for constraint assessment",
+        "fields": [
+            {
+                "name": "behavioral_intentions",
+                "type": "float",
+                "default_value": "0.0",
+                "description": "Calculated value representing the strength of behavioral intentions."
+            },
+            {
+                "name": "TPB_components",
+                "type": "dict",
+                "default_value": "{}",
+                "description": "Dictionary containing values for attitude, subjective norm, and perceived behavioral control."
+            }
+        ]
+    },
+    "3": {
+        "id": 3,
+        "from_agent_type": "CognitiveAgent",
+        "from_action_name": "finalize_behavior",
+        "to_agent_type": "EnvAgent",
+        "to_action_name": "terminate",
+        "from_action_id": 3,
+        "to_action_id": -1,
+        "event_name": "BehaviorFinalizedEvent",
+        "event_info": "Final behavior determination sent to EnvAgent to terminate the process",
+        "fields": [
+            {
+                "name": "final_behavior",
+                "type": "string",
+                "default_value": "undetermined",
+                "description": "The finalized behavior outcome based on intention and environmental constraints."
+            },
+            {
+                "name": "completion_status",
+                "type": "string",
+                "default_value": "pending",
+                "description": "Status indicating whether the behavior determination process is complete."
+            }
+        ]
+    },
+    "4": {
+        "id": 4,
+        "from_agent_type": "SocialNormAgent",
+        "from_action_name": "evaluate_social_norms",
+        "to_agent_type": "CognitiveAgent",
+        "to_action_name": "calculate_behavioral_intentions",
+        "from_action_id": 4,
+        "to_action_id": 2,
+        "event_name": "SocialNormsEvaluatedEvent",
+        "event_info": "Social norms evaluation results sent to CognitiveAgent for intention calculation",
+        "fields": [
+            {
+                "name": "social_norms_score",
+                "type": "float",
+                "default_value": "0.0",
+                "description": "Score representing the influence of social norms on the agent's intentions."
+            }
+        ]
+    },
+    "5": {
+        "id": 5,
+        "from_agent_type": "SocialNormAgent",
+        "from_action_name": "adjust_subjective_norms",
+        "to_agent_type": "CognitiveAgent",
+        "to_action_name": "calculate_behavioral_intentions",
+        "from_action_id": 5,
+        "to_action_id": 2,
+        "event_name": "SubjectiveNormsAdjustedEvent",
+        "event_info": "Adjusted subjective norms sent to CognitiveAgent for intention recalculation",
+        "fields": [
+            {
+                "name": "adjusted_subjective_norms",
+                "type": "dict",
+                "default_value": "{}",
+                "description": "Dictionary containing adjusted values for subjective norms based on social influence."
+            }
+        ]
+    },
+    "6": {
+        "id": 6,
+        "from_agent_type": "EnvironmentalAgent",
+        "from_action_name": "assess_environmental_constraints",
+        "to_agent_type": "CognitiveAgent",
+        "to_action_name": "finalize_behavior",
+        "from_action_id": 6,
+        "to_action_id": 3,
+        "event_name": "ConstraintsAssessedEvent",
+        "event_info": "Environmental constraints assessed, results sent to CognitiveAgent to finalize behavior",
+        "fields": [
+            {
+                "name": "resource_availability",
+                "type": "float",
+                "default_value": "1.0",
+                "description": "Assessment of resources available to perform the intended behavior."
+            },
+            {
+                "name": "situational_constraints",
+                "type": "dict",
+                "default_value": "{}",
+                "description": "Dictionary containing evaluated situational constraints affecting behavior."
+            }
+        ]
+    }
+}

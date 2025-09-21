@@ -1,0 +1,96 @@
+{
+  "domain": "Psychology",
+  "scene_name": "emotional_contagion_model",
+  "odd_protocol": {
+    "overview": {
+      "system_goal": "Simulate the process of emotional contagion to study how emotions spread among individuals and affect the overall emotional atmosphere of a group.",
+      "agent_types": "Individual agents representing group members, each with an emotional state such as joy, sadness, or anger.",
+      "environment_description": "A social network structure where agents interact through various forms of communication, influencing each other's emotional states.",
+      "emotional_dynamics": "Focus on observing how emotions spread during social interactions and analyzing the dynamic process of emotional contagion.",
+      "system_assumptions": "Emotions can spread between individuals through social interactions, influencing behavior, speech, and decisions, thus affecting others' emotions."
+    },
+    "design_concepts": {
+      "interaction_patterns": "Agents transmit emotions through social interactions like face-to-face communication or social media messages.",
+      "communication_protocols": "Emotions are conveyed through speech, behavior, and facial expressions during interactions.",
+      "decision_mechanisms": "Agents adjust their emotional states based on interactions with others, influenced by factors such as frequency of contact and emotional intensity.",
+      "network_structure": "Social network density, connectivity, and node importance influence the effectiveness of emotional spread.",
+      "emotional_influence": "Closer social relationships may accelerate emotional contagion, while distant relationships may slow it down."
+    },
+    "details": {
+      "agent_behaviors": "Agents react emotionally based on initial states, which can be random or predefined, and adjust their emotions through interactions.",
+      "decision_algorithms": "Emotional state changes depend on interaction frequency, emotional intensity, and agents' sensitivity to emotional contagion.",
+      "specific_constraints": "Emotional transmission speed and intensity are affected by agents' susceptibility to emotional contagion and the frequency of social interactions.",
+      "simulation_process": "Initialize a social network with agents having initial emotional states, engage in interactions, adjust emotions, and record emotional spread dynamics.",
+      "agent_quantity": "Typically set between 100-1000 agents, e.g., 500 agents with varying emotional states and contagion sensitivity."
+    }
+  },
+  "agent_types": {
+    "IndividualAgent": "Represents a member of the group with an emotional state such as joy, sadness, or anger. Responsible for interacting with other agents and adjusting its emotional state based on social interactions.",
+    "CommunicationAgent": "Facilitates the transmission of emotions between agents through various forms of communication, including speech, behavior, and facial expressions.",
+    "DecisionAgent": "Determines how an agent's emotional state changes in response to interactions, influenced by factors such as frequency of contact and emotional intensity."
+  },
+  "portrait": {
+    "IndividualAgent": 5,
+    "CommunicationAgent": 4,
+    "DecisionAgent": 2
+  },
+  "metrics": [
+    {
+      "id": "Average_Emotional_Intensity",
+      "name": "Average Emotional Intensity",
+      "description": "Measures the average intensity of emotions communicated by agents in the system.",
+      "visualization_type": "line",
+      "update_interval": 5,
+      "variables": [
+        {
+          "name": "intensity",
+          "source_type": "agent",
+          "agent_type": "CommunicationAgent",
+          "path": "intensity",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Aggregate the 'intensity' values from all CommunicationAgent instances. Calculate the average by summing all non-None values and dividing by the count of non-None values. If the list is empty or contains only None values, default to zero. Handle type errors by skipping invalid entries.",
+      "function_name": "Average_Emotional_Intensity"
+    },
+    {
+      "id": "Emotional_State_Distribution",
+      "name": "Emotional State Distribution",
+      "description": "Shows the proportion of agents in different emotional states to understand the emotional atmosphere of the group.",
+      "visualization_type": "pie",
+      "update_interval": 5,
+      "variables": [
+        {
+          "name": "emotional_state",
+          "source_type": "agent",
+          "agent_type": "IndividualAgent",
+          "path": "emotional_state",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Count occurrences of each unique emotional state across all IndividualAgent instances. Ignore None values and treat type errors by skipping invalid entries. Calculate proportions by dividing the count of each emotional state by the total number of valid entries.",
+      "function_name": "Emotional_State_Distribution"
+    },
+    {
+      "id": "Contact_Frequency_Analysis",
+      "name": "Contact Frequency Analysis",
+      "description": "Evaluates the frequency of interactions between agents to assess communication patterns.",
+      "visualization_type": "bar",
+      "update_interval": 5,
+      "variables": [
+        {
+          "name": "frequency_of_contact",
+          "source_type": "agent",
+          "agent_type": "CommunicationAgent",
+          "path": "frequency_of_contact",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Aggregate the 'frequency_of_contact' values from all CommunicationAgent instances. Categorize frequencies into bins (e.g., low, medium, high). Sum frequencies within each bin, ignoring None values and handling type errors by skipping invalid entries. Present the sum for each category as bar heights.",
+      "function_name": "Contact_Frequency_Analysis"
+    }
+  ]
+}

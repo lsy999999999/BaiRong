@@ -1,0 +1,2702 @@
+[
+    {
+        "name": "ResourceAgentAlpha",
+        "resource_count": 0,
+        "strategy": "defensive",
+        "visibility": 3,
+        "communication_protocol": "HTTP/1.1",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "1"
+    },
+    {
+        "name": "ResourceAgentBeta",
+        "resource_count": 0,
+        "strategy": "cautious",
+        "visibility": 7,
+        "communication_protocol": "WebSocket",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "2"
+    },
+    {
+        "name": "ResourceAgentGamma",
+        "resource_count": 0,
+        "strategy": "cautious",
+        "visibility": 4,
+        "communication_protocol": "MQTT",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "3"
+    },
+    {
+        "name": "ResourceAgentDelta",
+        "resource_count": 0,
+        "strategy": "cautious",
+        "visibility": 6,
+        "communication_protocol": "CoAP",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "4"
+    },
+    {
+        "name": "ResourceAgentEpsilon",
+        "resource_count": 0,
+        "strategy": "cautious",
+        "visibility": 6,
+        "communication_protocol": "gRPC",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "5"
+    },
+    {
+        "name": "ResourceAgent01",
+        "resource_count": 0,
+        "strategy": "aggressive",
+        "visibility": 5,
+        "communication_protocol": "HTTP/1.1",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "6"
+    },
+    {
+        "name": "ResourceAgent02",
+        "resource_count": 0,
+        "strategy": "cautious",
+        "visibility": 4,
+        "communication_protocol": "WebSocket",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "7"
+    },
+    {
+        "name": "ResourceAgent03",
+        "resource_count": 0,
+        "strategy": "aggressive",
+        "visibility": 5,
+        "communication_protocol": "MQTT",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "8"
+    },
+    {
+        "name": "ResourceAgent04",
+        "resource_count": 0,
+        "strategy": "defensive",
+        "visibility": 3,
+        "communication_protocol": "CoAP",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "9"
+    },
+    {
+        "name": "ResourceAgent05",
+        "resource_count": 0,
+        "strategy": "cautious",
+        "visibility": 3,
+        "communication_protocol": "SMPP",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "10"
+    },
+    {
+        "name": "ResourceAgent06",
+        "resource_count": 0,
+        "strategy": "cautious",
+        "visibility": 5,
+        "communication_protocol": "XMPP",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "11"
+    },
+    {
+        "name": "ResourceAgent07",
+        "resource_count": 0,
+        "strategy": "defensive",
+        "visibility": 3,
+        "communication_protocol": "HTTP/2",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "12"
+    },
+    {
+        "name": "ResourceAgent08",
+        "resource_count": 0,
+        "strategy": "defensive",
+        "visibility": 7,
+        "communication_protocol": "AMQP",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "13"
+    },
+    {
+        "name": "ResourceAgent09",
+        "resource_count": 0,
+        "strategy": "cautious",
+        "visibility": 4,
+        "communication_protocol": "SMTP",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "14"
+    },
+    {
+        "name": "ResourceAgent10",
+        "resource_count": 0,
+        "strategy": "aggressive",
+        "visibility": 5,
+        "communication_protocol": "FTP",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "15"
+    },
+    {
+        "name": "AgentOne",
+        "resource_count": 0,
+        "strategy": "defensive",
+        "visibility": 5,
+        "communication_protocol": "HTTP",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "16"
+    },
+    {
+        "name": "ResourceFinder",
+        "resource_count": 0,
+        "strategy": "aggressive",
+        "visibility": 6,
+        "communication_protocol": "MQTT",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "17"
+    },
+    {
+        "name": "DataCollector",
+        "resource_count": 0,
+        "strategy": "cautious",
+        "visibility": 5,
+        "communication_protocol": "HTTPS",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "18"
+    },
+    {
+        "name": "NetworkMonitor",
+        "resource_count": 0,
+        "strategy": "cautious",
+        "visibility": 3,
+        "communication_protocol": "TCP",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "19"
+    },
+    {
+        "name": "StorageAgent",
+        "resource_count": 0,
+        "strategy": "defensive",
+        "visibility": 3,
+        "communication_protocol": "SFTP",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "20"
+    },
+    {
+        "name": "ComputeNode",
+        "resource_count": 0,
+        "strategy": "defensive",
+        "visibility": 3,
+        "communication_protocol": "SSH",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "21"
+    },
+    {
+        "name": "BackupService",
+        "resource_count": 0,
+        "strategy": "defensive",
+        "visibility": 6,
+        "communication_protocol": "FTP",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "22"
+    },
+    {
+        "name": "SecurityGuard",
+        "resource_count": 0,
+        "strategy": "aggressive",
+        "visibility": 6,
+        "communication_protocol": "SMTP",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "23"
+    },
+    {
+        "name": "LoadBalancer",
+        "resource_count": 0,
+        "strategy": "aggressive",
+        "visibility": 7,
+        "communication_protocol": "HTTP",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "24"
+    },
+    {
+        "name": "LogAnalyzer",
+        "resource_count": 0,
+        "strategy": "cautious",
+        "visibility": 3,
+        "communication_protocol": "HTTPS",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "25"
+    },
+    {
+        "name": "AgentZero",
+        "resource_count": 0,
+        "strategy": "defensive",
+        "visibility": 6,
+        "communication_protocol": "HTTP/2",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "26"
+    },
+    {
+        "name": "ResourceScout",
+        "resource_count": 0,
+        "strategy": "defensive",
+        "visibility": 6,
+        "communication_protocol": "MQTT",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "27"
+    },
+    {
+        "name": "DataHunter",
+        "resource_count": 0,
+        "strategy": "cautious",
+        "visibility": 5,
+        "communication_protocol": "WebSocket",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "28"
+    },
+    {
+        "name": "MinerBot",
+        "resource_count": 0,
+        "strategy": "aggressive",
+        "visibility": 3,
+        "communication_protocol": "RESTful API",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "29"
+    },
+    {
+        "name": "ResourceTracker",
+        "resource_count": 0,
+        "strategy": "defensive",
+        "visibility": 5,
+        "communication_protocol": "CoAP",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "30"
+    },
+    {
+        "name": "InfoSeeker",
+        "resource_count": 0,
+        "strategy": "aggressive",
+        "visibility": 7,
+        "communication_protocol": "XMPP",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "31"
+    },
+    {
+        "name": "SupplyMonitor",
+        "resource_count": 0,
+        "strategy": "cautious",
+        "visibility": 7,
+        "communication_protocol": "AMQP",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "32"
+    },
+    {
+        "name": "StockAnalyzer",
+        "resource_count": 0,
+        "strategy": "defensive",
+        "visibility": 7,
+        "communication_protocol": "SIP",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "33"
+    },
+    {
+        "name": "DemandForecaster",
+        "resource_count": 0,
+        "strategy": "aggressive",
+        "visibility": 4,
+        "communication_protocol": "DDS",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "34"
+    },
+    {
+        "name": "Harvester9000",
+        "resource_count": 0,
+        "strategy": "defensive",
+        "visibility": 7,
+        "communication_protocol": "Bluetooth",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "35"
+    },
+    {
+        "name": "AgentOne",
+        "resource_count": 0,
+        "strategy": "defensive",
+        "visibility": 7,
+        "communication_protocol": "HTTP",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "36"
+    },
+    {
+        "name": "ResourceFinder",
+        "resource_count": 0,
+        "strategy": "aggressive",
+        "visibility": 4,
+        "communication_protocol": "MQTT",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "37"
+    },
+    {
+        "name": "StorageAgent",
+        "resource_count": 0,
+        "strategy": "cautious",
+        "visibility": 6,
+        "communication_protocol": "SFTP",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "38"
+    },
+    {
+        "name": "BackupService",
+        "resource_count": 0,
+        "strategy": "defensive",
+        "visibility": 7,
+        "communication_protocol": "FTP",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "39"
+    },
+    {
+        "name": "SecurityGuard",
+        "resource_count": 0,
+        "strategy": "defensive",
+        "visibility": 6,
+        "communication_protocol": "SMTP",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "40"
+    },
+    {
+        "name": "LoadBalancer",
+        "resource_count": 0,
+        "strategy": "aggressive",
+        "visibility": 6,
+        "communication_protocol": "HTTP",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "41"
+    },
+    {
+        "name": "LogAnalyzer",
+        "resource_count": 0,
+        "strategy": "aggressive",
+        "visibility": 4,
+        "communication_protocol": "HTTPS",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "42"
+    },
+    {
+        "name": "ResourceAgentAlpha",
+        "resource_count": 0,
+        "strategy": "cautious",
+        "visibility": 5,
+        "communication_protocol": "HTTP/1.1",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "43"
+    },
+    {
+        "name": "ResourceAgentBeta",
+        "resource_count": 0,
+        "strategy": "aggressive",
+        "visibility": 3,
+        "communication_protocol": "WebSocket",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "44"
+    },
+    {
+        "name": "ResourceAgentGamma",
+        "resource_count": 0,
+        "strategy": "cautious",
+        "visibility": 4,
+        "communication_protocol": "MQTT",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "45"
+    },
+    {
+        "name": "ResourceAgentDelta",
+        "resource_count": 0,
+        "strategy": "defensive",
+        "visibility": 6,
+        "communication_protocol": "CoAP",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "46"
+    },
+    {
+        "name": "ResourceAgentEpsilon",
+        "resource_count": 0,
+        "strategy": "aggressive",
+        "visibility": 3,
+        "communication_protocol": "HTTP/2",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "47"
+    },
+    {
+        "name": "ResourceAgentZeta",
+        "resource_count": 0,
+        "strategy": "aggressive",
+        "visibility": 4,
+        "communication_protocol": "AMQP",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "48"
+    },
+    {
+        "name": "ResourceAgentEta",
+        "resource_count": 0,
+        "strategy": "aggressive",
+        "visibility": 3,
+        "communication_protocol": "XMPP",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "49"
+    },
+    {
+        "name": "ResourceAgentTheta",
+        "resource_count": 0,
+        "strategy": "defensive",
+        "visibility": 4,
+        "communication_protocol": "SSE",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "50"
+    },
+    {
+        "name": "ResourceAgentIota",
+        "resource_count": 0,
+        "strategy": "cautious",
+        "visibility": 4,
+        "communication_protocol": "QUIC",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "51"
+    },
+    {
+        "name": "ResourceAgentKappa",
+        "resource_count": 0,
+        "strategy": "defensive",
+        "visibility": 5,
+        "communication_protocol": "gRPC",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "52"
+    },
+    {
+        "name": "Agent1",
+        "resource_count": 0,
+        "strategy": "defensive",
+        "visibility": 6,
+        "communication_protocol": "HTTP",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "53"
+    },
+    {
+        "name": "Agent2",
+        "resource_count": 0,
+        "strategy": "aggressive",
+        "visibility": 4,
+        "communication_protocol": "MQTT",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "54"
+    },
+    {
+        "name": "Agent3",
+        "resource_count": 0,
+        "strategy": "defensive",
+        "visibility": 5,
+        "communication_protocol": "AMQP",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "55"
+    },
+    {
+        "name": "Agent4",
+        "resource_count": 0,
+        "strategy": "cautious",
+        "visibility": 5,
+        "communication_protocol": "SMTP",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "56"
+    },
+    {
+        "name": "Agent5",
+        "resource_count": 0,
+        "strategy": "defensive",
+        "visibility": 7,
+        "communication_protocol": "XMPP",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "57"
+    },
+    {
+        "name": "Agent6",
+        "resource_count": 0,
+        "strategy": "defensive",
+        "visibility": 6,
+        "communication_protocol": "CoAP",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "58"
+    },
+    {
+        "name": "Agent7",
+        "resource_count": 0,
+        "strategy": "defensive",
+        "visibility": 5,
+        "communication_protocol": "HTTP",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "59"
+    },
+    {
+        "name": "Agent8",
+        "resource_count": 0,
+        "strategy": "aggressive",
+        "visibility": 6,
+        "communication_protocol": "MQTT",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "60"
+    },
+    {
+        "name": "Agent9",
+        "resource_count": 0,
+        "strategy": "aggressive",
+        "visibility": 6,
+        "communication_protocol": "AMQP",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "61"
+    },
+    {
+        "name": "Agent10",
+        "resource_count": 0,
+        "strategy": "aggressive",
+        "visibility": 3,
+        "communication_protocol": "SMTP",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "62"
+    },
+    {
+        "name": "Agent11",
+        "resource_count": 0,
+        "strategy": "defensive",
+        "visibility": 6,
+        "communication_protocol": "XMPP",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "63"
+    },
+    {
+        "name": "Agent12",
+        "resource_count": 0,
+        "strategy": "aggressive",
+        "visibility": 4,
+        "communication_protocol": "CoAP",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "64"
+    },
+    {
+        "name": "Agent13",
+        "resource_count": 0,
+        "strategy": "defensive",
+        "visibility": 6,
+        "communication_protocol": "HTTP",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "65"
+    },
+    {
+        "name": "Agent14",
+        "resource_count": 0,
+        "strategy": "defensive",
+        "visibility": 6,
+        "communication_protocol": "MQTT",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "66"
+    },
+    {
+        "name": "Agent15",
+        "resource_count": 0,
+        "strategy": "defensive",
+        "visibility": 6,
+        "communication_protocol": "AMQP",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "67"
+    },
+    {
+        "name": "Agent16",
+        "resource_count": 0,
+        "strategy": "aggressive",
+        "visibility": 5,
+        "communication_protocol": "SMTP",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "68"
+    },
+    {
+        "name": "Agent17",
+        "resource_count": 0,
+        "strategy": "aggressive",
+        "visibility": 5,
+        "communication_protocol": "XMPP",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "69"
+    },
+    {
+        "name": "Agent18",
+        "resource_count": 0,
+        "strategy": "aggressive",
+        "visibility": 6,
+        "communication_protocol": "CoAP",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "70"
+    },
+    {
+        "name": "Agent19",
+        "resource_count": 0,
+        "strategy": "defensive",
+        "visibility": 3,
+        "communication_protocol": "HTTP",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "71"
+    },
+    {
+        "name": "Agent20",
+        "resource_count": 0,
+        "strategy": "defensive",
+        "visibility": 4,
+        "communication_protocol": "MQTT",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "72"
+    },
+    {
+        "name": "Agent21",
+        "resource_count": 0,
+        "strategy": "aggressive",
+        "visibility": 3,
+        "communication_protocol": "AMQP",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "73"
+    },
+    {
+        "name": "Agent22",
+        "resource_count": 0,
+        "strategy": "aggressive",
+        "visibility": 6,
+        "communication_protocol": "SMTP",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "74"
+    },
+    {
+        "name": "Agent23",
+        "resource_count": 0,
+        "strategy": "cautious",
+        "visibility": 6,
+        "communication_protocol": "XMPP",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "75"
+    },
+    {
+        "name": "Agent24",
+        "resource_count": 0,
+        "strategy": "aggressive",
+        "visibility": 6,
+        "communication_protocol": "CoAP",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "76"
+    },
+    {
+        "name": "Agent25",
+        "resource_count": 0,
+        "strategy": "aggressive",
+        "visibility": 5,
+        "communication_protocol": "HTTP",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "77"
+    },
+    {
+        "name": "Agent26",
+        "resource_count": 0,
+        "strategy": "cautious",
+        "visibility": 6,
+        "communication_protocol": "MQTT",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "78"
+    },
+    {
+        "name": "Agent27",
+        "resource_count": 0,
+        "strategy": "cautious",
+        "visibility": 7,
+        "communication_protocol": "AMQP",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "79"
+    },
+    {
+        "name": "Agent28",
+        "resource_count": 0,
+        "strategy": "cautious",
+        "visibility": 5,
+        "communication_protocol": "SMTP",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "80"
+    },
+    {
+        "name": "Agent29",
+        "resource_count": 0,
+        "strategy": "aggressive",
+        "visibility": 6,
+        "communication_protocol": "XMPP",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "81"
+    },
+    {
+        "name": "Agent30",
+        "resource_count": 0,
+        "strategy": "cautious",
+        "visibility": 7,
+        "communication_protocol": "CoAP",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "82"
+    },
+    {
+        "name": "Agent31",
+        "resource_count": 0,
+        "strategy": "aggressive",
+        "visibility": 3,
+        "communication_protocol": "HTTP",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "83"
+    },
+    {
+        "name": "Agent32",
+        "resource_count": 0,
+        "strategy": "cautious",
+        "visibility": 3,
+        "communication_protocol": "MQTT",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "84"
+    },
+    {
+        "name": "Agent33",
+        "resource_count": 0,
+        "strategy": "defensive",
+        "visibility": 7,
+        "communication_protocol": "AMQP",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "85"
+    },
+    {
+        "name": "Agent34",
+        "resource_count": 0,
+        "strategy": "defensive",
+        "visibility": 7,
+        "communication_protocol": "SMTP",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "86"
+    },
+    {
+        "name": "Agent35",
+        "resource_count": 0,
+        "strategy": "cautious",
+        "visibility": 7,
+        "communication_protocol": "XMPP",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "87"
+    },
+    {
+        "name": "Agent36",
+        "resource_count": 0,
+        "strategy": "cautious",
+        "visibility": 4,
+        "communication_protocol": "CoAP",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "88"
+    },
+    {
+        "name": "Agent37",
+        "resource_count": 0,
+        "strategy": "defensive",
+        "visibility": 7,
+        "communication_protocol": "HTTP",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "89"
+    },
+    {
+        "name": "Agent38",
+        "resource_count": 0,
+        "strategy": "defensive",
+        "visibility": 5,
+        "communication_protocol": "MQTT",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "90"
+    },
+    {
+        "name": "Agent39",
+        "resource_count": 0,
+        "strategy": "aggressive",
+        "visibility": 4,
+        "communication_protocol": "AMQP",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "91"
+    },
+    {
+        "name": "Agent40",
+        "resource_count": 0,
+        "strategy": "defensive",
+        "visibility": 4,
+        "communication_protocol": "SMTP",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "92"
+    },
+    {
+        "name": "Agent41",
+        "resource_count": 0,
+        "strategy": "cautious",
+        "visibility": 6,
+        "communication_protocol": "XMPP",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "93"
+    },
+    {
+        "name": "Agent42",
+        "resource_count": 0,
+        "strategy": "cautious",
+        "visibility": 4,
+        "communication_protocol": "CoAP",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "94"
+    },
+    {
+        "name": "Agent43",
+        "resource_count": 0,
+        "strategy": "cautious",
+        "visibility": 5,
+        "communication_protocol": "HTTP",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "95"
+    },
+    {
+        "name": "Agent44",
+        "resource_count": 0,
+        "strategy": "cautious",
+        "visibility": 3,
+        "communication_protocol": "MQTT",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "96"
+    },
+    {
+        "name": "Agent45",
+        "resource_count": 0,
+        "strategy": "cautious",
+        "visibility": 4,
+        "communication_protocol": "AMQP",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "97"
+    },
+    {
+        "name": "Agent46",
+        "resource_count": 0,
+        "strategy": "aggressive",
+        "visibility": 7,
+        "communication_protocol": "SMTP",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "98"
+    },
+    {
+        "name": "Agent47",
+        "resource_count": 0,
+        "strategy": "defensive",
+        "visibility": 6,
+        "communication_protocol": "XMPP",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "99"
+    },
+    {
+        "name": "Agent48",
+        "resource_count": 0,
+        "strategy": "cautious",
+        "visibility": 3,
+        "communication_protocol": "CoAP",
+        "agent_type": "ResourceMiner",
+        "map_state": [
+            {
+                "cell_id": 1,
+                "resources_available": 3,
+                "owner": "none"
+            }
+        ],
+        "action_plan": {
+            "action": "awaiting",
+            "target_cell": 0
+        },
+        "energy_level": 100,
+        "investment_history": [
+            {
+                "round": 1,
+                "investment": 10
+            }
+        ],
+        "id": "100"
+    }
+]

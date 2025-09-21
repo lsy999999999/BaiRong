@@ -1,0 +1,823 @@
+{
+  "agents": {
+    "AuctionPlatform": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "1": {
+          "code": "async def initialize_auction(self, event: Event) -> List[Event]:\n        mechanism_type = self.profile.get_data(\"mechanism_type\", \"default\")\n        fee_structure = self.profile.get_data(\"fee_structure\", \"default\")\n        transparency_level = self.profile.get_data(\"transparency_level\", \"default\")\n        market_conditions = event.market_conditions\n\n        instruction = \"\"\"\n        You are tasked with initializing a new auction. Use the following data:\n        Mechanism Type: {mechanism_type}\n        Fee Structure: {fee_structure}\n        Transparency Level: {transparency_level}\n        Market Conditions: {market_conditions}\n    \n        Please generate the auction details including a unique auction_id and update the active_auctions list.\n        Return the response in the following JSON format:\n    \n        {\n            \"auction_id\": \"<Unique identifier for the auction>\",\n            \"mechanism_type\": \"<Type of auction mechanism>\",\n            \"fee_structure\": \"<Fee structure applicable>\",\n            \"transparency_level\": \"<Transparency level>\",\n            \"target_ids\": [\"<List of target agent IDs to send events to>\"]\n        }\n        \"\"\".format(\n            mechanism_type=mechanism_type,\n            fee_structure=fee_structure,\n            transparency_level=transparency_level,\n            market_conditions=market_conditions\n        )\n\n        result = await self.generate_reaction(instruction)\n\n        auction_id = result.get('auction_id', None)\n        mechanism_type = result.get('mechanism_type', None)\n        fee_structure = result.get('fee_structure', None)\n        transparency_level = result.get('transparency_level', None)\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        if not target_ids:\n            return []\n\n        active_auctions = self.profile.get_data(\"active_auctions\", [])\n        active_auctions.append({\n            \"auction_id\": auction_id,\n            \"mechanism_type\": mechanism_type,\n            \"fee_structure\": fee_structure,\n            \"transparency_level\": transparency_level\n        })\n        self.profile.update_data(\"active_auctions\", active_auctions)\n\n        events = []\n        for target_id in target_ids:\n            auction_event = AuctionInitializedEvent(\n                self.profile_id, target_id, auction_id, mechanism_type, fee_structure, transparency_level\n            )\n            events.append(auction_event)\n\n        return events",
+          "metadata": {
+            "id": 1,
+            "name": "initialize_auction",
+            "condition": null,
+            "description": "Set up and configure a new auction based on predefined settings and environmental factors.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "mechanism_type",
+                "type": "str",
+                "context": "agent",
+                "description": "Type of auction mechanism to be used."
+              },
+              {
+                "name": "fee_structure",
+                "type": "str",
+                "context": "agent",
+                "description": "Fee structure applicable for the auction."
+              },
+              {
+                "name": "transparency_level",
+                "type": "str",
+                "context": "agent",
+                "description": "Level of transparency for the auction."
+              },
+              {
+                "name": "market_conditions",
+                "type": "dict",
+                "context": "env",
+                "description": "Current market conditions including liquidity, volatility, and asymmetry."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "active_auctions",
+                "type": "list",
+                "context": "agent",
+                "description": "List of currently active auctions, updated with the new auction."
+              }
+            ]
+          }
+        },
+        "2": {
+          "code": "async def receive_bid(self, event: Event) -> List[Event]:\n        bid_id = event.bid_id\n        bid_amount = event.bid_amount\n        buyer_id = event.buyer_id\n\n        bids = self.profile.get_data(\"bids\", [])\n        bids.append({\"bid_id\": bid_id, \"bid_amount\": bid_amount, \"buyer_id\": buyer_id})\n        self.profile.update_data(\"bids\", bids)\n\n        observation = f\"Received bid with ID: {bid_id}, Amount: {bid_amount}, Buyer ID: {buyer_id}\"\n        instruction = \"\"\"You have received a bid and need to confirm its receipt. \n        The confirmation should include the bid_id, bid_amount, and buyer_id. \n        Additionally, determine the appropriate target_ids for further processing of this bid.\n        Return the information in the following JSON format:\n\n        {\n            \"confirmation\": \"Bid received with ID: <bid_id>, Amount: <bid_amount>, Buyer ID: <buyer_id>\",\n            \"target_ids\": [\"<The string ID of the AuctionPlatform for processing>\"]\n        }\n        \"\"\"\n\n        result = await self.generate_reaction(instruction, observation)\n\n        confirmation = result.get('confirmation', None)\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        events = []\n        for target_id in target_ids:\n            bid_received_event = BidReceivedEvent(self.profile_id, target_id, bid_id=bid_id, bid_amount=bid_amount, buyer_id=buyer_id)\n            events.append(bid_received_event)\n\n        return events",
+          "metadata": {
+            "id": 2,
+            "name": "receive_bid",
+            "condition": null,
+            "description": "Receive a bid from a buyer and prepare it for processing.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "bid_id",
+                "type": "str",
+                "context": "event",
+                "description": "Unique identifier for the bid."
+              },
+              {
+                "name": "bid_amount",
+                "type": "float",
+                "context": "event",
+                "description": "Amount of the bid placed."
+              },
+              {
+                "name": "buyer_id",
+                "type": "str",
+                "context": "event",
+                "description": "Identifier for the buyer placing the bid."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "bids",
+                "type": "list",
+                "context": "agent",
+                "description": "List of bids received, updated with the new bid."
+              }
+            ]
+          }
+        },
+        "3": {
+          "code": "async def set_reserve_price(self, event: Event) -> List[Event]:\n        if event.__class__.__name__ != \"SetReservePriceEvent\":\n            return []\n\n        reserve_price = event.reserve_price\n        auction_id = event.auction_id\n\n        auction_details = self.profile.get_data(\"auction_details\", {})\n        auction_details[auction_id] = {\n            \"reserve_price\": reserve_price\n        }\n        self.profile.update_data(\"auction_details\", auction_details)\n\n        instruction = \"\"\"Please determine the appropriate target(s) for the ReservePriceSetEvent based on the updated auction details.\n        Return the information in the following JSON format:\n\n        {\n        \"target_ids\": [\"<The string ID(s) of the target agent(s)>\"]\n        }\n        \"\"\"\n        observation = f\"Updated auction details: {auction_details}\"\n        result = await self.generate_reaction(instruction, observation)\n\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        events = []\n        for target_id in target_ids:\n            reserve_price_set_event = ReservePriceSetEvent(self.profile_id, target_id, auction_id, reserve_price)\n            events.append(reserve_price_set_event)\n\n        return events",
+          "metadata": {
+            "id": 3,
+            "name": "set_reserve_price",
+            "condition": null,
+            "description": "Set the reserve price for an auction based on seller input.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "reserve_price",
+                "type": "float",
+                "context": "event",
+                "description": "Reserve price set for the auction."
+              },
+              {
+                "name": "auction_id",
+                "type": "str",
+                "context": "event",
+                "description": "Unique identifier for the auction."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "auction_details",
+                "type": "dict",
+                "context": "agent",
+                "description": "Details of the auction, updated with the reserve price."
+              }
+            ]
+          }
+        },
+        "4": {
+          "code": "async def influence_market_conditions(self, event: Event) -> List[Event]:\n        speculator_id = event.speculator_id\n        influence_strategy = event.influence_strategy\n\n        market_volatility = await self.get_env_data(\"market_volatility\", 0.0)\n        information_asymmetry = await self.get_env_data(\"information_asymmetry\", 0.0)\n\n        instruction = \"\"\"\n        Adjust the market conditions based on the speculator's actions and strategy. \n        Consider how the influence strategy impacts market volatility and information asymmetry. \n        Please return the updated market conditions and specify target_ids for the MarketConditionChangedEvent. \n        The response should be in the following JSON format:\n\n        {\n        \"market_conditions\": {\n            \"market_volatility\": <Updated market volatility>,\n            \"information_asymmetry\": <Updated information asymmetry>\n        },\n        \"target_ids\": [\"<The string ID(s) of the AuctionPlatform agent(s)>\"]\n        }\n        \"\"\"\n    \n        observation = f\"Speculator ID: {speculator_id}, Influence Strategy: {influence_strategy}, \" \\\n                      f\"Current Market Volatility: {market_volatility}, Information Asymmetry: {information_asymmetry}\"\n\n        result = await self.generate_reaction(instruction, observation)\n\n        updated_market_conditions = result.get('market_conditions', {})\n        market_volatility = updated_market_conditions.get('market_volatility', market_volatility)\n        information_asymmetry = updated_market_conditions.get('information_asymmetry', information_asymmetry)\n        target_ids = result.get('target_ids', [])\n\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        self.env.update_data(\"market_volatility\", market_volatility)\n        self.env.update_data(\"information_asymmetry\", information_asymmetry)\n\n        events = []\n        for target_id in target_ids:\n            market_condition_event = MarketConditionChangedEvent(\n                self.profile_id, target_id, market_volatility, information_asymmetry\n            )\n            events.append(market_condition_event)\n\n        return events",
+          "metadata": {
+            "id": 4,
+            "name": "influence_market_conditions",
+            "condition": null,
+            "description": "Adjust market conditions based on speculator actions to influence auction dynamics.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "market_volatility",
+                "type": "float",
+                "context": "event",
+                "description": "Current market volatility affecting the auction."
+              },
+              {
+                "name": "information_asymmetry",
+                "type": "float",
+                "context": "event",
+                "description": "Level of information asymmetry in the market."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "market_conditions",
+                "type": "dict",
+                "context": "env",
+                "description": "Current market conditions, updated with new volatility and asymmetry levels."
+              }
+            ]
+          }
+        },
+        "5": {
+          "code": "async def process_bid(self, event: Event) -> List[Event]:\n        if event.__class__.__name__ == \"BidReceivedEvent\":\n            self.profile.update_data(\"BidReceivedEvent\", True)\n            self.profile.update_data(\"bid_id\", event.bid_id)\n            self.profile.update_data(\"bid_amount\", event.bid_amount)\n            self.profile.update_data(\"buyer_id\", event.buyer_id)\n        elif event.__class__.__name__ == \"ReservePriceSetEvent\":\n            self.profile.update_data(\"ReservePriceSetEvent\", True)\n            self.profile.update_data(\"auction_id\", event.auction_id)\n            self.profile.update_data(\"reserve_price\", event.reserve_price)\n    \n        bid_received = self.profile.get_data(\"BidReceivedEvent\", False)\n        reserve_price_set = self.profile.get_data(\"ReservePriceSetEvent\", False)\n\n        if not (bid_received and reserve_price_set):\n            return []\n\n        bid_id = self.profile.get_data(\"bid_id\", \"\")\n        bid_amount = self.profile.get_data(\"bid_amount\", 0.0)\n        reserve_price = self.profile.get_data(\"reserve_price\", 0.0)\n        auction_id = self.profile.get_data(\"auction_id\", \"\")\n\n        eligible_bids = self.profile.get_data(\"eligible_bids\", [])\n        if bid_amount >= reserve_price:\n            eligible_bids.append(bid_id)\n            self.profile.update_data(\"eligible_bids\", eligible_bids)\n\n        observation = f\"Bid ID: {bid_id}, Bid Amount: {bid_amount}, Reserve Price: {reserve_price}, Auction ID: {auction_id}\"\n        instruction = \"\"\"Determine the eligible bids and prepare for auction finalization. \n        Ensure to return the eligible bids and auction_id in the following JSON format:\n        {\n            \"eligible_bids\": [\"<List of eligible bid IDs>\"],\n            \"auction_id\": \"<The auction ID>\",\n            \"target_ids\": [\"<The string ID(s) of the AuctionPlatform agent(s) for finalization>\"]\n        }\n        \"\"\"\n    \n        result = await self.generate_reaction(instruction, observation)\n    \n        eligible_bids = result.get('eligible_bids', [])\n        auction_id = result.get('auction_id', auction_id)\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Reset flags after processing\n        self.profile.update_data(\"BidReceivedEvent\", False)\n        self.profile.update_data(\"ReservePriceSetEvent\", False)\n        self.profile.update_data(\"eligible_bids\", [])  # Reset eligible bids for new auction\n\n        events = []\n        for target_id in target_ids:\n            bidding_event = BiddingEligibilityConfirmedEvent(self.profile_id, target_id, eligible_bids, auction_id)\n            events.append(bidding_event)\n\n        # Store events as dictionaries for finalization condition\n        self.profile.update_data(\"BiddingEligibilityConfirmedEvent\", {\n            \"eligible_bids\": eligible_bids,\n            \"auction_id\": auction_id\n        })\n\n        return events",
+          "metadata": {
+            "id": 5,
+            "name": "process_bid",
+            "condition": "BidReceivedEvent and ReservePriceSetEvent",
+            "description": "Process received bids and determine their eligibility based on auction rules.",
+            "type": "AND",
+            "required_variables": [
+              {
+                "name": "bid_id",
+                "type": "str",
+                "context": "event",
+                "description": "Unique identifier for the bid."
+              },
+              {
+                "name": "bid_amount",
+                "type": "float",
+                "context": "event",
+                "description": "Amount of the bid placed."
+              },
+              {
+                "name": "reserve_price",
+                "type": "float",
+                "context": "event",
+                "description": "Reserve price set for the auction."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "eligible_bids",
+                "type": "list",
+                "context": "agent",
+                "description": "List of bids that meet auction criteria."
+              }
+            ]
+          }
+        },
+        "6": {
+          "code": "async def adjust_bidding_process(self, event: Event) -> List[Event]:\n        market_volatility = event.market_volatility\n        information_asymmetry = event.information_asymmetry\n    \n        instruction = \"\"\"\n        Please adjust the bidding rules based on the current market conditions.\n        Consider the market volatility and information asymmetry to determine the adjustments needed.\n        Return the information in the following JSON format:\n\n        {\n        \"bidding_rules\": {\"<rule_name>\": \"<rule_value>\", ...},\n        \"adjustment_reason\": \"<Reason for the adjustment>\",\n        \"auction_id\": \"<Unique identifier for the auction>\",\n        \"target_ids\": [\"<The string ID of the AuctionPlatform agent(s)>\"]\n        }\n        \"\"\"\n        observation = f\"Market Volatility: {market_volatility}, Information Asymmetry: {information_asymmetry}\"\n    \n        result = await self.generate_reaction(instruction, observation)\n    \n        bidding_rules = result.get('bidding_rules', {})\n        adjustment_reason = result.get('adjustment_reason', \"\")\n        auction_id = result.get('auction_id', \"\")\n        target_ids = result.get('target_ids', [])\n    \n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n    \n        self.profile.update_data(\"bidding_rules\", bidding_rules)\n    \n        events = []\n        for target_id in target_ids:\n            adjusted_event = BiddingProcessAdjustedEvent(\n                self.profile_id, target_id, adjustment_reason=adjustment_reason, auction_id=auction_id\n            )\n            events.append(adjusted_event)\n\n        # Store events as dictionaries for finalization condition\n        self.profile.update_data(\"BiddingProcessAdjustedEvent\", {\n            \"adjustment_reason\": adjustment_reason,\n            \"auction_id\": auction_id\n        })\n    \n        return events",
+          "metadata": {
+            "id": 6,
+            "name": "adjust_bidding_process",
+            "condition": null,
+            "description": "Adjust the bidding process based on changes in market conditions.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "market_volatility",
+                "type": "float",
+                "context": "event",
+                "description": "Current market volatility affecting the auction."
+              },
+              {
+                "name": "information_asymmetry",
+                "type": "float",
+                "context": "event",
+                "description": "Level of information asymmetry in the market."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "bidding_rules",
+                "type": "dict",
+                "context": "agent",
+                "description": "Rules governing the bidding process, adjusted for current conditions."
+              }
+            ]
+          }
+        },
+        "7": {
+          "code": "async def finalize_auction(self, event: Event) -> List[Event]:\n        bidding_eligibility_event = self.profile.get_data(\"BiddingEligibilityConfirmedEvent\", None)\n        bidding_process_adjusted_event = self.profile.get_data(\"BiddingProcessAdjustedEvent\", None)\n\n        if not bidding_eligibility_event or not bidding_process_adjusted_event:\n            return []\n\n        eligible_bids = bidding_eligibility_event.get(\"eligible_bids\", [])\n        auction_id = bidding_eligibility_event.get(\"auction_id\", \"\")\n\n        if not eligible_bids or not auction_id:\n            return []\n\n        observation = f\"Auction ID: {auction_id}, Eligible Bids: {eligible_bids}\"\n        instruction = \"\"\"Finalize the auction based on the eligible bids. \n        Return the auction outcome in the following JSON format:\n        {\n            \"auction_outcome\": {\n                \"winner\": \"<ID of the winning bidder>\",\n                \"final_price\": \"<Final price of the auction>\"\n            },\n            \"target_ids\": [\"ENV\"]\n        }\n        \"\"\"\n        result = await self.generate_reaction(instruction, observation)\n\n        auction_outcome = result.get(\"auction_outcome\", {})\n        target_ids = result.get(\"target_ids\", [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        self.profile.update_data(\"auction_outcome\", auction_outcome)\n\n        # Reset the profile data related to these events\n        self.profile.update_data(\"BiddingEligibilityConfirmedEvent\", None)\n        self.profile.update_data(\"BiddingProcessAdjustedEvent\", None)\n\n        events = []\n        for target_id in target_ids:\n            auction_outcome_event = AuctionOutcomeEvent(\n                self.profile_id,\n                target_id,\n                auction_id=auction_id,\n                outcome=str(auction_outcome),\n                completion_status=\"completed\"\n            )\n            events.append(auction_outcome_event)\n\n        return events",
+          "metadata": {
+            "id": 7,
+            "name": "finalize_auction",
+            "condition": "All bids processed and bidding process adjusted",
+            "description": "Finalize the auction and determine the outcome based on processed bids.",
+            "type": "AND",
+            "required_variables": [
+              {
+                "name": "eligible_bids",
+                "type": "list",
+                "context": "agent",
+                "description": "List of bids that meet auction criteria."
+              },
+              {
+                "name": "auction_id",
+                "type": "str",
+                "context": "event",
+                "description": "Unique identifier for the auction."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "auction_outcome",
+                "type": "dict",
+                "context": "agent",
+                "description": "Outcome of the auction, including winner and final price."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "Buyer": {
+      "imports": "from typing import Any, List, Optional\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "8": {
+          "code": "async def evaluate_auction(self, event: Event) -> List[Event]:\n        # Retrieve necessary data from the event and agent profile\n        auction_id = event.auction_id\n        mechanism_type = event.mechanism_type\n        fee_structure = event.fee_structure\n        transparency_level = event.transparency_level\n        private_value = self.profile.get_data(\"private_value\", 0.0)\n\n        # Formulate the instruction for decision making\n        instruction = f\"\"\"Evaluate the auction details and decide whether to place a bid. \n        Consider the following auction parameters:\n        - Auction ID: {auction_id}\n        - Mechanism Type: {mechanism_type}\n        - Fee Structure: {fee_structure}\n        - Transparency Level: {transparency_level}\n        - Your Private Value: {private_value}\n\n        Please return the decision in the following JSON format:\n        {{\n            \"bidding_decision\": <true/false>,\n            \"bid_amount\": <float, mandatory if bidding_decision is true>,\n            \"target_ids\": [\"<The string ID(s) of the AuctionPlatform(s)>\"]\n        }}\n        \"\"\"\n\n        # Generate reaction using the LLM\n        result = await self.generate_reaction(instruction)\n\n        # Parse the LLM's response\n        bidding_decision = result.get('bidding_decision', False)\n        bid_amount = result.get('bid_amount', None)\n        target_ids = result.get('target_ids', None)\n\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Update the agent's profile with the bidding decision\n        self.profile.update_data(\"bidding_decision\", bidding_decision)\n\n        events = []\n        if bidding_decision:\n            # Validate bid_amount to ensure it's a positive float\n            if bid_amount is None or not isinstance(bid_amount, float) or bid_amount <= 0.0:\n                logger.error(\"Bid amount must be a positive float if bidding_decision is true.\")\n                return []\n\n            for target_id in target_ids:\n                # Create a unique bid_id (simple example using auction_id and buyer_id)\n                bid_id = f\"{self.profile_id}_{auction_id}\"\n                # Prepare the BidDecisionEvent\n                bid_event = BidDecisionEvent(\n                    from_agent_id=self.profile_id,\n                    to_agent_id=target_id,\n                    buyer_id=self.profile_id,\n                    bid_amount=bid_amount,\n                    auction_id=auction_id,\n                    bid_id=bid_id\n                )\n                events.append(bid_event)\n\n        return events",
+          "metadata": {
+            "id": 8,
+            "name": "evaluate_auction",
+            "condition": null,
+            "description": "Evaluate auction details and decide whether to place a bid.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "auction_id",
+                "type": "str",
+                "context": "event",
+                "description": "Unique identifier for the auction."
+              },
+              {
+                "name": "mechanism_type",
+                "type": "str",
+                "context": "event",
+                "description": "Type of auction mechanism being used."
+              },
+              {
+                "name": "fee_structure",
+                "type": "str",
+                "context": "event",
+                "description": "Fee structure applicable for the auction."
+              },
+              {
+                "name": "transparency_level",
+                "type": "str",
+                "context": "event",
+                "description": "Level of transparency for the auction."
+              },
+              {
+                "name": "private_value",
+                "type": "float",
+                "context": "agent",
+                "description": "Buyer's private valuation of the auction item."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "bidding_decision",
+                "type": "bool",
+                "context": "agent",
+                "description": "Decision on whether to place a bid."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "Seller": {
+      "imports": "from typing import Any, List,Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "9": {
+          "code": "async def evaluate_auction(self, event: Event) -> List[Event]:\n        # Retrieve necessary data from the event and agent profile\n        auction_id = event.auction_id\n        mechanism_type = event.mechanism_type\n        fee_structure = event.fee_structure\n        transparency_level = event.transparency_level\n        production_cost = self.profile.get_data(\"production_cost\", 0.0)\n\n        # Prepare observation and instruction for LLM decision making\n        observation = f\"\"\"Auction ID: {auction_id}, Mechanism Type: {mechanism_type}, Fee Structure: {fee_structure}, Transparency Level: {transparency_level}, Production Cost: {production_cost}\"\"\"\n        instruction = \"\"\"Evaluate the auction details to set an appropriate reserve price. Ensure the reserve price is above the production cost. Return the information in the following JSON format:\n\n        {\n        \"reserve_price_decision\": <Calculated reserve price>,\n        \"target_ids\": [\"<Target agent ID or list of IDs>\"]\n        }\n        \"\"\"\n\n        # Generate reaction using LLM\n        result = await self.generate_reaction(instruction, observation)\n\n        # Extract reserve price decision and target IDs from the result\n        reserve_price_decision = result.get('reserve_price_decision', production_cost)\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Update the agent's profile with the new reserve price decision\n        self.profile.update_data(\"reserve_price_decision\", reserve_price_decision)\n\n        # Prepare and send SetReservePriceEvent to each target\n        events = []\n        for target_id in target_ids:\n            reserve_price_event = SetReservePriceEvent(self.profile_id, target_id, reserve_price_decision, auction_id)\n            events.append(reserve_price_event)\n\n        return events",
+          "metadata": {
+            "id": 9,
+            "name": "evaluate_auction",
+            "condition": null,
+            "description": "Evaluate auction details to set appropriate reserve price.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "auction_id",
+                "type": "str",
+                "context": "event",
+                "description": "Unique identifier for the auction."
+              },
+              {
+                "name": "mechanism_type",
+                "type": "str",
+                "context": "event",
+                "description": "Type of auction mechanism being used."
+              },
+              {
+                "name": "fee_structure",
+                "type": "str",
+                "context": "event",
+                "description": "Fee structure applicable for the auction."
+              },
+              {
+                "name": "transparency_level",
+                "type": "str",
+                "context": "event",
+                "description": "Level of transparency for the auction."
+              },
+              {
+                "name": "production_cost",
+                "type": "float",
+                "context": "agent",
+                "description": "Cost of producing the item being auctioned."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "reserve_price_decision",
+                "type": "float",
+                "context": "agent",
+                "description": "Decided reserve price for the auction."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "Speculator": {
+      "imports": "from typing import Any, List,Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "10": {
+          "code": "async def evaluate_auction(self, event: Event) -> List[Event]:\n        # Retrieve required variables from event and agent profile\n        auction_id = event.auction_id\n        mechanism_type = event.mechanism_type\n        fee_structure = event.fee_structure\n        transparency_level = event.transparency_level\n        capital = self.profile.get_data(\"capital\", 0.0)\n\n        # Define instruction for generating reaction\n        instruction = \"\"\"\n        Evaluate the auction details provided in the observation to decide on an influence strategy.\n        Use the auction_id, mechanism_type, fee_structure, transparency_level, and capital. \n        Return the decision in the following JSON format:\n        {\n            \"influence_strategy\": \"<Chosen strategy for influencing the market>\",\n            \"target_ids\": [\"<The string ID of the AuctionPlatform agent>\"]\n        }\n        \"\"\"\n    \n        # Set observation context\n        observation = f\"Auction ID: {auction_id}, Mechanism Type: {mechanism_type}, Fee Structure: {fee_structure}, Transparency Level: {transparency_level}, Capital: {capital}\"\n\n        # Generate reaction using LLM\n        result = await self.generate_reaction(instruction, observation)\n\n        # Extract influence strategy and target IDs from the result\n        influence_strategy = result.get('influence_strategy', None)\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Prepare and send MarketInfluenceEvent(s) to the AuctionPlatform\n        events = []\n        for target_id in target_ids:\n            influence_event = MarketInfluenceEvent(self.profile_id, target_id, influence_strategy)\n            events.append(influence_event)\n\n        return events",
+          "metadata": {
+            "id": 10,
+            "name": "evaluate_auction",
+            "condition": null,
+            "description": "Evaluate auction details to decide on market influence strategy.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "auction_id",
+                "type": "str",
+                "context": "event",
+                "description": "Unique identifier for the auction."
+              },
+              {
+                "name": "mechanism_type",
+                "type": "str",
+                "context": "event",
+                "description": "Type of auction mechanism being used."
+              },
+              {
+                "name": "fee_structure",
+                "type": "str",
+                "context": "event",
+                "description": "Fee structure applicable for the auction."
+              },
+              {
+                "name": "transparency_level",
+                "type": "str",
+                "context": "event",
+                "description": "Level of transparency for the auction."
+              },
+              {
+                "name": "capital",
+                "type": "float",
+                "context": "agent",
+                "description": "Speculator's available capital for market influence."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "influence_strategy",
+                "type": "str",
+                "context": "agent",
+                "description": "Chosen strategy for influencing the market."
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "events": {
+    "imports": "from onesim.events import Event\nfrom typing import Dict, List, Any",
+    "definitions": {
+      "-1": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        market_conditions: dict = {},\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.market_conditions = market_conditions",
+        "metadata": {
+          "id": -1,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "AuctionPlatform",
+          "to_action_name": "initialize_auction",
+          "from_action_id": 0,
+          "to_action_id": 1,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for auction setup",
+          "fields": [
+            {
+              "name": "market_conditions",
+              "type": "dict",
+              "default_value": {},
+              "description": "Current market conditions affecting auction setup."
+            }
+          ]
+        }
+      },
+      "1": {
+        "code": "class AuctionInitializedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        auction_id: str = \"\",\n        mechanism_type: str = \"\",\n        fee_structure: str = \"\",\n        transparency_level: str = \"\",\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.auction_id = auction_id\n        self.mechanism_type = mechanism_type\n        self.fee_structure = fee_structure\n        self.transparency_level = transparency_level",
+        "metadata": {
+          "id": 1,
+          "from_agent_type": "AuctionPlatform",
+          "from_action_name": "initialize_auction",
+          "to_agent_type": "Buyer",
+          "to_action_name": "evaluate_auction",
+          "from_action_id": 1,
+          "to_action_id": 8,
+          "event_name": "AuctionInitializedEvent",
+          "event_info": "Announce auction details to buyers for evaluation",
+          "fields": [
+            {
+              "name": "auction_id",
+              "type": "str",
+              "default_value": "",
+              "description": "Unique identifier for the auction"
+            },
+            {
+              "name": "mechanism_type",
+              "type": "str",
+              "default_value": "",
+              "description": "Type of auction mechanism being used"
+            },
+            {
+              "name": "fee_structure",
+              "type": "str",
+              "default_value": "",
+              "description": "Fee structure applicable for the auction"
+            },
+            {
+              "name": "transparency_level",
+              "type": "str",
+              "default_value": "",
+              "description": "Level of transparency for the auction"
+            }
+          ]
+        }
+      },
+      "2": {
+        "code": "class AuctionInitializedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        auction_id: str = \"\",\n        mechanism_type: str = \"\",\n        fee_structure: str = \"\",\n        transparency_level: str = \"\",\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.auction_id = auction_id\n        self.mechanism_type = mechanism_type\n        self.fee_structure = fee_structure\n        self.transparency_level = transparency_level",
+        "metadata": {
+          "id": 2,
+          "from_agent_type": "AuctionPlatform",
+          "from_action_name": "initialize_auction",
+          "to_agent_type": "Seller",
+          "to_action_name": "evaluate_auction",
+          "from_action_id": 1,
+          "to_action_id": 9,
+          "event_name": "AuctionInitializedEvent",
+          "event_info": "Announce auction details to sellers for evaluation",
+          "fields": [
+            {
+              "name": "auction_id",
+              "type": "str",
+              "default_value": "",
+              "description": "Unique identifier for the auction"
+            },
+            {
+              "name": "mechanism_type",
+              "type": "str",
+              "default_value": "",
+              "description": "Type of auction mechanism being used"
+            },
+            {
+              "name": "fee_structure",
+              "type": "str",
+              "default_value": "",
+              "description": "Fee structure applicable for the auction"
+            },
+            {
+              "name": "transparency_level",
+              "type": "str",
+              "default_value": "",
+              "description": "Level of transparency for the auction"
+            }
+          ]
+        }
+      },
+      "3": {
+        "code": "class AuctionInitializedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        auction_id: str = \"\",\n        mechanism_type: str = \"\",\n        fee_structure: str = \"\",\n        transparency_level: str = \"\",\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.auction_id = auction_id\n        self.mechanism_type = mechanism_type\n        self.fee_structure = fee_structure\n        self.transparency_level = transparency_level",
+        "metadata": {
+          "id": 3,
+          "from_agent_type": "AuctionPlatform",
+          "from_action_name": "initialize_auction",
+          "to_agent_type": "Speculator",
+          "to_action_name": "evaluate_auction",
+          "from_action_id": 1,
+          "to_action_id": 10,
+          "event_name": "AuctionInitializedEvent",
+          "event_info": "Announce auction details to speculators for evaluation",
+          "fields": [
+            {
+              "name": "auction_id",
+              "type": "str",
+              "default_value": "",
+              "description": "Unique identifier for the auction"
+            },
+            {
+              "name": "mechanism_type",
+              "type": "str",
+              "default_value": "",
+              "description": "Type of auction mechanism being used"
+            },
+            {
+              "name": "fee_structure",
+              "type": "str",
+              "default_value": "",
+              "description": "Fee structure applicable for the auction"
+            },
+            {
+              "name": "transparency_level",
+              "type": "str",
+              "default_value": "",
+              "description": "Level of transparency for the auction"
+            }
+          ]
+        }
+      },
+      "4": {
+        "code": "class BidReceivedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        bid_id: str = \"\",\n        bid_amount: float = 0.0,\n        buyer_id: str = \"\",\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.bid_id = bid_id\n        self.bid_amount = bid_amount\n        self.buyer_id = buyer_id",
+        "metadata": {
+          "id": 4,
+          "from_agent_type": "AuctionPlatform",
+          "from_action_name": "receive_bid",
+          "to_agent_type": "AuctionPlatform",
+          "to_action_name": "process_bid",
+          "from_action_id": 2,
+          "to_action_id": 5,
+          "event_name": "BidReceivedEvent",
+          "event_info": "Process incoming bid",
+          "fields": [
+            {
+              "name": "bid_id",
+              "type": "str",
+              "default_value": "",
+              "description": "Unique identifier for the bid"
+            },
+            {
+              "name": "bid_amount",
+              "type": "float",
+              "default_value": 0.0,
+              "description": "Amount of the bid placed"
+            },
+            {
+              "name": "buyer_id",
+              "type": "str",
+              "default_value": "",
+              "description": "Identifier for the buyer placing the bid"
+            }
+          ]
+        }
+      },
+      "6": {
+        "code": "class MarketConditionChangedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        market_volatility: float = 0.0,\n        information_asymmetry: float = 0.0,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.market_volatility = market_volatility\n        self.information_asymmetry = information_asymmetry",
+        "metadata": {
+          "id": 6,
+          "from_agent_type": "AuctionPlatform",
+          "from_action_name": "influence_market_conditions",
+          "to_agent_type": "AuctionPlatform",
+          "to_action_name": "adjust_bidding_process",
+          "from_action_id": 4,
+          "to_action_id": 6,
+          "event_name": "MarketConditionChangedEvent",
+          "event_info": "Adjust bidding process based on speculator influence",
+          "fields": [
+            {
+              "name": "market_volatility",
+              "type": "float",
+              "default_value": 0.0,
+              "description": "Current market volatility affecting the auction"
+            },
+            {
+              "name": "information_asymmetry",
+              "type": "float",
+              "default_value": 0.0,
+              "description": "Level of information asymmetry in the market"
+            }
+          ]
+        }
+      },
+      "7": {
+        "code": "class BiddingEligibilityConfirmedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        eligible_bids: List[Any] = [],\n        auction_id: str = \"\",\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.eligible_bids = eligible_bids\n        self.auction_id = auction_id",
+        "metadata": {
+          "id": 7,
+          "from_agent_type": "AuctionPlatform",
+          "from_action_name": "process_bid",
+          "to_agent_type": "AuctionPlatform",
+          "to_action_name": "finalize_auction",
+          "from_action_id": 5,
+          "to_action_id": 7,
+          "event_name": "BiddingEligibilityConfirmedEvent",
+          "event_info": "Bids processed and eligible, ready for auction finalization",
+          "fields": [
+            {
+              "name": "eligible_bids",
+              "type": "list",
+              "default_value": [],
+              "description": "List of eligible bids"
+            },
+            {
+              "name": "auction_id",
+              "type": "str",
+              "default_value": "",
+              "description": "Unique identifier for the auction"
+            }
+          ]
+        }
+      },
+      "8": {
+        "code": "class BiddingProcessAdjustedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        adjustment_reason: str = \"\",\n        auction_id: str = \"\",\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.adjustment_reason = adjustment_reason\n        self.auction_id = auction_id",
+        "metadata": {
+          "id": 8,
+          "from_agent_type": "AuctionPlatform",
+          "from_action_name": "adjust_bidding_process",
+          "to_agent_type": "AuctionPlatform",
+          "to_action_name": "finalize_auction",
+          "from_action_id": 6,
+          "to_action_id": 7,
+          "event_name": "BiddingProcessAdjustedEvent",
+          "event_info": "Bidding process adjusted, ready for auction finalization",
+          "fields": [
+            {
+              "name": "adjustment_reason",
+              "type": "str",
+              "default_value": "",
+              "description": "Reason for adjusting the bidding process"
+            },
+            {
+              "name": "auction_id",
+              "type": "str",
+              "default_value": "",
+              "description": "Unique identifier for the auction"
+            }
+          ]
+        }
+      },
+      "9": {
+        "code": "class AuctionOutcomeEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        auction_id: str = \"\",\n        outcome: str = \"\",\n        completion_status: str = 'completed',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.auction_id = auction_id\n        self.outcome = outcome\n        self.completion_status = completion_status",
+        "metadata": {
+          "id": 9,
+          "from_agent_type": "AuctionPlatform",
+          "from_action_name": "finalize_auction",
+          "to_agent_type": "EnvAgent",
+          "to_action_name": "terminate",
+          "from_action_id": 7,
+          "to_action_id": -1,
+          "event_name": "AuctionOutcomeEvent",
+          "event_info": "Auction outcome determined and sent for termination",
+          "fields": [
+            {
+              "name": "auction_id",
+              "type": "str",
+              "default_value": "",
+              "description": "Unique identifier for the auction"
+            },
+            {
+              "name": "outcome",
+              "type": "str",
+              "default_value": "",
+              "description": "Outcome of the auction (e.g., winner, final price)"
+            },
+            {
+              "name": "completion_status",
+              "type": "str",
+              "default_value": "completed",
+              "description": "Status of auction completion"
+            }
+          ]
+        }
+      },
+      "10": {
+        "code": "class BidDecisionEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        buyer_id: str = \"\",\n        bid_amount: float = 0.0,\n        auction_id: str = \"\",\n        bid_id: str = \"\",\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.buyer_id = buyer_id\n        self.bid_amount = bid_amount\n        self.auction_id = auction_id\n        self.bid_id = bid_id",
+        "metadata": {
+          "id": 10,
+          "from_agent_type": "Buyer",
+          "from_action_name": "evaluate_auction",
+          "to_agent_type": "AuctionPlatform",
+          "to_action_name": "receive_bid",
+          "from_action_id": 8,
+          "to_action_id": 2,
+          "event_name": "BidDecisionEvent",
+          "event_info": "Submit bid based on auction details and strategy",
+          "fields": [
+            {
+              "name": "buyer_id",
+              "type": "str",
+              "default_value": "",
+              "description": "Identifier for the buyer making the bid decision"
+            },
+            {
+              "name": "bid_amount",
+              "type": "float",
+              "default_value": 0.0,
+              "description": "Amount decided for the bid"
+            },
+            {
+              "name": "auction_id",
+              "type": "str",
+              "default_value": "",
+              "description": "Unique identifier for the auction"
+            },
+            {
+              "name": "bid_id",
+              "type": "str",
+              "default_value": "",
+              "description": "Unique identifier for the bid"
+            }
+          ]
+        }
+      },
+      "11": {
+        "code": "class SetReservePriceEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        seller_id: str = \"\",\n        reserve_price: float = 0.0,\n        auction_id: str = \"\",\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.seller_id = seller_id\n        self.reserve_price = reserve_price\n        self.auction_id = auction_id",
+        "metadata": {
+          "id": 11,
+          "from_agent_type": "Seller",
+          "from_action_name": "evaluate_auction",
+          "to_agent_type": "AuctionPlatform",
+          "to_action_name": "set_reserve_price",
+          "from_action_id": 9,
+          "to_action_id": 3,
+          "event_name": "SetReservePriceEvent",
+          "event_info": "Set reserve price based on auction details",
+          "fields": [
+            {
+              "name": "seller_id",
+              "type": "str",
+              "default_value": "",
+              "description": "Identifier for the seller setting the reserve price"
+            },
+            {
+              "name": "reserve_price",
+              "type": "float",
+              "default_value": 0.0,
+              "description": "Reserve price set by the seller"
+            },
+            {
+              "name": "auction_id",
+              "type": "str",
+              "default_value": "",
+              "description": "Unique identifier for the auction"
+            }
+          ]
+        }
+      },
+      "12": {
+        "code": "class MarketInfluenceEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        speculator_id: str = \"\",\n        influence_strategy: str = \"\",\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.speculator_id = speculator_id\n        self.influence_strategy = influence_strategy",
+        "metadata": {
+          "id": 12,
+          "from_agent_type": "Speculator",
+          "from_action_name": "evaluate_auction",
+          "to_agent_type": "AuctionPlatform",
+          "to_action_name": "influence_market_conditions",
+          "from_action_id": 10,
+          "to_action_id": 4,
+          "event_name": "MarketInfluenceEvent",
+          "event_info": "Speculator attempts to influence auction outcomes",
+          "fields": [
+            {
+              "name": "speculator_id",
+              "type": "str",
+              "default_value": "",
+              "description": "Identifier for the speculator attempting to influence the market"
+            },
+            {
+              "name": "influence_strategy",
+              "type": "str",
+              "default_value": "",
+              "description": "Strategy used by the speculator to influence the market"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,77 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Voter",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's designation in the polling system"
+    },
+    "selected_voter_id": {
+        "type": "str",
+        "default": "awaiting_selection",
+        "private": true,
+        "sampling": "default"
+    },
+    "expressed_preferences": {
+        "type": "object",
+        "default": {
+            "policy": "undecided",
+            "candidate": "undecided"
+        },
+        "private": false,
+        "sampling": "default"
+    },
+    "trust_level": {
+        "type": "int",
+        "default": 50,
+        "private": false,
+        "sampling": "default"
+    },
+    "interaction_history": {
+        "type": "list",
+        "default": [
+            {
+                "pollster_id": "P1",
+                "interaction_outcome": "neutral"
+            }
+        ],
+        "private": true,
+        "sampling": "default",
+        "sample_size": 1
+    },
+    "current_status": {
+        "type": "str",
+        "default": "ready",
+        "private": false,
+        "sampling": "default"
+    },
+    "age": {
+        "type": "int",
+        "default": 30,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            18,
+            80
+        ]
+    },
+    "political_affiliation": {
+        "type": "str",
+        "default": "independent",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "democrat",
+            "republican",
+            "independent",
+            "other"
+        ]
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

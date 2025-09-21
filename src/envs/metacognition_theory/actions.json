@@ -1,0 +1,188 @@
+{
+    "TaskExecutor": [
+        {
+            "id": 1,
+            "name": "initiate_task",
+            "condition": null,
+            "description": "The TaskExecutor begins the execution of a specified task, setting the stage for subsequent cognitive reflection and strategy adjustment.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "task_id",
+                    "type": "str",
+                    "context": "env",
+                    "description": "Unique identifier for the task being executed."
+                },
+                {
+                    "name": "task_details",
+                    "type": "str",
+                    "context": "env",
+                    "description": "Description of the task to be executed."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "task_status",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Current status of the task being executed, initially set to 'in_progress'."
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "name": "reflect_on_process",
+            "condition": null,
+            "description": "The TaskExecutor reflects on its cognitive processes during task execution, identifying strengths and areas for improvement.",
+            "type": "AND",
+            "required_variables": [
+                {
+                    "name": "observation_data",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Data collected during the observation of the task execution."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "reflection_summary",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Summary of the reflection on cognitive processes."
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "name": "adjust_strategy",
+            "condition": null,
+            "description": "The TaskExecutor adjusts its task strategy based on feedback received, aiming to enhance performance and efficiency.",
+            "type": "AND",
+            "required_variables": [
+                {
+                    "name": "feedback_details",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Details of the feedback provided to the Task Executor."
+                },
+                {
+                    "name": "recommendations",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Recommendations for strategy adjustments."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "strategy_changes",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Description of the adjustments made to the strategy."
+                },
+                {
+                    "name": "adjustment_reason",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Reason for the strategy adjustment based on feedback."
+                }
+            ]
+        }
+    ],
+    "Monitor": [
+        {
+            "id": 4,
+            "name": "observe_task",
+            "condition": null,
+            "description": "The Monitor observes the TaskExecutor's performance, collecting data to be used for feedback and reflection.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "task_id",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Unique identifier for the task being observed."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "observation_data",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Data collected during the observation of the task execution."
+                }
+            ]
+        },
+        {
+            "id": 5,
+            "name": "provide_feedback",
+            "condition": null,
+            "description": "The Monitor provides feedback to the TaskExecutor based on observations, suggesting potential strategy adjustments.",
+            "type": "AND",
+            "required_variables": [
+                {
+                    "name": "reflection_summary",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Summary of the reflection on cognitive processes."
+                },
+                {
+                    "name": "feedback_requested",
+                    "type": "bool",
+                    "context": "event",
+                    "description": "Indicator if feedback is requested from the Monitor."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "feedback_details",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Details of the feedback provided to the Task Executor."
+                },
+                {
+                    "name": "recommendations",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Recommendations for strategy adjustments."
+                }
+            ]
+        }
+    ],
+    "Evaluator": [
+        {
+            "id": 6,
+            "name": "analyze_performance",
+            "condition": null,
+            "description": "The Evaluator analyzes the overall performance of the TaskExecutor, assessing the effectiveness of the strategies employed.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "strategy_changes",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Description of the adjustments made to the strategy."
+                },
+                {
+                    "name": "adjustment_reason",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Reason for the strategy adjustment based on feedback."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "performance_summary",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Summary of the performance analysis."
+                },
+                {
+                    "name": "completion_status",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Status of the task completion."
+                }
+            ]
+        }
+    ]
+}

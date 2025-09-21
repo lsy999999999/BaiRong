@@ -1,0 +1,565 @@
+{
+  "agents": {
+    "Individual": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.relationship import RelationshipManager\nfrom onesim.events import *\nfrom .events import *",
+      "handlers": {
+        "1": {
+          "code": "async def perceive_risk(self, event: Event) -> List[Event]:\n        # No specific condition for perceive_risk action, always proceed\n        information_sources = self.profile.get_data(\"information_sources\", [])\n        personal_experiences = self.profile.get_data(\"personal_experiences\", {})\n    \n        instruction = f\"\"\"\n        The individual with ID {self.profile_id} is assessing their risk of infection based on personal experiences and external information sources.\n        Please update their risk perception value based on the provided information_sources and personal_experiences.\n        Please return the updated risk perception value and the target_ids in the following JSON format:\n    \n        {{\n        \"risk_perception\": \"<Updated risk perception value>\",\n        \"target_ids\": [\"<The string ID of the individual>\"]\n        }}\n        \"\"\"\n        result = await self.generate_reaction(instruction, observation=None)\n        \n        risk_perception = result.get('risk_perception', None)\n        target_ids = result.get('target_ids', [self.profile_id])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n    \n        self.profile.update_data(\"risk_perception\", risk_perception)\n    \n        events = []\n        for target_id in target_ids:\n            risk_perception_event = RiskPerceptionUpdatedEvent(self.profile_id, target_id, risk_perception=risk_perception, information_sources=information_sources)\n            events.append(risk_perception_event)\n    \n        return events",
+          "metadata": {
+            "id": 1,
+            "name": "perceive_risk",
+            "condition": "null",
+            "description": "The action where an individual assesses their risk of infection based on personal experiences and external information sources.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "information_sources",
+                "type": "list",
+                "context": "agent",
+                "description": "List of information sources that the individual uses to assess risk."
+              },
+              {
+                "name": "personal_experiences",
+                "type": "dict",
+                "context": "agent",
+                "description": "Personal experiences that influence the individual's risk perception."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "risk_perception",
+                "type": "float",
+                "context": "agent",
+                "description": "Updated risk perception value for the individual."
+              }
+            ]
+          }
+        },
+        "2": {
+          "code": "async def adjust_behavior(self, event: Event) -> List[Event]:\n        if not isinstance(event, RiskPerceptionUpdatedEvent):\n            return []\n        \n        risk_perception = event.risk_perception\n        individual_id = event.individual_id\n        information_sources = event.information_sources\n        \n        instruction = f\"\"\"\n        An individual with ID {individual_id} has updated their risk perception to {risk_perception} based on the information sources: {information_sources}.\n        Adjust their behavior accordingly and provide a list of behavior changes.\n        Return the behavior changes in the following JSON format:\n    \n        {{\n            \"target_ids\": [\"<The string ID of the affected entities>\"],\n            \"behavior_changes\": [\"<List of behavior changes made by the individual>\"]\n        }}\n        \"\"\"\n        \n        result = await self.generate_reaction(instruction)\n        target_ids = result.get('target_ids', [])\n        behavior_changes = result.get('behavior_changes', [])\n        \n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n        \n        events = []\n        for target_id in target_ids:\n            if target_id == \"ENV\":\n                continue\n            event_data = {\n                \"individual_id\": individual_id,\n                \"healthcare_facility_id\": self.profile.get_data(\"healthcare_facility_id\", 0),\n                \"household_id\": self.profile.get_data(\"household_id\", 0),\n                \"behavior_changes\": behavior_changes\n            }\n            if target_id.startswith(\"HH\"):\n                events.append(BehaviorAdjustedEvent(self.profile_id, target_id, **event_data))\n            elif target_id.startswith(\"HF\"):\n                events.append(BehaviorAdjustedEvent(self.profile_id, target_id, **event_data))\n            else:\n                events.append(BehaviorAdjustedEvent(self.profile_id, target_id, **event_data))\n        \n        return events",
+          "metadata": {
+            "id": 2,
+            "name": "adjust_behavior",
+            "condition": "RiskPerceptionUpdatedEvent received",
+            "description": "The action where an individual modifies their behavior (e.g., social distancing, seeking healthcare) based on updated risk perception.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "risk_perception",
+                "type": "float",
+                "context": "event",
+                "description": "The updated risk perception that triggers behavior adjustment."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "behavior_changes",
+                "type": "list",
+                "context": "agent",
+                "description": "List of behavior changes made by the individual."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "PublicHealthAuthority": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "3": {
+          "code": "async def evaluate_epidemiological_data(self, event: Event) -> List[Event]:\n        # Retrieve epidemiological data from environment\n        epidemiological_data = await self.get_env_data(\"epidemiological_data\", {})\n    \n        # Generate reaction to determine intervention strategies\n        instruction = f\"\"\"\n        The public health authority needs to evaluate the current state of the epidemic based on the provided epidemiological data.\n        Please return a list of potential intervention strategies in the following JSON format:\n        \n        {{\n            \"intervention_strategies\": [\"<List of intervention strategies>\"],\n            \"target_ids\": [\"<The string ID of the PublicHealthAuthority agent>\"]\n        }}\n        \"\"\"\n        result = await self.generate_reaction(instruction, observation=epidemiological_data)\n        \n        # Update agent's profile with intervention strategies\n        intervention_strategies = result.get('intervention_strategies', [])\n        self.profile.update_data(\"intervention_strategies\", intervention_strategies)\n        \n        # Prepare target_ids for event sending\n        target_ids = result.get('target_ids', [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n    \n        # Create and send EpidemiologicalDataEvaluatedEvent\n        events = []\n        for target_id in target_ids:\n            evaluated_event = EpidemiologicalDataEvaluatedEvent(self.profile_id, target_id, public_health_authority_id=int(self.profile_id), epidemiological_data=epidemiological_data)\n            events.append(evaluated_event)\n        \n        return events",
+          "metadata": {
+            "id": 3,
+            "name": "evaluate_epidemiological_data",
+            "condition": "null",
+            "description": "The action where public health authorities analyze epidemiological data to determine the current state of the epidemic.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "epidemiological_data",
+                "type": "dict",
+                "context": "env",
+                "description": "Data concerning the current state of the epidemic, including infection rates and transmission dynamics."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "intervention_strategies",
+                "type": "list",
+                "context": "agent",
+                "description": "List of potential intervention strategies based on evaluated data."
+              }
+            ]
+          }
+        },
+        "4": {
+          "code": "async def deploy_interventions(self, event: Event) -> List[Event]:\n        if event.__class__.__name__ != \"EpidemiologicalDataEvaluatedEvent\":\n            return []\n\n        # Ensure intervention_type is not None before proceeding\n        instruction = f\"\"\"\n        The PublicHealthAuthority agent has received an EpidemiologicalDataEvaluatedEvent. \n        Based on the evaluated data, please determine and return the intervention strategies to be deployed. \n        The response should be in the following JSON format:\n        \n        {{\n        \"intervention_type\": \"<Type of intervention to be deployed>\",\n        \"target_ids\": [\"<List of target IDs for the intervention>\"]\n        }}\n        \n        Ensure that the intervention types and target IDs are strategic and effective for controlling the disease spread.\n        \"\"\"\n        result = await self.generate_reaction(instruction, observation=event.epidemiological_data)\n        intervention_type = result.get('intervention_type', None)\n        if not intervention_type:\n            return []\n\n        target_ids = result.get('target_ids', [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        active_interventions = self.profile.get_data(\"active_interventions\", [])\n        active_interventions.extend([(intervention_type, target_id) for target_id in target_ids])\n        self.profile.update_data(\"active_interventions\", active_interventions)\n    \n        events = []\n        for target_id in target_ids:\n            intervention_deployed_event = InterventionDeployedEvent(\n                self.profile_id, \n                target_id, \n                public_health_authority_id=int(self.profile_id), \n                intervention_type=intervention_type, \n                target_individual_id=target_id\n            )\n            events.append(intervention_deployed_event)\n        \n        return events",
+          "metadata": {
+            "id": 4,
+            "name": "deploy_interventions",
+            "condition": "EpidemiologicalDataEvaluatedEvent received",
+            "description": "The action where public health authorities implement intervention strategies to control the spread of the disease.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "intervention_strategies",
+                "type": "list",
+                "context": "event",
+                "description": "List of intervention strategies determined from epidemiological evaluations."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "active_interventions",
+                "type": "list",
+                "context": "agent",
+                "description": "List of interventions currently being deployed."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "Household": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.relationship import RelationshipManager\nfrom onesim.events import *\nfrom .events import *",
+      "handlers": {
+        "5": {
+          "code": "async def update_quarantine_status(self, event: Event) -> List[Event]:\n        if event.__class__.__name__ != \"BehaviorAdjustedEvent\":\n            return []\n        \n        behavior_changes = event.behavior_changes\n        household_id = event.household_id\n\n        instruction = f\"\"\"\n        The household with ID {household_id} has received a BehaviorAdjustedEvent from one of its members.\n        The event contains the following behavior changes: {behavior_changes}.\n        Based on these changes, determine if the household's quarantine status should be updated.\n        Please return the new quarantine status and the target IDs (which should be the household ID) in the following JSON format:\n\n        {{\n            \"quarantine_status\": \"<The new quarantine status of the household>\",\n            \"target_ids\": [\"<The household ID>\"]\n        }}\n        \"\"\"\n        \n        result = await self.generate_reaction(instruction)\n        quarantine_status = result.get('quarantine_status', None)\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n        \n        if not target_ids:  # Check if target_ids is empty\n            return []\n        \n        events = []\n        for target_id in target_ids:\n            if target_id != 'ENV':\n                quarantine_event = QuarantineStatusUpdatedEvent(self.profile_id, target_id, household_id=household_id, quarantine_status=quarantine_status)\n                events.append(quarantine_event)\n        \n        return events",
+          "metadata": {
+            "id": 5,
+            "name": "update_quarantine_status",
+            "condition": "BehaviorAdjustedEvent received",
+            "description": "The action where a household updates its quarantine status based on the behavior of its members.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "behavior_changes",
+                "type": "list",
+                "context": "event",
+                "description": "List of behavior changes in household members that might affect quarantine status."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "quarantine_status",
+                "type": "str",
+                "context": "agent",
+                "description": "Updated quarantine status of the household."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "HealthcareFacility": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "6": {
+          "code": "async def provide_healthcare_services(self, event: Event) -> List[Event]:\n        # Ensure the event is of type 'BehaviorAdjustedEvent'\n        if not isinstance(event, BehaviorAdjustedEvent):\n            return []\n\n        # Access required variables from the event\n        individual_id = event.individual_id\n        behavior_changes = event.behavior_changes\n\n        # Access and update agent's current occupancy\n        current_occupancy = self.profile.get_data(\"current_occupancy\", 0)\n        capacity = self.profile.get_data(\"capacity\", 0)\n        if current_occupancy < capacity:\n            new_occupancy = current_occupancy + 1\n            self.profile.update_data(\"current_occupancy\", new_occupancy)\n        else:\n            return []\n\n        # Prepare instruction for the LLM to decide on target_ids and service type\n        observation = f\"Healthcare facility current occupancy: {new_occupancy}, behavior changes: {behavior_changes}\"\n        instruction = \"\"\"You are managing a healthcare facility providing services to individuals. \n        Based on the current occupancy and behavior changes, determine the type of healthcare service provided. \n        Also, decide the target_ids for sending the HealthcareServiceProvidedEvent. \n        The target_ids should be a single string ID or a list of IDs, with 'ENV' as the target_id for terminal events.\n        Please return the information in the following JSON format:\n\n        {\n        \"service_type\": \"<Type of healthcare service provided>\",\n        \"target_ids\": [\"<The string ID of the target agent(s)>\"]\n        }\n        \"\"\"\n\n        # Generate reaction from the LLM\n        result = await self.generate_reaction(instruction, observation)\n        service_type = result.get('service_type', \"\")\n        target_ids = result.get('target_ids', [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Create and send the HealthcareServiceProvidedEvent to each target_id\n        events = []\n        for target_id in target_ids:\n            healthcare_event = HealthcareServiceProvidedEvent(\n                from_agent_id=self.profile_id,\n                to_agent_id=target_id,\n                healthcare_facility_id=self.profile_id,\n                service_type=service_type,\n                completion_status=\"completed\"\n            )\n            events.append(healthcare_event)\n\n        return events",
+          "metadata": {
+            "id": 6,
+            "name": "provide_healthcare_services",
+            "condition": "BehaviorAdjustedEvent received",
+            "description": "The action where a healthcare facility provides medical services to individuals seeking care.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "individual_needs",
+                "type": "dict",
+                "context": "event",
+                "description": "Details of healthcare needs for the individual seeking services."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "current_occupancy",
+                "type": "int",
+                "context": "agent",
+                "description": "Updated number of patients currently being treated at the facility."
+              }
+            ]
+          }
+        },
+        "7": {
+          "code": "async def allocate_resources(self, event: Event) -> List[Event]:\n        if not isinstance(event, InterventionDeployedEvent):\n            return []\n\n        intervention_type = event.intervention_type\n        targeted_healthcare_facility_id = event.healthcare_facility_id\n\n        # Generate reaction to decide on resource allocation and target healthcare facilities\n        instruction = f\"\"\"\n        The healthcare facility needs to allocate resources based on the intervention type received.\n        The intervention type is: {intervention_type}\n        \n        Please return the target_ids, which can be a single ID or a list of IDs, indicating which healthcare facilities should respond to the intervention.\n        Additionally, provide the resources_allocated dictionary detailing the allocation of resources and the completion_status of the resource allocation process.\n        The JSON response should be in the following format:\n        {{\n            \"target_ids\": [\"<Healthcare facility ID(s)>\"],\n            \"resources_allocated\": {{<Resource allocation details as a dictionary>}},\n            \"completion_status\": \"<Status of the resource allocation process>\"\n        }}\n        \"\"\"\n\n        result = await self.generate_reaction(instruction)\n        target_ids = result.get('target_ids', [])\n        resources_allocated = result.get('resources_allocated', {})\n        completion_status = result.get('completion_status', 'completed')\n\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        events = []\n        for target_id in target_ids:\n            if target_id:\n                # Update the resource level for the targeted healthcare facility\n                targeted_profile = self.relationship_manager.get_agent_by_id(target_id)\n                if targeted_profile:\n                    targeted_profile.update_data(\"resource_level\", resources_allocated)\n\n                    # Send ResourcesAllocatedEvent to the environment agent\n                    resources_allocated_event = ResourcesAllocatedEvent(\n                        from_agent_id=self.profile_id,\n                        to_agent_id=target_id,\n                        healthcare_facility_id=targeted_healthcare_facility_id,\n                        resources_allocated=resources_allocated,\n                        completion_status=completion_status\n                    )\n                    events.append(resources_allocated_event)\n\n        return events",
+          "metadata": {
+            "id": 7,
+            "name": "allocate_resources",
+            "condition": "InterventionDeployedEvent received",
+            "description": "The action where a healthcare facility allocates resources in response to public health interventions.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "intervention_requirements",
+                "type": "dict",
+                "context": "event",
+                "description": "Resource requirements dictated by public health interventions."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "resource_level",
+                "type": "dict",
+                "context": "agent",
+                "description": "Updated levels of resources available at the facility."
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "events": {
+    "imports": "from onesim.events import Event\nfrom typing import Dict, List, Any        \nfrom datetime import datetime",
+    "definitions": {
+      "1": {
+        "code": "class RiskPerceptionUpdatedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        individual_id: int = 0,\n        risk_perception: float = 0.0,\n        information_sources: List[Any] = [],\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.individual_id = individual_id\n        self.risk_perception = risk_perception\n        self.information_sources = information_sources",
+        "metadata": {
+          "id": 1,
+          "from_agent_type": "Individual",
+          "from_action_name": "perceive_risk",
+          "to_agent_type": "Individual",
+          "to_action_name": "adjust_behavior",
+          "from_action_id": 1,
+          "to_action_id": 2,
+          "event_name": "RiskPerceptionUpdatedEvent",
+          "event_info": "Individual updates risk perception based on information sources and personal experiences",
+          "fields": [
+            {
+              "name": "individual_id",
+              "type": "int",
+              "default_value": "0",
+              "description": "Unique identifier for the individual whose risk perception is updated"
+            },
+            {
+              "name": "risk_perception",
+              "type": "float",
+              "default_value": "0.0",
+              "description": "Updated risk perception value for the individual"
+            },
+            {
+              "name": "information_sources",
+              "type": "list",
+              "default_value": "[]",
+              "description": "List of information sources that influenced the risk perception update"
+            }
+          ]
+        }
+      },
+      "2": {
+        "code": "class BehaviorAdjustedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        individual_id: int = 0,\n        healthcare_facility_id: int = 0,\n        household_id: int = 0,\n        behavior_changes: List[Any] = [],\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.individual_id = individual_id\n        self.healthcare_facility_id = healthcare_facility_id\n        self.household_id = household_id\n        self.behavior_changes = behavior_changes",
+        "metadata": {
+          "id": 2,
+          "from_agent_type": "Individual",
+          "from_action_name": "adjust_behavior",
+          "to_agent_type": "HealthcareFacility",
+          "to_action_name": "provide_healthcare_services",
+          "from_action_id": 2,
+          "to_action_id": 6,
+          "event_name": "BehaviorAdjustedEvent",
+          "event_info": "Individual adjusts behavior, seeks healthcare services if necessary",
+          "fields": [
+            {
+              "name": "individual_id",
+              "type": "int",
+              "default_value": "0",
+              "description": "Unique identifier for the individual adjusting behavior"
+            },
+            {
+              "name": "healthcare_facility_id",
+              "type": "int",
+              "default_value": "0",
+              "description": "Identifier for the healthcare facility, if healthcare services are sought"
+            },
+            {
+              "name": "household_id",
+              "type": "int",
+              "default_value": "0",
+              "description": "Identifier for the household affected by the individual's behavior adjustment"
+            },
+            {
+              "name": "behavior_changes",
+              "type": "list",
+              "default_value": "[]",
+              "description": "List of behavior changes made by the individual"
+            }
+          ]
+        }
+      },
+      "3": {
+        "code": "class BehaviorAdjustedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        individual_id: int = 0,\n        healthcare_facility_id: int = 0,\n        household_id: int = 0,\n        behavior_changes: List[Any] = [],\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.individual_id = individual_id\n        self.healthcare_facility_id = healthcare_facility_id\n        self.household_id = household_id\n        self.behavior_changes = behavior_changes",
+        "metadata": {
+          "id": 3,
+          "from_agent_type": "Individual",
+          "from_action_name": "adjust_behavior",
+          "to_agent_type": "Household",
+          "to_action_name": "update_quarantine_status",
+          "from_action_id": 2,
+          "to_action_id": 5,
+          "event_name": "BehaviorAdjustedEvent",
+          "event_info": "Individual's behavior adjustment affects household quarantine status",
+          "fields": [
+            {
+              "name": "individual_id",
+              "type": "int",
+              "default_value": "0",
+              "description": "Unique identifier for the individual adjusting behavior"
+            },
+            {
+              "name": "healthcare_facility_id",
+              "type": "int",
+              "default_value": "0",
+              "description": "Identifier for the healthcare facility, if healthcare services are sought"
+            },
+            {
+              "name": "household_id",
+              "type": "int",
+              "default_value": "0",
+              "description": "Identifier for the household affected by the individual's behavior adjustment"
+            },
+            {
+              "name": "behavior_changes",
+              "type": "list",
+              "default_value": "[]",
+              "description": "List of behavior changes made by the individual"
+            }
+          ]
+        }
+      },
+      "4": {
+        "code": "class EpidemiologicalDataEvaluatedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        public_health_authority_id: int = 0,\n        epidemiological_data: dict = {},\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.public_health_authority_id = public_health_authority_id\n        self.epidemiological_data = epidemiological_data",
+        "metadata": {
+          "id": 4,
+          "from_agent_type": "PublicHealthAuthority",
+          "from_action_name": "evaluate_epidemiological_data",
+          "to_agent_type": "PublicHealthAuthority",
+          "to_action_name": "deploy_interventions",
+          "from_action_id": 3,
+          "to_action_id": 4,
+          "event_name": "EpidemiologicalDataEvaluatedEvent",
+          "event_info": "Public health authority evaluates data to determine intervention strategies",
+          "fields": [
+            {
+              "name": "public_health_authority_id",
+              "type": "int",
+              "default_value": "0",
+              "description": "Identifier for the public health authority evaluating the data"
+            },
+            {
+              "name": "epidemiological_data",
+              "type": "dict",
+              "default_value": "{}",
+              "description": "Data evaluated to determine intervention strategies"
+            }
+          ]
+        }
+      },
+      "5": {
+        "code": "class InterventionDeployedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        public_health_authority_id: int = 0,\n        intervention_type: str = \"\",\n        target_individual_id: int = 0,\n        healthcare_facility_id: int = 0,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.public_health_authority_id = public_health_authority_id\n        self.intervention_type = intervention_type\n        self.target_individual_id = target_individual_id\n        self.healthcare_facility_id = healthcare_facility_id",
+        "metadata": {
+          "id": 5,
+          "from_agent_type": "PublicHealthAuthority",
+          "from_action_name": "deploy_interventions",
+          "to_agent_type": "Individual",
+          "to_action_name": "perceive_risk",
+          "from_action_id": 4,
+          "to_action_id": 1,
+          "event_name": "InterventionDeployedEvent",
+          "event_info": "Public health interventions affect individual risk perception",
+          "fields": [
+            {
+              "name": "public_health_authority_id",
+              "type": "int",
+              "default_value": "0",
+              "description": "Identifier for the public health authority deploying the intervention"
+            },
+            {
+              "name": "intervention_type",
+              "type": "str",
+              "default_value": "",
+              "description": "Type of intervention deployed"
+            },
+            {
+              "name": "target_individual_id",
+              "type": "int",
+              "default_value": "0",
+              "description": "Identifier for the target individual affected by the intervention"
+            },
+            {
+              "name": "healthcare_facility_id",
+              "type": "int",
+              "default_value": "0",
+              "description": "Identifier for the healthcare facility affected by the intervention"
+            }
+          ]
+        }
+      },
+      "6": {
+        "code": "class InterventionDeployedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        public_health_authority_id: int = 0,\n        intervention_type: str = \"\",\n        target_individual_id: int = 0,\n        healthcare_facility_id: int = 0,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.public_health_authority_id = public_health_authority_id\n        self.intervention_type = intervention_type\n        self.target_individual_id = target_individual_id\n        self.healthcare_facility_id = healthcare_facility_id",
+        "metadata": {
+          "id": 6,
+          "from_agent_type": "PublicHealthAuthority",
+          "from_action_name": "deploy_interventions",
+          "to_agent_type": "HealthcareFacility",
+          "to_action_name": "allocate_resources",
+          "from_action_id": 4,
+          "to_action_id": 7,
+          "event_name": "InterventionDeployedEvent",
+          "event_info": "Interventions require healthcare facilities to allocate resources",
+          "fields": [
+            {
+              "name": "public_health_authority_id",
+              "type": "int",
+              "default_value": "0",
+              "description": "Identifier for the public health authority deploying the intervention"
+            },
+            {
+              "name": "intervention_type",
+              "type": "str",
+              "default_value": "",
+              "description": "Type of intervention deployed"
+            },
+            {
+              "name": "target_individual_id",
+              "type": "int",
+              "default_value": "0",
+              "description": "Identifier for the target individual affected by the intervention"
+            },
+            {
+              "name": "healthcare_facility_id",
+              "type": "int",
+              "default_value": "0",
+              "description": "Identifier for the healthcare facility affected by the intervention"
+            }
+          ]
+        }
+      },
+      "7": {
+        "code": "class QuarantineStatusUpdatedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        household_id: int = 0,\n        quarantine_status: str = 'none',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.household_id = household_id\n        self.quarantine_status = quarantine_status",
+        "metadata": {
+          "id": 7,
+          "from_agent_type": "Household",
+          "from_action_name": "update_quarantine_status",
+          "to_agent_type": "EnvAgent",
+          "to_action_name": "terminate",
+          "from_action_id": 5,
+          "to_action_id": -1,
+          "event_name": "QuarantineStatusUpdatedEvent",
+          "event_info": "Household updates quarantine status, completing workflow branch",
+          "fields": [
+            {
+              "name": "household_id",
+              "type": "int",
+              "default_value": "0",
+              "description": "Identifier for the household updating quarantine status"
+            },
+            {
+              "name": "quarantine_status",
+              "type": "str",
+              "default_value": "none",
+              "description": "Updated quarantine status of the household"
+            }
+          ]
+        }
+      },
+      "8": {
+        "code": "class HealthcareServiceProvidedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        healthcare_facility_id: int = 0,\n        service_type: str = \"\",\n        completion_status: str = 'completed',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.healthcare_facility_id = healthcare_facility_id\n        self.service_type = service_type\n        self.completion_status = completion_status",
+        "metadata": {
+          "id": 8,
+          "from_agent_type": "HealthcareFacility",
+          "from_action_name": "provide_healthcare_services",
+          "to_agent_type": "EnvAgent",
+          "to_action_name": "terminate",
+          "from_action_id": 6,
+          "to_action_id": -1,
+          "event_name": "HealthcareServiceProvidedEvent",
+          "event_info": "Healthcare services provided, completing workflow branch",
+          "fields": [
+            {
+              "name": "healthcare_facility_id",
+              "type": "int",
+              "default_value": "0",
+              "description": "Identifier for the healthcare facility providing services"
+            },
+            {
+              "name": "service_type",
+              "type": "str",
+              "default_value": "",
+              "description": "Type of healthcare service provided"
+            },
+            {
+              "name": "completion_status",
+              "type": "str",
+              "default_value": "completed",
+              "description": "Status of the healthcare service provision"
+            }
+          ]
+        }
+      },
+      "9": {
+        "code": "class ResourcesAllocatedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        healthcare_facility_id: int = 0,\n        resources_allocated: dict = {},\n        completion_status: str = 'completed',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.healthcare_facility_id = healthcare_facility_id\n        self.resources_allocated = resources_allocated\n        self.completion_status = completion_status",
+        "metadata": {
+          "id": 9,
+          "from_agent_type": "HealthcareFacility",
+          "from_action_name": "allocate_resources",
+          "to_agent_type": "EnvAgent",
+          "to_action_name": "terminate",
+          "from_action_id": 7,
+          "to_action_id": -1,
+          "event_name": "ResourcesAllocatedEvent",
+          "event_info": "Resources allocated in response to interventions, completing workflow branch",
+          "fields": [
+            {
+              "name": "healthcare_facility_id",
+              "type": "int",
+              "default_value": "0",
+              "description": "Identifier for the healthcare facility allocating resources"
+            },
+            {
+              "name": "resources_allocated",
+              "type": "dict",
+              "default_value": "{}",
+              "description": "Details of resources allocated in response to interventions"
+            },
+            {
+              "name": "completion_status",
+              "type": "str",
+              "default_value": "completed",
+              "description": "Status of the resource allocation process"
+            }
+          ]
+        }
+      },
+      "-1": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": -1,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "Individual",
+          "to_action_name": "perceive_risk",
+          "from_action_id": 0,
+          "to_action_id": 1,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for individual risk perception update",
+          "fields": []
+        }
+      },
+      "-2": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": -2,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "PublicHealthAuthority",
+          "to_action_name": "evaluate_epidemiological_data",
+          "from_action_id": 0,
+          "to_action_id": 3,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for public health authority's evaluation of epidemiological data",
+          "fields": []
+        }
+      }
+    }
+  }
+}

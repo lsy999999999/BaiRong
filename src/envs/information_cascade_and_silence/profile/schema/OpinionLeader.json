@@ -1,0 +1,110 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Influential User",
+        "private": false,
+        "sampling": "llm",
+        "description": "A name representing an influential opinion leader in social networks."
+    },
+    "belief": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "expressed_opinion": {
+        "type": "str",
+        "default": "",
+        "private": false,
+        "sampling": "default"
+    },
+    "certainty": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "verification_tendency": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "conformity_tendency": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "isolation_fear": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "influence": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "followers": {
+        "type": "int",
+        "default": 100,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0,
+            10000
+        ]
+    },
+    "content_creation": {
+        "type": "str",
+        "default": "",
+        "private": false,
+        "sampling": "default"
+    },
+    "created_content": {
+        "type": "str",
+        "default": "",
+        "private": true,
+        "sampling": "default"
+    },
+    "amplified_content": {
+        "type": "str",
+        "default": "",
+        "private": true,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

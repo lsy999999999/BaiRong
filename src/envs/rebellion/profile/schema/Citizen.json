@@ -1,0 +1,80 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Alex Doe",
+        "private": false,
+        "sampling": "llm",
+        "description": "The citizen's full name"
+    },
+    "personal_experience": {
+        "type": "float",
+        "default": 5.0,
+        "private": true,
+        "sampling": "default"
+    },
+    "grievance_level": {
+        "type": "float",
+        "default": 50.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "rebellion_decision": {
+        "type": "bool",
+        "default": false,
+        "private": false,
+        "sampling": "default"
+    },
+    "age": {
+        "type": "int",
+        "default": 30,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            18,
+            80
+        ]
+    },
+    "occupation": {
+        "type": "str",
+        "default": "teacher",
+        "private": false,
+        "sampling": "llm",
+        "description": "The citizen's occupation in the societal setting"
+    },
+    "political_awareness": {
+        "type": "float",
+        "default": 70.0,
+        "private": true,
+        "sampling": "default"
+    },
+    "social_network_size": {
+        "type": "int",
+        "default": 150,
+        "private": true,
+        "sampling": "random",
+        "range": [
+            50,
+            300
+        ]
+    },
+    "economic_status": {
+        "type": "str",
+        "default": "middle_class",
+        "private": false,
+        "sampling": "llm",
+        "description": "Economic status of the citizen"
+    },
+    "initial_motivation": {
+        "type": "float",
+        "default": 60.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

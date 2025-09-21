@@ -1,0 +1,82 @@
+[
+    {
+        "name": "Witness",
+        "credibility": 75.0,
+        "public_attention": 50,
+        "legal_system_type": "common law with jury",
+        "precedent_strength": 80.0,
+        "procedural_rule_strictness": 70,
+        "agent_type": "Witness",
+        "testimony_content": "awaiting_input",
+        "prepared_testimony": "ready",
+        "testimony_given": "inactive",
+        "cross_examination_responses": [
+            "initial_response"
+        ],
+        "id": "25"
+    },
+    {
+        "name": "Witness",
+        "credibility": 75.0,
+        "public_attention": 50,
+        "legal_system_type": "civil law with judge ruling",
+        "precedent_strength": 80.0,
+        "procedural_rule_strictness": 70,
+        "agent_type": "Witness",
+        "testimony_content": "awaiting_input",
+        "prepared_testimony": "ready",
+        "testimony_given": "inactive",
+        "cross_examination_responses": [
+            "initial_response"
+        ],
+        "id": "26"
+    },
+    {
+        "name": "Witness",
+        "credibility": 75.0,
+        "public_attention": 50,
+        "legal_system_type": "common law with jury",
+        "precedent_strength": 80.0,
+        "procedural_rule_strictness": 70,
+        "agent_type": "Witness",
+        "testimony_content": "awaiting_input",
+        "prepared_testimony": "ready",
+        "testimony_given": "inactive",
+        "cross_examination_responses": [
+            "initial_response"
+        ],
+        "id": "27"
+    },
+    {
+        "name": "Witness",
+        "credibility": 75.0,
+        "public_attention": 50,
+        "legal_system_type": "civil law with judge ruling",
+        "precedent_strength": 80.0,
+        "procedural_rule_strictness": 70,
+        "agent_type": "Witness",
+        "testimony_content": "awaiting_input",
+        "prepared_testimony": "ready",
+        "testimony_given": "inactive",
+        "cross_examination_responses": [
+            "initial_response"
+        ],
+        "id": "28"
+    },
+    {
+        "name": "Witness",
+        "credibility": 75.0,
+        "public_attention": 50,
+        "legal_system_type": "common law with jury",
+        "precedent_strength": 80.0,
+        "procedural_rule_strictness": 70,
+        "agent_type": "Witness",
+        "testimony_content": "awaiting_input",
+        "prepared_testimony": "ready",
+        "testimony_given": "inactive",
+        "cross_examination_responses": [
+            "initial_response"
+        ],
+        "id": "29"
+    }
+]

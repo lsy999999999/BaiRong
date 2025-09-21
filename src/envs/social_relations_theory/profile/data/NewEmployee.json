@@ -1,0 +1,107 @@
+[
+    {
+        "name": "John Doe",
+        "interaction_status": "awaiting_input",
+        "job_satisfaction": 50.0,
+        "work_motivation": 50,
+        "social_needs": "High",
+        "relationship_quality": "average",
+        "team_interaction_level": 3,
+        "sense_of_belonging": 40,
+        "agent_type": "NewEmployee",
+        "initiator_emotion": "neutral",
+        "emotional_response": "calm",
+        "feedback_received": [
+            {
+                "date": "2025-04-01",
+                "type": "initial",
+                "content": "Welcome to the team!"
+            }
+        ],
+        "id": "0"
+    },
+    {
+        "name": "Jane Smith",
+        "interaction_status": "awaiting_input",
+        "job_satisfaction": 50.0,
+        "work_motivation": 50,
+        "social_needs": "Moderate",
+        "relationship_quality": "average",
+        "team_interaction_level": 2,
+        "sense_of_belonging": 40,
+        "agent_type": "NewEmployee",
+        "initiator_emotion": "neutral",
+        "emotional_response": "calm",
+        "feedback_received": [
+            {
+                "date": "2025-04-01",
+                "type": "initial",
+                "content": "Welcome to the team!"
+            }
+        ],
+        "id": "1"
+    },
+    {
+        "name": "Alice Johnson",
+        "interaction_status": "awaiting_input",
+        "job_satisfaction": 50.0,
+        "work_motivation": 50,
+        "social_needs": "Low",
+        "relationship_quality": "average",
+        "team_interaction_level": 3,
+        "sense_of_belonging": 40,
+        "agent_type": "NewEmployee",
+        "initiator_emotion": "neutral",
+        "emotional_response": "calm",
+        "feedback_received": [
+            {
+                "date": "2025-04-01",
+                "type": "initial",
+                "content": "Welcome to the team!"
+            }
+        ],
+        "id": "2"
+    },
+    {
+        "name": "Bob Brown",
+        "interaction_status": "awaiting_input",
+        "job_satisfaction": 50.0,
+        "work_motivation": 50,
+        "social_needs": "High",
+        "relationship_quality": "average",
+        "team_interaction_level": 1,
+        "sense_of_belonging": 40,
+        "agent_type": "NewEmployee",
+        "initiator_emotion": "neutral",
+        "emotional_response": "calm",
+        "feedback_received": [
+            {
+                "date": "2025-04-01",
+                "type": "initial",
+                "content": "Welcome to the team!"
+            }
+        ],
+        "id": "3"
+    },
+    {
+        "name": "Emily Davis",
+        "interaction_status": "awaiting_input",
+        "job_satisfaction": 50.0,
+        "work_motivation": 50,
+        "social_needs": "Moderate",
+        "relationship_quality": "average",
+        "team_interaction_level": 5,
+        "sense_of_belonging": 40,
+        "agent_type": "NewEmployee",
+        "initiator_emotion": "neutral",
+        "emotional_response": "calm",
+        "feedback_received": [
+            {
+                "date": "2025-04-01",
+                "type": "initial",
+                "content": "Welcome to the team!"
+            }
+        ],
+        "id": "4"
+    }
+]

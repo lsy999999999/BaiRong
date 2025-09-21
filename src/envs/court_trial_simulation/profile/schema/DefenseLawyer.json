@@ -1,0 +1,98 @@
+{
+    "name": {
+        "type": "str",
+        "default": "DefenseLawyer",
+        "private": false,
+        "sampling": "llm",
+        "description": "The name of the agent representing the defense lawyer in the simulation."
+    },
+    "defense_strategy": {
+        "type": "str",
+        "default": "awaiting_input",
+        "private": true,
+        "sampling": "default"
+    },
+    "prepared_defense": {
+        "type": "str",
+        "default": "ready",
+        "private": true,
+        "sampling": "default"
+    },
+    "plea_terms": {
+        "type": "str",
+        "default": "negotiation_pending",
+        "private": true,
+        "sampling": "default"
+    },
+    "negotiated_plea": {
+        "type": "str",
+        "default": "unconfirmed",
+        "private": true,
+        "sampling": "default"
+    },
+    "case_evaluation": {
+        "type": "str",
+        "default": "initial_review",
+        "private": true,
+        "sampling": "default"
+    },
+    "defense_strategy_options": {
+        "type": "list",
+        "default": [
+            "aggressive",
+            "cautious",
+            "evidence_based"
+        ],
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "aggressive",
+            "cautious",
+            "evidence_based",
+            "plea_focus"
+        ],
+        "sample_size": 3
+    },
+    "communication_protocol": {
+        "type": "str",
+        "default": "formal",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "formal",
+            "informal",
+            "strategic"
+        ]
+    },
+    "trial_phase": {
+        "type": "str",
+        "default": "preparation",
+        "private": false,
+        "sampling": "default"
+    },
+    "public_attention": {
+        "type": "int",
+        "default": 50,
+        "private": false,
+        "sampling": "default"
+    },
+    "precedent_strength": {
+        "type": "float",
+        "default": 0.75,
+        "private": false,
+        "sampling": "default"
+    },
+    "procedural_rule_strictness": {
+        "type": "int",
+        "default": 70,
+        "private": false,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

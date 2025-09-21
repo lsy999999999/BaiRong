@@ -1,0 +1,151 @@
+{
+    "-1": {
+        "id": -1,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "AntisocialAgent",
+        "to_action_name": "initiate_interaction",
+        "from_action_id": 0,
+        "to_action_id": 1,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for antisocial behavior simulation",
+        "fields": []
+    },
+    "1": {
+        "id": 1,
+        "from_agent_type": "AntisocialAgent",
+        "from_action_name": "initiate_interaction",
+        "to_agent_type": "SocialEnvironmentAgent",
+        "to_action_name": "engage_with_individual",
+        "from_action_id": 1,
+        "to_action_id": 2,
+        "event_name": "InteractionInitiatedEvent",
+        "event_info": "Initiates interaction with the social environment",
+        "fields": []
+    },
+    "2": {
+        "id": 2,
+        "from_agent_type": "SocialEnvironmentAgent",
+        "from_action_name": "engage_with_individual",
+        "to_agent_type": "AntisocialAgent",
+        "to_action_name": "manipulate_or_disrespect",
+        "from_action_id": 2,
+        "to_action_id": 3,
+        "event_name": "EnvironmentResponseEvent",
+        "event_info": "Response from the social environment to the initial interaction",
+        "fields": [
+            {
+                "name": "response_type",
+                "type": "string",
+                "default_value": "neutral",
+                "description": "Type of response from the environment, e.g., positive, negative, or neutral"
+            },
+            {
+                "name": "response_intensity",
+                "type": "integer",
+                "default_value": 0,
+                "description": "Intensity of the response on a scale, where higher values indicate stronger responses"
+            }
+        ]
+    },
+    "3": {
+        "id": 3,
+        "from_agent_type": "AntisocialAgent",
+        "from_action_name": "manipulate_or_disrespect",
+        "to_agent_type": "SocialEnvironmentAgent",
+        "to_action_name": "handle_manipulation",
+        "from_action_id": 3,
+        "to_action_id": 4,
+        "event_name": "ManipulationAttemptEvent",
+        "event_info": "Attempts to manipulate or disrespect the social environment",
+        "fields": [
+            {
+                "name": "manipulation_strategy",
+                "type": "string",
+                "default_value": "coercion",
+                "description": "The strategy used by the agent to manipulate the environment"
+            },
+            {
+                "name": "target_agent",
+                "type": "string",
+                "default_value": "unknown",
+                "description": "Identifier of the target agent being manipulated"
+            }
+        ]
+    },
+    "4": {
+        "id": 4,
+        "from_agent_type": "AntisocialAgent",
+        "from_action_name": "manipulate_or_disrespect",
+        "to_agent_type": "SocialEnvironmentAgent",
+        "to_action_name": "handle_disrespect",
+        "from_action_id": 3,
+        "to_action_id": 5,
+        "event_name": "DisrespectActionEvent",
+        "event_info": "Engages in disrespectful behavior",
+        "fields": [
+            {
+                "name": "disrespect_type",
+                "type": "string",
+                "default_value": "verbal",
+                "description": "Type of disrespectful action, such as verbal or physical"
+            },
+            {
+                "name": "severity_level",
+                "type": "integer",
+                "default_value": 1,
+                "description": "Severity level of the disrespectful action on a predefined scale"
+            }
+        ]
+    },
+    "5": {
+        "id": 5,
+        "from_agent_type": "SocialEnvironmentAgent",
+        "from_action_name": "handle_manipulation",
+        "to_agent_type": "EnvAgent",
+        "to_action_name": "terminate",
+        "from_action_id": 4,
+        "to_action_id": -1,
+        "event_name": "ManipulationHandledEvent",
+        "event_info": "Social environment processes manipulation attempt",
+        "fields": [
+            {
+                "name": "handling_method",
+                "type": "string",
+                "default_value": "ignore",
+                "description": "Method used by the environment to handle the manipulation attempt"
+            },
+            {
+                "name": "outcome",
+                "type": "string",
+                "default_value": "unresolved",
+                "description": "Outcome of the handling process, such as resolved or unresolved"
+            }
+        ]
+    },
+    "6": {
+        "id": 6,
+        "from_agent_type": "SocialEnvironmentAgent",
+        "from_action_name": "handle_disrespect",
+        "to_agent_type": "EnvAgent",
+        "to_action_name": "terminate",
+        "from_action_id": 5,
+        "to_action_id": -1,
+        "event_name": "DisrespectHandledEvent",
+        "event_info": "Social environment processes disrespectful behavior",
+        "fields": [
+            {
+                "name": "response_action",
+                "type": "string",
+                "default_value": "reprimand",
+                "description": "Action taken by the environment in response to the disrespectful behavior"
+            },
+            {
+                "name": "resolution_status",
+                "type": "string",
+                "default_value": "pending",
+                "description": "Status of the resolution process for the disrespectful behavior"
+            }
+        ]
+    }
+}

@@ -1,0 +1,92 @@
+{
+  "domain": "Politics",
+  "scene_name": "simple_policy_implementation_model",
+  "odd_protocol": {
+    "overview": {
+      "system_goal": "Simulate the execution process of government policies and study the fundamental mechanisms of policy implementation.",
+      "agent_types": "Government, Citizens",
+      "environment_description": "The environment consists of government entities executing policies and citizens reacting to these policies.",
+      "policy_execution_mechanism": "Study the basic processes of policy execution and analyze the impact of policy strength and execution efficiency on policy effectiveness.",
+      "citizen_satisfaction_analysis": "Simulate citizens' acceptance of policies to study the impact of policy execution on citizen satisfaction."
+    },
+    "design_concepts": {
+      "interaction_patterns": "Government and citizens operate independently with no complex interactions.",
+      "communication_protocols": "No direct communication between government and citizens; interactions are based on policy execution and citizen responses.",
+      "decision_mechanisms": "Government adjusts policy strength based on execution efficiency; citizens decide compliance based on policy acceptance.",
+      "policy_effect_evaluation": "Evaluate the impact of different policy strengths on execution effectiveness to provide a basis for policy formulation."
+    },
+    "details": {
+      "agent_behaviors": "Government executes policies daily, adjusting strength based on efficiency; citizens decide daily compliance based on acceptance.",
+      "decision_algorithms": "If government efficiency is high, maintain or increase policy strength; if low, decrease strength. Citizens increase satisfaction if accepting policies, decrease if not.",
+      "specific_constraints": "Policy execution efficiency ranges from 0 to 1; citizen acceptance and satisfaction also range from 0 to 1.",
+      "daily_decision_process": "Government assesses execution efficiency daily, while citizens evaluate policy acceptance and adjust compliance accordingly."
+    }
+  },
+  "agent_types": {
+    "Government": "Responsible for executing policies and adjusting policy strength based on execution efficiency.",
+    "Citizens": "React to government policies by deciding daily compliance based on acceptance and adjusting satisfaction levels accordingly."
+  },
+  "portrait": {
+    "Government": 1,
+    "Citizens": 5
+  },
+  "metrics": [
+    {
+      "id": "Government_Policy_Efficiency",
+      "name": "Government Policy Efficiency",
+      "description": "Measures the average efficiency of government policy execution.",
+      "visualization_type": "line",
+      "update_interval": 5,
+      "variables": [
+        {
+          "name": "efficiency_metrics",
+          "source_type": "agent",
+          "agent_type": "Government",
+          "path": "efficiency_metrics",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Calculate the average efficiency across all government agents. Handle None values by skipping them, and use 0 as default for empty lists. Return a time-series line chart showing efficiency over time.",
+      "function_name": "Government_Policy_Efficiency"
+    },
+    {
+      "id": "Citizen_Policy_Acceptance",
+      "name": "Citizen Policy Acceptance",
+      "description": "Represents the average level of citizen acceptance towards government policies.",
+      "visualization_type": "line",
+      "update_interval": 5,
+      "variables": [
+        {
+          "name": "satisfaction_level",
+          "source_type": "agent",
+          "agent_type": "Citizens",
+          "path": "satisfaction_level",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Compute the average acceptance level among citizens. Exclude None values from the calculation and default to 0 if the list is empty. Present the data as a line chart to observe changes in acceptance over time.",
+      "function_name": "Citizen_Policy_Acceptance"
+    },
+    {
+      "id": "Policy_Strength_Adjustment_Reasons",
+      "name": "Policy Strength Adjustment Reasons",
+      "description": "Analyzes the reasons for adjustments in policy strength by the government.",
+      "visualization_type": "bar",
+      "update_interval": 5,
+      "variables": [
+        {
+          "name": "adjustment_reason",
+          "source_type": "agent",
+          "agent_type": "Government",
+          "path": "adjustment_reason",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Count occurrences of each adjustment reason among government agents. Handle None and unexpected type values by ignoring them. Display the data as a bar chart comparing the frequency of different reasons for policy adjustments.",
+      "function_name": "Policy_Strength_Adjustment_Reasons"
+    }
+  ]
+}

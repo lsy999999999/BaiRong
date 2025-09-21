@@ -1,0 +1,96 @@
+{
+  "domain": "Psychology",
+  "scene_name": "cognitive_dissonance_theory",
+  "odd_protocol": {
+    "overview": {
+      "system_goal": "Simulate cognitive dissonance theory using three LLM agents to study the conflict between behavior and belief.",
+      "agent_types": "Three agents: Actor A, Observer B, and Feedbacker C.",
+      "environment_description": "A simulated environment where agents interact based on cognitive dissonance scenarios.",
+      "agent_roles": "Actor A experiences cognitive dissonance, Observer B provides feedback, Feedbacker C evaluates responses.",
+      "system_scope": "Focuses on how agents manage cognitive dissonance through belief change, behavior change, or rationalization."
+    },
+    "design_concepts": {
+      "interaction_patterns": "Actor A faces dissonance, Observer B observes and provides feedback, Feedbacker C evaluates and suggests improvements.",
+      "communication_protocols": "Feedback provided by Observer B and evaluation by Feedbacker C are communicated to Actor A.",
+      "decision_mechanisms": "Actor A decides on belief change, behavior change, or rationalization to reduce dissonance.",
+      "task_design": "Situations designed to create conflict between Actor A's behavior and beliefs, requiring decision-making to resolve dissonance.",
+      "feedback_mechanism": "Observer B and Feedbacker C provide feedback and evaluation on Actor A's dissonance resolution strategies."
+    },
+    "details": {
+      "agent_behaviors": "Actor A experiences dissonance and chooses strategies to reduce it; Observer B provides feedback; Feedbacker C evaluates outcomes.",
+      "decision_algorithms": "Algorithms for decision-making include belief adjustment, behavior modification, and rationalization techniques.",
+      "specific_constraints": "Tasks must induce cognitive dissonance in Actor A, requiring observable and evaluative feedback.",
+      "task_execution": "Includes scenarios where Actor A engages in belief-inconsistent tasks or faces image-threatening situations.",
+      "monitoring_and_feedback": "Observer B assesses Actor A's response effectiveness, while Feedbacker C analyzes and suggests improvements."
+    }
+  },
+  "agent_types": {
+    "ActorA": "Responsible for experiencing cognitive dissonance and choosing strategies to reduce it, such as belief change, behavior change, or rationalization.",
+    "ObserverB": "Observes the actions and outcomes of Actor A, providing feedback to help Actor A understand the dissonance experienced.",
+    "FeedbackerC": "Evaluates the outcomes of Actor A's decisions and suggests improvements to the strategies used to resolve cognitive dissonance."
+  },
+  "portrait": {
+    "ActorA": 5,
+    "ObserverB": 2,
+    "FeedbackerC": 3
+  },
+  "metrics": [
+    {
+      "id": "average_dissonance_level",
+      "name": "average_dissonance_level",
+      "description": "Measures the average dissonance level experienced by Actor A across all scenarios.",
+      "visualization_type": "line",
+      "update_interval": 5,
+      "variables": [
+        {
+          "name": "dissonance_level",
+          "source_type": "agent",
+          "agent_type": "ActorA",
+          "path": "dissonance_level",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Calculate the average of the dissonance_level values from Actor A. Handle None values by ignoring them in the calculation. If the list is empty or all values are None, return 0 as the average.",
+      "function_name": "average_dissonance_level"
+    },
+    {
+      "id": "feedback_quality_distribution",
+      "name": "feedback_quality_distribution",
+      "description": "Shows the distribution of feedback quality scores provided by Observer B.",
+      "visualization_type": "bar",
+      "update_interval": 5,
+      "variables": [
+        {
+          "name": "feedback_quality",
+          "source_type": "agent",
+          "agent_type": "ObserverB",
+          "path": "feedback_quality",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Count the occurrences of each feedback_quality score from Observer B. Handle None values by excluding them from the count. If the list is empty, return an empty distribution.",
+      "function_name": "feedback_quality_distribution"
+    },
+    {
+      "id": "strategy_type_proportion",
+      "name": "strategy_type_proportion",
+      "description": "Represents the proportion of each strategy type chosen by Actor A to reduce dissonance.",
+      "visualization_type": "pie",
+      "update_interval": 5,
+      "variables": [
+        {
+          "name": "strategy_type",
+          "source_type": "agent",
+          "agent_type": "ActorA",
+          "path": "strategy_type",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Calculate the proportion of each unique strategy_type value from Actor A. Handle None values by excluding them from the calculation. If the list is empty or all values are None, return an empty proportion.",
+      "function_name": "strategy_type_proportion"
+    }
+  ]
+}

@@ -1,0 +1,62 @@
+[
+    {
+        "name": "VoterAgent Alpha",
+        "current_political_preference": 0.5,
+        "adjusted_political_preference": 0.5,
+        "initial_political_bias": 0.13512342862293947,
+        "media_consumption_pattern": null,
+        "decision_making_algorithm": "Bayesian Network Analysis",
+        "exposure_to_opposing_views": 0.8130458975701347,
+        "agent_type": "VoterAgent",
+        "selected_media_id": -1,
+        "id": "0"
+    },
+    {
+        "name": "VoterAgent Beta",
+        "current_political_preference": 0.5,
+        "adjusted_political_preference": 0.5,
+        "initial_political_bias": 0.16536662914703115,
+        "media_consumption_pattern": null,
+        "decision_making_algorithm": "Neural Network Classifier",
+        "exposure_to_opposing_views": 0.9576290006267691,
+        "agent_type": "VoterAgent",
+        "selected_media_id": -1,
+        "id": "1"
+    },
+    {
+        "name": "VoterAgent Gamma",
+        "current_political_preference": 0.5,
+        "adjusted_political_preference": 0.5,
+        "initial_political_bias": 0.25547690776004983,
+        "media_consumption_pattern": null,
+        "decision_making_algorithm": "Decision Tree Learning",
+        "exposure_to_opposing_views": 0.4649055003803426,
+        "agent_type": "VoterAgent",
+        "selected_media_id": -1,
+        "id": "2"
+    },
+    {
+        "name": "VoterAgent Delta",
+        "current_political_preference": 0.5,
+        "adjusted_political_preference": 0.5,
+        "initial_political_bias": 0.8691433141612793,
+        "media_consumption_pattern": null,
+        "decision_making_algorithm": "Genetic Algorithm Optimization",
+        "exposure_to_opposing_views": 0.20813328260398567,
+        "agent_type": "VoterAgent",
+        "selected_media_id": -1,
+        "id": "3"
+    },
+    {
+        "name": "VoterAgent Epsilon",
+        "current_political_preference": 0.5,
+        "adjusted_political_preference": 0.5,
+        "initial_political_bias": 0.48623698452444786,
+        "media_consumption_pattern": null,
+        "decision_making_algorithm": "Support Vector Machine",
+        "exposure_to_opposing_views": 0.31605127003965916,
+        "agent_type": "VoterAgent",
+        "selected_media_id": -1,
+        "id": "4"
+    }
+]

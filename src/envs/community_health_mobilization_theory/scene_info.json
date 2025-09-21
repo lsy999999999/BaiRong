@@ -1,0 +1,95 @@
+{
+  "domain": "Demographics",
+  "scene_name": "community_health_mobilization_theory",
+  "odd_protocol": {
+    "overview": {
+      "system_goal": "Simulate the process of community health mobilization focusing on interactions between community members, leaders, and public health experts to drive health improvements through collective action.",
+      "agent_types": "Community Leader, Community Member, Public Health Expert",
+      "environment_description": "Community background including socioeconomic status, cultural context, health issues, and available resources affecting mobilization outcomes.",
+      "health_challenges": "Focus on specific health challenges such as vaccine uptake, chronic disease management, and infectious disease prevention."
+    },
+    "design_concepts": {
+      "interaction_patterns": "Community leaders organize health mobilization activities; community members engage and influence each other's health behaviors; public health experts provide guidance and resources.",
+      "communication_protocols": "Information spread through meetings, social media, traditional channels influenced by leaders and experts.",
+      "decision_mechanisms": "Community members decide on health behavior changes based on received information and interactions.",
+      "resource_mobilization": "Leaders and experts coordinate and distribute resources like funding, volunteers, and educational materials.",
+      "behavior_change_evaluation": "Assess individual participation and behavior change through health indicators like vaccination rates and chronic disease management."
+    },
+    "details": {
+      "agent_behaviors": "Community Leader plans and drives mobilization; Community Members adapt health behaviors; Public Health Expert provides data and policy support.",
+      "decision_algorithms": "Algorithms to simulate decision-making based on information received and social interactions.",
+      "specific_constraints": "Constraints include resource availability, cultural attitudes, and socioeconomic factors impacting mobilization.",
+      "simulation_steps": "Role definition, mobilization initiation, information dissemination, resource allocation, behavior change, feedback and evaluation.",
+      "output_evaluation": "Analyze participation rates, behavior change rates, and community health improvement through collected data."
+    }
+  },
+  "agent_types": {
+    "CommunityLeader": "CommunityLeader organizes and drives health mobilization activities, influencing community members through leadership and communication.",
+    "CommunityMember": "CommunityMember engages in health behaviors, influenced by interactions with leaders and peers, and decides on health behavior changes based on received information.",
+    "PublicHealthExpert": "PublicHealthExpert provides guidance, data, and policy support to facilitate community health improvements and mobilization efforts."
+  },
+  "portrait": {
+    "CommunityLeader": 1,
+    "CommunityMember": 5,
+    "PublicHealthExpert": 2
+  },
+  "metrics": [
+    {
+      "id": "Community_Mobilization_Status",
+      "name": "Community Mobilization Status",
+      "description": "Tracks the proportion of community leaders actively engaged in mobilization activities.",
+      "visualization_type": "pie",
+      "update_frequency": 5,
+      "variables": [
+        {
+          "name": "mobilization_status",
+          "source_type": "agent",
+          "agent_type": "CommunityLeader",
+          "path": "mobilization_status",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Count the number of 'active' statuses in the mobilization_status list. Calculate the proportion of active versus inactive or None values. Handle None values by treating them as 'inactive'. Return a dictionary with keys 'Active' and 'Inactive', each with the corresponding count as the value.",
+      "function_name": "Community_Mobilization_Status"
+    },
+    {
+      "id": "Community_Participation_Rate",
+      "name": "Community Participation Rate",
+      "description": "Measures the average participation rate of community members in health mobilization activities.",
+      "visualization_type": "bar",
+      "update_frequency": 5,
+      "variables": [
+        {
+          "name": "participation_status",
+          "source_type": "agent",
+          "agent_type": "CommunityMember",
+          "path": "participation_status",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Iterate over the participation_status list, counting the number of 'participating' statuses. Calculate the percentage of participating members over the total number of members. Handle None values by excluding them from the calculation. Return a dictionary with the category 'Participation Rate' and the calculated percentage as the value.",
+      "function_name": "Community_Participation_Rate"
+    },
+    {
+      "id": "Guidance_Provision_Status",
+      "name": "Guidance Provision Status",
+      "description": "Analyzes the distribution of guidance statuses provided by public health experts.",
+      "visualization_type": "bar",
+      "update_frequency": 5,
+      "variables": [
+        {
+          "name": "guidance_status",
+          "source_type": "agent",
+          "agent_type": "PublicHealthExpert",
+          "path": "guidance_status",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Count occurrences of each unique status in the guidance_status list. Handle None values by counting them under a separate 'None' category. Return a dictionary where keys are unique statuses (including 'None') and values are their respective counts.",
+      "function_name": "Guidance_Provision_Status"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+    "simulated_factors": {
+        "decision_maker_risk_tolerance": 0.75,
+        "external_condition_variability": 0.45,
+        "resource_availability_score": 8.3,
+        "information_reliability_index": 0.92,
+        "alternative_option_utility_scores": [
+            0.68,
+            0.54,
+            0.79
+        ],
+        "decision_maker_emotional_state": "cautiously optimistic",
+        "environmental_risk_factor": 0.36,
+        "communication_efficiency": 0.89,
+        "feedback_loop_latency": 1.2,
+        "decision_outcome_success_rate": 0.81
+    }
+}

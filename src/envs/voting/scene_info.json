@@ -1,0 +1,54 @@
+{
+  "domain": "Politics",
+  "scene_name": "voting",
+  "odd_protocol": {
+    "overview": {
+      "system_goal": "Analyze how collective voting decisions produce results and how different voting rules affect fairness and efficiency in social choices.",
+      "agent_types": "Voters who are agents deciding whether to vote and whom to vote for.",
+      "environment_description": "A voting environment where voters have preferences for candidates or policies and decide their participation based on certain rules.",
+      "state_variables_description": "Voting preference, whether voted, candidate votes, voter turnout.",
+      "initialization_process": "Generate voters with different voting preferences and set candidate or policy options based on rules like randomness, regional distribution, or background influence."
+    },
+    "design_concepts": {
+      "interaction_patterns": "Voters interact by participating in the voting process and influencing the outcome through their choices.",
+      "communication_protocols": "Implicit communication through voting preferences and turnout rates.",
+      "decision_mechanisms": "Voters decide to vote and select their preferred candidates based on established preferences and rules.",
+      "voting_process_description": "On voting day, voters decide to vote and cast their votes for preferred candidates, updating candidate votes based on preference distribution."
+    },
+    "details": {
+      "agent_behaviors": "Voters may randomly decide to participate in voting and select candidates based on their preferences.",
+      "decision_algorithms": "Algorithms may include random assignment of participation and preference-based candidate selection.",
+      "specific_constraints": "Constraints may include time limits for voting activity and rules governing voter behavior.",
+      "result_analysis": "Post-voting analysis involves counting candidate votes and calculating voter turnout to assess impact on results."
+    }
+  },
+  "agent_types": {
+    "VoterAgent": "VoterAgent is responsible for deciding whether to participate in the voting process and selecting candidates based on personal preferences and established rules.",
+    "VotingEnvironmentAgent": "VotingEnvironmentAgent manages the voting process, including setting rules and constraints, and facilitating interactions among VoterAgents."
+  },
+  "portrait": {
+    "VoterAgent": 5,
+    "VotingEnvironmentAgent": 1
+  },
+  "metrics": [
+    {
+      "id": "Candidate_Selection_Distribution",
+      "name": "Candidate Selection Distribution",
+      "description": "Examines the distribution of selected candidates among the voters.",
+      "visualization_type": "bar",
+      "update_interval": 5,
+      "variables": [
+        {
+          "name": "selected_candidate_id",
+          "source_type": "agent",
+          "agent_type": "VoterAgent",
+          "path": "selected_candidate_id",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Count occurrences of each candidate ID in the selected_candidate_id list to determine how many votes each candidate received. Handle None values by excluding them from the count. Return a dictionary where each key is a candidate ID and the value is the count of votes.",
+      "function_name": "Candidate_Selection_Distribution"
+    }
+  ]
+}

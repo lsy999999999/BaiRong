@@ -1,0 +1,42 @@
+[
+    {
+        "source_agent": "OrdinaryUser",
+        "target_agent": "OrdinaryUser",
+        "direction": "unidirectional"
+    },
+    {
+        "source_agent": "OrdinaryUser",
+        "target_agent": "OpinionLeader",
+        "direction": "unidirectional"
+    },
+    {
+        "source_agent": "OpinionLeader",
+        "target_agent": "MediaOrganization",
+        "direction": "unidirectional"
+    },
+    {
+        "source_agent": "MediaOrganization",
+        "target_agent": "MediaOrganization",
+        "direction": "unidirectional"
+    },
+    {
+        "source_agent": "MediaOrganization",
+        "target_agent": "FactCheckOrganization",
+        "direction": "unidirectional"
+    },
+    {
+        "source_agent": "FactCheckOrganization",
+        "target_agent": "FactCheckOrganization",
+        "direction": "unidirectional"
+    },
+    {
+        "source_agent": "FactCheckOrganization",
+        "target_agent": "PlatformRegulator",
+        "direction": "unidirectional"
+    },
+    {
+        "source_agent": "PlatformRegulator",
+        "target_agent": "PlatformRegulator",
+        "direction": "unidirectional"
+    }
+]

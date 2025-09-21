@@ -1,0 +1,308 @@
+{
+    "-1": {
+        "id": -1,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "Prosecutor",
+        "to_action_name": "evaluate_evidence",
+        "from_action_id": 0,
+        "to_action_id": 1,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for evidence evaluation",
+        "fields": []
+    },
+    "-2": {
+        "id": -2,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "DefenseLawyer",
+        "to_action_name": "prepare_defense",
+        "from_action_id": 0,
+        "to_action_id": 2,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for defense preparation",
+        "fields": []
+    },
+    "-3": {
+        "id": -3,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "Judge",
+        "to_action_name": "manage_trial",
+        "from_action_id": 0,
+        "to_action_id": 5,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for trial management",
+        "fields": []
+    },
+    "-4": {
+        "id": -4,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "Witness",
+        "to_action_name": "prepare_testimony",
+        "from_action_id": 0,
+        "to_action_id": 9,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for witness testimony preparation",
+        "fields": []
+    },
+    "1": {
+        "id": 1,
+        "from_agent_type": "Prosecutor",
+        "from_action_name": "evaluate_evidence",
+        "to_agent_type": "Judge",
+        "to_action_name": "rule_on_evidence",
+        "from_action_id": 1,
+        "to_action_id": 4,
+        "event_name": "EvidenceEvaluatedEvent",
+        "event_info": "Prosecutor presents evaluated evidence for ruling",
+        "fields": [
+            {
+                "name": "evidence_details",
+                "type": "string",
+                "default_value": "",
+                "description": "Details of the evidence presented by the Prosecutor."
+            },
+            {
+                "name": "ruling_request",
+                "type": "string",
+                "default_value": "pending",
+                "description": "Request for Judge's ruling on the evidence admissibility."
+            },
+            {
+                "name": "prosecution_decision",
+                "type": "string",
+                "default_value": "undecided",
+                "description": "Decision made by the Prosecutor on whether to prosecute."
+            }
+        ]
+    },
+    "2": {
+        "id": 2,
+        "from_agent_type": "Prosecutor",
+        "from_action_name": "evaluate_evidence",
+        "to_agent_type": "DefenseLawyer",
+        "to_action_name": "negotiate_plea",
+        "from_action_id": 1,
+        "to_action_id": 3,
+        "event_name": "ProsecutionDecisionEvent",
+        "event_info": "Decision to prosecute prompts plea negotiation",
+        "fields": [
+            {
+                "name": "prosecution_decision",
+                "type": "string",
+                "default_value": "undecided",
+                "description": "Decision made by the Prosecutor on whether to prosecute."
+            },
+            {
+                "name": "evidence_quality",
+                "type": "float",
+                "default_value": 0.0,
+                "description": "Quality assessment of the evidence influencing the decision."
+            },
+            {
+                "name": "conviction_likelihood",
+                "type": "float",
+                "default_value": 0.0,
+                "description": "Likelihood of conviction influencing the decision."
+            }
+        ]
+    },
+    "3": {
+        "id": 3,
+        "from_agent_type": "DefenseLawyer",
+        "from_action_name": "prepare_defense",
+        "to_agent_type": "Judge",
+        "to_action_name": "manage_trial",
+        "from_action_id": 2,
+        "to_action_id": 5,
+        "event_name": "DefensePreparedEvent",
+        "event_info": "Defense strategy prepared for trial management",
+        "fields": [
+            {
+                "name": "defense_strategy",
+                "type": "string",
+                "default_value": "",
+                "description": "Prepared defense strategy for trial."
+            }
+        ]
+    },
+    "4": {
+        "id": 4,
+        "from_agent_type": "DefenseLawyer",
+        "from_action_name": "negotiate_plea",
+        "to_agent_type": "Defendant",
+        "to_action_name": "consider_plea",
+        "from_action_id": 3,
+        "to_action_id": 6,
+        "event_name": "PleaNegotiationEvent",
+        "event_info": "Defense lawyer proposes plea deal to defendant",
+        "fields": [
+            {
+                "name": "plea_terms",
+                "type": "string",
+                "default_value": "",
+                "description": "Terms of the plea deal proposed to the Defendant."
+            }
+        ]
+    },
+    "5": {
+        "id": 5,
+        "from_agent_type": "Judge",
+        "from_action_name": "rule_on_evidence",
+        "to_agent_type": "Jury",
+        "to_action_name": "evaluate_evidence",
+        "from_action_id": 4,
+        "to_action_id": 7,
+        "event_name": "EvidenceRulingEvent",
+        "event_info": "Judge rules on evidence admissibility for jury evaluation",
+        "fields": [
+            {
+                "name": "evidence_admissibility",
+                "type": "string",
+                "default_value": "pending",
+                "description": "Judge's ruling on the admissibility of evidence."
+            }
+        ]
+    },
+    "6": {
+        "id": 6,
+        "from_agent_type": "Judge",
+        "from_action_name": "manage_trial",
+        "to_agent_type": "Jury",
+        "to_action_name": "form_verdict",
+        "from_action_id": 5,
+        "to_action_id": 8,
+        "event_name": "TrialManagementEvent",
+        "event_info": "Judge oversees trial proceedings for jury verdict formation",
+        "fields": [
+            {
+                "name": "trial_phase",
+                "type": "string",
+                "default_value": "ongoing",
+                "description": "Current phase of the trial overseen by the Judge."
+            }
+        ]
+    },
+    "7": {
+        "id": 7,
+        "from_agent_type": "Judge",
+        "from_action_name": "manage_trial",
+        "to_agent_type": "Witness",
+        "to_action_name": "testify",
+        "from_action_id": 5,
+        "to_action_id": 10,
+        "event_name": "WitnessCallEvent",
+        "event_info": "Judge calls witness to testify during trial",
+        "fields": [
+            {
+                "name": "witness_id",
+                "type": "string",
+                "default_value": "",
+                "description": "Identifier for the witness called to testify."
+            }
+        ]
+    },
+    "8": {
+        "id": 8,
+        "from_agent_type": "Defendant",
+        "from_action_name": "consider_plea",
+        "to_agent_type": "Judge",
+        "to_action_name": "manage_trial",
+        "from_action_id": 6,
+        "to_action_id": 5,
+        "event_name": "PleaDecisionEvent",
+        "event_info": "Defendant decides on plea deal affecting trial management",
+        "fields": [
+            {
+                "name": "plea_acceptance",
+                "type": "string",
+                "default_value": "undecided",
+                "description": "Decision on whether the Defendant accepts the plea deal."
+            }
+        ]
+    },
+    "9": {
+        "id": 9,
+        "from_agent_type": "Jury",
+        "from_action_name": "evaluate_evidence",
+        "to_agent_type": "Jury",
+        "to_action_name": "form_verdict",
+        "from_action_id": 7,
+        "to_action_id": 8,
+        "event_name": "EvidenceEvaluationEvent",
+        "event_info": "Jury evaluates evidence as part of verdict formation",
+        "fields": [
+            {
+                "name": "evidence_evaluation",
+                "type": "list",
+                "default_value": [],
+                "description": "Evaluation results of evidence items."
+            }
+        ]
+    },
+    "10": {
+        "id": 10,
+        "from_agent_type": "Jury",
+        "from_action_name": "form_verdict",
+        "to_agent_type": "EnvAgent",
+        "to_action_name": "terminate",
+        "from_action_id": 8,
+        "to_action_id": -1,
+        "event_name": "VerdictFormedEvent",
+        "event_info": "Jury forms verdict, completing trial process",
+        "fields": [
+            {
+                "name": "verdict",
+                "type": "string",
+                "default_value": "undecided",
+                "description": "Final verdict formed by the Jury."
+            },
+            {
+                "name": "completion_status",
+                "type": "string",
+                "default_value": "complete",
+                "description": "Status indicating the trial process completion."
+            }
+        ]
+    },
+    "11": {
+        "id": 11,
+        "from_agent_type": "Witness",
+        "from_action_name": "prepare_testimony",
+        "to_agent_type": "Judge",
+        "to_action_name": "manage_trial",
+        "from_action_id": 9,
+        "to_action_id": 5,
+        "event_name": "TestimonyPreparedEvent",
+        "event_info": "Witness prepared for testimony during trial",
+        "fields": [
+            {
+                "name": "testimony_content",
+                "type": "string",
+                "default_value": "",
+                "description": "Prepared content of the witness's testimony."
+            }
+        ]
+    },
+    "12": {
+        "id": 12,
+        "from_agent_type": "Witness",
+        "from_action_name": "testify",
+        "to_agent_type": "Jury",
+        "to_action_name": "evaluate_evidence",
+        "from_action_id": 10,
+        "to_action_id": 7,
+        "event_name": "TestimonyEvent",
+        "event_info": "Witness testimony provided for jury evaluation",
+        "fields": [
+            {
+                "name": "testimony_details",
+                "type": "string",
+                "default_value": "",
+                "description": "Details of the testimony provided by the witness."
+            }
+        ]
+    }
+}

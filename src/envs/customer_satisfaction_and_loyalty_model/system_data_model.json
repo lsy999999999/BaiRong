@@ -1,0 +1,91 @@
+{
+    "environment": {
+        "variables": [
+            {
+                "name": "service_sensitivity_coefficient",
+                "type": "float",
+                "default_value": null
+            },
+            {
+                "name": "product_sensitivity_coefficient",
+                "type": "float",
+                "default_value": null
+            },
+            {
+                "name": "baseline_service_quality",
+                "type": "float",
+                "default_value": null
+            },
+            {
+                "name": "baseline_product_quality",
+                "type": "float",
+                "default_value": null
+            }
+        ]
+    },
+    "agents": {
+        "CustomerAgent": {
+            "variables": [
+                {
+                    "name": "initial_loyalty",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "loyalty",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "service_sensitivity_coefficient",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "product_sensitivity_coefficient",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "perceived_service_quality",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "product_experience_score",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "satisfaction",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "purchase_decision",
+                    "type": "bool",
+                    "default_value": null
+                }
+            ]
+        },
+        "MerchantAgent": {
+            "variables": [
+                {
+                    "name": "service_quality",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "product_quality",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "average_feedback_score",
+                    "type": "float",
+                    "default_value": null
+                }
+            ]
+        }
+    }
+}

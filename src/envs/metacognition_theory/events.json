@@ -1,0 +1,158 @@
+{
+    "-1": {
+        "id": -1,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "TaskExecutor",
+        "to_action_name": "initiate_task",
+        "from_action_id": 0,
+        "to_action_id": 1,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for task execution",
+        "fields": []
+    },
+    "1": {
+        "id": 1,
+        "from_agent_type": "TaskExecutor",
+        "from_action_name": "initiate_task",
+        "to_agent_type": "Monitor",
+        "to_action_name": "observe_task",
+        "from_action_id": 1,
+        "to_action_id": 4,
+        "event_name": "TaskExecutionEvent",
+        "event_info": "Task execution initiated, ready for monitoring",
+        "fields": [
+            {
+                "name": "task_id",
+                "type": "str",
+                "default_value": "",
+                "description": "Unique identifier for the task being executed."
+            },
+            {
+                "name": "task_details",
+                "type": "str",
+                "default_value": "N/A",
+                "description": "Description of the task to be executed."
+            }
+        ]
+    },
+    "2": {
+        "id": 2,
+        "from_agent_type": "TaskExecutor",
+        "from_action_name": "reflect_on_process",
+        "to_agent_type": "Monitor",
+        "to_action_name": "provide_feedback",
+        "from_action_id": 2,
+        "to_action_id": 5,
+        "event_name": "ReflectionEvent",
+        "event_info": "Reflection on cognitive process completed, feedback requested",
+        "fields": [
+            {
+                "name": "reflection_summary",
+                "type": "str",
+                "default_value": "N/A",
+                "description": "Summary of the reflection on cognitive processes."
+            },
+            {
+                "name": "feedback_requested",
+                "type": "bool",
+                "default_value": "true",
+                "description": "Indicator if feedback is requested from the Monitor."
+            }
+        ]
+    },
+    "3": {
+        "id": 3,
+        "from_agent_type": "TaskExecutor",
+        "from_action_name": "adjust_strategy",
+        "to_agent_type": "Evaluator",
+        "to_action_name": "analyze_performance",
+        "from_action_id": 3,
+        "to_action_id": 6,
+        "event_name": "StrategyAdjustmentEvent",
+        "event_info": "Strategy adjusted based on feedback, ready for evaluation",
+        "fields": [
+            {
+                "name": "strategy_changes",
+                "type": "str",
+                "default_value": "N/A",
+                "description": "Description of the adjustments made to the strategy."
+            },
+            {
+                "name": "adjustment_reason",
+                "type": "str",
+                "default_value": "N/A",
+                "description": "Reason for the strategy adjustment based on feedback."
+            }
+        ]
+    },
+    "4": {
+        "id": 4,
+        "from_agent_type": "Monitor",
+        "from_action_name": "observe_task",
+        "to_agent_type": "TaskExecutor",
+        "to_action_name": "reflect_on_process",
+        "from_action_id": 4,
+        "to_action_id": 2,
+        "event_name": "ObservationEvent",
+        "event_info": "Observation data collected, ready for reflection",
+        "fields": [
+            {
+                "name": "observation_data",
+                "type": "str",
+                "default_value": "N/A",
+                "description": "Data collected during the observation of the task execution."
+            }
+        ]
+    },
+    "5": {
+        "id": 5,
+        "from_agent_type": "Monitor",
+        "from_action_name": "provide_feedback",
+        "to_agent_type": "TaskExecutor",
+        "to_action_name": "adjust_strategy",
+        "from_action_id": 5,
+        "to_action_id": 3,
+        "event_name": "FeedbackEvent",
+        "event_info": "Feedback provided, strategy adjustment recommended",
+        "fields": [
+            {
+                "name": "feedback_details",
+                "type": "str",
+                "default_value": "N/A",
+                "description": "Details of the feedback provided to the Task Executor."
+            },
+            {
+                "name": "recommendations",
+                "type": "str",
+                "default_value": "N/A",
+                "description": "Recommendations for strategy adjustments."
+            }
+        ]
+    },
+    "6": {
+        "id": 6,
+        "from_agent_type": "Evaluator",
+        "from_action_name": "analyze_performance",
+        "to_agent_type": "EnvAgent",
+        "to_action_name": "terminate",
+        "from_action_id": 6,
+        "to_action_id": -1,
+        "event_name": "PerformanceAnalysisEvent",
+        "event_info": "Performance analysis completed, workflow terminated",
+        "fields": [
+            {
+                "name": "performance_summary",
+                "type": "str",
+                "default_value": "N/A",
+                "description": "Summary of the performance analysis."
+            },
+            {
+                "name": "completion_status",
+                "type": "str",
+                "default_value": "completed",
+                "description": "Status of the task completion."
+            }
+        ]
+    }
+}

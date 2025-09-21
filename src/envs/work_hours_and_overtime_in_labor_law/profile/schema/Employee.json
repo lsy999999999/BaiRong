@@ -1,0 +1,84 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Jane Doe",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's full name"
+    },
+    "overtime_hours": {
+        "type": "float",
+        "default": 0.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "overtime_reason": {
+        "type": "str",
+        "default": "awaiting_input",
+        "private": false,
+        "sampling": "default"
+    },
+    "work_status": {
+        "type": "str",
+        "default": "active",
+        "private": false,
+        "sampling": "default"
+    },
+    "job_title": {
+        "type": "str",
+        "default": "Software Engineer",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's job title within the company"
+    },
+    "salary": {
+        "type": "float",
+        "default": 60000.0,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            30000.0,
+            120000.0
+        ]
+    },
+    "employment_type": {
+        "type": "str",
+        "default": "full-time",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "full-time",
+            "part-time",
+            "contract"
+        ]
+    },
+    "remote_work": {
+        "type": "str",
+        "default": "eligible",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "eligible",
+            "not eligible"
+        ]
+    },
+    "communication_log": {
+        "type": "list",
+        "default": [
+            {
+                "date": "2023-10-01",
+                "message": "Initial contact with employer"
+            }
+        ],
+        "private": true,
+        "sampling": "default",
+        "sample_size": 5
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

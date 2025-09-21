@@ -1,0 +1,95 @@
+{
+  "domain": "Psychology",
+  "scene_name": "health_belief_model",
+  "odd_protocol": {
+    "overview": {
+      "system_goal": "Simulate individual decision-making in the face of health threats using the Health Belief Model (HBM) and explore how perception of threat, benefits, barriers, and self-efficacy influence health behavior adoption.",
+      "agent_types": "The system uses multiple agents representing individuals, families, communities, and government entities.",
+      "environment_description": "The environment includes social settings where individuals, families, communities, and government interact, influenced by health policies, social support, and available resources.",
+      "health_decision_process": "The simulation explores health decision processes in different contexts, including the impact of social support, information dissemination, and interventions."
+    },
+    "design_concepts": {
+      "interaction_patterns": "Agents interact based on health belief factors such as perceived susceptibility and severity, perceived benefits and barriers, and self-efficacy.",
+      "communication_protocols": "Communication occurs through social support networks, media, and health education initiatives, influencing agents' health decisions.",
+      "decision_mechanisms": "Decisions are influenced by perceived health threats, benefits, barriers, self-efficacy, and external cues to action.",
+      "model_stages": "The model includes initial decision-making, intervention, behavior change, and long-term effect stages."
+    },
+    "details": {
+      "agent_behaviors": "Individual agents decide on health behaviors like quitting smoking or exercising based on health beliefs. Family agents influence individual decisions through support. Community agents affect norms and resources. Government agents implement health policies.",
+      "decision_algorithms": "Agents use algorithms considering perceived susceptibility, severity, benefits, barriers, and self-efficacy to make health decisions.",
+      "specific_constraints": "Constraints include time, cost, emotional burden, and availability of resources affecting health behavior adoption.",
+      "simulation_steps": "Steps include initializing health belief states, decision-making based on beliefs, intervention impacts, and evaluating behavior change and long-term effects."
+    }
+  },
+  "agent_types": {
+    "IndividualAgent": "Represents individual decision-makers who assess health threats and decide on personal health behaviors based on perceived susceptibility, severity, benefits, barriers, and self-efficacy.",
+    "FamilyAgent": "Influences individual health decisions by providing emotional and practical support, shaping family norms and health behaviors.",
+    "CommunityAgent": "Affects health behavior adoption by establishing community norms, providing resources, and facilitating social support networks.",
+    "GovernmentAgent": "Implements health policies and initiatives, influencing public health behaviors through regulations, incentives, and educational campaigns."
+  },
+  "portrait": {
+    "IndividualAgent": 5,
+    "FamilyAgent": 5,
+    "CommunityAgent": 5,
+    "GovernmentAgent": 1
+  },
+  "metrics": [
+    {
+      "id": "average_perceived_threat_level",
+      "name": "average_perceived_threat_level",
+      "description": "Measures the average perceived threat level across all IndividualAgents, indicating overall perception of health threats in the system.",
+      "visualization_type": "line",
+      "update_frequency": 5,
+      "variables": [
+        {
+          "name": "perceived_threat_level",
+          "source_type": "agent",
+          "agent_type": "IndividualAgent",
+          "path": "perceived_threat_level",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Aggregate the perceived threat levels from all IndividualAgents by calculating the average. Handle None values by skipping them in the average calculation. If the list is empty, return a default average value of 0.",
+      "function_name": "average_perceived_threat_level"
+    },
+    {
+      "id": "policy_impact_distribution",
+      "name": "policy_impact_distribution",
+      "description": "Shows the distribution of policy impact across GovernmentAgents, providing insights into how various policies are influencing health behaviors.",
+      "visualization_type": "bar",
+      "update_frequency": 5,
+      "variables": [
+        {
+          "name": "policy_impact",
+          "source_type": "agent",
+          "agent_type": "GovernmentAgent",
+          "path": "policy_impact",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Collect policy impact values from all GovernmentAgents and categorize them into bins (e.g., low, medium, high impact). Handle None values by excluding them from the distribution. If the list is empty, return an empty distribution.",
+      "function_name": "policy_impact_distribution"
+    },
+    {
+      "id": "behavior_adoption_success_rate",
+      "name": "behavior_adoption_success_rate",
+      "description": "Tracks the success rate of adopted health behaviors among IndividualAgents, indicating the effectiveness of health belief factors in behavior change.",
+      "visualization_type": "pie",
+      "update_frequency": 5,
+      "variables": [
+        {
+          "name": "adoption_success",
+          "source_type": "agent",
+          "agent_type": "IndividualAgent",
+          "path": "adoption_success",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Calculate the proportion of IndividualAgents where adoption_success is True versus False. Handle None values by excluding them from the calculation. If the list is empty, return equal proportions for success and failure.",
+      "function_name": "behavior_adoption_success_rate"
+    }
+  ]
+}

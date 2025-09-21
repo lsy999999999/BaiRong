@@ -1,0 +1,63 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Interest Group",
+        "private": false,
+        "sampling": "llm",
+        "description": "A name representing the interest group, reflecting its focus or mission."
+    },
+    "interests": {
+        "type": "list",
+        "default": [],
+        "private": false,
+        "sampling": "llm",
+        "description": "A list of key interests or issues that the group focuses on."
+    },
+    "resources": {
+        "type": "int",
+        "default": 1000,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            500,
+            5000
+        ]
+    },
+    "influence_strategy": {
+        "type": "str",
+        "default": "",
+        "private": false,
+        "sampling": "default"
+    },
+    "connections": {
+        "type": "list",
+        "default": [],
+        "private": true,
+        "sampling": "default"
+    },
+    "public_support": {
+        "type": "float",
+        "default": 0.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "lobbying_effectiveness": {
+        "type": "float",
+        "default": 0.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "media_influence_effect": {
+        "type": "dict",
+        "default": {},
+        "private": true,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "int",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

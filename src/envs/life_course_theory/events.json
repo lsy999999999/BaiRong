@@ -1,0 +1,264 @@
+{
+    "-1": {
+        "id": -1,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "IndividualAgent",
+        "to_action_name": "begin_life_stage",
+        "from_action_id": 0,
+        "to_action_id": 1,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for individual life stage simulation",
+        "fields": []
+    },
+    "-2": {
+        "id": -2,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "FamilyAgent",
+        "to_action_name": "initiate_family_influence",
+        "from_action_id": 0,
+        "to_action_id": 6,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for family influence on individual agents",
+        "fields": []
+    },
+    "-3": {
+        "id": -3,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "GovernmentAgent",
+        "to_action_name": "implement_policy",
+        "from_action_id": 0,
+        "to_action_id": 9,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for government policy implementation",
+        "fields": []
+    },
+    "1": {
+        "id": 1,
+        "from_agent_type": "IndividualAgent",
+        "from_action_name": "begin_life_stage",
+        "to_agent_type": "EducationSystemAgent",
+        "to_action_name": "assess_education_impact",
+        "from_action_id": 1,
+        "to_action_id": 7,
+        "event_name": "LifeStageProgressEvent",
+        "event_info": "Event to assess educational impact on life stage",
+        "fields": [
+            {
+                "name": "educational_impact",
+                "type": "float",
+                "default_value": "0.0",
+                "description": "Quantitative measure of educational impact on the individual's life stage"
+            },
+            {
+                "name": "life_stage",
+                "type": "string",
+                "default_value": "",
+                "description": "Current life stage of the individual"
+            }
+        ]
+    },
+    "2": {
+        "id": 2,
+        "from_agent_type": "IndividualAgent",
+        "from_action_name": "begin_life_stage",
+        "to_agent_type": "HealthcareSystemAgent",
+        "to_action_name": "evaluate_health_services",
+        "from_action_id": 1,
+        "to_action_id": 8,
+        "event_name": "LifeStageHealthEvent",
+        "event_info": "Event to evaluate health services impact on life stage",
+        "fields": [
+            {
+                "name": "health_services_impact",
+                "type": "float",
+                "default_value": "0.0",
+                "description": "Quantitative measure of health services impact on the individual's life stage"
+            },
+            {
+                "name": "health_status",
+                "type": "string",
+                "default_value": "",
+                "description": "Current health status of the individual"
+            }
+        ]
+    },
+    "3": {
+        "id": 3,
+        "from_agent_type": "IndividualAgent",
+        "from_action_name": "receive_family_support",
+        "to_agent_type": "EnvAgent",
+        "to_action_name": "terminate",
+        "from_action_id": 2,
+        "to_action_id": -1,
+        "event_name": "FamilySupportIntegratedEvent",
+        "event_info": "Final event indicating integration of family support",
+        "fields": [
+            {
+                "name": "integration_status",
+                "type": "string",
+                "default_value": "completed",
+                "description": "Status indicating completion of family support integration"
+            }
+        ]
+    },
+    "4": {
+        "id": 4,
+        "from_agent_type": "IndividualAgent",
+        "from_action_name": "adapt_to_education_outcome",
+        "to_agent_type": "EnvAgent",
+        "to_action_name": "terminate",
+        "from_action_id": 3,
+        "to_action_id": -1,
+        "event_name": "EducationAdaptationCompletedEvent",
+        "event_info": "Final event indicating adaptation to education outcome",
+        "fields": [
+            {
+                "name": "adaptation_status",
+                "type": "string",
+                "default_value": "completed",
+                "description": "Status indicating completion of education adaptation"
+            }
+        ]
+    },
+    "5": {
+        "id": 5,
+        "from_agent_type": "IndividualAgent",
+        "from_action_name": "integrate_health_outcome",
+        "to_agent_type": "EnvAgent",
+        "to_action_name": "terminate",
+        "from_action_id": 4,
+        "to_action_id": -1,
+        "event_name": "HealthIntegrationCompletedEvent",
+        "event_info": "Final event indicating integration of health outcome",
+        "fields": [
+            {
+                "name": "integration_status",
+                "type": "string",
+                "default_value": "completed",
+                "description": "Status indicating completion of health outcome integration"
+            }
+        ]
+    },
+    "6": {
+        "id": 6,
+        "from_agent_type": "IndividualAgent",
+        "from_action_name": "adjust_to_policy_changes",
+        "to_agent_type": "EnvAgent",
+        "to_action_name": "terminate",
+        "from_action_id": 5,
+        "to_action_id": -1,
+        "event_name": "PolicyAdjustmentCompletedEvent",
+        "event_info": "Final event indicating adjustment to policy changes",
+        "fields": [
+            {
+                "name": "adjustment_status",
+                "type": "string",
+                "default_value": "completed",
+                "description": "Status indicating completion of policy adjustment"
+            }
+        ]
+    },
+    "7": {
+        "id": 7,
+        "from_agent_type": "FamilyAgent",
+        "from_action_name": "initiate_family_influence",
+        "to_agent_type": "IndividualAgent",
+        "to_action_name": "receive_family_support",
+        "from_action_id": 6,
+        "to_action_id": 2,
+        "event_name": "FamilySupportEvent",
+        "event_info": "Event to provide family support to individual agents",
+        "fields": [
+            {
+                "name": "support_type",
+                "type": "string",
+                "default_value": "",
+                "description": "Type of family support provided to the individual"
+            },
+            {
+                "name": "support_level",
+                "type": "float",
+                "default_value": "0.0",
+                "description": "Quantitative level of support provided"
+            }
+        ]
+    },
+    "8": {
+        "id": 8,
+        "from_agent_type": "EducationSystemAgent",
+        "from_action_name": "assess_education_impact",
+        "to_agent_type": "IndividualAgent",
+        "to_action_name": "adapt_to_education_outcome",
+        "from_action_id": 7,
+        "to_action_id": 3,
+        "event_name": "EducationOutcomeEvent",
+        "event_info": "Event reflecting the educational outcome adaptation",
+        "fields": [
+            {
+                "name": "education_outcome",
+                "type": "string",
+                "default_value": "",
+                "description": "Description of the educational outcome for the individual"
+            },
+            {
+                "name": "adaptation_level",
+                "type": "float",
+                "default_value": "0.0",
+                "description": "Quantitative measure of adaptation to educational outcomes"
+            }
+        ]
+    },
+    "9": {
+        "id": 9,
+        "from_agent_type": "HealthcareSystemAgent",
+        "from_action_name": "evaluate_health_services",
+        "to_agent_type": "IndividualAgent",
+        "to_action_name": "integrate_health_outcome",
+        "from_action_id": 8,
+        "to_action_id": 4,
+        "event_name": "HealthServiceOutcomeEvent",
+        "event_info": "Event reflecting healthcare service outcome integration",
+        "fields": [
+            {
+                "name": "health_outcome",
+                "type": "string",
+                "default_value": "",
+                "description": "Description of the healthcare service outcome for the individual"
+            },
+            {
+                "name": "service_quality",
+                "type": "float",
+                "default_value": "0.0",
+                "description": "Quantitative measure of healthcare service quality"
+            }
+        ]
+    },
+    "10": {
+        "id": 10,
+        "from_agent_type": "GovernmentAgent",
+        "from_action_name": "implement_policy",
+        "to_agent_type": "IndividualAgent",
+        "to_action_name": "adjust_to_policy_changes",
+        "from_action_id": 9,
+        "to_action_id": 5,
+        "event_name": "PolicyImpactEvent",
+        "event_info": "Event reflecting policy impact on individual agents",
+        "fields": [
+            {
+                "name": "policy_effect",
+                "type": "string",
+                "default_value": "",
+                "description": "Description of the policy impact on the individual"
+            },
+            {
+                "name": "impact_level",
+                "type": "float",
+                "default_value": "0.0",
+                "description": "Quantitative measure of the policy impact level"
+            }
+        ]
+    }
+}

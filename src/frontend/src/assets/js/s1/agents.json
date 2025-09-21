@@ -1,0 +1,2415 @@
+{
+    "agents": [
+        {
+            "id": "0",
+            "type": "MediaAgent",
+            "profile": {
+                "name": "Alex MediaPro",
+                "communication_channel": "social_media",
+                "credibility_score": 0,
+                "agent_type": "MediaAgent",
+                "generated_content": "",
+                "selected_topic": "",
+                "influence_factor": 0,
+                "interaction_history": [],
+                "id": "0"
+            }
+        },
+        {
+            "id": "1",
+            "type": "MediaAgent",
+            "profile": {
+                "name": "Beth NewsAnchor",
+                "communication_channel": "social_media",
+                "credibility_score": 0,
+                "agent_type": "MediaAgent",
+                "generated_content": "",
+                "selected_topic": "",
+                "influence_factor": 0,
+                "interaction_history": [],
+                "id": "1"
+            }
+        },
+        {
+            "id": "2",
+            "type": "MediaAgent",
+            "profile": {
+                "name": "Carlos Broadcast",
+                "communication_channel": "social_media",
+                "credibility_score": 0,
+                "agent_type": "MediaAgent",
+                "generated_content": "",
+                "selected_topic": "",
+                "influence_factor": 0,
+                "interaction_history": [],
+                "id": "2"
+            }
+        },
+        {
+            "id": "3",
+            "type": "MediaAgent",
+            "profile": {
+                "name": "Diana TalkShow",
+                "communication_channel": "social_media",
+                "credibility_score": 0,
+                "agent_type": "MediaAgent",
+                "generated_content": "",
+                "selected_topic": "",
+                "influence_factor": 0,
+                "interaction_history": [],
+                "id": "3"
+            }
+        },
+        {
+            "id": "4",
+            "type": "MediaAgent",
+            "profile": {
+                "name": "Evan Podcast",
+                "communication_channel": "social_media",
+                "credibility_score": 0,
+                "agent_type": "MediaAgent",
+                "generated_content": "",
+                "selected_topic": "",
+                "influence_factor": 0,
+                "interaction_history": [],
+                "id": "4"
+            }
+        },
+        {
+            "id": "5",
+            "type": "MediaAgent",
+            "profile": {
+                "name": "MediaMaster",
+                "communication_channel": "news_outlets",
+                "credibility_score": 0,
+                "agent_type": "MediaAgent",
+                "generated_content": "",
+                "selected_topic": "",
+                "influence_factor": 0,
+                "interaction_history": [],
+                "id": "5"
+            }
+        },
+        {
+            "id": "6",
+            "type": "MediaAgent",
+            "profile": {
+                "name": "CommPro",
+                "communication_channel": "blogs",
+                "credibility_score": 0,
+                "agent_type": "MediaAgent",
+                "generated_content": "",
+                "selected_topic": "",
+                "influence_factor": 0,
+                "interaction_history": [],
+                "id": "6"
+            }
+        },
+        {
+            "id": "7",
+            "type": "MediaAgent",
+            "profile": {
+                "name": "BroadcastBuddy",
+                "communication_channel": "news_outlets",
+                "credibility_score": 0,
+                "agent_type": "MediaAgent",
+                "generated_content": "",
+                "selected_topic": "",
+                "influence_factor": 0,
+                "interaction_history": [],
+                "id": "7"
+            }
+        },
+        {
+            "id": "8",
+            "type": "MediaAgent",
+            "profile": {
+                "name": "NewsNexus",
+                "communication_channel": "blogs",
+                "credibility_score": 0,
+                "agent_type": "MediaAgent",
+                "generated_content": "",
+                "selected_topic": "",
+                "influence_factor": 0,
+                "interaction_history": [],
+                "id": "8"
+            }
+        },
+        {
+            "id": "9",
+            "type": "MediaAgent",
+            "profile": {
+                "name": "EchoExpress",
+                "communication_channel": "news_outlets",
+                "credibility_score": 0,
+                "agent_type": "MediaAgent",
+                "generated_content": "",
+                "selected_topic": "",
+                "influence_factor": 0,
+                "interaction_history": [],
+                "id": "9"
+            }
+        },
+        {
+            "id": "10",
+            "type": "MediaAgent",
+            "profile": {
+                "name": "Alex MediaLink",
+                "communication_channel": "news_outlets",
+                "credibility_score": 0,
+                "agent_type": "MediaAgent",
+                "generated_content": "",
+                "selected_topic": "",
+                "influence_factor": 0,
+                "interaction_history": [],
+                "id": "10"
+            }
+        },
+        {
+            "id": "11",
+            "type": "MediaAgent",
+            "profile": {
+                "name": "Zoe Broadcast",
+                "communication_channel": "news_outlets",
+                "credibility_score": 0,
+                "agent_type": "MediaAgent",
+                "generated_content": "",
+                "selected_topic": "",
+                "influence_factor": 0,
+                "interaction_history": [],
+                "id": "11"
+            }
+        },
+        {
+            "id": "12",
+            "type": "MediaAgent",
+            "profile": {
+                "name": "Jordan Streamer",
+                "communication_channel": "social_media",
+                "credibility_score": 0,
+                "agent_type": "MediaAgent",
+                "generated_content": "",
+                "selected_topic": "",
+                "influence_factor": 0,
+                "interaction_history": [],
+                "id": "12"
+            }
+        },
+        {
+            "id": "13",
+            "type": "MediaAgent",
+            "profile": {
+                "name": "Lily ContentPro",
+                "communication_channel": "social_media",
+                "credibility_score": 0,
+                "agent_type": "MediaAgent",
+                "generated_content": "",
+                "selected_topic": "",
+                "influence_factor": 0,
+                "interaction_history": [],
+                "id": "13"
+            }
+        },
+        {
+            "id": "14",
+            "type": "MediaAgent",
+            "profile": {
+                "name": "Ethan MediaWave",
+                "communication_channel": "blogs",
+                "credibility_score": 0,
+                "agent_type": "MediaAgent",
+                "generated_content": "",
+                "selected_topic": "",
+                "influence_factor": 0,
+                "interaction_history": [],
+                "id": "14"
+            }
+        },
+        {
+            "id": "15",
+            "type": "MediaAgent",
+            "profile": {
+                "name": "Alex MediaPro",
+                "communication_channel": "blogs",
+                "credibility_score": 0,
+                "agent_type": "MediaAgent",
+                "generated_content": "",
+                "selected_topic": "",
+                "influence_factor": 0,
+                "interaction_history": [],
+                "id": "15"
+            }
+        },
+        {
+            "id": "16",
+            "type": "MediaAgent",
+            "profile": {
+                "name": "Jamie Broadcast",
+                "communication_channel": "blogs",
+                "credibility_score": 0,
+                "agent_type": "MediaAgent",
+                "generated_content": "",
+                "selected_topic": "",
+                "influence_factor": 0,
+                "interaction_history": [],
+                "id": "16"
+            }
+        },
+        {
+            "id": "17",
+            "type": "MediaAgent",
+            "profile": {
+                "name": "Taylor CableTV",
+                "communication_channel": "news_outlets",
+                "credibility_score": 0,
+                "agent_type": "MediaAgent",
+                "generated_content": "",
+                "selected_topic": "",
+                "influence_factor": 0,
+                "interaction_history": [],
+                "id": "17"
+            }
+        },
+        {
+            "id": "18",
+            "type": "MediaAgent",
+            "profile": {
+                "name": "Jordan Streaming",
+                "communication_channel": "blogs",
+                "credibility_score": 0,
+                "agent_type": "MediaAgent",
+                "generated_content": "",
+                "selected_topic": "",
+                "influence_factor": 0,
+                "interaction_history": [],
+                "id": "18"
+            }
+        },
+        {
+            "id": "19",
+            "type": "MediaAgent",
+            "profile": {
+                "name": "Ella ContentHub",
+                "communication_channel": "news_outlets",
+                "credibility_score": 0,
+                "agent_type": "MediaAgent",
+                "generated_content": "",
+                "selected_topic": "",
+                "influence_factor": 0,
+                "interaction_history": [],
+                "id": "19"
+            }
+        },
+        {
+            "id": "20",
+            "type": "MediaAgent",
+            "profile": {
+                "name": "Alex MediaPro",
+                "communication_channel": "news_outlets",
+                "credibility_score": 0,
+                "agent_type": "MediaAgent",
+                "generated_content": "",
+                "selected_topic": "",
+                "influence_factor": 0,
+                "interaction_history": [],
+                "id": "20"
+            }
+        },
+        {
+            "id": "21",
+            "type": "MediaAgent",
+            "profile": {
+                "name": "Zoe Broadcast",
+                "communication_channel": "blogs",
+                "credibility_score": 0,
+                "agent_type": "MediaAgent",
+                "generated_content": "",
+                "selected_topic": "",
+                "influence_factor": 0,
+                "interaction_history": [],
+                "id": "21"
+            }
+        },
+        {
+            "id": "22",
+            "type": "MediaAgent",
+            "profile": {
+                "name": "Ethan Streamline",
+                "communication_channel": "social_media",
+                "credibility_score": 0,
+                "agent_type": "MediaAgent",
+                "generated_content": "",
+                "selected_topic": "",
+                "influence_factor": 0,
+                "interaction_history": [],
+                "id": "22"
+            }
+        },
+        {
+            "id": "23",
+            "type": "MediaAgent",
+            "profile": {
+                "name": "Lily MediaWave",
+                "communication_channel": "news_outlets",
+                "credibility_score": 0,
+                "agent_type": "MediaAgent",
+                "generated_content": "",
+                "selected_topic": "",
+                "influence_factor": 0,
+                "interaction_history": [],
+                "id": "23"
+            }
+        },
+        {
+            "id": "24",
+            "type": "MediaAgent",
+            "profile": {
+                "name": "Max Connect",
+                "communication_channel": "news_outlets",
+                "credibility_score": 0,
+                "agent_type": "MediaAgent",
+                "generated_content": "",
+                "selected_topic": "",
+                "influence_factor": 0,
+                "interaction_history": [],
+                "id": "24"
+            }
+        },
+        {
+            "id": "25",
+            "type": "MediaAgent",
+            "profile": {
+                "name": "Jessica Broadcast",
+                "communication_channel": "social_media",
+                "credibility_score": 0,
+                "agent_type": "MediaAgent",
+                "generated_content": "",
+                "selected_topic": "",
+                "influence_factor": 0,
+                "interaction_history": [],
+                "id": "25"
+            }
+        },
+        {
+            "id": "26",
+            "type": "MediaAgent",
+            "profile": {
+                "name": "Michael Airing",
+                "communication_channel": "blogs",
+                "credibility_score": 0,
+                "agent_type": "MediaAgent",
+                "generated_content": "",
+                "selected_topic": "",
+                "influence_factor": 0,
+                "interaction_history": [],
+                "id": "26"
+            }
+        },
+        {
+            "id": "27",
+            "type": "MediaAgent",
+            "profile": {
+                "name": "Sophia Streamline",
+                "communication_channel": "social_media",
+                "credibility_score": 0,
+                "agent_type": "MediaAgent",
+                "generated_content": "",
+                "selected_topic": "",
+                "influence_factor": 0,
+                "interaction_history": [],
+                "id": "27"
+            }
+        },
+        {
+            "id": "28",
+            "type": "MediaAgent",
+            "profile": {
+                "name": "Ethan Broadcaster",
+                "communication_channel": "social_media",
+                "credibility_score": 0,
+                "agent_type": "MediaAgent",
+                "generated_content": "",
+                "selected_topic": "",
+                "influence_factor": 0,
+                "interaction_history": [],
+                "id": "28"
+            }
+        },
+        {
+            "id": "29",
+            "type": "MediaAgent",
+            "profile": {
+                "name": "MediaMaven",
+                "communication_channel": "news_outlets",
+                "credibility_score": 0,
+                "agent_type": "MediaAgent",
+                "generated_content": "",
+                "selected_topic": "",
+                "influence_factor": 0,
+                "interaction_history": [],
+                "id": "29"
+            }
+        },
+        {
+            "id": "30",
+            "type": "MediaAgent",
+            "profile": {
+                "name": "MediaMaven",
+                "communication_channel": "news_outlets",
+                "credibility_score": 0,
+                "agent_type": "MediaAgent",
+                "generated_content": "",
+                "selected_topic": "",
+                "influence_factor": 0,
+                "interaction_history": [],
+                "id": "30"
+            }
+        },
+        {
+            "id": "31",
+            "type": "MediaAgent",
+            "profile": {
+                "name": "CommConnect",
+                "communication_channel": "social_media",
+                "credibility_score": 0,
+                "agent_type": "MediaAgent",
+                "generated_content": "",
+                "selected_topic": "",
+                "influence_factor": 0,
+                "interaction_history": [],
+                "id": "31"
+            }
+        },
+        {
+            "id": "32",
+            "type": "MediaAgent",
+            "profile": {
+                "name": "BroadcastBravo",
+                "communication_channel": "social_media",
+                "credibility_score": 0,
+                "agent_type": "MediaAgent",
+                "generated_content": "",
+                "selected_topic": "",
+                "influence_factor": 0,
+                "interaction_history": [],
+                "id": "32"
+            }
+        },
+        {
+            "id": "33",
+            "type": "MediaAgent",
+            "profile": {
+                "name": "StreamSavvy",
+                "communication_channel": "social_media",
+                "credibility_score": 0,
+                "agent_type": "MediaAgent",
+                "generated_content": "",
+                "selected_topic": "",
+                "influence_factor": 0,
+                "interaction_history": [],
+                "id": "33"
+            }
+        },
+        {
+            "id": "34",
+            "type": "MediaAgent",
+            "profile": {
+                "name": "ChannelCharm",
+                "communication_channel": "social_media",
+                "credibility_score": 0,
+                "agent_type": "MediaAgent",
+                "generated_content": "",
+                "selected_topic": "",
+                "influence_factor": 0,
+                "interaction_history": [],
+                "id": "34"
+            }
+        },
+        {
+            "id": "35",
+            "type": "MediaAgent",
+            "profile": {
+                "name": "EchoWave",
+                "communication_channel": "blogs",
+                "credibility_score": 0,
+                "agent_type": "MediaAgent",
+                "generated_content": "",
+                "selected_topic": "",
+                "influence_factor": 0,
+                "interaction_history": [],
+                "id": "35"
+            }
+        },
+        {
+            "id": "36",
+            "type": "MediaAgent",
+            "profile": {
+                "name": "SignalSentry",
+                "communication_channel": "news_outlets",
+                "credibility_score": 0,
+                "agent_type": "MediaAgent",
+                "generated_content": "",
+                "selected_topic": "",
+                "influence_factor": 0,
+                "interaction_history": [],
+                "id": "36"
+            }
+        },
+        {
+            "id": "37",
+            "type": "MediaAgent",
+            "profile": {
+                "name": "BroadcastBrain",
+                "communication_channel": "news_outlets",
+                "credibility_score": 0,
+                "agent_type": "MediaAgent",
+                "generated_content": "",
+                "selected_topic": "",
+                "influence_factor": 0,
+                "interaction_history": [],
+                "id": "37"
+            }
+        },
+        {
+            "id": "38",
+            "type": "MediaAgent",
+            "profile": {
+                "name": "MediaMaven",
+                "communication_channel": "news_outlets",
+                "credibility_score": 0,
+                "agent_type": "MediaAgent",
+                "generated_content": "",
+                "selected_topic": "",
+                "influence_factor": 0,
+                "interaction_history": [],
+                "id": "38"
+            }
+        },
+        {
+            "id": "39",
+            "type": "MediaAgent",
+            "profile": {
+                "name": "WaveWatcher",
+                "communication_channel": "blogs",
+                "credibility_score": 0,
+                "agent_type": "MediaAgent",
+                "generated_content": "",
+                "selected_topic": "",
+                "influence_factor": 0,
+                "interaction_history": [],
+                "id": "39"
+            }
+        },
+        {
+            "id": "40",
+            "type": "MediaAgent",
+            "profile": {
+                "name": "Alexandra Newsom",
+                "communication_channel": "blogs",
+                "credibility_score": 0,
+                "agent_type": "MediaAgent",
+                "generated_content": "",
+                "selected_topic": "",
+                "influence_factor": 0,
+                "interaction_history": [],
+                "id": "40"
+            }
+        },
+        {
+            "id": "41",
+            "type": "MediaAgent",
+            "profile": {
+                "name": "Carlos Media",
+                "communication_channel": "blogs",
+                "credibility_score": 0,
+                "agent_type": "MediaAgent",
+                "generated_content": "",
+                "selected_topic": "",
+                "influence_factor": 0,
+                "interaction_history": [],
+                "id": "41"
+            }
+        },
+        {
+            "id": "42",
+            "type": "MediaAgent",
+            "profile": {
+                "name": "Emily Broadcast",
+                "communication_channel": "social_media",
+                "credibility_score": 0,
+                "agent_type": "MediaAgent",
+                "generated_content": "",
+                "selected_topic": "",
+                "influence_factor": 0,
+                "interaction_history": [],
+                "id": "42"
+            }
+        },
+        {
+            "id": "43",
+            "type": "MediaAgent",
+            "profile": {
+                "name": "Finn Press",
+                "communication_channel": "news_outlets",
+                "credibility_score": 0,
+                "agent_type": "MediaAgent",
+                "generated_content": "",
+                "selected_topic": "",
+                "influence_factor": 0,
+                "interaction_history": [],
+                "id": "43"
+            }
+        },
+        {
+            "id": "44",
+            "type": "MediaAgent",
+            "profile": {
+                "name": "Gina Stream",
+                "communication_channel": "social_media",
+                "credibility_score": 0,
+                "agent_type": "MediaAgent",
+                "generated_content": "",
+                "selected_topic": "",
+                "influence_factor": 0,
+                "interaction_history": [],
+                "id": "44"
+            }
+        },
+        {
+            "id": "45",
+            "type": "MediaAgent",
+            "profile": {
+                "name": "MediaMaven",
+                "communication_channel": "news_outlets",
+                "credibility_score": 0,
+                "agent_type": "MediaAgent",
+                "generated_content": "",
+                "selected_topic": "",
+                "influence_factor": 0,
+                "interaction_history": [],
+                "id": "45"
+            }
+        },
+        {
+            "id": "46",
+            "type": "MediaAgent",
+            "profile": {
+                "name": "BroadcastBrian",
+                "communication_channel": "news_outlets",
+                "credibility_score": 0,
+                "agent_type": "MediaAgent",
+                "generated_content": "",
+                "selected_topic": "",
+                "influence_factor": 0,
+                "interaction_history": [],
+                "id": "46"
+            }
+        },
+        {
+            "id": "47",
+            "type": "MediaAgent",
+            "profile": {
+                "name": "StreamSally",
+                "communication_channel": "blogs",
+                "credibility_score": 0,
+                "agent_type": "MediaAgent",
+                "generated_content": "",
+                "selected_topic": "",
+                "influence_factor": 0,
+                "interaction_history": [],
+                "id": "47"
+            }
+        },
+        {
+            "id": "48",
+            "type": "MediaAgent",
+            "profile": {
+                "name": "TelecomTom",
+                "communication_channel": "social_media",
+                "credibility_score": 0,
+                "agent_type": "MediaAgent",
+                "generated_content": "",
+                "selected_topic": "",
+                "influence_factor": 0,
+                "interaction_history": [],
+                "id": "48"
+            }
+        },
+        {
+            "id": "49",
+            "type": "MediaAgent",
+            "profile": {
+                "name": "SignalSam",
+                "communication_channel": "news_outlets",
+                "credibility_score": 0,
+                "agent_type": "MediaAgent",
+                "generated_content": "",
+                "selected_topic": "",
+                "influence_factor": 0,
+                "interaction_history": [],
+                "id": "49"
+            }
+        },
+        {
+            "id": "350",
+            "type": "OpinionLeaderAgent",
+            "profile": {
+                "name": "TechGuruX",
+                "credibility_score": 0,
+                "influence_factor": 0,
+                "social_circle_size": 29,
+                "reliability_index": 0.6778331270693565,
+                "communication_delay": 0,
+                "agent_type": "OpinionLeaderAgent",
+                "personal_views": [],
+                "evaluated_content": "",
+                "modified_content": "",
+                "information_log": [],
+                "id": "350"
+            }
+        },
+        {
+            "id": "351",
+            "type": "OpinionLeaderAgent",
+            "profile": {
+                "name": "EcoWarriorZ",
+                "credibility_score": 0,
+                "influence_factor": 0,
+                "social_circle_size": 28,
+                "reliability_index": 0.6949584763971943,
+                "communication_delay": 0,
+                "agent_type": "OpinionLeaderAgent",
+                "personal_views": [],
+                "evaluated_content": "",
+                "modified_content": "",
+                "information_log": [],
+                "id": "351"
+            }
+        },
+        {
+            "id": "352",
+            "type": "OpinionLeaderAgent",
+            "profile": {
+                "name": "FitLifeY",
+                "credibility_score": 0,
+                "influence_factor": 0,
+                "social_circle_size": 31,
+                "reliability_index": 0.560089164029304,
+                "communication_delay": 0,
+                "agent_type": "OpinionLeaderAgent",
+                "personal_views": [],
+                "evaluated_content": "",
+                "modified_content": "",
+                "information_log": [],
+                "id": "352"
+            }
+        },
+        {
+            "id": "353",
+            "type": "OpinionLeaderAgent",
+            "profile": {
+                "name": "ArtisanA",
+                "credibility_score": 0,
+                "influence_factor": 0,
+                "social_circle_size": 22,
+                "reliability_index": 0.6276550660557694,
+                "communication_delay": 0,
+                "agent_type": "OpinionLeaderAgent",
+                "personal_views": [],
+                "evaluated_content": "",
+                "modified_content": "",
+                "information_log": [],
+                "id": "353"
+            }
+        },
+        {
+            "id": "354",
+            "type": "OpinionLeaderAgent",
+            "profile": {
+                "name": "CulinaryChampionB",
+                "credibility_score": 0,
+                "influence_factor": 0,
+                "social_circle_size": 46,
+                "reliability_index": 0.9844052501705717,
+                "communication_delay": 0,
+                "agent_type": "OpinionLeaderAgent",
+                "personal_views": [],
+                "evaluated_content": "",
+                "modified_content": "",
+                "information_log": [],
+                "id": "354"
+            }
+        },
+        {
+            "id": "355",
+            "type": "OpinionLeaderAgent",
+            "profile": {
+                "name": "EcoWarriorEmma",
+                "credibility_score": 0,
+                "influence_factor": 0,
+                "social_circle_size": 12,
+                "reliability_index": 0.5058846889637831,
+                "communication_delay": 0,
+                "agent_type": "OpinionLeaderAgent",
+                "personal_views": [],
+                "evaluated_content": "",
+                "modified_content": "",
+                "information_log": [],
+                "id": "355"
+            }
+        },
+        {
+            "id": "356",
+            "type": "OpinionLeaderAgent",
+            "profile": {
+                "name": "TechTrendsTom",
+                "credibility_score": 0,
+                "influence_factor": 0,
+                "social_circle_size": 7,
+                "reliability_index": 0.11724549722322741,
+                "communication_delay": 0,
+                "agent_type": "OpinionLeaderAgent",
+                "personal_views": [],
+                "evaluated_content": "",
+                "modified_content": "",
+                "information_log": [],
+                "id": "356"
+            }
+        },
+        {
+            "id": "357",
+            "type": "OpinionLeaderAgent",
+            "profile": {
+                "name": "FitFusionFiona",
+                "credibility_score": 0,
+                "influence_factor": 0,
+                "social_circle_size": 9,
+                "reliability_index": 0.6902137269678676,
+                "communication_delay": 0,
+                "agent_type": "OpinionLeaderAgent",
+                "personal_views": [],
+                "evaluated_content": "",
+                "modified_content": "",
+                "information_log": [],
+                "id": "357"
+            }
+        },
+        {
+            "id": "358",
+            "type": "OpinionLeaderAgent",
+            "profile": {
+                "name": "ArtisanAlly",
+                "credibility_score": 0,
+                "influence_factor": 0,
+                "social_circle_size": 7,
+                "reliability_index": 0.19506905876015868,
+                "communication_delay": 0,
+                "agent_type": "OpinionLeaderAgent",
+                "personal_views": [],
+                "evaluated_content": "",
+                "modified_content": "",
+                "information_log": [],
+                "id": "358"
+            }
+        },
+        {
+            "id": "359",
+            "type": "OpinionLeaderAgent",
+            "profile": {
+                "name": "SustainableSteve",
+                "credibility_score": 0,
+                "influence_factor": 0,
+                "social_circle_size": 41,
+                "reliability_index": 0.1272191286377441,
+                "communication_delay": 0,
+                "agent_type": "OpinionLeaderAgent",
+                "personal_views": [],
+                "evaluated_content": "",
+                "modified_content": "",
+                "information_log": [],
+                "id": "359"
+            }
+        },
+        {
+            "id": "360",
+            "type": "OpinionLeaderAgent",
+            "profile": {
+                "name": "TechSavvyGal",
+                "credibility_score": 0,
+                "influence_factor": 0,
+                "social_circle_size": 34,
+                "reliability_index": 0.8985397685591657,
+                "communication_delay": 0,
+                "agent_type": "OpinionLeaderAgent",
+                "personal_views": [],
+                "evaluated_content": "",
+                "modified_content": "",
+                "information_log": [],
+                "id": "360"
+            }
+        },
+        {
+            "id": "361",
+            "type": "OpinionLeaderAgent",
+            "profile": {
+                "name": "FitnessFreakMax",
+                "credibility_score": 0,
+                "influence_factor": 0,
+                "social_circle_size": 15,
+                "reliability_index": 0.6234910942104194,
+                "communication_delay": 0,
+                "agent_type": "OpinionLeaderAgent",
+                "personal_views": [],
+                "evaluated_content": "",
+                "modified_content": "",
+                "information_log": [],
+                "id": "361"
+            }
+        },
+        {
+            "id": "362",
+            "type": "OpinionLeaderAgent",
+            "profile": {
+                "name": "TravelTalesTom",
+                "credibility_score": 0,
+                "influence_factor": 0,
+                "social_circle_size": 38,
+                "reliability_index": 0.015189787547077227,
+                "communication_delay": 0,
+                "agent_type": "OpinionLeaderAgent",
+                "personal_views": [],
+                "evaluated_content": "",
+                "modified_content": "",
+                "information_log": [],
+                "id": "362"
+            }
+        },
+        {
+            "id": "363",
+            "type": "OpinionLeaderAgent",
+            "profile": {
+                "name": "BeautyBloggerBella",
+                "credibility_score": 0,
+                "influence_factor": 0,
+                "social_circle_size": 10,
+                "reliability_index": 0.8063811363584458,
+                "communication_delay": 0,
+                "agent_type": "OpinionLeaderAgent",
+                "personal_views": [],
+                "evaluated_content": "",
+                "modified_content": "",
+                "information_log": [],
+                "id": "363"
+            }
+        },
+        {
+            "id": "364",
+            "type": "OpinionLeaderAgent",
+            "profile": {
+                "name": "FoodieFrankie",
+                "credibility_score": 0,
+                "influence_factor": 0,
+                "social_circle_size": 19,
+                "reliability_index": 0.17081402584042804,
+                "communication_delay": 0,
+                "agent_type": "OpinionLeaderAgent",
+                "personal_views": [],
+                "evaluated_content": "",
+                "modified_content": "",
+                "information_log": [],
+                "id": "364"
+            }
+        },
+        {
+            "id": "365",
+            "type": "OpinionLeaderAgent",
+            "profile": {
+                "name": "TechSavvySam",
+                "credibility_score": 0,
+                "influence_factor": 0,
+                "social_circle_size": 46,
+                "reliability_index": 0.35609176370629414,
+                "communication_delay": 0,
+                "agent_type": "OpinionLeaderAgent",
+                "personal_views": [],
+                "evaluated_content": "",
+                "modified_content": "",
+                "information_log": [],
+                "id": "365"
+            }
+        },
+        {
+            "id": "366",
+            "type": "OpinionLeaderAgent",
+            "profile": {
+                "name": "FitnessFreakLily",
+                "credibility_score": 0,
+                "influence_factor": 0,
+                "social_circle_size": 15,
+                "reliability_index": 0.1492370316746916,
+                "communication_delay": 0,
+                "agent_type": "OpinionLeaderAgent",
+                "personal_views": [],
+                "evaluated_content": "",
+                "modified_content": "",
+                "information_log": [],
+                "id": "366"
+            }
+        },
+        {
+            "id": "367",
+            "type": "OpinionLeaderAgent",
+            "profile": {
+                "name": "ArtisticAlly",
+                "credibility_score": 0,
+                "influence_factor": 0,
+                "social_circle_size": 47,
+                "reliability_index": 0.3328461992029056,
+                "communication_delay": 0,
+                "agent_type": "OpinionLeaderAgent",
+                "personal_views": [],
+                "evaluated_content": "",
+                "modified_content": "",
+                "information_log": [],
+                "id": "367"
+            }
+        },
+        {
+            "id": "368",
+            "type": "OpinionLeaderAgent",
+            "profile": {
+                "name": "TravelTalesTom",
+                "credibility_score": 0,
+                "influence_factor": 0,
+                "social_circle_size": 13,
+                "reliability_index": 0.9914981955882637,
+                "communication_delay": 0,
+                "agent_type": "OpinionLeaderAgent",
+                "personal_views": [],
+                "evaluated_content": "",
+                "modified_content": "",
+                "information_log": [],
+                "id": "368"
+            }
+        },
+        {
+            "id": "369",
+            "type": "OpinionLeaderAgent",
+            "profile": {
+                "name": "GourmetGina",
+                "credibility_score": 0,
+                "influence_factor": 0,
+                "social_circle_size": 28,
+                "reliability_index": 0.8269755794701853,
+                "communication_delay": 0,
+                "agent_type": "OpinionLeaderAgent",
+                "personal_views": [],
+                "evaluated_content": "",
+                "modified_content": "",
+                "information_log": [],
+                "id": "369"
+            }
+        },
+        {
+            "id": "370",
+            "type": "OpinionLeaderAgent",
+            "profile": {
+                "name": "TechSavvyGal",
+                "credibility_score": 0,
+                "influence_factor": 0,
+                "social_circle_size": 16,
+                "reliability_index": 0.38895832660424523,
+                "communication_delay": 0,
+                "agent_type": "OpinionLeaderAgent",
+                "personal_views": [],
+                "evaluated_content": "",
+                "modified_content": "",
+                "information_log": [],
+                "id": "370"
+            }
+        },
+        {
+            "id": "371",
+            "type": "OpinionLeaderAgent",
+            "profile": {
+                "name": "FitnessFreakMax",
+                "credibility_score": 0,
+                "influence_factor": 0,
+                "social_circle_size": 38,
+                "reliability_index": 0.9486466985066313,
+                "communication_delay": 0,
+                "agent_type": "OpinionLeaderAgent",
+                "personal_views": [],
+                "evaluated_content": "",
+                "modified_content": "",
+                "information_log": [],
+                "id": "371"
+            }
+        },
+        {
+            "id": "372",
+            "type": "OpinionLeaderAgent",
+            "profile": {
+                "name": "ArtisticAlly",
+                "credibility_score": 0,
+                "influence_factor": 0,
+                "social_circle_size": 40,
+                "reliability_index": 0.7534293051262205,
+                "communication_delay": 0,
+                "agent_type": "OpinionLeaderAgent",
+                "personal_views": [],
+                "evaluated_content": "",
+                "modified_content": "",
+                "information_log": [],
+                "id": "372"
+            }
+        },
+        {
+            "id": "373",
+            "type": "OpinionLeaderAgent",
+            "profile": {
+                "name": "TravelTalesTina",
+                "credibility_score": 0,
+                "influence_factor": 0,
+                "social_circle_size": 43,
+                "reliability_index": 0.7301058735101007,
+                "communication_delay": 0,
+                "agent_type": "OpinionLeaderAgent",
+                "personal_views": [],
+                "evaluated_content": "",
+                "modified_content": "",
+                "information_log": [],
+                "id": "373"
+            }
+        },
+        {
+            "id": "374",
+            "type": "OpinionLeaderAgent",
+            "profile": {
+                "name": "ChefCharlie",
+                "credibility_score": 0,
+                "influence_factor": 0,
+                "social_circle_size": 32,
+                "reliability_index": 0.07257164003303629,
+                "communication_delay": 0,
+                "agent_type": "OpinionLeaderAgent",
+                "personal_views": [],
+                "evaluated_content": "",
+                "modified_content": "",
+                "information_log": [],
+                "id": "374"
+            }
+        },
+        {
+            "id": "375",
+            "type": "OpinionLeaderAgent",
+            "profile": {
+                "name": "TechGuruMax",
+                "credibility_score": 0,
+                "influence_factor": 0,
+                "social_circle_size": 49,
+                "reliability_index": 0.3257156657493976,
+                "communication_delay": 0,
+                "agent_type": "OpinionLeaderAgent",
+                "personal_views": [],
+                "evaluated_content": "",
+                "modified_content": "",
+                "information_log": [],
+                "id": "375"
+            }
+        },
+        {
+            "id": "376",
+            "type": "OpinionLeaderAgent",
+            "profile": {
+                "name": "FashionistaFlora",
+                "credibility_score": 0,
+                "influence_factor": 0,
+                "social_circle_size": 9,
+                "reliability_index": 0.3394087282586342,
+                "communication_delay": 0,
+                "agent_type": "OpinionLeaderAgent",
+                "personal_views": [],
+                "evaluated_content": "",
+                "modified_content": "",
+                "information_log": [],
+                "id": "376"
+            }
+        },
+        {
+            "id": "377",
+            "type": "OpinionLeaderAgent",
+            "profile": {
+                "name": "HealthHawkHarry",
+                "credibility_score": 0,
+                "influence_factor": 0,
+                "social_circle_size": 9,
+                "reliability_index": 0.15503338485449036,
+                "communication_delay": 0,
+                "agent_type": "OpinionLeaderAgent",
+                "personal_views": [],
+                "evaluated_content": "",
+                "modified_content": "",
+                "information_log": [],
+                "id": "377"
+            }
+        },
+        {
+            "id": "378",
+            "type": "OpinionLeaderAgent",
+            "profile": {
+                "name": "TravelTrendTina",
+                "credibility_score": 0,
+                "influence_factor": 0,
+                "social_circle_size": 17,
+                "reliability_index": 0.6673985838934744,
+                "communication_delay": 0,
+                "agent_type": "OpinionLeaderAgent",
+                "personal_views": [],
+                "evaluated_content": "",
+                "modified_content": "",
+                "information_log": [],
+                "id": "378"
+            }
+        },
+        {
+            "id": "379",
+            "type": "OpinionLeaderAgent",
+            "profile": {
+                "name": "GamingGuruGary",
+                "credibility_score": 0,
+                "influence_factor": 0,
+                "social_circle_size": 35,
+                "reliability_index": 0.8509412833867437,
+                "communication_delay": 0,
+                "agent_type": "OpinionLeaderAgent",
+                "personal_views": [],
+                "evaluated_content": "",
+                "modified_content": "",
+                "information_log": [],
+                "id": "379"
+            }
+        },
+        {
+            "id": "380",
+            "type": "OpinionLeaderAgent",
+            "profile": {
+                "name": "TechSavvySarah",
+                "credibility_score": 0,
+                "influence_factor": 0,
+                "social_circle_size": 35,
+                "reliability_index": 0.1613817947390015,
+                "communication_delay": 0,
+                "agent_type": "OpinionLeaderAgent",
+                "personal_views": [],
+                "evaluated_content": "",
+                "modified_content": "",
+                "information_log": [],
+                "id": "380"
+            }
+        },
+        {
+            "id": "381",
+            "type": "OpinionLeaderAgent",
+            "profile": {
+                "name": "FitnessGuruFrank",
+                "credibility_score": 0,
+                "influence_factor": 0,
+                "social_circle_size": 36,
+                "reliability_index": 0.09665845336835832,
+                "communication_delay": 0,
+                "agent_type": "OpinionLeaderAgent",
+                "personal_views": [],
+                "evaluated_content": "",
+                "modified_content": "",
+                "information_log": [],
+                "id": "381"
+            }
+        },
+        {
+            "id": "382",
+            "type": "OpinionLeaderAgent",
+            "profile": {
+                "name": "ArtisticAlice",
+                "credibility_score": 0,
+                "influence_factor": 0,
+                "social_circle_size": 21,
+                "reliability_index": 0.6439378458789125,
+                "communication_delay": 0,
+                "agent_type": "OpinionLeaderAgent",
+                "personal_views": [],
+                "evaluated_content": "",
+                "modified_content": "",
+                "information_log": [],
+                "id": "382"
+            }
+        },
+        {
+            "id": "383",
+            "type": "OpinionLeaderAgent",
+            "profile": {
+                "name": "TravelTanya",
+                "credibility_score": 0,
+                "influence_factor": 0,
+                "social_circle_size": 19,
+                "reliability_index": 0.8290332517283537,
+                "communication_delay": 0,
+                "agent_type": "OpinionLeaderAgent",
+                "personal_views": [],
+                "evaluated_content": "",
+                "modified_content": "",
+                "information_log": [],
+                "id": "383"
+            }
+        },
+        {
+            "id": "384",
+            "type": "OpinionLeaderAgent",
+            "profile": {
+                "name": "FinanceFinn",
+                "credibility_score": 0,
+                "influence_factor": 0,
+                "social_circle_size": 27,
+                "reliability_index": 0.05741231649044698,
+                "communication_delay": 0,
+                "agent_type": "OpinionLeaderAgent",
+                "personal_views": [],
+                "evaluated_content": "",
+                "modified_content": "",
+                "information_log": [],
+                "id": "384"
+            }
+        },
+        {
+            "id": "385",
+            "type": "OpinionLeaderAgent",
+            "profile": {
+                "name": "TechSavvyGuru",
+                "credibility_score": 0,
+                "influence_factor": 0,
+                "social_circle_size": 46,
+                "reliability_index": 0.6282858249291858,
+                "communication_delay": 0,
+                "agent_type": "OpinionLeaderAgent",
+                "personal_views": [],
+                "evaluated_content": "",
+                "modified_content": "",
+                "information_log": [],
+                "id": "385"
+            }
+        },
+        {
+            "id": "386",
+            "type": "OpinionLeaderAgent",
+            "profile": {
+                "name": "FashionistaQueen",
+                "credibility_score": 0,
+                "influence_factor": 0,
+                "social_circle_size": 33,
+                "reliability_index": 0.1199578534378335,
+                "communication_delay": 0,
+                "agent_type": "OpinionLeaderAgent",
+                "personal_views": [],
+                "evaluated_content": "",
+                "modified_content": "",
+                "information_log": [],
+                "id": "386"
+            }
+        },
+        {
+            "id": "387",
+            "type": "OpinionLeaderAgent",
+            "profile": {
+                "name": "HealthyLivingPro",
+                "credibility_score": 0,
+                "influence_factor": 0,
+                "social_circle_size": 10,
+                "reliability_index": 0.9040214544671848,
+                "communication_delay": 0,
+                "agent_type": "OpinionLeaderAgent",
+                "personal_views": [],
+                "evaluated_content": "",
+                "modified_content": "",
+                "information_log": [],
+                "id": "387"
+            }
+        },
+        {
+            "id": "388",
+            "type": "OpinionLeaderAgent",
+            "profile": {
+                "name": "TravelBugTrix",
+                "credibility_score": 0,
+                "influence_factor": 0,
+                "social_circle_size": 25,
+                "reliability_index": 0.771341688306634,
+                "communication_delay": 0,
+                "agent_type": "OpinionLeaderAgent",
+                "personal_views": [],
+                "evaluated_content": "",
+                "modified_content": "",
+                "information_log": [],
+                "id": "388"
+            }
+        },
+        {
+            "id": "389",
+            "type": "OpinionLeaderAgent",
+            "profile": {
+                "name": "FoodieFusionist",
+                "credibility_score": 0,
+                "influence_factor": 0,
+                "social_circle_size": 5,
+                "reliability_index": 0.3835361046779504,
+                "communication_delay": 0,
+                "agent_type": "OpinionLeaderAgent",
+                "personal_views": [],
+                "evaluated_content": "",
+                "modified_content": "",
+                "information_log": [],
+                "id": "389"
+            }
+        },
+        {
+            "id": "390",
+            "type": "OpinionLeaderAgent",
+            "profile": {
+                "name": "TechSavvySam",
+                "credibility_score": 0,
+                "influence_factor": 0,
+                "social_circle_size": 32,
+                "reliability_index": 0.6489641517327095,
+                "communication_delay": 0,
+                "agent_type": "OpinionLeaderAgent",
+                "personal_views": [],
+                "evaluated_content": "",
+                "modified_content": "",
+                "information_log": [],
+                "id": "390"
+            }
+        },
+        {
+            "id": "391",
+            "type": "OpinionLeaderAgent",
+            "profile": {
+                "name": "FitLifeAlex",
+                "credibility_score": 0,
+                "influence_factor": 0,
+                "social_circle_size": 12,
+                "reliability_index": 0.0827608451734192,
+                "communication_delay": 0,
+                "agent_type": "OpinionLeaderAgent",
+                "personal_views": [],
+                "evaluated_content": "",
+                "modified_content": "",
+                "information_log": [],
+                "id": "391"
+            }
+        },
+        {
+            "id": "392",
+            "type": "OpinionLeaderAgent",
+            "profile": {
+                "name": "GadgetGuruGina",
+                "credibility_score": 0,
+                "influence_factor": 0,
+                "social_circle_size": 15,
+                "reliability_index": 0.3686011565727981,
+                "communication_delay": 0,
+                "agent_type": "OpinionLeaderAgent",
+                "personal_views": [],
+                "evaluated_content": "",
+                "modified_content": "",
+                "information_log": [],
+                "id": "392"
+            }
+        },
+        {
+            "id": "393",
+            "type": "OpinionLeaderAgent",
+            "profile": {
+                "name": "EcoWarriorElla",
+                "credibility_score": 0,
+                "influence_factor": 0,
+                "social_circle_size": 38,
+                "reliability_index": 0.38412632481459474,
+                "communication_delay": 0,
+                "agent_type": "OpinionLeaderAgent",
+                "personal_views": [],
+                "evaluated_content": "",
+                "modified_content": "",
+                "information_log": [],
+                "id": "393"
+            }
+        },
+        {
+            "id": "394",
+            "type": "OpinionLeaderAgent",
+            "profile": {
+                "name": "TravelTrendTom",
+                "credibility_score": 0,
+                "influence_factor": 0,
+                "social_circle_size": 43,
+                "reliability_index": 0.49724063754454306,
+                "communication_delay": 0,
+                "agent_type": "OpinionLeaderAgent",
+                "personal_views": [],
+                "evaluated_content": "",
+                "modified_content": "",
+                "information_log": [],
+                "id": "394"
+            }
+        },
+        {
+            "id": "395",
+            "type": "OpinionLeaderAgent",
+            "profile": {
+                "name": "TechSavvySam",
+                "credibility_score": 0,
+                "influence_factor": 0,
+                "social_circle_size": 27,
+                "reliability_index": 0.1611799565310661,
+                "communication_delay": 0,
+                "agent_type": "OpinionLeaderAgent",
+                "personal_views": [],
+                "evaluated_content": "",
+                "modified_content": "",
+                "information_log": [],
+                "id": "395"
+            }
+        },
+        {
+            "id": "396",
+            "type": "OpinionLeaderAgent",
+            "profile": {
+                "name": "FitLifeFiona",
+                "credibility_score": 0,
+                "influence_factor": 0,
+                "social_circle_size": 29,
+                "reliability_index": 0.8262392881868896,
+                "communication_delay": 0,
+                "agent_type": "OpinionLeaderAgent",
+                "personal_views": [],
+                "evaluated_content": "",
+                "modified_content": "",
+                "information_log": [],
+                "id": "396"
+            }
+        },
+        {
+            "id": "397",
+            "type": "OpinionLeaderAgent",
+            "profile": {
+                "name": "ArtisanAlex",
+                "credibility_score": 0,
+                "influence_factor": 0,
+                "social_circle_size": 11,
+                "reliability_index": 0.6122172307504313,
+                "communication_delay": 0,
+                "agent_type": "OpinionLeaderAgent",
+                "personal_views": [],
+                "evaluated_content": "",
+                "modified_content": "",
+                "information_log": [],
+                "id": "397"
+            }
+        },
+        {
+            "id": "398",
+            "type": "OpinionLeaderAgent",
+            "profile": {
+                "name": "EcoWarriorEve",
+                "credibility_score": 0,
+                "influence_factor": 0,
+                "social_circle_size": 39,
+                "reliability_index": 0.5493456708942689,
+                "communication_delay": 0,
+                "agent_type": "OpinionLeaderAgent",
+                "personal_views": [],
+                "evaluated_content": "",
+                "modified_content": "",
+                "information_log": [],
+                "id": "398"
+            }
+        },
+        {
+            "id": "399",
+            "type": "OpinionLeaderAgent",
+            "profile": {
+                "name": "GadgetGuruGary",
+                "credibility_score": 0,
+                "influence_factor": 0,
+                "social_circle_size": 30,
+                "reliability_index": 0.07471264385236076,
+                "communication_delay": 0,
+                "agent_type": "OpinionLeaderAgent",
+                "personal_views": [],
+                "evaluated_content": "",
+                "modified_content": "",
+                "information_log": [],
+                "id": "399"
+            }
+        },
+        {
+            "id": "700",
+            "type": "PublicAgent",
+            "profile": {
+                "name": "Alice Public",
+                "trust_level": 0,
+                "behavior_adjustment": "",
+                "social_circle": [],
+                "influence_score": 0.9410967112750365,
+                "information_acceptance": "low",
+                "agent_type": "PublicAgent",
+                "received_content": "",
+                "id": "700"
+            }
+        },
+        {
+            "id": "701",
+            "type": "PublicAgent",
+            "profile": {
+                "name": "Bob Networker",
+                "trust_level": 0,
+                "behavior_adjustment": "",
+                "social_circle": [],
+                "influence_score": 0.32265053694625967,
+                "information_acceptance": "low",
+                "agent_type": "PublicAgent",
+                "received_content": "",
+                "id": "701"
+            }
+        },
+        {
+            "id": "702",
+            "type": "PublicAgent",
+            "profile": {
+                "name": "Charlie Advocate",
+                "trust_level": 0,
+                "behavior_adjustment": "",
+                "social_circle": [],
+                "influence_score": 0.6752977003629108,
+                "information_acceptance": "medium",
+                "agent_type": "PublicAgent",
+                "received_content": "",
+                "id": "702"
+            }
+        },
+        {
+            "id": "703",
+            "type": "PublicAgent",
+            "profile": {
+                "name": "Diana Outreach",
+                "trust_level": 0,
+                "behavior_adjustment": "",
+                "social_circle": [],
+                "influence_score": 0.7524130867423148,
+                "information_acceptance": "medium",
+                "agent_type": "PublicAgent",
+                "received_content": "",
+                "id": "703"
+            }
+        },
+        {
+            "id": "704",
+            "type": "PublicAgent",
+            "profile": {
+                "name": "Evan Community",
+                "trust_level": 0,
+                "behavior_adjustment": "",
+                "social_circle": [],
+                "influence_score": 0.5663688850488279,
+                "information_acceptance": "medium",
+                "agent_type": "PublicAgent",
+                "received_content": "",
+                "id": "704"
+            }
+        },
+        {
+            "id": "705",
+            "type": "PublicAgent",
+            "profile": {
+                "name": "Jane Doe",
+                "trust_level": 0,
+                "behavior_adjustment": "",
+                "social_circle": [],
+                "influence_score": 0.36783549956621253,
+                "information_acceptance": "high",
+                "agent_type": "PublicAgent",
+                "received_content": "",
+                "id": "705"
+            }
+        },
+        {
+            "id": "706",
+            "type": "PublicAgent",
+            "profile": {
+                "name": "John Smith",
+                "trust_level": 0,
+                "behavior_adjustment": "",
+                "social_circle": [],
+                "influence_score": 0.5041105735318713,
+                "information_acceptance": "low",
+                "agent_type": "PublicAgent",
+                "received_content": "",
+                "id": "706"
+            }
+        },
+        {
+            "id": "707",
+            "type": "PublicAgent",
+            "profile": {
+                "name": "Emily Johnson",
+                "trust_level": 0,
+                "behavior_adjustment": "",
+                "social_circle": [],
+                "influence_score": 0.8939655158835874,
+                "information_acceptance": "low",
+                "agent_type": "PublicAgent",
+                "received_content": "",
+                "id": "707"
+            }
+        },
+        {
+            "id": "708",
+            "type": "PublicAgent",
+            "profile": {
+                "name": "Michael Brown",
+                "trust_level": 0,
+                "behavior_adjustment": "",
+                "social_circle": [],
+                "influence_score": 0.6226917092829964,
+                "information_acceptance": "high",
+                "agent_type": "PublicAgent",
+                "received_content": "",
+                "id": "708"
+            }
+        },
+        {
+            "id": "709",
+            "type": "PublicAgent",
+            "profile": {
+                "name": "Sarah Williams",
+                "trust_level": 0,
+                "behavior_adjustment": "",
+                "social_circle": [],
+                "influence_score": 0.8688808319723739,
+                "information_acceptance": "low",
+                "agent_type": "PublicAgent",
+                "received_content": "",
+                "id": "709"
+            }
+        },
+        {
+            "id": "710",
+            "type": "PublicAgent",
+            "profile": {
+                "name": "Alice Public",
+                "trust_level": 0,
+                "behavior_adjustment": "",
+                "social_circle": [],
+                "influence_score": 0.5797608728248898,
+                "information_acceptance": "low",
+                "agent_type": "PublicAgent",
+                "received_content": "",
+                "id": "710"
+            }
+        },
+        {
+            "id": "711",
+            "type": "PublicAgent",
+            "profile": {
+                "name": "Bob Networker",
+                "trust_level": 0,
+                "behavior_adjustment": "",
+                "social_circle": [],
+                "influence_score": 0.5649199112709984,
+                "information_acceptance": "medium",
+                "agent_type": "PublicAgent",
+                "received_content": "",
+                "id": "711"
+            }
+        },
+        {
+            "id": "712",
+            "type": "PublicAgent",
+            "profile": {
+                "name": "Charlie Social",
+                "trust_level": 0,
+                "behavior_adjustment": "",
+                "social_circle": [],
+                "influence_score": 0.22671724506636226,
+                "information_acceptance": "low",
+                "agent_type": "PublicAgent",
+                "received_content": "",
+                "id": "712"
+            }
+        },
+        {
+            "id": "713",
+            "type": "PublicAgent",
+            "profile": {
+                "name": "Diana Media",
+                "trust_level": 0,
+                "behavior_adjustment": "",
+                "social_circle": [],
+                "influence_score": 0.7948742961677076,
+                "information_acceptance": "medium",
+                "agent_type": "PublicAgent",
+                "received_content": "",
+                "id": "713"
+            }
+        },
+        {
+            "id": "714",
+            "type": "PublicAgent",
+            "profile": {
+                "name": "Ethan Connect",
+                "trust_level": 0,
+                "behavior_adjustment": "",
+                "social_circle": [],
+                "influence_score": 0.3680864305701135,
+                "information_acceptance": "high",
+                "agent_type": "PublicAgent",
+                "received_content": "",
+                "id": "714"
+            }
+        },
+        {
+            "id": "715",
+            "type": "PublicAgent",
+            "profile": {
+                "name": "Alice Johnson",
+                "trust_level": 0,
+                "behavior_adjustment": "",
+                "social_circle": [],
+                "influence_score": 0.5418320013709663,
+                "information_acceptance": "medium",
+                "agent_type": "PublicAgent",
+                "received_content": "",
+                "id": "715"
+            }
+        },
+        {
+            "id": "716",
+            "type": "PublicAgent",
+            "profile": {
+                "name": "Carlos Rodriguez",
+                "trust_level": 0,
+                "behavior_adjustment": "",
+                "social_circle": [],
+                "influence_score": 0.7173704024008567,
+                "information_acceptance": "medium",
+                "agent_type": "PublicAgent",
+                "received_content": "",
+                "id": "716"
+            }
+        },
+        {
+            "id": "717",
+            "type": "PublicAgent",
+            "profile": {
+                "name": "Diana Lee",
+                "trust_level": 0,
+                "behavior_adjustment": "",
+                "social_circle": [],
+                "influence_score": 0.22109589735821844,
+                "information_acceptance": "low",
+                "agent_type": "PublicAgent",
+                "received_content": "",
+                "id": "717"
+            }
+        },
+        {
+            "id": "718",
+            "type": "PublicAgent",
+            "profile": {
+                "name": "Ethan Zhou",
+                "trust_level": 0,
+                "behavior_adjustment": "",
+                "social_circle": [],
+                "influence_score": 0.22554819651447533,
+                "information_acceptance": "high",
+                "agent_type": "PublicAgent",
+                "received_content": "",
+                "id": "718"
+            }
+        },
+        {
+            "id": "719",
+            "type": "PublicAgent",
+            "profile": {
+                "name": "Felicity Smith",
+                "trust_level": 0,
+                "behavior_adjustment": "",
+                "social_circle": [],
+                "influence_score": 0.5491767423021524,
+                "information_acceptance": "low",
+                "agent_type": "PublicAgent",
+                "received_content": "",
+                "id": "719"
+            }
+        },
+        {
+            "id": "720",
+            "type": "PublicAgent",
+            "profile": {
+                "name": "John Doe",
+                "trust_level": 0,
+                "behavior_adjustment": "",
+                "social_circle": [],
+                "influence_score": 0.5013611336284104,
+                "information_acceptance": "high",
+                "agent_type": "PublicAgent",
+                "received_content": "",
+                "id": "720"
+            }
+        },
+        {
+            "id": "721",
+            "type": "PublicAgent",
+            "profile": {
+                "name": "Jane Smith",
+                "trust_level": 0,
+                "behavior_adjustment": "",
+                "social_circle": [],
+                "influence_score": 0.15935369823745593,
+                "information_acceptance": "low",
+                "agent_type": "PublicAgent",
+                "received_content": "",
+                "id": "721"
+            }
+        },
+        {
+            "id": "722",
+            "type": "PublicAgent",
+            "profile": {
+                "name": "Alice Johnson",
+                "trust_level": 0,
+                "behavior_adjustment": "",
+                "social_circle": [],
+                "influence_score": 0.7306062803102512,
+                "information_acceptance": "medium",
+                "agent_type": "PublicAgent",
+                "received_content": "",
+                "id": "722"
+            }
+        },
+        {
+            "id": "723",
+            "type": "PublicAgent",
+            "profile": {
+                "name": "Bob Brown",
+                "trust_level": 0,
+                "behavior_adjustment": "",
+                "social_circle": [],
+                "influence_score": 0.9936163838641253,
+                "information_acceptance": "medium",
+                "agent_type": "PublicAgent",
+                "received_content": "",
+                "id": "723"
+            }
+        },
+        {
+            "id": "724",
+            "type": "PublicAgent",
+            "profile": {
+                "name": "Eve White",
+                "trust_level": 0,
+                "behavior_adjustment": "",
+                "social_circle": [],
+                "influence_score": 0.29704179704058653,
+                "information_acceptance": "low",
+                "agent_type": "PublicAgent",
+                "received_content": "",
+                "id": "724"
+            }
+        },
+        {
+            "id": "725",
+            "type": "PublicAgent",
+            "profile": {
+                "name": "John Smith",
+                "trust_level": 0,
+                "behavior_adjustment": "",
+                "social_circle": [],
+                "influence_score": 0.222077702226947,
+                "information_acceptance": "medium",
+                "agent_type": "PublicAgent",
+                "received_content": "",
+                "id": "725"
+            }
+        },
+        {
+            "id": "726",
+            "type": "PublicAgent",
+            "profile": {
+                "name": "Emily Davis",
+                "trust_level": 0,
+                "behavior_adjustment": "",
+                "social_circle": [],
+                "influence_score": 0.9338875366266777,
+                "information_acceptance": "medium",
+                "agent_type": "PublicAgent",
+                "received_content": "",
+                "id": "726"
+            }
+        },
+        {
+            "id": "727",
+            "type": "PublicAgent",
+            "profile": {
+                "name": "Michael Brown",
+                "trust_level": 0,
+                "behavior_adjustment": "",
+                "social_circle": [],
+                "influence_score": 0.7124693557240862,
+                "information_acceptance": "medium",
+                "agent_type": "PublicAgent",
+                "received_content": "",
+                "id": "727"
+            }
+        },
+        {
+            "id": "728",
+            "type": "PublicAgent",
+            "profile": {
+                "name": "Sarah Wilson",
+                "trust_level": 0,
+                "behavior_adjustment": "",
+                "social_circle": [],
+                "influence_score": 0.8002371014881754,
+                "information_acceptance": "low",
+                "agent_type": "PublicAgent",
+                "received_content": "",
+                "id": "728"
+            }
+        },
+        {
+            "id": "729",
+            "type": "PublicAgent",
+            "profile": {
+                "name": "David Johnson",
+                "trust_level": 0,
+                "behavior_adjustment": "",
+                "social_circle": [],
+                "influence_score": 0.5498218485461686,
+                "information_acceptance": "medium",
+                "agent_type": "PublicAgent",
+                "received_content": "",
+                "id": "729"
+            }
+        },
+        {
+            "id": "730",
+            "type": "PublicAgent",
+            "profile": {
+                "name": "Emily Johnson",
+                "trust_level": 0,
+                "behavior_adjustment": "",
+                "social_circle": [],
+                "influence_score": 0.8141574115977398,
+                "information_acceptance": "medium",
+                "agent_type": "PublicAgent",
+                "type": "public_agent",
+                "description": "Emily is a community liaison for a local government agency, active in social media to engage with the public.",
+                "received_content": "",
+                "id": "730"
+            }
+        },
+        {
+            "id": "731",
+            "type": "PublicAgent",
+            "profile": {
+                "name": "Carlos Rodriguez",
+                "trust_level": 0,
+                "behavior_adjustment": "",
+                "social_circle": [],
+                "influence_score": 0.8156027151754549,
+                "information_acceptance": "high",
+                "agent_type": "PublicAgent",
+                "type": "public_agent",
+                "description": "Carlos works as a public relations officer for a national park, sharing updates and educational content.",
+                "received_content": "",
+                "id": "731"
+            }
+        },
+        {
+            "id": "732",
+            "type": "PublicAgent",
+            "profile": {
+                "name": "Samantha Lee",
+                "trust_level": 0,
+                "behavior_adjustment": "",
+                "social_circle": [],
+                "influence_score": 0.18807252099949456,
+                "information_acceptance": "medium",
+                "agent_type": "PublicAgent",
+                "type": "public_agent",
+                "description": "Samantha is a spokesperson for a city council, often featured in local media and social networks.",
+                "received_content": "",
+                "id": "732"
+            }
+        },
+        {
+            "id": "733",
+            "type": "PublicAgent",
+            "profile": {
+                "name": "David Patel",
+                "trust_level": 0,
+                "behavior_adjustment": "",
+                "social_circle": [],
+                "influence_score": 0.9261499524166246,
+                "information_acceptance": "medium",
+                "agent_type": "PublicAgent",
+                "type": "public_agent",
+                "description": "David is a public health officer, using social media to spread awareness about health and safety.",
+                "received_content": "",
+                "id": "733"
+            }
+        },
+        {
+            "id": "734",
+            "type": "PublicAgent",
+            "profile": {
+                "name": "Nina Green",
+                "trust_level": 0,
+                "behavior_adjustment": "",
+                "social_circle": [],
+                "influence_score": 0.6322812841601649,
+                "information_acceptance": "medium",
+                "agent_type": "PublicAgent",
+                "type": "public_agent",
+                "description": "Nina is a communications director for a state agency, focusing on transparency and community engagement.",
+                "received_content": "",
+                "id": "734"
+            }
+        },
+        {
+            "id": "735",
+            "type": "PublicAgent",
+            "profile": {
+                "name": "Alice Public",
+                "trust_level": 0,
+                "behavior_adjustment": "",
+                "social_circle": [],
+                "influence_score": 0.725325504701085,
+                "information_acceptance": "high",
+                "agent_type": "PublicAgent",
+                "received_content": "",
+                "id": "735"
+            }
+        },
+        {
+            "id": "736",
+            "type": "PublicAgent",
+            "profile": {
+                "name": "Bob Networker",
+                "trust_level": 0,
+                "behavior_adjustment": "",
+                "social_circle": [],
+                "influence_score": 0.5365344882685252,
+                "information_acceptance": "high",
+                "agent_type": "PublicAgent",
+                "received_content": "",
+                "id": "736"
+            }
+        },
+        {
+            "id": "737",
+            "type": "PublicAgent",
+            "profile": {
+                "name": "Charlie Outreach",
+                "trust_level": 0,
+                "behavior_adjustment": "",
+                "social_circle": [],
+                "influence_score": 0.8236829962139046,
+                "information_acceptance": "high",
+                "agent_type": "PublicAgent",
+                "received_content": "",
+                "id": "737"
+            }
+        },
+        {
+            "id": "738",
+            "type": "PublicAgent",
+            "profile": {
+                "name": "Diana Media",
+                "trust_level": 0,
+                "behavior_adjustment": "",
+                "social_circle": [],
+                "influence_score": 0.16060039933491022,
+                "information_acceptance": "low",
+                "agent_type": "PublicAgent",
+                "received_content": "",
+                "id": "738"
+            }
+        },
+        {
+            "id": "739",
+            "type": "PublicAgent",
+            "profile": {
+                "name": "Evan Social",
+                "trust_level": 0,
+                "behavior_adjustment": "",
+                "social_circle": [],
+                "influence_score": 0.28579118243374513,
+                "information_acceptance": "high",
+                "agent_type": "PublicAgent",
+                "received_content": "",
+                "id": "739"
+            }
+        },
+        {
+            "id": "740",
+            "type": "PublicAgent",
+            "profile": {
+                "name": "Jane Public",
+                "trust_level": 0,
+                "behavior_adjustment": "",
+                "social_circle": [],
+                "influence_score": 0.7829892227642623,
+                "information_acceptance": "medium",
+                "agent_type": "PublicAgent",
+                "received_content": "",
+                "id": "740"
+            }
+        },
+        {
+            "id": "741",
+            "type": "PublicAgent",
+            "profile": {
+                "name": "John Doe",
+                "trust_level": 0,
+                "behavior_adjustment": "",
+                "social_circle": [],
+                "influence_score": 0.30709704199623666,
+                "information_acceptance": "medium",
+                "agent_type": "PublicAgent",
+                "received_content": "",
+                "id": "741"
+            }
+        },
+        {
+            "id": "742",
+            "type": "PublicAgent",
+            "profile": {
+                "name": "Maria Community",
+                "trust_level": 0,
+                "behavior_adjustment": "",
+                "social_circle": [],
+                "influence_score": 0.2647049991305367,
+                "information_acceptance": "high",
+                "agent_type": "PublicAgent",
+                "received_content": "",
+                "id": "742"
+            }
+        },
+        {
+            "id": "743",
+            "type": "PublicAgent",
+            "profile": {
+                "name": "Carlos Publico",
+                "trust_level": 0,
+                "behavior_adjustment": "",
+                "social_circle": [],
+                "influence_score": 0.6403169913982244,
+                "information_acceptance": "low",
+                "agent_type": "PublicAgent",
+                "received_content": "",
+                "id": "743"
+            }
+        },
+        {
+            "id": "744",
+            "type": "PublicAgent",
+            "profile": {
+                "name": "Yasmin Network",
+                "trust_level": 0,
+                "behavior_adjustment": "",
+                "social_circle": [],
+                "influence_score": 0.49109172772699916,
+                "information_acceptance": "high",
+                "agent_type": "PublicAgent",
+                "received_content": "",
+                "id": "744"
+            }
+        },
+        {
+            "id": "745",
+            "type": "PublicAgent",
+            "profile": {
+                "name": "Alice PublicAgent",
+                "trust_level": 0,
+                "behavior_adjustment": "",
+                "social_circle": [],
+                "influence_score": 0.41036684354190955,
+                "information_acceptance": "medium",
+                "agent_type": "PublicAgent",
+                "received_content": "",
+                "id": "745"
+            }
+        },
+        {
+            "id": "746",
+            "type": "PublicAgent",
+            "profile": {
+                "name": "Bob SocialWorker",
+                "trust_level": 0,
+                "behavior_adjustment": "",
+                "social_circle": [],
+                "influence_score": 0.6468485392604475,
+                "information_acceptance": "low",
+                "agent_type": "PublicAgent",
+                "received_content": "",
+                "id": "746"
+            }
+        },
+        {
+            "id": "747",
+            "type": "PublicAgent",
+            "profile": {
+                "name": "Charlie Outreacher",
+                "trust_level": 0,
+                "behavior_adjustment": "",
+                "social_circle": [],
+                "influence_score": 0.4435592822719233,
+                "information_acceptance": "low",
+                "agent_type": "PublicAgent",
+                "received_content": "",
+                "id": "747"
+            }
+        },
+        {
+            "id": "748",
+            "type": "PublicAgent",
+            "profile": {
+                "name": "Diana CommunityLeader",
+                "trust_level": 0,
+                "behavior_adjustment": "",
+                "social_circle": [],
+                "influence_score": 0.2402701393086627,
+                "information_acceptance": "high",
+                "agent_type": "PublicAgent",
+                "received_content": "",
+                "id": "748"
+            }
+        },
+        {
+            "id": "749",
+            "type": "PublicAgent",
+            "profile": {
+                "name": "Evan Volunteer",
+                "trust_level": 0,
+                "behavior_adjustment": "",
+                "social_circle": [],
+                "influence_score": 0.9158864453689908,
+                "information_acceptance": "medium",
+                "agent_type": "PublicAgent",
+                "received_content": "",
+                "id": "749"
+            }
+        }
+    ],
+    "count": 150
+}

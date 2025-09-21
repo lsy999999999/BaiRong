@@ -1,0 +1,72 @@
+[
+    {
+        "name": "AgentPhoenix",
+        "case_context": "awaiting_input",
+        "applied_interpretation": "pending_analysis",
+        "legal_field": "contract law",
+        "socio_political_influence": 0.5,
+        "interpretation_accuracy": 80,
+        "agent_type": "CaseAgent",
+        "precedent_reference": [
+            "precedent_1",
+            "precedent_2"
+        ],
+        "id": "5"
+    },
+    {
+        "name": "AgentFalcon",
+        "case_context": "awaiting_input",
+        "applied_interpretation": "pending_analysis",
+        "legal_field": "criminal law",
+        "socio_political_influence": 0.5,
+        "interpretation_accuracy": 80,
+        "agent_type": "CaseAgent",
+        "precedent_reference": [
+            "precedent_1",
+            "precedent_2"
+        ],
+        "id": "6"
+    },
+    {
+        "name": "AgentWolf",
+        "case_context": "awaiting_input",
+        "applied_interpretation": "pending_analysis",
+        "legal_field": "criminal law",
+        "socio_political_influence": 0.5,
+        "interpretation_accuracy": 80,
+        "agent_type": "CaseAgent",
+        "precedent_reference": [
+            "precedent_1",
+            "precedent_2"
+        ],
+        "id": "7"
+    },
+    {
+        "name": "AgentShadow",
+        "case_context": "awaiting_input",
+        "applied_interpretation": "pending_analysis",
+        "legal_field": "contract law",
+        "socio_political_influence": 0.5,
+        "interpretation_accuracy": 80,
+        "agent_type": "CaseAgent",
+        "precedent_reference": [
+            "precedent_1",
+            "precedent_2"
+        ],
+        "id": "8"
+    },
+    {
+        "name": "AgentViper",
+        "case_context": "awaiting_input",
+        "applied_interpretation": "pending_analysis",
+        "legal_field": "contract law",
+        "socio_political_influence": 0.5,
+        "interpretation_accuracy": 80,
+        "agent_type": "CaseAgent",
+        "precedent_reference": [
+            "precedent_1",
+            "precedent_2"
+        ],
+        "id": "9"
+    }
+]

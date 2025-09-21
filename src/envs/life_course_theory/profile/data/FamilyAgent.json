@@ -1,0 +1,97 @@
+[
+    {
+        "name": "The Smith Family",
+        "family_resources": 11550.82785367989,
+        "family_support_provided": true,
+        "number_of_children": 1,
+        "educational_investment": 4469.317906818199,
+        "current_life_stage": "middle_age",
+        "financial_stability_index": 70,
+        "agent_type": "FamilyAgent",
+        "parental_health_status": "minor_issues",
+        "recent_family_events": [
+            {
+                "event": "birth",
+                "impact": "positive",
+                "date": "2023-05-01"
+            }
+        ],
+        "id": "5"
+    },
+    {
+        "name": "The Johnson Family",
+        "family_resources": 74190.87923828539,
+        "family_support_provided": true,
+        "number_of_children": 4,
+        "educational_investment": 18902.948203191805,
+        "current_life_stage": "middle_age",
+        "financial_stability_index": 70,
+        "agent_type": "FamilyAgent",
+        "parental_health_status": "chronic_conditions",
+        "recent_family_events": [
+            {
+                "event": "birth",
+                "impact": "positive",
+                "date": "2023-05-01"
+            }
+        ],
+        "id": "6"
+    },
+    {
+        "name": "The Martinez Family",
+        "family_resources": 42639.38812342253,
+        "family_support_provided": true,
+        "number_of_children": 4,
+        "educational_investment": 9762.856369930018,
+        "current_life_stage": "middle_age",
+        "financial_stability_index": 70,
+        "agent_type": "FamilyAgent",
+        "parental_health_status": "chronic_conditions",
+        "recent_family_events": [
+            {
+                "event": "birth",
+                "impact": "positive",
+                "date": "2023-05-01"
+            }
+        ],
+        "id": "7"
+    },
+    {
+        "name": "The Brown Family",
+        "family_resources": 50442.4784246801,
+        "family_support_provided": true,
+        "number_of_children": 5,
+        "educational_investment": 16242.174645972007,
+        "current_life_stage": "middle_age",
+        "financial_stability_index": 70,
+        "agent_type": "FamilyAgent",
+        "parental_health_status": "minor_issues",
+        "recent_family_events": [
+            {
+                "event": "birth",
+                "impact": "positive",
+                "date": "2023-05-01"
+            }
+        ],
+        "id": "8"
+    },
+    {
+        "name": "The Lee Family",
+        "family_resources": 31722.71357842339,
+        "family_support_provided": true,
+        "number_of_children": 5,
+        "educational_investment": 42874.23481261909,
+        "current_life_stage": "middle_age",
+        "financial_stability_index": 70,
+        "agent_type": "FamilyAgent",
+        "parental_health_status": "healthy",
+        "recent_family_events": [
+            {
+                "event": "birth",
+                "impact": "positive",
+                "date": "2023-05-01"
+            }
+        ],
+        "id": "9"
+    }
+]

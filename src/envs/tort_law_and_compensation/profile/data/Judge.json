@@ -1,0 +1,92 @@
+[
+    {
+        "name": "Judge Emily Carter",
+        "evaluation_status": "awaiting_evidence",
+        "evaluation_status_request": "pending_review",
+        "evaluation_status_defense": "awaiting_response",
+        "judgment_accuracy": 88.49298163871427,
+        "communication_protocol": "standard_legal",
+        "case_complexity": 1,
+        "agent_type": "Judge",
+        "evaluation_notes": "Initial notes on case setup",
+        "legal_knowledge_base": [
+            "precedents",
+            "legal texts",
+            "case studies"
+        ],
+        "decision_algorithm": "evidence_based",
+        "id": "10"
+    },
+    {
+        "name": "Judge Michael Thompson",
+        "evaluation_status": "awaiting_evidence",
+        "evaluation_status_request": "pending_review",
+        "evaluation_status_defense": "awaiting_response",
+        "judgment_accuracy": 72.61436442182406,
+        "communication_protocol": "standard_legal",
+        "case_complexity": 5,
+        "agent_type": "Judge",
+        "evaluation_notes": "Initial notes on case setup",
+        "legal_knowledge_base": [
+            "precedents",
+            "legal texts",
+            "case studies"
+        ],
+        "decision_algorithm": "evidence_based",
+        "id": "11"
+    },
+    {
+        "name": "Judge Sophia Martinez",
+        "evaluation_status": "awaiting_evidence",
+        "evaluation_status_request": "pending_review",
+        "evaluation_status_defense": "awaiting_response",
+        "judgment_accuracy": 78.92388003084139,
+        "communication_protocol": "standard_legal",
+        "case_complexity": 2,
+        "agent_type": "Judge",
+        "evaluation_notes": "Initial notes on case setup",
+        "legal_knowledge_base": [
+            "precedents",
+            "legal texts",
+            "case studies"
+        ],
+        "decision_algorithm": "evidence_based",
+        "id": "12"
+    },
+    {
+        "name": "Judge David Nguyen",
+        "evaluation_status": "awaiting_evidence",
+        "evaluation_status_request": "pending_review",
+        "evaluation_status_defense": "awaiting_response",
+        "judgment_accuracy": 75.86701784799698,
+        "communication_protocol": "standard_legal",
+        "case_complexity": 4,
+        "agent_type": "Judge",
+        "evaluation_notes": "Initial notes on case setup",
+        "legal_knowledge_base": [
+            "precedents",
+            "legal texts",
+            "case studies"
+        ],
+        "decision_algorithm": "evidence_based",
+        "id": "13"
+    },
+    {
+        "name": "Judge Olivia Patel",
+        "evaluation_status": "awaiting_evidence",
+        "evaluation_status_request": "pending_review",
+        "evaluation_status_defense": "awaiting_response",
+        "judgment_accuracy": 92.49785880898042,
+        "communication_protocol": "standard_legal",
+        "case_complexity": 4,
+        "agent_type": "Judge",
+        "evaluation_notes": "Initial notes on case setup",
+        "legal_knowledge_base": [
+            "precedents",
+            "legal texts",
+            "case studies"
+        ],
+        "decision_algorithm": "evidence_based",
+        "id": "14"
+    }
+]

@@ -1,0 +1,85 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Judge",
+        "private": false,
+        "sampling": "llm",
+        "description": "The name of the agent representing the judge in the court trial simulation."
+    },
+    "evidence_admissibility": {
+        "type": "str",
+        "default": "pending_review",
+        "private": true,
+        "sampling": "default"
+    },
+    "trial_phase": {
+        "type": "str",
+        "default": "ongoing",
+        "private": false,
+        "sampling": "default"
+    },
+    "trial_status": {
+        "type": "str",
+        "default": "active",
+        "private": false,
+        "sampling": "default"
+    },
+    "legal_system_type": {
+        "type": "str",
+        "default": "common law",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "common law",
+            "civil law"
+        ]
+    },
+    "court_backlog": {
+        "type": "int",
+        "default": 50,
+        "private": false,
+        "sampling": "default"
+    },
+    "public_attention": {
+        "type": "int",
+        "default": 70,
+        "private": false,
+        "sampling": "default"
+    },
+    "precedent_strength": {
+        "type": "int",
+        "default": 80,
+        "private": false,
+        "sampling": "default"
+    },
+    "procedural_rule_strictness": {
+        "type": "int",
+        "default": 90,
+        "private": false,
+        "sampling": "default"
+    },
+    "evidence_ruling": {
+        "type": "list",
+        "default": [
+            {
+                "type": "initial",
+                "status": "awaiting_decision"
+            }
+        ],
+        "private": true,
+        "sampling": "default"
+    },
+    "trial_management": {
+        "type": "str",
+        "default": "coordinating",
+        "private": false,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

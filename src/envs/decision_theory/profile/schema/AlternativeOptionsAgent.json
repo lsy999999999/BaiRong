@@ -1,0 +1,77 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Alternative Option A",
+        "private": false,
+        "sampling": "llm",
+        "description": "The name of the alternative option presented to decision makers"
+    },
+    "presented_alternatives": {
+        "type": "object",
+        "default": null,
+        "private": true,
+        "sampling": "default"
+    },
+    "cost": {
+        "type": "float",
+        "default": 100.0,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            50.0,
+            500.0
+        ]
+    },
+    "utility": {
+        "type": "float",
+        "default": 75.0,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            100.0
+        ]
+    },
+    "risk": {
+        "type": "float",
+        "default": 0.2,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "status": {
+        "type": "str",
+        "default": "awaiting_evaluation",
+        "private": false,
+        "sampling": "default"
+    },
+    "evaluation_feedback": {
+        "type": "list",
+        "default": [
+            {
+                "aspect": "cost",
+                "feedback": "reasonable"
+            }
+        ],
+        "private": true,
+        "sampling": "default",
+        "sample_size": 3
+    },
+    "decision_impact": {
+        "type": "str",
+        "default": "neutral",
+        "private": false,
+        "sampling": "llm",
+        "description": "The perceived impact of the decision on the overall goal"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

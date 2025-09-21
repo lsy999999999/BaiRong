@@ -1,0 +1,101 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Default Party Name",
+        "private": false,
+        "sampling": "llm",
+        "description": "A suitable name for a political party."
+    },
+    "party_ideology": {
+        "type": "str",
+        "default": "",
+        "private": false,
+        "sampling": "default"
+    },
+    "policy_positions": {
+        "type": "dict",
+        "default": {},
+        "private": false,
+        "sampling": "default"
+    },
+    "current_strategy": {
+        "type": "str",
+        "default": "",
+        "private": true,
+        "sampling": "default"
+    },
+    "new_strategy": {
+        "type": "str",
+        "default": "",
+        "private": true,
+        "sampling": "default"
+    },
+    "platform": {
+        "type": "str",
+        "default": "General Platform",
+        "private": false,
+        "sampling": "llm",
+        "description": "Political platform outlining the party's main policies and values."
+    },
+    "resources": {
+        "type": "float",
+        "default": 0.0,
+        "private": true,
+        "sampling": "default"
+    },
+    "strategy": {
+        "type": "str",
+        "choices": [
+            "aggressive",
+            "conservative",
+            "moderate",
+            "progressive"
+        ],
+        "default": "moderate",
+        "private": false,
+        "sampling": "random"
+    },
+    "base_voters": {
+        "type": "list",
+        "default": [],
+        "private": true,
+        "sampling": "default"
+    },
+    "target_voters": {
+        "type": "list",
+        "default": [],
+        "private": true,
+        "sampling": "default"
+    },
+    "message_framing": {
+        "type": "str",
+        "choices": [
+            "positive",
+            "negative",
+            "neutral"
+        ],
+        "default": "neutral",
+        "private": false,
+        "sampling": "random"
+    },
+    "leadership": {
+        "type": "str",
+        "default": "Default Leadership",
+        "private": false,
+        "sampling": "llm",
+        "description": "Leadership style or figurehead of the party."
+    },
+    "history": {
+        "type": "list",
+        "default": [],
+        "private": true,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "int",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

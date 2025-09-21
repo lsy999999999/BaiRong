@@ -1,0 +1,92 @@
+[
+    {
+        "name": "EcoWarriors",
+        "updated_norms": [
+            "cooperation",
+            "respect"
+        ],
+        "behavior_tendency": "passive",
+        "group_pressure": 0.8580147373572172,
+        "norm_acceptance_rate": 0.75,
+        "communication_mode": "Online forums and social media groups",
+        "agent_type": "SocialGroupAgent",
+        "members": [
+            "Individual1",
+            "Individual2"
+        ],
+        "interaction_count": 10,
+        "id": "5"
+    },
+    {
+        "name": "BookLoversClub",
+        "updated_norms": [
+            "cooperation",
+            "respect"
+        ],
+        "behavior_tendency": "neutral",
+        "group_pressure": 0.9610340718330468,
+        "norm_acceptance_rate": 0.75,
+        "communication_mode": "Monthly meetups and email newsletters",
+        "agent_type": "SocialGroupAgent",
+        "members": [
+            "Individual1",
+            "Individual2"
+        ],
+        "interaction_count": 10,
+        "id": "6"
+    },
+    {
+        "name": "FitnessFriends",
+        "updated_norms": [
+            "cooperation",
+            "respect"
+        ],
+        "behavior_tendency": "neutral",
+        "group_pressure": 0.41422585826069147,
+        "norm_acceptance_rate": 0.75,
+        "communication_mode": "WhatsApp group and weekly gym sessions",
+        "agent_type": "SocialGroupAgent",
+        "members": [
+            "Individual1",
+            "Individual2"
+        ],
+        "interaction_count": 10,
+        "id": "7"
+    },
+    {
+        "name": "TravelEnthusiasts",
+        "updated_norms": [
+            "cooperation",
+            "respect"
+        ],
+        "behavior_tendency": "neutral",
+        "group_pressure": 0.5867955080990929,
+        "norm_acceptance_rate": 0.75,
+        "communication_mode": "Facebook group and quarterly trips",
+        "agent_type": "SocialGroupAgent",
+        "members": [
+            "Individual1",
+            "Individual2"
+        ],
+        "interaction_count": 10,
+        "id": "8"
+    },
+    {
+        "name": "TechInnovators",
+        "updated_norms": [
+            "cooperation",
+            "respect"
+        ],
+        "behavior_tendency": "aggressive",
+        "group_pressure": 0.6099052648243459,
+        "norm_acceptance_rate": 0.75,
+        "communication_mode": "Slack channels and bi-weekly webinars",
+        "agent_type": "SocialGroupAgent",
+        "members": [
+            "Individual1",
+            "Individual2"
+        ],
+        "interaction_count": 10,
+        "id": "9"
+    }
+]

@@ -1,0 +1,99 @@
+{
+    "name": {
+        "type": "str",
+        "default": "GroupAgent",
+        "private": false,
+        "sampling": "llm",
+        "description": "A name representing the group agent in a social simulation."
+    },
+    "members": {
+        "type": "list",
+        "default": [],
+        "private": true,
+        "sampling": "default"
+    },
+    "cohesion": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "norms": {
+        "type": "list",
+        "default": [],
+        "private": false,
+        "sampling": "llm",
+        "description": "A list of social norms that influence group behavior."
+    },
+    "majority_threshold": {
+        "type": "float",
+        "default": 0.6,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.5,
+            1.0
+        ]
+    },
+    "communication_structure": {
+        "type": "str",
+        "choices": [
+            "hierarchical",
+            "network",
+            "circle"
+        ],
+        "default": "network",
+        "private": false,
+        "sampling": "random"
+    },
+    "homogeneity": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "decision_method": {
+        "type": "str",
+        "choices": [
+            "consensus",
+            "majority_vote",
+            "leader_decision"
+        ],
+        "default": "majority_vote",
+        "private": false,
+        "sampling": "random"
+    },
+    "member_opinions": {
+        "type": "list",
+        "default": [],
+        "private": true,
+        "sampling": "default"
+    },
+    "opinion_distribution": {
+        "type": "dict",
+        "default": {},
+        "private": true,
+        "sampling": "default"
+    },
+    "updated_group_opinion": {
+        "type": "str",
+        "default": "",
+        "private": false,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "int",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

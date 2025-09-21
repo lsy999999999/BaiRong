@@ -1,0 +1,22 @@
+[
+    {
+        "source_agent": "Media",
+        "target_agent": "Voter",
+        "direction": "unidirectional"
+    },
+    {
+        "source_agent": "Party",
+        "target_agent": "Voter",
+        "direction": "bidirectional"
+    },
+    {
+        "source_agent": "InterestGroup",
+        "target_agent": "Media",
+        "direction": "unidirectional"
+    },
+    {
+        "source_agent": "Voter",
+        "target_agent": "Voter",
+        "direction": "unidirectional"
+    }
+]

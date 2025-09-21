@@ -1,0 +1,85 @@
+{
+    "environment": {
+        "variables": [
+            {
+                "name": "case_id",
+                "type": "string",
+                "default_value": null
+            },
+            {
+                "name": "judgment_result",
+                "type": "string",
+                "default_value": null
+            },
+            {
+                "name": "completion_status",
+                "type": "string",
+                "default_value": null
+            }
+        ]
+    },
+    "agents": {
+        "Plaintiff": {
+            "variables": [
+                {
+                    "name": "evidence_details",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "plaintiff_id",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "evidence_submitted",
+                    "type": "boolean",
+                    "default_value": null
+                }
+            ]
+        },
+        "Defendant": {
+            "variables": [
+                {
+                    "name": "defense_arguments",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "defendant_id",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "defense_prepared",
+                    "type": "boolean",
+                    "default_value": null
+                }
+            ]
+        },
+        "Judge": {
+            "variables": [
+                {
+                    "name": "evidence_evaluation_result",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "defense_evaluation_result",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "judge_id",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "case_id",
+                    "type": "string",
+                    "default_value": null
+                }
+            ]
+        }
+    }
+}

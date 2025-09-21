@@ -1,0 +1,38 @@
+{
+    "domain": "Economics",
+    "scene_name": "decentralized_property_rights_formation",
+    "odd_protocol": {
+        "overview": {
+            "system_goal": "Study decentralized property-rights formation and efficiency when agents maximize personal cumulative gold under incomplete information and no authority.",
+            "agent_types": "EnvAgent (Simulation Orchestrator), MinerAgent (LLM-Driven Miner), StrategistAgent (Per-Miner, Optional Advisor), AdjudicatorAgent (Conflict Resolution + RNG)",
+            "environment_description": "A 10×10 grid of homogeneous plots, initially unowned, with a fixed number of rounds.",
+            "evaluation_criteria": "Global output is recorded for evaluation but not in the agent reward."
+        },
+        "design_concepts": {
+            "interaction_patterns": "Agents submit action bundles each round, including claims, raids, defense, and mining, subject to legality and budget constraints.",
+            "communication_protocols": "No direct communication; agents receive public observables and maintain private state.",
+            "decision_mechanisms": "Agents allocate stamina to actions each round, with deterministic clipping applied if over budget.",
+            "round_resolution_order": "Claims resolved first, followed by raids, then mining, with public logs published after each round.",
+            "agent_types_first": "EnvAgent orchestrates the simulation, MinerAgent makes decisions to maximize personal gold, StrategistAgent advises MinerAgent, AdjudicatorAgent resolves conflicts deterministically."
+        },
+        "details": {
+            "agent_behaviors": "Agents aim to maximize cumulative gold, choosing combinations of expansion, predation, protection, and extraction.",
+            "decision_algorithms": "Agents may use heuristics, forward lookahead, opponent modeling, or rule-based systems, respecting constraints.",
+            "specific_constraints": "Integer stamina per agent per round, mining cap per plot, costs for actions, and deterministic RNG for conflict resolution.",
+            "budget_enforcement": "EnvAgent issues BudgetViolationNotice once if over-budget; agents may resubmit corrected plans or face deterministic clipping.",
+            "rng_mechanism": "SHA256-based RNG for deterministic, reproducible resolution of claim and raid contests."
+        }
+    },
+    "agent_types": {
+        "EnvAgent": "Role: Runs the world. Collects actions, enforces rules/budgets, resolves conflicts, updates ownership, computes mining, publishes logs, and ends the run.\nInputs: All agents’ action submissions for the round; global RNG seed; current world state.\nOutputs: Round outcome, updated state, public logs, termination events.\nWorkflow (per round):\n\nCollectDrafts → BudgetCheck/Clip → Ack: Receive each Miner’s draft action vector; run validation + stamina budget enforcement (see “Budget Enforcement”). If over-budget, return a BudgetViolationNotice once; accept corrected resubmission (one retry). If still invalid, deterministically clip and proceed.\n\nLock Submissions: Freeze all per-agent final actions for the round.\n\nAdjudication: Call AdjudicatorAgent to resolve claims/raids via deterministic RNG; apply results to ownership.\n\nMining: Process mining yields on plots owned after adjudication and subject to per-plot mining caps.\n\nPublish Logs: Emit PublicLogPublishedEvent with canonical, reproducible round logs.\n\nClose Round / Terminate: Emit RoundClosedEvent. If stop condition met (max rounds or other experiment rule), emit SimulationFinishedEvent and halt; else, advance to next round.",
+        "MinerAgent": "Role: Single point for all player decisions: allocate stamina across claim / raid / defend / mine to maximize personal cumulative gold (no global reward component).\nInformation State: Current ownership grid; previous round’s public log; their own stamina budget S; mining cap per owned plot; no knowledge of others’ current-round defense choices; no direct comms.\nAction Space (integers):\n\nclaim: set of unowned plot coordinates (1 stamina each).\n\nraid: set of owned-by-others plot coordinates (1 stamina each).\n\ndefend: {0 or 1} per currently owned plot (precommit; costs 1 if chosen, regardless of being attacked).\n\nmine: 0..s_max per owned plot (per-plot cap s_max, e.g., 3).\nConstraints: Sum of all costs ≤ S (enforced).\nWorkflow (per round):\n\nOptionally consult StrategistAgent (below) for a ranked draft plan.\n\nSubmit draft action vector (one shot); if BudgetViolationNotice returned, resubmit once with a corrected vector ≤ S.\n\nReceive public logs at end of round; adapt strategy next round.",
+        "StrategistAgent": "Acts as an optional advisor to the MinerAgent, providing strategic guidance to optimize mining and resource allocation.Role: A local helper (no cross-miner coordination). Produces a ranked plan (e.g., prioritized buckets and per-plot order) to hand to MinerAgent.\nInputs: Same public info the MinerAgent has.\nOutput: Ranked allocations and tie-break ordering; MinerAgent may accept or override.\nWorkflow: Called by its MinerAgent before submission; no independent actions submitted to Env.",
+        "AdjudicatorAgent": "Role: Deterministic, reproducible resolution of claim and raid contests using a SHA256-based RNG.\nInputs: Final, locked submissions from all miners; world state; global RNG seed.\nOutputs: Winners for each contested plot; updated owners.\nWorkflow:\n\nClaims (unowned plots): If multiple claimants, pick exactly one winner using RNG; losers get nothing.\n\nRaids (owned plots): If defender precommitted defend=1, the plot is shielded for this round (all raids fail). If no defense, and ≥1 raider, select exactly one attacker as the new owner using RNG.\n\nReturn ownership delta to EnvAgent"
+    },
+    "portrait": {
+        "EnvAgent": 1,
+        "MinerAgent": 5,
+        "StrategistAgent": 2,
+        "AdjudicatorAgent": 1
+    }
+}

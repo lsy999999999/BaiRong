@@ -1,0 +1,97 @@
+[
+    {
+        "name": "AgentA123",
+        "spending_amount": 200.0,
+        "financial_status": "stable",
+        "income_level": 83283,
+        "spending_habits": "Frugal",
+        "credit_rating": 330,
+        "age_group": "teen",
+        "location": "Urban",
+        "agent_type": "ConsumerAgent",
+        "purchase_history": [
+            {
+                "date": "2025-01-01",
+                "amount": 150.0,
+                "item": "electronics"
+            }
+        ],
+        "id": "10"
+    },
+    {
+        "name": "AgentB456",
+        "spending_amount": 200.0,
+        "financial_status": "stable",
+        "income_level": 51110,
+        "spending_habits": "Impulsive",
+        "credit_rating": 713,
+        "age_group": "teen",
+        "location": "Suburban",
+        "agent_type": "ConsumerAgent",
+        "purchase_history": [
+            {
+                "date": "2025-01-01",
+                "amount": 150.0,
+                "item": "electronics"
+            }
+        ],
+        "id": "11"
+    },
+    {
+        "name": "AgentC789",
+        "spending_amount": 200.0,
+        "financial_status": "stable",
+        "income_level": 94561,
+        "spending_habits": "Moderate",
+        "credit_rating": 398,
+        "age_group": "teen",
+        "location": "Rural",
+        "agent_type": "ConsumerAgent",
+        "purchase_history": [
+            {
+                "date": "2025-01-01",
+                "amount": 150.0,
+                "item": "electronics"
+            }
+        ],
+        "id": "12"
+    },
+    {
+        "name": "AgentD012",
+        "spending_amount": 200.0,
+        "financial_status": "stable",
+        "income_level": 84788,
+        "spending_habits": "Luxury",
+        "credit_rating": 481,
+        "age_group": "adult",
+        "location": "Metropolitan",
+        "agent_type": "ConsumerAgent",
+        "purchase_history": [
+            {
+                "date": "2025-01-01",
+                "amount": 150.0,
+                "item": "electronics"
+            }
+        ],
+        "id": "13"
+    },
+    {
+        "name": "AgentE345",
+        "spending_amount": 200.0,
+        "financial_status": "stable",
+        "income_level": 83363,
+        "spending_habits": "Budget-Conscious",
+        "credit_rating": 604,
+        "age_group": "adult",
+        "location": "Coastal",
+        "agent_type": "ConsumerAgent",
+        "purchase_history": [
+            {
+                "date": "2025-01-01",
+                "amount": 150.0,
+                "item": "electronics"
+            }
+        ],
+        "id": "14"
+    }
+]

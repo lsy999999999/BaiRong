@@ -1,0 +1,67 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Defendant",
+        "private": false,
+        "sampling": "default"
+    },
+    "plea_acceptance": {
+        "type": "str",
+        "default": "undecided",
+        "private": true,
+        "sampling": "default"
+    },
+    "testimony_risk_assessment": {
+        "type": "float",
+        "default": 0.5,
+        "private": true,
+        "sampling": "default"
+    },
+    "legal_knowledge": {
+        "type": "int",
+        "default": 50,
+        "private": true,
+        "sampling": "random",
+        "range": [
+            0,
+            100
+        ]
+    },
+    "stress_level": {
+        "type": "int",
+        "default": 50,
+        "private": false,
+        "sampling": "default"
+    },
+    "public_perception": {
+        "type": "str",
+        "default": "neutral",
+        "private": false,
+        "sampling": "default"
+    },
+    "supporting_evidence": {
+        "type": "list",
+        "default": [
+            {
+                "type": "character_witness",
+                "strength": 75
+            }
+        ],
+        "private": true,
+        "sampling": "default"
+    },
+    "decision_making_strategy": {
+        "type": "str",
+        "default": "risk_averse",
+        "private": true,
+        "sampling": "llm",
+        "description": "Strategy used by the defendant to make decisions during the trial process"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

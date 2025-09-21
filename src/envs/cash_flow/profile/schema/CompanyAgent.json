@@ -1,0 +1,93 @@
+{
+    "name": {
+        "type": "str",
+        "default": "CompanyX",
+        "private": false,
+        "sampling": "llm",
+        "description": "The name of the company agent"
+    },
+    "cash_reserves": {
+        "type": "float",
+        "default": 50000.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "debt_levels": {
+        "type": "float",
+        "default": 10000.0,
+        "private": true,
+        "sampling": "default"
+    },
+    "credit_rating": {
+        "type": "str",
+        "default": "B",
+        "private": true,
+        "sampling": "default"
+    },
+    "cash_flow_status": {
+        "type": "str",
+        "default": "stable",
+        "private": false,
+        "sampling": "default"
+    },
+    "loan_amount": {
+        "type": "float",
+        "default": 0.0,
+        "private": true,
+        "sampling": "default"
+    },
+    "loan_application_status": {
+        "type": "str",
+        "default": "not_applied",
+        "private": false,
+        "sampling": "default"
+    },
+    "total_expenses": {
+        "type": "float",
+        "default": 20000.0,
+        "private": true,
+        "sampling": "default"
+    },
+    "completion_status": {
+        "type": "str",
+        "default": "ongoing",
+        "private": false,
+        "sampling": "default"
+    },
+    "projected_revenue": {
+        "type": "float",
+        "default": 75000.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "default_risk": {
+        "type": "float",
+        "default": 0.05,
+        "private": true,
+        "sampling": "default"
+    },
+    "interest_rate": {
+        "type": "float",
+        "default": 0.03,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.01,
+            0.05
+        ]
+    },
+    "market_conditions": {
+        "type": "str",
+        "default": "favorable",
+        "private": false,
+        "sampling": "llm",
+        "description": "The current market conditions affecting the company"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

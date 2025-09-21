@@ -1,0 +1,105 @@
+{
+    "PhysiologicalAgent": [
+        {
+            "id": 1,
+            "name": "assess_physiological_needs",
+            "condition": null,
+            "description": "Evaluates the current state of an agent's physiological needs and determines the necessary resources required to satisfy these needs.",
+            "type": "OR",
+            "required_variables": [],
+            "output_updates": [
+                {
+                    "name": "physiological_needs_status",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Updated status of the agent's physiological needs after assessment."
+                },
+                {
+                    "name": "resources_required",
+                    "type": "list",
+                    "context": "agent",
+                    "description": "List of resources identified as necessary to meet physiological needs."
+                }
+            ]
+        }
+    ],
+    "SocialAgent": [
+        {
+            "id": 2,
+            "name": "evaluate_social_needs",
+            "condition": null,
+            "description": "Analyzes the agent's social environment to determine if social needs are being met through interactions and relationships.",
+            "type": "OR",
+            "required_variables": [],
+            "output_updates": [
+                {
+                    "name": "social_needs_status",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Updated status of the agent's social needs after evaluation."
+                },
+                {
+                    "name": "social_interactions_needed",
+                    "type": "list",
+                    "context": "agent",
+                    "description": "List of social interactions required to satisfy the agent's social needs."
+                }
+            ]
+        }
+    ],
+    "SelfActualizationAgent": [
+        {
+            "id": 3,
+            "name": "identify_self_actualization_goals",
+            "condition": null,
+            "description": "Identifies and sets goals that align with the agent's self-actualization aspirations, focusing on personal growth and fulfillment.",
+            "type": "OR",
+            "required_variables": [],
+            "output_updates": [
+                {
+                    "name": "self_actualization_goals",
+                    "type": "list",
+                    "context": "agent",
+                    "description": "List of goals identified for the agent's self-actualization."
+                },
+                {
+                    "name": "self_actualization_status",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Updated status of the agent's progress towards self-actualization."
+                }
+            ]
+        }
+    ],
+    "FeedbackAgent": [
+        {
+            "id": 4,
+            "name": "collect_feedback",
+            "condition": "Requires input from PhysiologicalNeedsMetEvent, SocialNeedsSatisfiedEvent, SelfActualizationAchievedEvent",
+            "description": "Gathers feedback on the satisfaction of various needs from agents, compiling information to inform future actions and adjustments.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "agent_id",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Identifier for the agent providing feedback."
+                },
+                {
+                    "name": "satisfaction_level",
+                    "type": "float",
+                    "context": "event",
+                    "description": "Degree to which the agent's needs have been satisfied."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "feedback_data",
+                    "type": "list",
+                    "context": "env",
+                    "description": "Compiled feedback data from agents regarding need satisfaction."
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,161 @@
+{
+    "ResourceMiner": [
+        {
+            "id": 1,
+            "name": "start_workflow",
+            "condition": null,
+            "description": "Initializes the workflow for the ResourceMiner, setting up the initial state and preparing for the first round of actions.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "miner_id",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Unique identifier for the ResourceMiner."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "current_state",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Initial state of the ResourceMiner, e.g., idle, observing, deciding."
+                }
+            ],
+            "code": ""
+        },
+        {
+            "id": 2,
+            "name": "observe_environment",
+            "condition": null,
+            "description": "Observes the current state of the environment, including resource availability and land ownership.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "global_map_state",
+                    "type": "object",
+                    "context": "env",
+                    "description": "Current state of the grid, including resource availability and land ownership."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "observed_state",
+                    "type": "object",
+                    "context": "agent",
+                    "description": "Record of the observed environment state."
+                }
+            ],
+            "code": ""
+        },
+        {
+            "id": 3,
+            "name": "decide_investment_strategy",
+            "condition": null,
+            "description": "Decides the investment strategy based on the observed environment state and strategic goals.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "observed_state",
+                    "type": "object",
+                    "context": "agent",
+                    "description": "Record of the observed environment state."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "investment_strategy",
+                    "type": "object",
+                    "context": "agent",
+                    "description": "Decided investment strategy, including target grid cells and investment amounts."
+                }
+            ],
+            "code": ""
+        },
+        {
+            "id": 6,
+            "name": "process_resolution_outcome",
+            "condition": null,
+            "description": "Processes the outcome of the resolution process and updates the state accordingly.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "winner_id",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Unique identifier for the ResourceMiner who won the contest."
+                },
+                {
+                    "name": "grid_cell_id",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Unique identifier for the contested or maintained grid cell."
+                },
+                {
+                    "name": "investment_amount",
+                    "type": "integer",
+                    "context": "event",
+                    "description": "Amount of energy invested by the winning miner."
+                },
+                {
+                    "name": "tie_resolution",
+                    "type": "boolean",
+                    "context": "event",
+                    "description": "Flag indicating if the outcome was resolved due to a tie."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "current_state",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Updated state of the ResourceMiner based on the resolution outcome."
+                }
+            ],
+            "code": ""
+        }
+    ],
+    "AdjudicatorAgent": [
+        {
+            "id": 4,
+            "name": "initiate_resolution",
+            "condition": null,
+            "description": "Initializes the resolution process for contested land.",
+            "type": "OR",
+            "required_variables": [],
+            "output_updates": [
+                {
+                    "name": "resolution_status",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Status of the resolution process, e.g., initiated, ongoing, completed."
+                }
+            ],
+            "code": ""
+        },
+        {
+            "id": 5,
+            "name": "resolve_investment_outcome",
+            "condition": "Investment data received from ResourceMiner and current grid status",
+            "description": "Resolves the outcome of the investment competition and determines the winner.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "investment_strategy",
+                    "type": "object",
+                    "context": "event",
+                    "description": "Investment strategy submitted by the ResourceMiner, including target grid cells and investment amounts."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "resolution_outcome",
+                    "type": "object",
+                    "context": "agent",
+                    "description": "Outcome of the resolution process, including the winner and investment details."
+                }
+            ],
+            "code": ""
+        }
+    ]
+}

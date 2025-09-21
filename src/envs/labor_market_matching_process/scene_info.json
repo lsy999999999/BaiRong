@@ -1,0 +1,101 @@
+{
+  "domain": "Economics",
+  "scene_name": "labor_market_simulation",
+  "odd_protocol": {
+    "overview": {
+      "system_goal": "Simulate the job seeking and recruitment process in the labor market to study information asymmetry, signaling, matching efficiency, bias, and the impact of different recruitment strategies and job-seeking behaviors on market outcomes and fairness.",
+      "agent_types": "Job_Seeker: Attributes include id, skills, education, experience, productivity, salary_expectation, job_preferences, network, risk_attitude, job_search_strategy, negotiation_style, observable_traits, reservation_wage. Employer: Attributes include id, industry, size, jobs, compensation_structure, culture, hiring_criteria, screening_methods, bias, reputation, historical_hires, turnover_rate. Recruitment_Channel: Attributes include type, reach, cost, information_richness, filtering_mechanism, matching_algorithm.",
+      "environment_description": "Labor market tightness, economic conditions, regulatory environment, skill demand trends, technological change rate."
+    },
+    "design_concepts": {
+      "interaction_patterns": "Job seekers and employers interact through recruitment channels, with job seekers applying for jobs and employers screening candidates. Information acquisition and exchange occur throughout the process.",
+      "communication_protocols": "Job seekers and employers communicate through recruitment channels, exchanging information about job postings, applications, and negotiations.",
+      "decision_mechanisms": "Job seekers evaluate job applications based on skill match, job attractiveness, and application cost. Employers design job requirements based on business needs and market conditions, and make hiring decisions based on candidate evaluations."
+    },
+    "details": {
+      "agent_behaviors": "Job seekers enter the market, set job goals and strategies, evaluate job applications, negotiate salaries, and decide on job offers. Employers post job vacancies, screen candidates, conduct interviews, and make hiring decisions.",
+      "decision_algorithms": "Job seekers use algorithms to evaluate job application value, select job search strategies, and negotiate salaries. Employers use algorithms to design job requirements, screen candidates, and make hiring decisions.",
+      "specific_constraints": "Labor market tightness, economic conditions, regulatory environment, skill demand trends, technological change rate, bias in screening methods, and social network influence."
+    }
+  },
+  "agent_types": {
+    "JobSeeker": "An agent representing individuals seeking employment, responsible for setting job goals, evaluating job applications, negotiating salaries, and deciding on job offers.",
+    "Employer": "An agent representing companies or organizations offering employment, responsible for posting job vacancies, screening candidates, conducting interviews, and making hiring decisions.",
+    "RecruitmentChannel": "An agent facilitating interactions between job seekers and employers, responsible for disseminating job postings, filtering applications, and matching candidates to job opportunities."
+  },
+  "metrics": [
+    {
+      "id": "average_job_seeker_experience",
+      "name": "average_job_seeker_experience",
+      "description": "Measures the average years of experience among job seekers, providing insights into the overall experience level of the job-seeking population.",
+      "visualization_type": "bar",
+      "update_interval": 5,
+      "variables": [
+        {
+          "name": "experience",
+          "source_type": "agent",
+          "agent_type": "JobSeeker",
+          "path": "profile.experience",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "The metric calculates the average experience by summing all non-None experience values and dividing by the number of valid entries. If the list is empty or contains only None, the average is set to 0.",
+      "function_name": "average_job_seeker_experience"
+    },
+    {
+      "id": "job_application_success_rate",
+      "name": "job_application_success_rate",
+      "description": "Measures the proportion of job applications that result in successful negotiations, indicating the efficiency of job matching and negotiation processes.",
+      "visualization_type": "pie",
+      "update_interval": 5,
+      "variables": [
+        {
+          "name": "applications_submitted",
+          "source_type": "agent",
+          "agent_type": "JobSeeker",
+          "path": "profile.applications_submitted",
+          "required": true,
+          "is_list": true
+        },
+        {
+          "name": "negotiation_outcomes",
+          "source_type": "agent",
+          "agent_type": "JobSeeker",
+          "path": "profile.negotiation_outcomes",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "This metric calculates the success rate by counting successful negotiation outcomes and dividing by the total number of applications submitted. It handles None values and empty lists by treating them as unsuccessful applications, ensuring robustness in calculation.",
+      "function_name": "job_application_success_rate"
+    },
+    {
+      "id": "employer_screening_efficiency",
+      "name": "employer_screening_efficiency",
+      "description": "Evaluates the efficiency of employers in screening candidates by comparing the number of screened candidates to the number of posted jobs.",
+      "visualization_type": "line",
+      "update_interval": 5,
+      "variables": [
+        {
+          "name": "screened_candidates",
+          "source_type": "agent",
+          "agent_type": "Employer",
+          "path": "profile.screened_candidates",
+          "required": true,
+          "is_list": true
+        },
+        {
+          "name": "posted_jobs",
+          "source_type": "agent",
+          "agent_type": "Employer",
+          "path": "profile.posted_jobs",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "The metric computes efficiency by dividing the total number of screened candidates by the total number of posted jobs. None values and empty lists are treated as zero, ensuring the calculation remains valid even when data is missing.",
+      "function_name": "employer_screening_efficiency"
+    }
+  ]
+}

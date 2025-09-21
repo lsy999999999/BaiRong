@@ -1,0 +1,12 @@
+[
+    {
+        "source_agent": "LeaderAgent",
+        "target_agent": "ManagerAgent",
+        "direction": "bidirectional"
+    },
+    {
+        "source_agent": "ManagerAgent",
+        "target_agent": "EmployeeAgent",
+        "direction": "bidirectional"
+    }
+]

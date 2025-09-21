@@ -1,0 +1,86 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Smith Family",
+        "private": false,
+        "sampling": "llm",
+        "description": "A surname suitable for representing a family unit in a social network."
+    },
+    "members": {
+        "type": "list",
+        "default": [],
+        "private": false,
+        "sampling": "default"
+    },
+    "collective_resources": {
+        "type": "float",
+        "default": 0.0,
+        "private": true,
+        "sampling": "default"
+    },
+    "inheritance_rules": {
+        "type": "str",
+        "choices": [
+            "equal",
+            "primogeniture",
+            "custom"
+        ],
+        "default": "equal",
+        "private": false,
+        "sampling": "random"
+    },
+    "education_investment": {
+        "type": "float",
+        "default": 0.0,
+        "private": true,
+        "sampling": "default"
+    },
+    "education_strategy": {
+        "type": "str",
+        "choices": [
+            "public",
+            "private",
+            "home-schooling"
+        ],
+        "default": "public",
+        "private": false,
+        "sampling": "random"
+    },
+    "social_status": {
+        "type": "str",
+        "choices": [
+            "low",
+            "middle",
+            "high"
+        ],
+        "default": "middle",
+        "private": false,
+        "sampling": "random"
+    },
+    "residential_area": {
+        "type": "str",
+        "default": "",
+        "private": false,
+        "sampling": "llm",
+        "description": "A description of the residential area where the family resides."
+    },
+    "allocated_resources": {
+        "type": "float",
+        "default": 0.0,
+        "private": true,
+        "sampling": "default"
+    },
+    "admission_decisions": {
+        "type": "list",
+        "default": [],
+        "private": true,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "int",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

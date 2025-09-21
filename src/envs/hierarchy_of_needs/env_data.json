@@ -1,0 +1,32 @@
+{
+    "feedback_data": [
+        {
+            "agent_id": "A01",
+            "interaction_type": "Collaborative Task",
+            "emotional_response": "Satisfaction",
+            "need_level": "Social",
+            "performance_score": 85.7
+        },
+        {
+            "agent_id": "A02",
+            "interaction_type": "Resource Request",
+            "emotional_response": "Frustration",
+            "need_level": "Physiological",
+            "performance_score": 60.3
+        },
+        {
+            "agent_id": "A03",
+            "interaction_type": "Leadership Meeting",
+            "emotional_response": "Motivation",
+            "need_level": "Self-Actualization",
+            "performance_score": 92.1
+        },
+        {
+            "agent_id": "A04",
+            "interaction_type": "Team Discussion",
+            "emotional_response": "Contentment",
+            "need_level": "Social",
+            "performance_score": 78.5
+        }
+    ]
+}

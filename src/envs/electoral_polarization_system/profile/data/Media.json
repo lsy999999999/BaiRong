@@ -1,0 +1,72 @@
+[
+    {
+        "name": "Alexandra Green",
+        "type": "online",
+        "media_ideology_bias": "",
+        "audience_reach": 0.0,
+        "credibility": 0.0,
+        "framing_strategy": "neutral",
+        "agenda_setting_power": 0.0,
+        "content_selection_bias": "economic",
+        "agent_type": "Media",
+        "audience_demographics": [],
+        "agenda_topics": [],
+        "id": "10"
+    },
+    {
+        "name": "Jordan Rivers",
+        "type": "television",
+        "media_ideology_bias": "",
+        "audience_reach": 0.0,
+        "credibility": 0.0,
+        "framing_strategy": "sensational",
+        "agenda_setting_power": 0.0,
+        "content_selection_bias": "political",
+        "agent_type": "Media",
+        "audience_demographics": [],
+        "agenda_topics": [],
+        "id": "11"
+    },
+    {
+        "name": "Taylor Morgan",
+        "type": "online",
+        "media_ideology_bias": "",
+        "audience_reach": 0.0,
+        "credibility": 0.0,
+        "framing_strategy": "sensational",
+        "agenda_setting_power": 0.0,
+        "content_selection_bias": "economic",
+        "agent_type": "Media",
+        "audience_demographics": [],
+        "agenda_topics": [],
+        "id": "12"
+    },
+    {
+        "name": "Casey Harper",
+        "type": "newspaper",
+        "media_ideology_bias": "",
+        "audience_reach": 0.0,
+        "credibility": 0.0,
+        "framing_strategy": "biased",
+        "agenda_setting_power": 0.0,
+        "content_selection_bias": "economic",
+        "agent_type": "Media",
+        "audience_demographics": [],
+        "agenda_topics": [],
+        "id": "13"
+    },
+    {
+        "name": "Riley Bennett",
+        "type": "radio",
+        "media_ideology_bias": "",
+        "audience_reach": 0.0,
+        "credibility": 0.0,
+        "framing_strategy": "balanced",
+        "agenda_setting_power": 0.0,
+        "content_selection_bias": "economic",
+        "agent_type": "Media",
+        "audience_demographics": [],
+        "agenda_topics": [],
+        "id": "14"
+    }
+]

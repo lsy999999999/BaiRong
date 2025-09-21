@@ -1,0 +1,77 @@
+{
+    "name": {
+        "type": "str",
+        "default": "General Hospital",
+        "private": false,
+        "sampling": "llm",
+        "description": "A recognizable name for a healthcare facility."
+    },
+    "location": {
+        "type": "str",
+        "default": "City Center",
+        "private": false,
+        "sampling": "llm",
+        "description": "The geographical location of the healthcare facility."
+    },
+    "capacity": {
+        "type": "int",
+        "default": 100,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            50,
+            500
+        ]
+    },
+    "current_occupancy": {
+        "type": "int",
+        "default": 0,
+        "private": true,
+        "sampling": "default"
+    },
+    "staff_level": {
+        "type": "int",
+        "default": 50,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            10,
+            200
+        ]
+    },
+    "treatment_effectiveness": {
+        "type": "float",
+        "default": 0.9,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.5,
+            1.0
+        ]
+    },
+    "resource_level": {
+        "type": "dict",
+        "default": {},
+        "private": true,
+        "sampling": "default"
+    },
+    "resource_allocation": {
+        "type": "str",
+        "default": "",
+        "private": true,
+        "sampling": "default"
+    },
+    "status_log": {
+        "type": "list",
+        "default": [],
+        "private": true,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "int",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

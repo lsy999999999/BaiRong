@@ -1,0 +1,112 @@
+[
+    {
+        "name": "Alex Johnson",
+        "content_type": "social",
+        "target_need": "social_interaction",
+        "satisfaction_level": 50.0,
+        "interaction_count": 0,
+        "availability_status": "active",
+        "social_influence_factor": 1.2792028309413732,
+        "agent_type": "MediaAgent",
+        "delivered_content": {
+            "headline": "Breaking News",
+            "body": "Details of the news..."
+        },
+        "feedback_records": [
+            {
+                "user_id": 1,
+                "feedback": "positive",
+                "timestamp": "2025-04-01T10:00:00Z"
+            }
+        ],
+        "id": "5"
+    },
+    {
+        "name": "Morgan Lee",
+        "content_type": "education",
+        "target_need": "entertainment",
+        "satisfaction_level": 50.0,
+        "interaction_count": 0,
+        "availability_status": "active",
+        "social_influence_factor": 0.6292521009178762,
+        "agent_type": "MediaAgent",
+        "delivered_content": {
+            "headline": "Breaking News",
+            "body": "Details of the news..."
+        },
+        "feedback_records": [
+            {
+                "user_id": 1,
+                "feedback": "positive",
+                "timestamp": "2025-04-01T10:00:00Z"
+            }
+        ],
+        "id": "6"
+    },
+    {
+        "name": "Taylor Smith",
+        "content_type": "social",
+        "target_need": "social_interaction",
+        "satisfaction_level": 50.0,
+        "interaction_count": 0,
+        "availability_status": "active",
+        "social_influence_factor": 0.6330166156849344,
+        "agent_type": "MediaAgent",
+        "delivered_content": {
+            "headline": "Breaking News",
+            "body": "Details of the news..."
+        },
+        "feedback_records": [
+            {
+                "user_id": 1,
+                "feedback": "positive",
+                "timestamp": "2025-04-01T10:00:00Z"
+            }
+        ],
+        "id": "7"
+    },
+    {
+        "name": "Jordan Brown",
+        "content_type": "social",
+        "target_need": "social_interaction",
+        "satisfaction_level": 50.0,
+        "interaction_count": 0,
+        "availability_status": "active",
+        "social_influence_factor": 0.6807280818368238,
+        "agent_type": "MediaAgent",
+        "delivered_content": {
+            "headline": "Breaking News",
+            "body": "Details of the news..."
+        },
+        "feedback_records": [
+            {
+                "user_id": 1,
+                "feedback": "positive",
+                "timestamp": "2025-04-01T10:00:00Z"
+            }
+        ],
+        "id": "8"
+    },
+    {
+        "name": "Casey Davis",
+        "content_type": "education",
+        "target_need": "entertainment",
+        "satisfaction_level": 50.0,
+        "interaction_count": 0,
+        "availability_status": "active",
+        "social_influence_factor": 1.389607444164807,
+        "agent_type": "MediaAgent",
+        "delivered_content": {
+            "headline": "Breaking News",
+            "body": "Details of the news..."
+        },
+        "feedback_records": [
+            {
+                "user_id": 1,
+                "feedback": "positive",
+                "timestamp": "2025-04-01T10:00:00Z"
+            }
+        ],
+        "id": "9"
+    }
+]

@@ -1,0 +1,72 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Monitor Agent",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's role in the multi-agent system"
+    },
+    "observation_data": {
+        "type": "str",
+        "default": "Initial observation data",
+        "private": true,
+        "sampling": "default"
+    },
+    "feedback_details": {
+        "type": "str",
+        "default": "Awaiting feedback",
+        "private": false,
+        "sampling": "default"
+    },
+    "recommendations": {
+        "type": "str",
+        "default": "No recommendations yet",
+        "private": false,
+        "sampling": "default"
+    },
+    "monitoring_strategy": {
+        "type": "str",
+        "default": "real-time_analysis",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "real-time_analysis",
+            "post-task_review",
+            "periodic_check"
+        ]
+    },
+    "feedback_frequency": {
+        "type": "int",
+        "default": 5,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            1,
+            10
+        ]
+    },
+    "cognitive_load": {
+        "type": "float",
+        "default": 0.5,
+        "private": true,
+        "sampling": "default"
+    },
+    "reflection_notes": {
+        "type": "list",
+        "default": [
+            {
+                "timestamp": "2025-04-01T12:00:00",
+                "note": "Initial reflection"
+            }
+        ],
+        "private": true,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

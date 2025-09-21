@@ -1,0 +1,96 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Social Group Agent",
+        "private": false,
+        "sampling": "llm",
+        "description": "The name of the social group agent representing collective interests"
+    },
+    "evaluation_criteria": {
+        "type": "str",
+        "default": "impact_assessment",
+        "private": false,
+        "sampling": "default"
+    },
+    "evaluation_status": {
+        "type": "str",
+        "default": "pending_review",
+        "private": false,
+        "sampling": "default"
+    },
+    "group_interest": {
+        "type": "str",
+        "default": "equality",
+        "private": false,
+        "sampling": "llm",
+        "description": "The primary interest or goal of the social group"
+    },
+    "negotiation_strategy": {
+        "type": "str",
+        "default": "collaborative",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "collaborative",
+            "competitive",
+            "compromising"
+        ]
+    },
+    "contract_history": {
+        "type": "list",
+        "default": [
+            {
+                "date": "2025-01-01",
+                "status": "successful",
+                "type": "initial"
+            }
+        ],
+        "private": true,
+        "sampling": "default"
+    },
+    "current_mood": {
+        "type": "str",
+        "default": "neutral",
+        "private": false,
+        "sampling": "default"
+    },
+    "influence_level": {
+        "type": "int",
+        "default": 50,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0,
+            100
+        ]
+    },
+    "communication_efficiency": {
+        "type": "float",
+        "default": 75.0,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            50.0,
+            100.0
+        ]
+    },
+    "policy_impact_assessment": {
+        "type": "list",
+        "default": [
+            {
+                "policy": "tax_reform",
+                "impact": "positive",
+                "assessment_date": "2025-04-01"
+            }
+        ],
+        "private": true,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

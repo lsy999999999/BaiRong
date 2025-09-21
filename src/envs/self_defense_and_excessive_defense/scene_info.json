@@ -1,0 +1,93 @@
+{
+  "domain": "Law",
+  "scene_name": "self_defense_and_excessive_defense",
+  "odd_protocol": {
+    "overview": {
+      "system_goal": "The goal is to simulate a simple violent conflict scenario to analyze how to judge if self-defense is reasonable within a legal framework and if excessive defense exists.",
+      "agent_types": "Three agents: aggressor (attacker), defender (defendee), and judge (adjudicator).",
+      "environment_description": "A simulated environment involving a violent conflict where the defender faces a threat from the aggressor, and a judge evaluates the situation.",
+      "simulation_focus": "Focus on the necessity and proportionality of defense actions and how to make judgments under unclear circumstances based on legal rules."
+    },
+    "design_concepts": {
+      "interaction_patterns": "The aggressor threatens the defender, who reacts with defensive measures, while the judge evaluates actions based on legal standards.",
+      "communication_protocols": "Agents communicate through simulated actions and legal evaluations, with the judge interpreting evidence and actions.",
+      "decision_mechanisms": "The judge uses legal standards and evidence to decide if the defense is justified or constitutes excessive defense.",
+      "legal_rule_application": "Application of self-defense standards, considering reasonable threat, excessive force, and necessity of defense."
+    },
+    "details": {
+      "agent_behaviors": "The aggressor simulates a threat, the defender reacts with various defensive measures, and the judge assesses the situation.",
+      "decision_algorithms": "The judge analyzes threat level, evaluates the defender's response, and applies legal standards to determine justification or excess.",
+      "specific_constraints": "Constraints include the level of threat, type of defensive action, and legal standards for necessity and proportionality.",
+      "evidence_analysis": "Involves witness testimonies, injury records, and environmental descriptions to determine the legitimacy of defense actions."
+    }
+  },
+  "agent_types": {
+    "Aggressor": "The Aggressor simulates a threat in the conflict scenario, initiating actions that challenge the defender.",
+    "Defender": "The Defender reacts to threats posed by the aggressor, employing defensive measures to protect themselves.",
+    "Judge": "The Judge evaluates the situation, interpreting evidence and actions to determine if the defender's response is justified or excessive according to legal standards."
+  },
+  "portrait": {
+    "Aggressor": 5,
+    "Defender": 3,
+    "Judge": 1
+  },
+  "metrics": [
+    {
+      "id": "Average_Threat_Level",
+      "name": "Average Threat Level",
+      "description": "Measures the average threat level posed by aggressors in the scenario.",
+      "visualization_type": "line",
+      "update_frequency": 5,
+      "variables": [
+        {
+          "name": "threat_level",
+          "source_type": "agent",
+          "agent_type": "Aggressor",
+          "path": "threat_level",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Calculate the average threat level by summing all non-None values in the 'threat_level' list and dividing by the count of non-None values. If the list is empty or all values are None, the average threat level should be set to 0. Handle type errors by skipping invalid entries.",
+      "function_name": "Average_Threat_Level"
+    },
+    {
+      "id": "Defense_Action_Distribution",
+      "name": "Defense Action Distribution",
+      "description": "Shows the distribution of different types of defensive actions taken by defenders.",
+      "visualization_type": "pie",
+      "update_frequency": 5,
+      "variables": [
+        {
+          "name": "defensive_action_type",
+          "source_type": "agent",
+          "agent_type": "Defender",
+          "path": "defensive_action_type",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Count occurrences of each type of defensive action in the 'defensive_action_type' list, ignoring None values. Use these counts to calculate proportions for the pie chart. If the list is empty, return an empty dictionary.",
+      "function_name": "Defense_Action_Distribution"
+    },
+    {
+      "id": "Judgment_Result_Summary",
+      "name": "Judgment Result Summary",
+      "description": "Summarizes the results of judgments made by the judge, indicating the frequency of different outcomes.",
+      "visualization_type": "bar",
+      "update_frequency": 5,
+      "variables": [
+        {
+          "name": "judgment_result",
+          "source_type": "agent",
+          "agent_type": "Judge",
+          "path": "judgment_result",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Count the occurrences of each unique judgment result in the 'judgment_result' list, ignoring None values. Use these counts to create a bar chart showing the frequency of each judgment result. If the list is empty, return an empty dictionary.",
+      "function_name": "Judgment_Result_Summary"
+    }
+  ]
+}

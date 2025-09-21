@@ -1,0 +1,267 @@
+{
+    "-1": {
+        "id": -1,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "IndividualAgent",
+        "to_action_name": "make_health_decision",
+        "from_action_id": 0,
+        "to_action_id": 1,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for individual health decision making",
+        "fields": []
+    },
+    "-2": {
+        "id": -2,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "FamilyAgent",
+        "to_action_name": "influence_family_health",
+        "from_action_id": 0,
+        "to_action_id": 2,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for family health influence",
+        "fields": []
+    },
+    "-3": {
+        "id": -3,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "CommunityAgent",
+        "to_action_name": "provide_community_resources",
+        "from_action_id": 0,
+        "to_action_id": 3,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for community resource provision",
+        "fields": []
+    },
+    "-4": {
+        "id": -4,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "GovernmentAgent",
+        "to_action_name": "implement_health_policies",
+        "from_action_id": 0,
+        "to_action_id": 4,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for government policy implementation",
+        "fields": []
+    },
+    "-5": {
+        "id": -5,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "HealthcareSystemAgent",
+        "to_action_name": "allocate_healthcare_resources",
+        "from_action_id": 0,
+        "to_action_id": 5,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for healthcare resource allocation",
+        "fields": []
+    },
+    "1": {
+        "id": 1,
+        "from_agent_type": "IndividualAgent",
+        "from_action_name": "make_health_decision",
+        "to_agent_type": "FamilyAgent",
+        "to_action_name": "influence_family_health",
+        "from_action_id": 1,
+        "to_action_id": 2,
+        "event_name": "HealthDecisionEvent",
+        "event_info": "Individual health decisions impacting family health",
+        "fields": [
+            {
+                "name": "individual_id",
+                "type": "int",
+                "default_value": -1,
+                "description": "Unique identifier for the individual seeking healthcare services"
+            },
+            {
+                "name": "service_requested",
+                "type": "str",
+                "default_value": "none",
+                "description": "Type of healthcare service requested by the individual"
+            },
+            {
+                "name": "priority_level",
+                "type": "int",
+                "default_value": 0,
+                "description": "Priority level of the healthcare service request"
+            }
+        ]
+    },
+    "2": {
+        "id": 2,
+        "from_agent_type": "IndividualAgent",
+        "from_action_name": "make_health_decision",
+        "to_agent_type": "HealthcareSystemAgent",
+        "to_action_name": "request_healthcare_services",
+        "from_action_id": 1,
+        "to_action_id": 6,
+        "event_name": "HealthDecisionEvent",
+        "event_info": "Individual seeking healthcare services",
+        "fields": [
+            {
+                "name": "individual_id",
+                "type": "int",
+                "default_value": -1,
+                "description": "Unique identifier for the individual seeking healthcare services"
+            },
+            {
+                "name": "service_requested",
+                "type": "str",
+                "default_value": "none",
+                "description": "Type of healthcare service requested by the individual"
+            },
+            {
+                "name": "priority_level",
+                "type": "int",
+                "default_value": 0,
+                "description": "Priority level of the healthcare service request"
+            }
+        ]
+    },
+    "3": {
+        "id": 3,
+        "from_agent_type": "FamilyAgent",
+        "from_action_name": "influence_family_health",
+        "to_agent_type": "CommunityAgent",
+        "to_action_name": "provide_community_resources",
+        "from_action_id": 2,
+        "to_action_id": 3,
+        "event_name": "FamilyHealthImpactEvent",
+        "event_info": "Family health influence affecting community resources",
+        "fields": [
+            {
+                "name": "family_id",
+                "type": "int",
+                "default_value": -1,
+                "description": "Unique identifier for the family influencing community resources"
+            },
+            {
+                "name": "impact_type",
+                "type": "str",
+                "default_value": "unknown",
+                "description": "Type of impact the family health has on community resources"
+            },
+            {
+                "name": "resource_change",
+                "type": "float",
+                "default_value": 0.0,
+                "description": "Amount of change in community resources due to family health"
+            }
+        ]
+    },
+    "4": {
+        "id": 4,
+        "from_agent_type": "CommunityAgent",
+        "from_action_name": "provide_community_resources",
+        "to_agent_type": "GovernmentAgent",
+        "to_action_name": "implement_health_policies",
+        "from_action_id": 3,
+        "to_action_id": 4,
+        "event_name": "CommunityResourceEvent",
+        "event_info": "Community resource needs informing government policies",
+        "fields": [
+            {
+                "name": "community_id",
+                "type": "int",
+                "default_value": -1,
+                "description": "Unique identifier for the community informing government policies"
+            },
+            {
+                "name": "resource_needs",
+                "type": "str",
+                "default_value": "none",
+                "description": "Description of community resource needs"
+            },
+            {
+                "name": "urgency_level",
+                "type": "int",
+                "default_value": 0,
+                "description": "Urgency level of the resource needs"
+            }
+        ]
+    },
+    "5": {
+        "id": 5,
+        "from_agent_type": "GovernmentAgent",
+        "from_action_name": "implement_health_policies",
+        "to_agent_type": "HealthcareSystemAgent",
+        "to_action_name": "allocate_healthcare_resources",
+        "from_action_id": 4,
+        "to_action_id": 5,
+        "event_name": "PolicyImplementationEvent",
+        "event_info": "Government policies affecting healthcare resource allocation",
+        "fields": [
+            {
+                "name": "policy_id",
+                "type": "int",
+                "default_value": -1,
+                "description": "Unique identifier for the government policy being implemented"
+            },
+            {
+                "name": "affected_region",
+                "type": "str",
+                "default_value": "unknown",
+                "description": "Region affected by the policy implementation"
+            },
+            {
+                "name": "resource_allocation_change",
+                "type": "float",
+                "default_value": 0.0,
+                "description": "Change in healthcare resource allocation due to policy"
+            }
+        ]
+    },
+    "6": {
+        "id": 6,
+        "from_agent_type": "HealthcareSystemAgent",
+        "from_action_name": "allocate_healthcare_resources",
+        "to_agent_type": "EnvAgent",
+        "to_action_name": "terminate",
+        "from_action_id": 5,
+        "to_action_id": -1,
+        "event_name": "HealthcareResourceAllocationEvent",
+        "event_info": "Completion of healthcare resource allocation process",
+        "fields": [
+            {
+                "name": "allocation_status",
+                "type": "str",
+                "default_value": "pending",
+                "description": "Status of the healthcare resource allocation process"
+            },
+            {
+                "name": "allocated_resources",
+                "type": "float",
+                "default_value": 0.0,
+                "description": "Amount of resources allocated in the process"
+            }
+        ]
+    },
+    "7": {
+        "id": 7,
+        "from_agent_type": "HealthcareSystemAgent",
+        "from_action_name": "request_healthcare_services",
+        "to_agent_type": "EnvAgent",
+        "to_action_name": "terminate",
+        "from_action_id": 6,
+        "to_action_id": -1,
+        "event_name": "HealthcareServiceProvidedEvent",
+        "event_info": "Completion of healthcare service provision",
+        "fields": [
+            {
+                "name": "service_status",
+                "type": "str",
+                "default_value": "pending",
+                "description": "Status of the healthcare service provision"
+            },
+            {
+                "name": "services_provided",
+                "type": "str",
+                "default_value": "none",
+                "description": "List of healthcare services provided"
+            }
+        ]
+    }
+}

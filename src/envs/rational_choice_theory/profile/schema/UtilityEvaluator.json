@@ -1,0 +1,65 @@
+{
+    "name": {
+        "type": "str",
+        "default": "UtilityEvaluator",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's identifier within the simulation"
+    },
+    "utility_value": {
+        "type": "float",
+        "default": 100.0,
+        "private": true,
+        "sampling": "default"
+    },
+    "resource_level": {
+        "type": "int",
+        "default": 50,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0,
+            100
+        ]
+    },
+    "decision_strategy": {
+        "type": "str",
+        "default": "maximize_utility",
+        "private": false,
+        "sampling": "llm",
+        "description": "Strategy used by the agent to make decisions"
+    },
+    "risk_tolerance": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "goal_priority": {
+        "type": "list",
+        "default": [
+            "wealth_maximization",
+            "happiness_enhancement"
+        ],
+        "private": false,
+        "sampling": "llm",
+        "description": "List of goals prioritized by the agent"
+    },
+    "current_status": {
+        "type": "str",
+        "default": "active",
+        "private": false,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

@@ -1,0 +1,25 @@
+{
+    "new_land_status": {
+        "cell_coordinates": [
+            4,
+            7
+        ],
+        "current_owner": "Miner_12",
+        "previous_owner": "Miner_8",
+        "energy_investment": 15,
+        "ownership_change": true
+    },
+    "competition_result": {
+        "cell_coordinates": [
+            2,
+            5
+        ],
+        "winning_miner": "Miner_3",
+        "losing_miners": [
+            "Miner_7",
+            "Miner_11"
+        ],
+        "winning_energy": 20,
+        "tie_resolved": false
+    }
+}

@@ -1,0 +1,107 @@
+[
+    {
+        "name": "Eco Warriors",
+        "collective_goal": "Promote sustainable living practices in urban areas",
+        "evaluation_criteria": "Reduction in carbon footprint and increase in community participation",
+        "public_benefit_threshold": 0.5260525087949849,
+        "current_public_benefit": 0.0,
+        "agent_type": "Group",
+        "individual_cooperation_levels": [
+            {
+                "individual_id": 1,
+                "cooperation_level": 0.75
+            }
+        ],
+        "interaction_history": [
+            {
+                "interaction_id": 1,
+                "result": "success"
+            }
+        ],
+        "id": "5"
+    },
+    {
+        "name": "Tech Innovators",
+        "collective_goal": "Develop cutting-edge technology solutions for healthcare",
+        "evaluation_criteria": "Number of successful product launches and improvements in patient outcomes",
+        "public_benefit_threshold": 0.5422001756829941,
+        "current_public_benefit": 0.0,
+        "agent_type": "Group",
+        "individual_cooperation_levels": [
+            {
+                "individual_id": 1,
+                "cooperation_level": 0.75
+            }
+        ],
+        "interaction_history": [
+            {
+                "interaction_id": 1,
+                "result": "success"
+            }
+        ],
+        "id": "6"
+    },
+    {
+        "name": "Cultural Connectors",
+        "collective_goal": "Foster cultural exchange and understanding through art and music",
+        "evaluation_criteria": "Number of cultural events hosted and diversity of participant backgrounds",
+        "public_benefit_threshold": 0.746276576579828,
+        "current_public_benefit": 0.0,
+        "agent_type": "Group",
+        "individual_cooperation_levels": [
+            {
+                "individual_id": 1,
+                "cooperation_level": 0.75
+            }
+        ],
+        "interaction_history": [
+            {
+                "interaction_id": 1,
+                "result": "success"
+            }
+        ],
+        "id": "7"
+    },
+    {
+        "name": "Youth Empowerment League",
+        "collective_goal": "Empower young individuals through leadership and skill development programs",
+        "evaluation_criteria": "Increase in youth leadership roles and skill acquisition among participants",
+        "public_benefit_threshold": 0.8375430307739171,
+        "current_public_benefit": 0.0,
+        "agent_type": "Group",
+        "individual_cooperation_levels": [
+            {
+                "individual_id": 1,
+                "cooperation_level": 0.75
+            }
+        ],
+        "interaction_history": [
+            {
+                "interaction_id": 1,
+                "result": "success"
+            }
+        ],
+        "id": "8"
+    },
+    {
+        "name": "Green Builders",
+        "collective_goal": "Promote eco-friendly construction and sustainable architecture",
+        "evaluation_criteria": "Number of green buildings certified and reduction in construction waste",
+        "public_benefit_threshold": 0.8806346493435488,
+        "current_public_benefit": 0.0,
+        "agent_type": "Group",
+        "individual_cooperation_levels": [
+            {
+                "individual_id": 1,
+                "cooperation_level": 0.75
+            }
+        ],
+        "interaction_history": [
+            {
+                "interaction_id": 1,
+                "result": "success"
+            }
+        ],
+        "id": "9"
+    }
+]

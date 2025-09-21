@@ -1,0 +1,72 @@
+[
+    {
+        "name": "Anderson",
+        "members": [],
+        "inheritance_rules": "custom",
+        "education_strategy": "educational institutions",
+        "social_status": "high",
+        "residential_area": "A charming suburban neighborhood with tree-lined streets and a close-knit community atmosphere, located just outside the bustling city.",
+        "agent_type": "Family",
+        "collective_resources": 100000.0,
+        "education_investment": 1650.0,
+        "allocated_resources": 8760.0,
+        "admission_decisions": "None",
+        "id": "0"
+    },
+    {
+        "name": "Gupta",
+        "members": [],
+        "inheritance_rules": "custom",
+        "education_strategy": "educational institutions",
+        "social_status": "middle",
+        "residential_area": "A vibrant urban district known for its cultural diversity, bustling markets, and an array of restaurants offering international cuisines.",
+        "agent_type": "Family",
+        "collective_resources": 67560.0,
+        "education_investment": 9210.0,
+        "allocated_resources": 2430.0,
+        "admission_decisions": "None",
+        "id": "1"
+    },
+    {
+        "name": "Martinez",
+        "members": [],
+        "inheritance_rules": "equal",
+        "education_strategy": "educational institutions",
+        "social_status": "high",
+        "residential_area": "A peaceful coastal town featuring beautiful beaches, a scenic boardwalk, and a friendly, laid-back lifestyle.",
+        "agent_type": "Family",
+        "collective_resources": 78540.0,
+        "education_investment": 12543.0,
+        "allocated_resources": 980.0,
+        "admission_decisions": "None",
+        "id": "2"
+    },
+    {
+        "name": "O'Connor",
+        "members": [],
+        "inheritance_rules": "custom",
+        "education_strategy": "educational institutions",
+        "social_status": "high",
+        "residential_area": "A rural countryside area surrounded by rolling hills, farms, and a strong sense of community among its residents.",
+        "agent_type": "Family",
+        "collective_resources": 324530.0,
+        "education_investment": 24320.0,
+        "allocated_resources": 14350.0,
+        "admission_decisions": "None",
+        "id": "3"
+    },
+    {
+        "name": "Nguyen",
+        "members": [],
+        "inheritance_rules": "custom",
+        "education_strategy": "educational institutions",
+        "social_status": "middle",
+        "residential_area": "A dynamic metropolitan area known for its modern architecture, high-rise buildings, and a fast-paced urban lifestyle.",
+        "agent_type": "Family",
+        "collective_resources": 89540.0,
+        "education_investment": 14530.0,
+        "allocated_resources": 6540.0,
+        "admission_decisions": "None",
+        "id": "4"
+    }
+]

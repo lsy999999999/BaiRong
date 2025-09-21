@@ -1,0 +1,39 @@
+{
+    "domain": "Economics",
+    "scene_name": "agent_resource_optimization_grid",
+    "odd_protocol": {
+        "overview": {
+            "system_goal": "Maximize each agent's cumulative gold, with global output evaluated but not influencing decisions.",
+            "agent_types": "Initially identical agents, with diversity possible due to stamina variations, resource affinity, communication capabilities, and response to authority.",
+            "environment_description": "A 10x10 grid consisting of 100 plots where agents can interact by claiming or raiding plots using consistent event-keyed hashed randomization.",
+            "stamina_constraint": "Each agent must adhere to a hard stamina budget S; actions submitted in a round must total costs ≤ S.",
+            "self_maximization_priority": "If an agent's plan exceeds S, they prioritize their actions to maximize self-benefit by either resubmitting under budget or having the system deterministically trim actions."
+        },
+        "design_concepts": {
+            "interaction_patterns": "Agents claim, raid, and defend plots while determining the optimal allocation of stamina to maximize resources using randomization methods.",
+            "communication_protocols": "No direct communication; agents aim to maximize personal gain with minimal public information and short-term memory.",
+            "decision_mechanisms": "SHA256 hash calculations for fair outcome determination in claims, deflects, and raids based on events ensure independent and consistent results.",
+            "budget_overage_handling": "Agents can resubmit a revised plan immediately upon receiving 'OVER_BUDGET' status, and if still over, the system enforces a deterministic trimming based on action priority or default order."
+        },
+        "details": {
+            "agent_behaviors": "Agents strategically allocate stamina given environmental context, employ randomized decisions for actions, and are unable to retain cross-round private memory.",
+            "decision_algorithms": "Use hash computations and modulus operations for event outcomes, while prioritizing agent-provided action trimming when necessary.",
+            "specific_constraints": "Agents face fixed stamina limits, variable mining caps, and guaranteed equitable randomness through systematic hashes in decision order regardless of actions' sequence.",
+            "default_action_priority": "For consistent results, when agents do not specify a trimming priority, the system trims using a default deterministic order, focusing first on retaining mining on self-owned plots and down through raids."
+        }
+    },
+    "agent_types": {
+        "ResourcePlannerAgent": "This agent type focuses on strategically allocating stamina and resources to maximize personal gold acquisition by planning and executing effective claim, raid, and defend actions.",
+        "StaminaManagerAgent": "This agent type ensures that the total cost of actions remains within the designated stamina budget by optimizing action selection or resubmitting plans if over-budget.",
+        "DecisionAlgorithmAgent": "This agent utilizes hash computations and modulus operations to resolve action outcomes, ensuring fairness and consistency in claims and raids.",
+        "RandomizationHandlerAgent": "Responsible for employing event-keyed hashed randomization to ensure equitable randomness and unpredictability in agent interactions.",
+        "MemorylessRaiderAgent": "Operates without the ability to retain cross-round memory, focusing on short-term gains through selective raiding and defending strategies."
+    },
+    "portrait": {
+        "ResourcePlannerAgent": 4,
+        "StaminaManagerAgent": 3,
+        "DecisionAlgorithmAgent": 2,
+        "RandomizationHandlerAgent": 5,
+        "MemorylessRaiderAgent": 1
+    }
+}

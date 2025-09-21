@@ -1,0 +1,108 @@
+{
+    "name": {
+        "type": "str",
+        "default": "CustomerAgent",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's identifier in the simulation"
+    },
+    "initial_loyalty": {
+        "type": "float",
+        "default": 0.0,
+        "private": true,
+        "sampling": "default"
+    },
+    "loyalty": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "default"
+    },
+    "service_sensitivity_coefficient": {
+        "type": "float",
+        "default": 1.0,
+        "private": true,
+        "sampling": "random",
+        "range": [
+            0.8,
+            1.2
+        ]
+    },
+    "product_sensitivity_coefficient": {
+        "type": "float",
+        "default": 1.0,
+        "private": true,
+        "sampling": "random",
+        "range": [
+            0.8,
+            1.2
+        ]
+    },
+    "perceived_service_quality": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "default"
+    },
+    "product_experience_score": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "default"
+    },
+    "satisfaction": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "default"
+    },
+    "purchase_decision": {
+        "type": "bool",
+        "default": false,
+        "private": false,
+        "sampling": "default"
+    },
+    "purchase_probability": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "default"
+    },
+    "service_quality_weight": {
+        "type": "float",
+        "default": 0.6,
+        "private": true,
+        "sampling": "default"
+    },
+    "product_experience_weight": {
+        "type": "float",
+        "default": 0.4,
+        "private": true,
+        "sampling": "default"
+    },
+    "satisfaction_fluctuation": {
+        "type": "float",
+        "default": 0.05,
+        "private": true,
+        "sampling": "default"
+    },
+    "loyalty_decay_factor": {
+        "type": "float",
+        "default": 0.1,
+        "private": true,
+        "sampling": "default"
+    },
+    "purchase_threshold": {
+        "type": "float",
+        "default": 0.5,
+        "private": true,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

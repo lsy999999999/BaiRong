@@ -1,0 +1,55 @@
+{
+    "environment": {
+        "variables": [
+            {
+                "name": "initial_emotional_state",
+                "type": "string",
+                "default_value": null
+            }
+        ]
+    },
+    "agents": {
+        "IndividualAgent": {
+            "variables": [
+                {
+                    "name": "emotional_state",
+                    "type": "string",
+                    "default_value": null
+                }
+            ]
+        },
+        "CommunicationAgent": {
+            "variables": [
+                {
+                    "name": "emotional_state",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "intensity",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "frequency_of_contact",
+                    "type": "int",
+                    "default_value": null
+                }
+            ]
+        },
+        "DecisionAgent": {
+            "variables": [
+                {
+                    "name": "evaluation_result",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "adjustment_factor",
+                    "type": "float",
+                    "default_value": null
+                }
+            ]
+        }
+    }
+}

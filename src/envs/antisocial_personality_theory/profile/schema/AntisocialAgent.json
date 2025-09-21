@@ -1,0 +1,83 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Alex Doe",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's full name representing an individual with antisocial personality traits"
+    },
+    "personal_goal": {
+        "type": "str",
+        "default": "maximize_personal_gain",
+        "private": false,
+        "sampling": "default"
+    },
+    "interaction_status": {
+        "type": "str",
+        "default": "ready_to_interact",
+        "private": false,
+        "sampling": "default"
+    },
+    "manipulation_strategy": {
+        "type": "str",
+        "default": "strategic_deceit",
+        "private": true,
+        "sampling": "default"
+    },
+    "empathy_level": {
+        "type": "int",
+        "default": 10,
+        "private": true,
+        "sampling": "random",
+        "range": [
+            0,
+            20
+        ]
+    },
+    "social_norm_violations": {
+        "type": "int",
+        "default": 5,
+        "private": false,
+        "sampling": "default"
+    },
+    "communication_tactics": {
+        "type": "list",
+        "default": [
+            "direct",
+            "manipulative"
+        ],
+        "private": false,
+        "sampling": "default"
+    },
+    "conflict_involvement": {
+        "type": "int",
+        "default": 3,
+        "private": false,
+        "sampling": "default"
+    },
+    "decision_making_process": {
+        "type": "str",
+        "default": "self_benefit_analysis",
+        "private": true,
+        "sampling": "default"
+    },
+    "interaction_history": {
+        "type": "list",
+        "default": [
+            {
+                "date": "2023-10-25",
+                "interaction_type": "manipulation",
+                "outcome": "success"
+            }
+        ],
+        "private": true,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

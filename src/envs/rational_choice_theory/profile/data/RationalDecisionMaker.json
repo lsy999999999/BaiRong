@@ -1,0 +1,142 @@
+[
+    {
+        "name": "RationalDecisionMaker001",
+        "selected_decision": "awaiting_decision",
+        "current_utility": 0.0,
+        "interaction_mode": "social_network",
+        "risk_tolerance": 0.10255760641069145,
+        "experience_level": 7,
+        "agent_type": "RationalDecisionMaker",
+        "personal_goals": {
+            "wealth_maximization": true,
+            "risk_aversion": false
+        },
+        "resource_status": {
+            "financial": 1000,
+            "social": 10
+        },
+        "evaluated_choices": [
+            {
+                "option": "A",
+                "utility": 75
+            },
+            {
+                "option": "B",
+                "utility": 60
+            }
+        ],
+        "id": "0"
+    },
+    {
+        "name": "RationalDecisionMaker002",
+        "selected_decision": "awaiting_decision",
+        "current_utility": 0.0,
+        "interaction_mode": "social_network",
+        "risk_tolerance": 0.3889045373680391,
+        "experience_level": 3,
+        "agent_type": "RationalDecisionMaker",
+        "personal_goals": {
+            "wealth_maximization": true,
+            "risk_aversion": false
+        },
+        "resource_status": {
+            "financial": 1000,
+            "social": 10
+        },
+        "evaluated_choices": [
+            {
+                "option": "A",
+                "utility": 75
+            },
+            {
+                "option": "B",
+                "utility": 60
+            }
+        ],
+        "id": "1"
+    },
+    {
+        "name": "RationalDecisionMaker003",
+        "selected_decision": "awaiting_decision",
+        "current_utility": 0.0,
+        "interaction_mode": "market_exchange",
+        "risk_tolerance": 0.2324858875830641,
+        "experience_level": 4,
+        "agent_type": "RationalDecisionMaker",
+        "personal_goals": {
+            "wealth_maximization": true,
+            "risk_aversion": false
+        },
+        "resource_status": {
+            "financial": 1000,
+            "social": 10
+        },
+        "evaluated_choices": [
+            {
+                "option": "A",
+                "utility": 75
+            },
+            {
+                "option": "B",
+                "utility": 60
+            }
+        ],
+        "id": "2"
+    },
+    {
+        "name": "RationalDecisionMaker004",
+        "selected_decision": "awaiting_decision",
+        "current_utility": 0.0,
+        "interaction_mode": "market_exchange",
+        "risk_tolerance": 0.5208507495030309,
+        "experience_level": 5,
+        "agent_type": "RationalDecisionMaker",
+        "personal_goals": {
+            "wealth_maximization": true,
+            "risk_aversion": false
+        },
+        "resource_status": {
+            "financial": 1000,
+            "social": 10
+        },
+        "evaluated_choices": [
+            {
+                "option": "A",
+                "utility": 75
+            },
+            {
+                "option": "B",
+                "utility": 60
+            }
+        ],
+        "id": "3"
+    },
+    {
+        "name": "RationalDecisionMaker005",
+        "selected_decision": "awaiting_decision",
+        "current_utility": 0.0,
+        "interaction_mode": "market_exchange",
+        "risk_tolerance": 0.7411108222160884,
+        "experience_level": 5,
+        "agent_type": "RationalDecisionMaker",
+        "personal_goals": {
+            "wealth_maximization": true,
+            "risk_aversion": false
+        },
+        "resource_status": {
+            "financial": 1000,
+            "social": 10
+        },
+        "evaluated_choices": [
+            {
+                "option": "A",
+                "utility": 75
+            },
+            {
+                "option": "B",
+                "utility": 60
+            }
+        ],
+        "id": "4"
+    }
+]

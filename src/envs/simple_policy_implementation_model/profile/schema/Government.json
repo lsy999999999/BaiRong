@@ -1,0 +1,79 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Government Entity",
+        "private": false,
+        "sampling": "llm",
+        "description": "The name of the government agent"
+    },
+    "current_strength": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "default"
+    },
+    "efficiency_metrics": {
+        "type": "float",
+        "default": 0.7,
+        "private": false,
+        "sampling": "default"
+    },
+    "new_strength": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "default"
+    },
+    "adjustment_reason": {
+        "type": "str",
+        "default": "Initial setup",
+        "private": true,
+        "sampling": "llm",
+        "description": "Reason for policy strength adjustment"
+    },
+    "policy_execution_frequency": {
+        "type": "int",
+        "default": 1,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            1,
+            7
+        ]
+    },
+    "policy_acceptance_threshold": {
+        "type": "float",
+        "default": 0.6,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "citizen_satisfaction_change": {
+        "type": "float",
+        "default": 0.1,
+        "private": false,
+        "sampling": "default"
+    },
+    "policy_adjustment_log": {
+        "type": "list",
+        "default": [
+            {
+                "date": "2023-10-01",
+                "strength_change": 0.1,
+                "reason": "Efficiency improvement"
+            }
+        ],
+        "private": true,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

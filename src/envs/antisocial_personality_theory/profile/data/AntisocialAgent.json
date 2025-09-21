@@ -1,0 +1,117 @@
+[
+    {
+        "name": "Jordan Black",
+        "personal_goal": "maximize_personal_gain",
+        "interaction_status": "ready_to_interact",
+        "social_norm_violations": 5,
+        "communication_tactics": [
+            "direct",
+            "manipulative"
+        ],
+        "conflict_involvement": 3,
+        "agent_type": "AntisocialAgent",
+        "manipulation_strategy": "strategic_deceit",
+        "empathy_level": 11,
+        "decision_making_process": "self_benefit_analysis",
+        "interaction_history": [
+            {
+                "date": "2023-10-25",
+                "interaction_type": "manipulation",
+                "outcome": "success"
+            }
+        ],
+        "id": "0"
+    },
+    {
+        "name": "Casey Night",
+        "personal_goal": "maximize_personal_gain",
+        "interaction_status": "ready_to_interact",
+        "social_norm_violations": 5,
+        "communication_tactics": [
+            "direct",
+            "manipulative"
+        ],
+        "conflict_involvement": 3,
+        "agent_type": "AntisocialAgent",
+        "manipulation_strategy": "strategic_deceit",
+        "empathy_level": 19,
+        "decision_making_process": "self_benefit_analysis",
+        "interaction_history": [
+            {
+                "date": "2023-10-25",
+                "interaction_type": "manipulation",
+                "outcome": "success"
+            }
+        ],
+        "id": "1"
+    },
+    {
+        "name": "Alex Shade",
+        "personal_goal": "maximize_personal_gain",
+        "interaction_status": "ready_to_interact",
+        "social_norm_violations": 5,
+        "communication_tactics": [
+            "direct",
+            "manipulative"
+        ],
+        "conflict_involvement": 3,
+        "agent_type": "AntisocialAgent",
+        "manipulation_strategy": "strategic_deceit",
+        "empathy_level": 1,
+        "decision_making_process": "self_benefit_analysis",
+        "interaction_history": [
+            {
+                "date": "2023-10-25",
+                "interaction_type": "manipulation",
+                "outcome": "success"
+            }
+        ],
+        "id": "2"
+    },
+    {
+        "name": "Morgan Steele",
+        "personal_goal": "maximize_personal_gain",
+        "interaction_status": "ready_to_interact",
+        "social_norm_violations": 5,
+        "communication_tactics": [
+            "direct",
+            "manipulative"
+        ],
+        "conflict_involvement": 3,
+        "agent_type": "AntisocialAgent",
+        "manipulation_strategy": "strategic_deceit",
+        "empathy_level": 2,
+        "decision_making_process": "self_benefit_analysis",
+        "interaction_history": [
+            {
+                "date": "2023-10-25",
+                "interaction_type": "manipulation",
+                "outcome": "success"
+            }
+        ],
+        "id": "3"
+    },
+    {
+        "name": "Taylor Frost",
+        "personal_goal": "maximize_personal_gain",
+        "interaction_status": "ready_to_interact",
+        "social_norm_violations": 5,
+        "communication_tactics": [
+            "direct",
+            "manipulative"
+        ],
+        "conflict_involvement": 3,
+        "agent_type": "AntisocialAgent",
+        "manipulation_strategy": "strategic_deceit",
+        "empathy_level": 13,
+        "decision_making_process": "self_benefit_analysis",
+        "interaction_history": [
+            {
+                "date": "2023-10-25",
+                "interaction_type": "manipulation",
+                "outcome": "success"
+            }
+        ],
+        "id": "4"
+    }
+]

@@ -1,0 +1,127 @@
+[
+    {
+        "name": "Alexandra Johnson",
+        "self_actualization_goals": [
+            "lead a team project",
+            "publish research paper"
+        ],
+        "self_actualization_status": "in_progress",
+        "current_need_level": "esteem",
+        "motivation_level": 70,
+        "emotional_state": "optimistic",
+        "work_performance": 85.5,
+        "leadership_style": "Transformational",
+        "agent_type": "SelfActualizationAgent",
+        "interaction_history": [
+            {
+                "interaction": "team meeting",
+                "outcome": "positive"
+            }
+        ],
+        "social_connections": [
+            "colleague A",
+            "mentor B"
+        ],
+        "id": "10"
+    },
+    {
+        "name": "Benjamin Lee",
+        "self_actualization_goals": [
+            "lead a team project",
+            "publish research paper"
+        ],
+        "self_actualization_status": "in_progress",
+        "current_need_level": "esteem",
+        "motivation_level": 70,
+        "emotional_state": "optimistic",
+        "work_performance": 85.5,
+        "leadership_style": "Servant",
+        "agent_type": "SelfActualizationAgent",
+        "interaction_history": [
+            {
+                "interaction": "team meeting",
+                "outcome": "positive"
+            }
+        ],
+        "social_connections": [
+            "colleague A",
+            "mentor B"
+        ],
+        "id": "11"
+    },
+    {
+        "name": "Caroline Smith",
+        "self_actualization_goals": [
+            "lead a team project",
+            "publish research paper"
+        ],
+        "self_actualization_status": "in_progress",
+        "current_need_level": "esteem",
+        "motivation_level": 70,
+        "emotional_state": "optimistic",
+        "work_performance": 85.5,
+        "leadership_style": "Democratic",
+        "agent_type": "SelfActualizationAgent",
+        "interaction_history": [
+            {
+                "interaction": "team meeting",
+                "outcome": "positive"
+            }
+        ],
+        "social_connections": [
+            "colleague A",
+            "mentor B"
+        ],
+        "id": "12"
+    },
+    {
+        "name": "David Martinez",
+        "self_actualization_goals": [
+            "lead a team project",
+            "publish research paper"
+        ],
+        "self_actualization_status": "in_progress",
+        "current_need_level": "esteem",
+        "motivation_level": 70,
+        "emotional_state": "optimistic",
+        "work_performance": 85.5,
+        "leadership_style": "Autocratic",
+        "agent_type": "SelfActualizationAgent",
+        "interaction_history": [
+            {
+                "interaction": "team meeting",
+                "outcome": "positive"
+            }
+        ],
+        "social_connections": [
+            "colleague A",
+            "mentor B"
+        ],
+        "id": "13"
+    },
+    {
+        "name": "Eleanor Davis",
+        "self_actualization_goals": [
+            "lead a team project",
+            "publish research paper"
+        ],
+        "self_actualization_status": "in_progress",
+        "current_need_level": "esteem",
+        "motivation_level": 70,
+        "emotional_state": "optimistic",
+        "work_performance": 85.5,
+        "leadership_style": "Laissez-faire",
+        "agent_type": "SelfActualizationAgent",
+        "interaction_history": [
+            {
+                "interaction": "team meeting",
+                "outcome": "positive"
+            }
+        ],
+        "social_connections": [
+            "colleague A",
+            "mentor B"
+        ],
+        "id": "14"
+    }
+]

@@ -1,0 +1,71 @@
+{
+    "name": {
+        "type": "str",
+        "default": "LegalExpertAgent",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's designated name in the simulation"
+    },
+    "outcome_analysis": {
+        "type": "str",
+        "default": "awaiting_analysis",
+        "private": true,
+        "sampling": "default"
+    },
+    "expertise_field": {
+        "type": "str",
+        "default": "criminal law",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "criminal law",
+            "civil law",
+            "contract law",
+            "administrative law"
+        ]
+    },
+    "interpretation_skill": {
+        "type": "int",
+        "default": 80,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            50,
+            100
+        ]
+    },
+    "precedent_referencing_ability": {
+        "type": "float",
+        "default": 75.5,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            60.0,
+            90.0
+        ]
+    },
+    "socio_political_influence": {
+        "type": "list",
+        "default": [
+            "neutral",
+            "balanced"
+        ],
+        "private": true,
+        "sampling": "default",
+        "sample_size": 2
+    },
+    "communication_protocol": {
+        "type": "str",
+        "default": "legal_reasoning",
+        "private": false,
+        "sampling": "llm",
+        "description": "Guides communication between agents based on legal principles"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

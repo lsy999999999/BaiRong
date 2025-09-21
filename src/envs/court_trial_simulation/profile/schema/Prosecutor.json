@@ -1,0 +1,81 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Prosecutor",
+        "private": false,
+        "sampling": "llm",
+        "description": "The official title of the agent representing the state in legal proceedings."
+    },
+    "evidence_quality": {
+        "type": "float",
+        "default": 0.75,
+        "private": true,
+        "sampling": "default"
+    },
+    "conviction_likelihood": {
+        "type": "float",
+        "default": 0.6,
+        "private": true,
+        "sampling": "default"
+    },
+    "prosecution_decision": {
+        "type": "str",
+        "default": "pending_review",
+        "private": true,
+        "sampling": "default"
+    },
+    "case_load": {
+        "type": "int",
+        "default": 5,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            1,
+            20
+        ]
+    },
+    "communication_protocol": {
+        "type": "str",
+        "default": "formal",
+        "private": false,
+        "sampling": "llm",
+        "description": "The style and structure of communication used during legal proceedings."
+    },
+    "strategy": {
+        "type": "list",
+        "default": [
+            "evidence presentation",
+            "witness examination"
+        ],
+        "private": true,
+        "sampling": "default",
+        "sample_size": 2
+    },
+    "legal_system_type": {
+        "type": "str",
+        "default": "common law",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "common law",
+            "civil law"
+        ]
+    },
+    "public_attention": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

@@ -1,0 +1,93 @@
+{
+    "name": {
+        "type": "str",
+        "default": "ManagerAgent",
+        "private": false,
+        "sampling": "llm",
+        "description": "The name of the manager agent, typically generated to reflect its role and identity in the simulation."
+    },
+    "workflow_design_status": {
+        "type": "str",
+        "default": "initial_design",
+        "private": true,
+        "sampling": "default"
+    },
+    "worker_skills": {
+        "type": "list",
+        "default": [
+            "basic_skill"
+        ],
+        "private": false,
+        "sampling": "default",
+        "sample_size": 3
+    },
+    "task_allocation_status": {
+        "type": "str",
+        "default": "pending",
+        "private": true,
+        "sampling": "default"
+    },
+    "worker_performance": {
+        "type": "list",
+        "default": [
+            {
+                "worker_id": 1,
+                "performance": 75
+            }
+        ],
+        "private": false,
+        "sampling": "default",
+        "sample_size": 2
+    },
+    "incentive_plan": {
+        "type": "list",
+        "default": [
+            "standard_bonus"
+        ],
+        "private": false,
+        "sampling": "default",
+        "sample_size": 1
+    },
+    "performance_evaluation": {
+        "type": "str",
+        "default": "not_evaluated",
+        "private": true,
+        "sampling": "default"
+    },
+    "workflow_final_status": {
+        "type": "str",
+        "default": "not_finalized",
+        "private": true,
+        "sampling": "default"
+    },
+    "manager_experience_level": {
+        "type": "int",
+        "default": 5,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            1,
+            10
+        ]
+    },
+    "communication_efficiency": {
+        "type": "float",
+        "default": 0.85,
+        "private": false,
+        "sampling": "default"
+    },
+    "decision_making_strategy": {
+        "type": "str",
+        "default": "scientific_analysis",
+        "private": false,
+        "sampling": "llm",
+        "description": "The strategy used by the manager agent for decision-making, reflecting scientific management principles."
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

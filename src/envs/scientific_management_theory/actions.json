@@ -1,0 +1,190 @@
+{
+    "ManagerAgent": [
+        {
+            "id": 1,
+            "name": "initiate_workflow_design",
+            "condition": null,
+            "description": "Begins the process of designing a workflow by analyzing tasks and determining optimal task allocation strategies.",
+            "type": "OR",
+            "required_variables": [],
+            "output_updates": [
+                {
+                    "name": "workflow_design_status",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Status indicating the initiation of workflow design."
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "name": "allocate_tasks",
+            "condition": null,
+            "description": "Allocates tasks to workers based on the designed workflow and worker capabilities.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "workflow_id",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Unique identifier for the workflow."
+                },
+                {
+                    "name": "design_details",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Details of the workflow design."
+                },
+                {
+                    "name": "worker_skills",
+                    "type": "list",
+                    "context": "agent",
+                    "description": "List of skills for each worker to match tasks."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "task_allocation_status",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Status indicating completion of task allocation."
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "name": "provide_feedback_and_incentives",
+            "condition": null,
+            "description": "Provides feedback and incentives to workers based on their performance to motivate and improve productivity.",
+            "type": "AND",
+            "required_variables": [
+                {
+                    "name": "evaluation_report",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Report of the performance evaluation."
+                },
+                {
+                    "name": "worker_performance",
+                    "type": "list",
+                    "context": "agent",
+                    "description": "Performance metrics of each worker."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "incentive_plan",
+                    "type": "list",
+                    "context": "agent",
+                    "description": "List of incentives planned for workers."
+                }
+            ]
+        },
+        {
+            "id": 6,
+            "name": "evaluate_performance",
+            "condition": "TasksExecutedEvent received from all WorkerAgents",
+            "description": "Evaluates the performance of workers after task execution to determine effectiveness and productivity.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "task_results",
+                    "type": "list",
+                    "context": "event",
+                    "description": "Results of the tasks executed by workers."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "performance_evaluation",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Summary of the performance evaluation."
+                }
+            ]
+        },
+        {
+            "id": 7,
+            "name": "finalize_workflow",
+            "condition": null,
+            "description": "Finalizes the workflow based on performance adjustments and concludes the simulation process.",
+            "type": "AND",
+            "required_variables": [
+                {
+                    "name": "adjustments",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Details of performance adjustments made by workers."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "workflow_final_status",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Final status of the workflow indicating completion."
+                }
+            ]
+        }
+    ],
+    "WorkerAgent": [
+        {
+            "id": 4,
+            "name": "execute_tasks",
+            "condition": null,
+            "description": "Executes the tasks assigned by the manager according to the standardized workflow.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "task_list",
+                    "type": "list",
+                    "context": "event",
+                    "description": "List of tasks allocated to the worker."
+                },
+                {
+                    "name": "workflow_id",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Identifier of the workflow in which tasks are executed."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "task_completion_status",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Status indicating the completion of tasks."
+                }
+            ]
+        },
+        {
+            "id": 5,
+            "name": "adjust_performance",
+            "condition": null,
+            "description": "Adjusts performance based on feedback and incentives received to improve task execution.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "feedback",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Feedback given to the worker."
+                },
+                {
+                    "name": "incentives",
+                    "type": "list",
+                    "context": "event",
+                    "description": "Incentives provided to the worker."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "performance_adjustment_status",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Status indicating the adjustment of performance."
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,320 @@
+{
+    "OrdinaryUser": [
+        {
+            "id": 1,
+            "name": "receive_information",
+            "condition": null,
+            "description": "The action where an ordinary user receives information from their social network or the environment to process further.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "information_content",
+                    "type": "str",
+                    "context": "event",
+                    "description": "The content of the information being received by the user."
+                },
+                {
+                    "name": "source_user_id",
+                    "type": "str",
+                    "context": "event",
+                    "description": "The ID of the user who shared the information."
+                },
+                {
+                    "name": "credibility_score",
+                    "type": "float",
+                    "context": "event",
+                    "description": "The perceived credibility score of the information."
+                }
+            ],
+            "output_updates": []
+        },
+        {
+            "id": 2,
+            "name": "evaluate_information",
+            "condition": "Information received from other users or media",
+            "description": "The action where an ordinary user evaluates the credibility of received information and decides its validity based on their tendencies.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "information_content",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "The content of the information being evaluated by the user."
+                },
+                {
+                    "name": "credibility_score",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "The perceived credibility score of the information."
+                },
+                {
+                    "name": "verification_tendency",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "The user's tendency to verify information before accepting it."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "evaluation_result",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "The result of the user's evaluation, e.g., 'credible', 'not credible', or 'undecided'."
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "name": "express_opinion",
+            "condition": "Credibility evaluation and isolation risk assessment complete",
+            "description": "The action where an ordinary user decides whether to publicly express their opinion based on evaluation results and perceived social pressure.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "evaluation_result",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "The result of the user's evaluation of the information."
+                },
+                {
+                    "name": "expression_willingness",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "The willingness of the user to express their opinion publicly."
+                },
+                {
+                    "name": "isolation_fear",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "The user's fear of social isolation if their opinion is not aligned with the majority."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "expressed_opinion",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "The opinion expressed by the user based on their evaluation and willingness."
+                }
+            ]
+        },
+        {
+            "id": 4,
+            "name": "spread_information",
+            "condition": null,
+            "description": "The action where an ordinary user spreads information and their expressed opinion to their social network.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "expressed_opinion",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "The opinion expressed by the user that is being shared."
+                },
+                {
+                    "name": "target_audience",
+                    "type": "list",
+                    "context": "agent",
+                    "description": "A list of user IDs representing the audience receiving the opinion."
+                }
+            ],
+            "output_updates": []
+        }
+    ],
+    "OpinionLeader": [
+        {
+            "id": 5,
+            "name": "create_content",
+            "condition": null,
+            "description": "The action where an opinion leader creates new content to influence their followers and initiate discussions.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "content_creation",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "The content being created by the opinion leader."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "created_content",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "The content created by the opinion leader for dissemination."
+                }
+            ]
+        },
+        {
+            "id": 6,
+            "name": "amplify_information",
+            "condition": "Information received from ordinary users",
+            "description": "The action where an opinion leader amplifies information received from ordinary users or other sources to increase its reach.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "information_content",
+                    "type": "str",
+                    "context": "event",
+                    "description": "The content of the information being amplified."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "amplified_content",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "The content amplified by the opinion leader."
+                }
+            ]
+        }
+    ],
+    "MediaOrganization": [
+        {
+            "id": 7,
+            "name": "select_content",
+            "condition": null,
+            "description": "The action where a media organization selects content for publication based on its editorial policy.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "content",
+                    "type": "str",
+                    "context": "event",
+                    "description": "The content submitted to the media organization for selection."
+                },
+                {
+                    "name": "editorial_policy",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "The editorial policy guiding the selection of content."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "selected_content",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "The content selected by the media organization for publication."
+                }
+            ]
+        },
+        {
+            "id": 8,
+            "name": "publish_content",
+            "condition": "Content selection complete",
+            "description": "The action where a media organization publishes selected content for public consumption.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "selected_content",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "The content selected by the media organization for publication."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "published_content",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "The content published by the media organization."
+                }
+            ]
+        }
+    ],
+    "FactCheckOrganization": [
+        {
+            "id": 9,
+            "name": "monitor_rumors",
+            "condition": null,
+            "description": "The action where a fact-check organization monitors social networks for rumors requiring verification.",
+            "type": "OR",
+            "required_variables": [],
+            "output_updates": [
+                {
+                    "name": "detected_rumors",
+                    "type": "list",
+                    "context": "agent",
+                    "description": "The list of rumors detected by the fact-check organization."
+                }
+            ]
+        },
+        {
+            "id": 10,
+            "name": "verify_information",
+            "condition": "Rumor detected or content published",
+            "description": "The action where a fact-check organization verifies the accuracy of detected rumors.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "rumor_content",
+                    "type": "str",
+                    "context": "event",
+                    "description": "The content of the rumor being verified."
+                },
+                {
+                    "name": "detection_confidence",
+                    "type": "float",
+                    "context": "event",
+                    "description": "The confidence level of the rumor detection."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "verification_result",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "The result of the verification process, e.g., 'verified', 'false', or 'unverified'."
+                }
+            ]
+        }
+    ],
+    "PlatformRegulator": [
+        {
+            "id": 11,
+            "name": "monitor_content",
+            "condition": null,
+            "description": "The action where a platform regulator monitors content on the platform to identify policy violations or risks.",
+            "type": "OR",
+            "required_variables": [],
+            "output_updates": [
+                {
+                    "name": "monitored_content",
+                    "type": "list",
+                    "context": "agent",
+                    "description": "The list of content monitored by the platform regulator."
+                }
+            ]
+        },
+        {
+            "id": 12,
+            "name": "intervene_content",
+            "condition": "Content monitored or verification results received",
+            "description": "The action where a platform regulator intervenes to enforce policies by tagging or removing content.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "monitored_content",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "The content being assessed for intervention."
+                },
+                {
+                    "name": "risk_level",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "The assessed risk level of the monitored content, e.g., 'low', 'medium', or 'high'."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "intervention_status",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "The status of the intervention, e.g., 'completed', 'failed', or 'pending'."
+                }
+            ]
+        }
+    ]
+}

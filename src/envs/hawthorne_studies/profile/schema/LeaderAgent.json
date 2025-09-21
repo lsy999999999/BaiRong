@@ -1,0 +1,82 @@
+{
+    "name": {
+        "type": "str",
+        "default": "LeaderAgent",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's designated role within the simulation"
+    },
+    "feedback_log": {
+        "type": "str",
+        "default": "No feedback yet",
+        "private": true,
+        "sampling": "default"
+    },
+    "evaluation_outcome": {
+        "type": "str",
+        "default": "pending",
+        "private": true,
+        "sampling": "default"
+    },
+    "attention_level": {
+        "type": "float",
+        "default": 75.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "motivation_strategy": {
+        "type": "str",
+        "default": "positive_reinforcement",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "positive_reinforcement",
+            "constructive_feedback",
+            "goal_setting"
+        ]
+    },
+    "communication_frequency": {
+        "type": "int",
+        "default": 3,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            1,
+            10
+        ]
+    },
+    "team_support": {
+        "type": "list",
+        "default": [
+            "weekly_meetings",
+            "one-on-one sessions"
+        ],
+        "private": false,
+        "sampling": "default",
+        "sample_size": 2
+    },
+    "task_allocation_strategy": {
+        "type": "str",
+        "default": "skill_based",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "skill_based",
+            "random",
+            "performance_based"
+        ]
+    },
+    "initial_state": {
+        "type": "str",
+        "default": "active",
+        "private": false,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

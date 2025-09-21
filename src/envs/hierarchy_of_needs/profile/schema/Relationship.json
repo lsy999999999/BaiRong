@@ -1,0 +1,17 @@
+[
+    {
+        "source_agent": "PhysiologicalAgent",
+        "target_agent": "FeedbackAgent",
+        "direction": "unidirectional"
+    },
+    {
+        "source_agent": "SocialAgent",
+        "target_agent": "FeedbackAgent",
+        "direction": "unidirectional"
+    },
+    {
+        "source_agent": "SelfActualizationAgent",
+        "target_agent": "FeedbackAgent",
+        "direction": "unidirectional"
+    }
+]

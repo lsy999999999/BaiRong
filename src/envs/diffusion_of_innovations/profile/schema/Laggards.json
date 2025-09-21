@@ -1,0 +1,71 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Laggards",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent type representing individuals who adopt innovations last"
+    },
+    "adoption_status": {
+        "type": "bool",
+        "default": false,
+        "private": false,
+        "sampling": "default"
+    },
+    "social_pressure": {
+        "type": "float",
+        "default": 30.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "network_influence": {
+        "type": "float",
+        "default": 20.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "trust_in_innovation": {
+        "type": "float",
+        "default": 10.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "adoption_threshold": {
+        "type": "int",
+        "default": 80,
+        "private": true,
+        "sampling": "random",
+        "range": [
+            70,
+            90
+        ]
+    },
+    "innovation_advantages": {
+        "type": "list",
+        "default": [
+            "cost-effective",
+            "easy to use"
+        ],
+        "private": false,
+        "sampling": "llm",
+        "description": "The perceived advantages of the innovation"
+    },
+    "communication_history": {
+        "type": "list",
+        "default": [
+            {
+                "date": "2025-01-01",
+                "interaction": "initial contact"
+            }
+        ],
+        "private": true,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

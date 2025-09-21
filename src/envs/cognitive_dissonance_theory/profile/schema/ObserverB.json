@@ -1,0 +1,72 @@
+{
+    "name": {
+        "type": "str",
+        "default": "ObserverB",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's designated name within the simulation"
+    },
+    "feedback_content": {
+        "type": "str",
+        "default": "Initial feedback content",
+        "private": false,
+        "sampling": "default"
+    },
+    "feedback_quality": {
+        "type": "int",
+        "default": 50,
+        "private": false,
+        "sampling": "default"
+    },
+    "observation_skill_level": {
+        "type": "int",
+        "default": 70,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            50,
+            100
+        ]
+    },
+    "communication_style": {
+        "type": "str",
+        "default": "direct",
+        "private": false,
+        "sampling": "llm",
+        "description": "The style of communication used by the agent"
+    },
+    "evaluation_criteria": {
+        "type": "list",
+        "default": [
+            "clarity",
+            "relevance",
+            "constructiveness"
+        ],
+        "private": true,
+        "sampling": "default"
+    },
+    "feedback_history": {
+        "type": "list",
+        "default": [
+            {
+                "timestamp": "2025-04-01T12:00:00",
+                "content": "Initial observation feedback"
+            }
+        ],
+        "private": true,
+        "sampling": "default"
+    },
+    "current_status": {
+        "type": "str",
+        "default": "observing",
+        "private": false,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

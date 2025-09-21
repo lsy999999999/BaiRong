@@ -1,0 +1,131 @@
+{
+    "HealthBehaviorAdvocate": [
+        {
+            "id": 1,
+            "name": "initiate_health_behavior_change",
+            "condition": "null",
+            "description": "The HealthBehaviorAdvocate initiates a change in health behavior for the recipient, setting the stage for reciprocal altruism and promoting healthy behaviors within the community.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "advocate_id",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Identifier of the health behavior advocate initiating the change."
+                },
+                {
+                    "name": "behavior_type",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Type of health behavior being initiated."
+                },
+                {
+                    "name": "intensity",
+                    "type": "integer",
+                    "context": "agent",
+                    "description": "Intensity level of the behavior change initiation."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "recipient_id",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Identifier of the recipient of the health behavior change."
+                }
+            ]
+        }
+    ],
+    "BehaviorChangeRecipient": [
+        {
+            "id": 2,
+            "name": "receive_and_commit_to_change",
+            "condition": "null",
+            "description": "The BehaviorChangeRecipient receives the health behavior change and commits to spreading it further, thereby contributing to the chain of reciprocal altruism.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "recipient_id",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Identifier of the recipient of the health behavior change."
+                },
+                {
+                    "name": "behavior_type",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Type of health behavior being received."
+                },
+                {
+                    "name": "intensity",
+                    "type": "integer",
+                    "context": "event",
+                    "description": "Intensity level of the behavior change received."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "commitment_level",
+                    "type": "integer",
+                    "context": "agent",
+                    "description": "Level of commitment to spreading the health behavior."
+                },
+                {
+                    "name": "spread_target",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Target group or entity for behavior spread."
+                }
+            ]
+        }
+    ],
+    "CommunityNetworkFacilitator": [
+        {
+            "id": 3,
+            "name": "facilitate_behavior_spread",
+            "condition": "null",
+            "description": "The CommunityNetworkFacilitator supports the recipient's commitment to spreading health behavior and ensures the dissemination throughout the community network.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "recipient_id",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Identifier of the recipient committing to spread the behavior."
+                },
+                {
+                    "name": "commitment_level",
+                    "type": "integer",
+                    "context": "event",
+                    "description": "Level of commitment to spreading the health behavior."
+                },
+                {
+                    "name": "spread_target",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Target group or entity for behavior spread."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "network_id",
+                    "type": "string",
+                    "context": "env",
+                    "description": "Identifier of the community network facilitating the spread."
+                },
+                {
+                    "name": "spread_result",
+                    "type": "string",
+                    "context": "env",
+                    "description": "Result of the behavior spread process."
+                },
+                {
+                    "name": "completion_status",
+                    "type": "boolean",
+                    "context": "env",
+                    "description": "Indicates whether the spread process is completed."
+                }
+            ]
+        }
+    ]
+}

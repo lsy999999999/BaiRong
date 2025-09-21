@@ -1,0 +1,181 @@
+{
+    "-1": {
+        "id": -1,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "NewEmployee",
+        "to_action_name": "initiate_interaction",
+        "from_action_id": 0,
+        "to_action_id": 1,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for new employee interaction",
+        "fields": []
+    },
+    "-2": {
+        "id": -2,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "ExperiencedEmployee",
+        "to_action_name": "initiate_interaction",
+        "from_action_id": 0,
+        "to_action_id": 2,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for experienced employee interaction",
+        "fields": []
+    },
+    "-3": {
+        "id": -3,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "NeutralMember",
+        "to_action_name": "initiate_interaction",
+        "from_action_id": 0,
+        "to_action_id": 3,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for neutral member interaction",
+        "fields": []
+    },
+    "1": {
+        "id": 1,
+        "from_agent_type": "NewEmployee",
+        "from_action_name": "initiate_interaction",
+        "to_agent_type": "TeamLeader",
+        "to_action_name": "provide_feedback",
+        "from_action_id": 1,
+        "to_action_id": 4,
+        "event_name": "InteractionEvent",
+        "event_info": "New employee interacts with team leader",
+        "fields": [
+            {
+                "name": "interaction_type",
+                "type": "string",
+                "default_value": "dialogue",
+                "description": "Type of interaction occurring between agents"
+            },
+            {
+                "name": "initiator_emotion",
+                "type": "string",
+                "default_value": "neutral",
+                "description": "Emotional state of the initiating agent"
+            },
+            {
+                "name": "receiver_role",
+                "type": "string",
+                "default_value": "TeamLeader",
+                "description": "Role of the receiving agent in the interaction"
+            }
+        ]
+    },
+    "2": {
+        "id": 2,
+        "from_agent_type": "ExperiencedEmployee",
+        "from_action_name": "initiate_interaction",
+        "to_agent_type": "TeamLeader",
+        "to_action_name": "provide_feedback",
+        "from_action_id": 2,
+        "to_action_id": 4,
+        "event_name": "InteractionEvent",
+        "event_info": "Experienced employee interacts with team leader",
+        "fields": [
+            {
+                "name": "interaction_type",
+                "type": "string",
+                "default_value": "dialogue",
+                "description": "Type of interaction occurring between agents"
+            },
+            {
+                "name": "initiator_emotion",
+                "type": "string",
+                "default_value": "neutral",
+                "description": "Emotional state of the initiating agent"
+            },
+            {
+                "name": "receiver_role",
+                "type": "string",
+                "default_value": "TeamLeader",
+                "description": "Role of the receiving agent in the interaction"
+            }
+        ]
+    },
+    "3": {
+        "id": 3,
+        "from_agent_type": "NeutralMember",
+        "from_action_name": "initiate_interaction",
+        "to_agent_type": "TeamLeader",
+        "to_action_name": "provide_feedback",
+        "from_action_id": 3,
+        "to_action_id": 4,
+        "event_name": "InteractionEvent",
+        "event_info": "Neutral member interacts with team leader",
+        "fields": [
+            {
+                "name": "interaction_type",
+                "type": "string",
+                "default_value": "dialogue",
+                "description": "Type of interaction occurring between agents"
+            },
+            {
+                "name": "initiator_emotion",
+                "type": "string",
+                "default_value": "neutral",
+                "description": "Emotional state of the initiating agent"
+            },
+            {
+                "name": "receiver_role",
+                "type": "string",
+                "default_value": "TeamLeader",
+                "description": "Role of the receiving agent in the interaction"
+            }
+        ]
+    },
+    "4": {
+        "id": 4,
+        "from_agent_type": "TeamLeader",
+        "from_action_name": "provide_feedback",
+        "to_agent_type": "EmotionalAnalyzer",
+        "to_action_name": "analyze_emotion",
+        "from_action_id": 4,
+        "to_action_id": 5,
+        "event_name": "FeedbackEvent",
+        "event_info": "Team leader provides feedback to emotional analyzer",
+        "fields": [
+            {
+                "name": "feedback_content",
+                "type": "string",
+                "default_value": "general",
+                "description": "Content of the feedback provided"
+            },
+            {
+                "name": "receiver_id",
+                "type": "string",
+                "default_value": "EmotionalAnalyzer",
+                "description": "Identifier of the agent receiving feedback"
+            }
+        ]
+    },
+    "5": {
+        "id": 5,
+        "from_agent_type": "EmotionalAnalyzer",
+        "from_action_name": "analyze_emotion",
+        "to_agent_type": "EnvAgent",
+        "to_action_name": "terminate",
+        "from_action_id": 5,
+        "to_action_id": -1,
+        "event_name": "EmotionAnalyzedEvent",
+        "event_info": "Emotional analysis completed and process terminates",
+        "fields": [
+            {
+                "name": "emotion_analysis_result",
+                "type": "string",
+                "default_value": "neutral",
+                "description": "Result of the emotional analysis"
+            },
+            {
+                "name": "analysis_status",
+                "type": "string",
+                "default_value": "completed",
+                "description": "Status of the emotional analysis process"
+            }
+        ]
+    }
+}

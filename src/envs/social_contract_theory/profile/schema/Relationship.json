@@ -1,0 +1,22 @@
+[
+    {
+        "source_agent": "IndividualAgent",
+        "target_agent": "SocialGroupAgent",
+        "direction": "unidirectional"
+    },
+    {
+        "source_agent": "SocialGroupAgent",
+        "target_agent": "GovernmentAgent",
+        "direction": "unidirectional"
+    },
+    {
+        "source_agent": "GovernmentAgent",
+        "target_agent": "ContractBreakdownAgent",
+        "direction": "unidirectional"
+    },
+    {
+        "source_agent": "GovernmentAgent",
+        "target_agent": "PublicPolicyAgent",
+        "direction": "unidirectional"
+    }
+]

@@ -1,0 +1,88 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Evaluator Agent",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's designation within the multi-agent system"
+    },
+    "performance_summary": {
+        "type": "str",
+        "default": "Initial evaluation pending",
+        "private": false,
+        "sampling": "default"
+    },
+    "completion_status": {
+        "type": "str",
+        "default": "not_started",
+        "private": false,
+        "sampling": "default"
+    },
+    "evaluation_criteria": {
+        "type": "list",
+        "default": [
+            "accuracy",
+            "efficiency",
+            "creativity"
+        ],
+        "private": false,
+        "sampling": "random",
+        "sample_size": 3
+    },
+    "feedback_quality": {
+        "type": "int",
+        "default": 70,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            50,
+            100
+        ]
+    },
+    "strategy_effectiveness": {
+        "type": "float",
+        "default": 0.75,
+        "private": false,
+        "sampling": "default"
+    },
+    "observation_notes": {
+        "type": "list",
+        "default": [
+            {
+                "note": "Initial observation",
+                "timestamp": "2023-10-01T10:00:00Z"
+            }
+        ],
+        "private": true,
+        "sampling": "default"
+    },
+    "communication_log": {
+        "type": "list",
+        "default": [
+            {
+                "message": "Awaiting task completion",
+                "timestamp": "2023-10-01T10:05:00Z"
+            }
+        ],
+        "private": true,
+        "sampling": "default"
+    },
+    "task_difficulty_assessment": {
+        "type": "str",
+        "default": "medium",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "easy",
+            "medium",
+            "hard"
+        ]
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

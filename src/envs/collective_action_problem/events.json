@@ -1,0 +1,82 @@
+{
+    "-1": {
+        "id": -1,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "Individual",
+        "to_action_name": "calculate_cooperation_willingness",
+        "from_action_id": 0,
+        "to_action_id": 1,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for individual decision-making process",
+        "fields": []
+    },
+    "1": {
+        "id": 1,
+        "from_agent_type": "Individual",
+        "from_action_name": "calculate_cooperation_willingness",
+        "to_agent_type": "Group",
+        "to_action_name": "evaluate_collective_action_success",
+        "from_action_id": 1,
+        "to_action_id": 2,
+        "event_name": "CooperationDecisionEvent",
+        "event_info": "Individual decision on cooperation sent to group for evaluation",
+        "fields": [
+            {
+                "name": "individual_id",
+                "type": "string",
+                "default_value": "",
+                "description": "Unique identifier for the individual making the cooperation decision"
+            },
+            {
+                "name": "cooperation_willingness",
+                "type": "float",
+                "default_value": 0.0,
+                "description": "The degree to which the individual is willing to cooperate, calculated based on cost-benefit analysis"
+            },
+            {
+                "name": "personal_cost",
+                "type": "float",
+                "default_value": 0.0,
+                "description": "The cost incurred by the individual for participating in the collective action"
+            },
+            {
+                "name": "personal_benefit",
+                "type": "float",
+                "default_value": 0.0,
+                "description": "The benefit received by the individual from participating in the collective action"
+            }
+        ]
+    },
+    "2": {
+        "id": 2,
+        "from_agent_type": "Group",
+        "from_action_name": "evaluate_collective_action_success",
+        "to_agent_type": "EnvAgent",
+        "to_action_name": "terminate",
+        "from_action_id": 2,
+        "to_action_id": -1,
+        "event_name": "CollectiveActionResultEvent",
+        "event_info": "Final evaluation of collective action success sent to environment for termination",
+        "fields": [
+            {
+                "name": "collective_success",
+                "type": "bool",
+                "default_value": false,
+                "description": "Indicates whether the collective action was successful based on individual cooperation levels"
+            },
+            {
+                "name": "total_cooperation",
+                "type": "float",
+                "default_value": 0.0,
+                "description": "The aggregated cooperation level of all individuals, used to evaluate the success of the collective action"
+            },
+            {
+                "name": "group_benefit",
+                "type": "float",
+                "default_value": 0.0,
+                "description": "The overall benefit achieved by the group as a result of the collective action"
+            }
+        ]
+    }
+}

@@ -1,0 +1,66 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Alex Doe",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's full name representing an individual in the collective action scenario"
+    },
+    "personal_cost": {
+        "type": "float",
+        "default": 10.0,
+        "private": true,
+        "sampling": "random",
+        "range": [
+            5.0,
+            20.0
+        ]
+    },
+    "personal_benefit": {
+        "type": "float",
+        "default": 15.0,
+        "private": true,
+        "sampling": "random",
+        "range": [
+            10.0,
+            30.0
+        ]
+    },
+    "cooperation_willingness": {
+        "type": "float",
+        "default": 50.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "decision_algorithm": {
+        "type": "str",
+        "default": "cost_benefit_analysis",
+        "private": false,
+        "sampling": "default"
+    },
+    "interaction_pattern": {
+        "type": "str",
+        "default": "awaiting_decision",
+        "private": false,
+        "sampling": "default"
+    },
+    "communication_protocol": {
+        "type": "str",
+        "default": "implicit_signaling",
+        "private": false,
+        "sampling": "default"
+    },
+    "group_evaluation_impact": {
+        "type": "float",
+        "default": 0.0,
+        "private": true,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

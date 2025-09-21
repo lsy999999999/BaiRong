@@ -1,0 +1,49 @@
+{
+    "environment": {
+        "variables": [
+            {
+                "name": "simulated_factors",
+                "type": "object",
+                "default_value": null
+            }
+        ]
+    },
+    "agents": {
+        "DecisionMakerAgent": {
+            "variables": [
+                {
+                    "name": "collected_information",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "evaluation_result",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "decision_id",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "decision_result",
+                    "type": "string",
+                    "default_value": null
+                }
+            ]
+        },
+        "EnvironmentAgent": {
+            "variables": []
+        },
+        "AlternativeOptionsAgent": {
+            "variables": [
+                {
+                    "name": "presented_alternatives",
+                    "type": "object",
+                    "default_value": null
+                }
+            ]
+        }
+    }
+}

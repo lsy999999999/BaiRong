@@ -1,0 +1,122 @@
+[
+    {
+        "name": "StrategicPlanner",
+        "worker_skills": [
+            "basic_skill"
+        ],
+        "worker_performance": [
+            {
+                "worker_id": 1,
+                "performance": 75
+            }
+        ],
+        "incentive_plan": [
+            "standard_bonus"
+        ],
+        "manager_experience_level": 10,
+        "communication_efficiency": 0.85,
+        "decision_making_strategy": "Data-Driven Analysis",
+        "agent_type": "ManagerAgent",
+        "workflow_design_status": "initial_design",
+        "task_allocation_status": "pending",
+        "performance_evaluation": "not_evaluated",
+        "workflow_final_status": "not_finalized",
+        "id": "5"
+    },
+    {
+        "name": "EfficiencyOptimizer",
+        "worker_skills": [
+            "basic_skill"
+        ],
+        "worker_performance": [
+            {
+                "worker_id": 1,
+                "performance": 75
+            }
+        ],
+        "incentive_plan": [
+            "standard_bonus"
+        ],
+        "manager_experience_level": 9,
+        "communication_efficiency": 0.85,
+        "decision_making_strategy": "Lean Management",
+        "agent_type": "ManagerAgent",
+        "workflow_design_status": "initial_design",
+        "task_allocation_status": "pending",
+        "performance_evaluation": "not_evaluated",
+        "workflow_final_status": "not_finalized",
+        "id": "6"
+    },
+    {
+        "name": "RiskMitigator",
+        "worker_skills": [
+            "basic_skill"
+        ],
+        "worker_performance": [
+            {
+                "worker_id": 1,
+                "performance": 75
+            }
+        ],
+        "incentive_plan": [
+            "standard_bonus"
+        ],
+        "manager_experience_level": 6,
+        "communication_efficiency": 0.85,
+        "decision_making_strategy": "Risk Assessment and Management",
+        "agent_type": "ManagerAgent",
+        "workflow_design_status": "initial_design",
+        "task_allocation_status": "pending",
+        "performance_evaluation": "not_evaluated",
+        "workflow_final_status": "not_finalized",
+        "id": "7"
+    },
+    {
+        "name": "InnovationCatalyst",
+        "worker_skills": [
+            "basic_skill"
+        ],
+        "worker_performance": [
+            {
+                "worker_id": 1,
+                "performance": 75
+            }
+        ],
+        "incentive_plan": [
+            "standard_bonus"
+        ],
+        "manager_experience_level": 9,
+        "communication_efficiency": 0.85,
+        "decision_making_strategy": "Creative Problem Solving",
+        "agent_type": "ManagerAgent",
+        "workflow_design_status": "initial_design",
+        "task_allocation_status": "pending",
+        "performance_evaluation": "not_evaluated",
+        "workflow_final_status": "not_finalized",
+        "id": "8"
+    },
+    {
+        "name": "ResourceAllocator",
+        "worker_skills": [
+            "basic_skill"
+        ],
+        "worker_performance": [
+            {
+                "worker_id": 1,
+                "performance": 75
+            }
+        ],
+        "incentive_plan": [
+            "standard_bonus"
+        ],
+        "manager_experience_level": 2,
+        "communication_efficiency": 0.85,
+        "decision_making_strategy": "Resource-Based Planning",
+        "agent_type": "ManagerAgent",
+        "workflow_design_status": "initial_design",
+        "task_allocation_status": "pending",
+        "performance_evaluation": "not_evaluated",
+        "workflow_final_status": "not_finalized",
+        "id": "9"
+    }
+]

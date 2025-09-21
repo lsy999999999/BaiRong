@@ -1,0 +1,91 @@
+{
+    "name": {
+        "type": "str",
+        "default": "RationalDecisionMaker",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's identifier in the simulation"
+    },
+    "personal_goals": {
+        "type": "dict",
+        "default": {
+            "wealth_maximization": true,
+            "risk_aversion": false
+        },
+        "private": true,
+        "sampling": "default"
+    },
+    "resource_status": {
+        "type": "dict",
+        "default": {
+            "financial": 1000,
+            "social": 10
+        },
+        "private": true,
+        "sampling": "default"
+    },
+    "evaluated_choices": {
+        "type": "list",
+        "default": [
+            {
+                "option": "A",
+                "utility": 75
+            },
+            {
+                "option": "B",
+                "utility": 60
+            }
+        ],
+        "private": true,
+        "sampling": "default"
+    },
+    "selected_decision": {
+        "type": "str",
+        "default": "awaiting_decision",
+        "private": false,
+        "sampling": "default"
+    },
+    "current_utility": {
+        "type": "float",
+        "default": 0.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "interaction_mode": {
+        "type": "str",
+        "default": "market_exchange",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "social_network",
+            "market_exchange"
+        ]
+    },
+    "risk_tolerance": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.1,
+            0.9
+        ]
+    },
+    "experience_level": {
+        "type": "int",
+        "default": 1,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            1,
+            10
+        ]
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

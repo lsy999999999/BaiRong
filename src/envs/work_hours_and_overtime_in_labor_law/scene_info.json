@@ -1,0 +1,91 @@
+{
+  "domain": "Law",
+  "scene_name": "work_hours_and_overtime_in_labor_law",
+  "odd_protocol": {
+    "overview": {
+      "system_goal": "Simulate a labor dispute case to explore the balance of rights between employees and employers regarding work hours and overtime pay.",
+      "agent_types": "Employee, Employer, Judge",
+      "environment_description": "A simulated legal environment where labor law is applied to resolve disputes concerning work hours and overtime pay.",
+      "dispute_focus": "Focus on the recognition of overtime hours and rest periods within labor law."
+    },
+    "design_concepts": {
+      "interaction_patterns": "Employee contests unpaid overtime, Employer defends against claims, Judge adjudicates based on labor law.",
+      "communication_protocols": "Direct dialogue between Employee and Employer, with legal arguments presented to Judge.",
+      "decision_mechanisms": "Judge uses labor law to determine overtime eligibility and payment standards.",
+      "dispute_scenarios": "Includes disputes over overtime recognition, payment ratios, remote work, and flexible hours."
+    },
+    "details": {
+      "agent_behaviors": "Employee requests overtime pay, Employer argues against the claim, Judge evaluates based on legal standards.",
+      "decision_algorithms": "Judge applies legal definitions and payment standards for overtime as per labor law.",
+      "specific_constraints": "Consideration of remote work and flexible hours affecting overtime calculation.",
+      "case_examples": "Case 1: Regular overtime dispute; Case 2: Remote work with flexible hours leading to overtime disputes."
+    }
+  },
+  "agent_types": {
+    "Employee": "Represents the worker in the labor dispute, contesting unpaid overtime and seeking fair compensation.",
+    "Employer": "Acts as the business entity or manager defending against claims of unpaid overtime, arguing based on company policies and practices.",
+    "Judge": "Serves as the neutral arbiter who evaluates the arguments from both Employee and Employer, making decisions based on labor law to resolve the dispute."
+  },
+  "portrait": {
+    "Employee": 3,
+    "Employer": 4,
+    "Judge": 1
+  },
+  "metrics": [
+    {
+      "id": "Average_Overtime_Hours_per_Employee",
+      "name": "Average Overtime Hours per Employee",
+      "description": "This metric calculates the average number of overtime hours claimed by employees.",
+      "visualization_type": "bar",
+      "update_frequency": 5,
+      "variables": [
+        {
+          "name": "overtime_hours",
+          "source_type": "agent",
+          "agent_type": "Employee",
+          "path": "overtime_hours",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "To calculate this metric, sum all non-None and valid overtime hours from the list of 'overtime_hours' for each employee and divide by the number of valid entries. Handle None and invalid entries by skipping them. If there are no valid entries, return 0 as the average.",
+      "function_name": "Average_Overtime_Hours_per_Employee"
+    },
+    {
+      "id": "Ruling_Outcome_Distribution",
+      "name": "Ruling Outcome Distribution",
+      "description": "This metric shows the distribution of different ruling outcomes in the simulation.",
+      "visualization_type": "pie",
+      "update_frequency": 5,
+      "variables": [
+        {
+          "name": "ruling",
+          "source_type": "env",
+          "path": "ruling",
+          "required": true,
+          "is_list": false
+        }
+      ],
+      "calculation_logic": "Count the occurrences of each unique ruling outcome (e.g., 'in favor of employee', 'in favor of employer') from the 'ruling' variable. Handle None values by excluding them from the count. The pie chart slices represent the proportion of each ruling outcome.",
+      "function_name": "Ruling_Outcome_Distribution"
+    },
+    {
+      "id": "Legal_References_Usage",
+      "name": "Legal References Usage",
+      "description": "This metric tracks how often different legal references are cited during the simulation.",
+      "visualization_type": "bar",
+      "update_frequency": 5,
+      "variables": [
+        {
+          "name": "legal_references",
+          "source_type": "env",
+          "path": "legal_references",
+          "required": true,
+          "is_list": false
+        }
+      ],
+      "calculation_logic": "Extract and count each unique legal reference from the 'legal_references' list. Handle None or empty lists by returning an empty result. Each bar represents the count of a specific legal reference being cited.",
+      "function_name": "Legal_References_Usage"
+    }
+  ]
+}

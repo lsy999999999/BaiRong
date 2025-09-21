@@ -1,0 +1,107 @@
+[
+    {
+        "name": "Emma Johnson",
+        "interaction_frequency": 20,
+        "communication_channels": [
+            "Email",
+            "Video Conferencing",
+            "Social Media"
+        ],
+        "support_level": 75,
+        "behavior_spread_rate": 0.5,
+        "network_size": 118,
+        "reciprocal_promise_strength": 0.8,
+        "social_support_availability": "high",
+        "agent_type": "CommunityNetworkFacilitator",
+        "initial_health_behaviors": [
+            "Regular Exercise",
+            "Healthy Eating",
+            "Stress Management"
+        ],
+        "id": "10"
+    },
+    {
+        "name": "Michael Smith",
+        "interaction_frequency": 6,
+        "communication_channels": [
+            "Instant Messaging",
+            "Community Forums",
+            "Phone Calls"
+        ],
+        "support_level": 75,
+        "behavior_spread_rate": 0.5,
+        "network_size": 133,
+        "reciprocal_promise_strength": 0.8,
+        "social_support_availability": "low",
+        "agent_type": "CommunityNetworkFacilitator",
+        "initial_health_behaviors": [
+            "Mindfulness Meditation",
+            "Adequate Sleep",
+            "Hydration"
+        ],
+        "id": "11"
+    },
+    {
+        "name": "Sophia Lee",
+        "interaction_frequency": 12,
+        "communication_channels": [
+            "Social Media",
+            "Email",
+            "Webinars"
+        ],
+        "support_level": 75,
+        "behavior_spread_rate": 0.5,
+        "network_size": 144,
+        "reciprocal_promise_strength": 0.8,
+        "social_support_availability": "high",
+        "agent_type": "CommunityNetworkFacilitator",
+        "initial_health_behaviors": [
+            "Balanced Diet",
+            "Physical Activity",
+            "Mental Health Awareness"
+        ],
+        "id": "12"
+    },
+    {
+        "name": "James Brown",
+        "interaction_frequency": 20,
+        "communication_channels": [
+            "Video Conferencing",
+            "Instant Messaging",
+            "Community Events"
+        ],
+        "support_level": 75,
+        "behavior_spread_rate": 0.5,
+        "network_size": 154,
+        "reciprocal_promise_strength": 0.8,
+        "social_support_availability": "medium",
+        "agent_type": "CommunityNetworkFacilitator",
+        "initial_health_behaviors": [
+            "Smoking Cessation",
+            "Regular Check-ups",
+            "Positive Social Interaction"
+        ],
+        "id": "13"
+    },
+    {
+        "name": "Olivia Garcia",
+        "interaction_frequency": 8,
+        "communication_channels": [
+            "Phone Calls",
+            "Email",
+            "Social Media"
+        ],
+        "support_level": 75,
+        "behavior_spread_rate": 0.5,
+        "network_size": 61,
+        "reciprocal_promise_strength": 0.8,
+        "social_support_availability": "low",
+        "agent_type": "CommunityNetworkFacilitator",
+        "initial_health_behaviors": [
+            "Heart Health",
+            "Weight Management",
+            "Stress Reduction"
+        ],
+        "id": "14"
+    }
+]

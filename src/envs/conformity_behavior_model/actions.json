@@ -1,0 +1,225 @@
+{
+    "IndividualAgent": [
+        {
+            "id": 1,
+            "name": "form_initial_judgment",
+            "condition": null,
+            "description": "The individual forms an initial judgment based on their personal attributes and environmental context, setting the baseline for their opinion.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "conformity_tendency",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "The tendency of the individual to conform to group opinions."
+                },
+                {
+                    "name": "self_confidence",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "The self-assuredness of the individual in their own opinions."
+                },
+                {
+                    "name": "opinion_visibility",
+                    "type": "bool",
+                    "context": "agent",
+                    "description": "Whether the individual's opinion is visible to others."
+                },
+                {
+                    "name": "environmental_factors",
+                    "type": "dict",
+                    "context": "env",
+                    "description": "External factors influencing the individual's opinion formation."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "initial_judgment",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "The initial opinion formed by the individual."
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "name": "decide_conformity",
+            "condition": "Received social pressure and leader influence",
+            "description": "The individual decides whether to conform to the group's opinion based on social pressure and influence from opinion leaders.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "social_pressure",
+                    "type": "float",
+                    "context": "env",
+                    "description": "The level of social pressure exerted on the individual."
+                },
+                {
+                    "name": "leader_influence",
+                    "type": "float",
+                    "context": "event",
+                    "description": "The influence strength from the opinion leader."
+                },
+                {
+                    "name": "conformity_threshold",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "The threshold at which the individual decides to conform."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "conformity_decision",
+                    "type": "bool",
+                    "context": "agent",
+                    "description": "The decision whether to conform (true) or not (false)."
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "name": "update_internal_belief",
+            "condition": "Received new social pressure information",
+            "description": "The individual updates their internal belief system based on new information and influences.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "new_information",
+                    "type": "str",
+                    "context": "event",
+                    "description": "The new information received that may influence belief."
+                },
+                {
+                    "name": "belief_certainty",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "The individual's certainty in their current beliefs."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "updated_belief",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "The updated belief of the individual."
+                }
+            ]
+        }
+    ],
+    "GroupAgent": [
+        {
+            "id": 4,
+            "name": "track_opinion_distribution",
+            "condition": null,
+            "description": "The group tracks the distribution of opinions among its members to understand the collective stance.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "member_opinions",
+                    "type": "list",
+                    "context": "agent",
+                    "description": "List of opinions from group members."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "opinion_distribution",
+                    "type": "dict",
+                    "context": "agent",
+                    "description": "The distribution of opinions within the group."
+                }
+            ]
+        },
+        {
+            "id": 5,
+            "name": "update_group_opinion",
+            "condition": "Received inputs from individuals and leaders",
+            "description": "The group updates its collective opinion based on individual inputs and dynamics.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "individual_inputs",
+                    "type": "list",
+                    "context": "event",
+                    "description": "Inputs from individuals regarding their opinions."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "updated_group_opinion",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "The updated collective opinion of the group."
+                }
+            ]
+        }
+    ],
+    "OpinionLeaderAgent": [
+        {
+            "id": 6,
+            "name": "exert_influence",
+            "condition": null,
+            "description": "The opinion leader exerts influence on individuals to sway their opinions or conformity decisions.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "charisma",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "The charisma level of the opinion leader."
+                },
+                {
+                    "name": "credibility",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "The credibility of the opinion leader."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "influence_strength",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "The strength of influence exerted by the leader."
+                }
+            ]
+        }
+    ],
+    "DecisionContextAgent": [
+        {
+            "id": 7,
+            "name": "handle_decision_context",
+            "condition": "Received group opinion update and opinion distribution",
+            "description": "The decision context agent processes the decision context, considering group opinions and environmental factors.",
+            "type": "AND",
+            "required_variables": [
+                {
+                    "name": "group_opinion",
+                    "type": "str",
+                    "context": "event",
+                    "description": "The current opinion of the group."
+                },
+                {
+                    "name": "environmental_factors",
+                    "type": "dict",
+                    "context": "env",
+                    "description": "Factors from the environment affecting the decision context."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "completion_status",
+                    "type": "str",
+                    "context": "env",
+                    "description": "The status of the decision context processing."
+                },
+                {
+                    "name": "results",
+                    "type": "dict",
+                    "context": "env",
+                    "description": "The outcomes of the decision context handling."
+                }
+            ]
+        }
+    ]
+}

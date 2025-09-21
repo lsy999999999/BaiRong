@@ -1,0 +1,87 @@
+[
+    {
+        "name": "AgentAlpha",
+        "influence_strength": 50,
+        "legal_field_focus": "civil_law",
+        "current_status": "active",
+        "impact_factor": 1.0,
+        "agent_type": "SocioPoliticalAgent",
+        "socio_political_influences": "stable_government",
+        "interaction_history": [
+            {
+                "date": "2025-04-01",
+                "interaction": "initial_setup",
+                "impact": "moderate"
+            }
+        ],
+        "id": "15"
+    },
+    {
+        "name": "AgentBeta",
+        "influence_strength": 50,
+        "legal_field_focus": "civil_law",
+        "current_status": "active",
+        "impact_factor": 1.0,
+        "agent_type": "SocioPoliticalAgent",
+        "socio_political_influences": "stable_government",
+        "interaction_history": [
+            {
+                "date": "2025-04-01",
+                "interaction": "initial_setup",
+                "impact": "moderate"
+            }
+        ],
+        "id": "16"
+    },
+    {
+        "name": "AgentGamma",
+        "influence_strength": 50,
+        "legal_field_focus": "administrative_law",
+        "current_status": "active",
+        "impact_factor": 1.0,
+        "agent_type": "SocioPoliticalAgent",
+        "socio_political_influences": "stable_government",
+        "interaction_history": [
+            {
+                "date": "2025-04-01",
+                "interaction": "initial_setup",
+                "impact": "moderate"
+            }
+        ],
+        "id": "17"
+    },
+    {
+        "name": "AgentDelta",
+        "influence_strength": 50,
+        "legal_field_focus": "civil_law",
+        "current_status": "active",
+        "impact_factor": 1.0,
+        "agent_type": "SocioPoliticalAgent",
+        "socio_political_influences": "stable_government",
+        "interaction_history": [
+            {
+                "date": "2025-04-01",
+                "interaction": "initial_setup",
+                "impact": "moderate"
+            }
+        ],
+        "id": "18"
+    },
+    {
+        "name": "AgentEpsilon",
+        "influence_strength": 50,
+        "legal_field_focus": "administrative_law",
+        "current_status": "active",
+        "impact_factor": 1.0,
+        "agent_type": "SocioPoliticalAgent",
+        "socio_political_influences": "stable_government",
+        "interaction_history": [
+            {
+                "date": "2025-04-01",
+                "interaction": "initial_setup",
+                "impact": "moderate"
+            }
+        ],
+        "id": "19"
+    }
+]

@@ -1,0 +1,462 @@
+[
+    {
+        "name": "Alex Stone",
+        "energyLevel": 50,
+        "currentCell": 0,
+        "currentStatus": "available",
+        "resourceExploited": 0,
+        "strategyLevel": 7,
+        "isAdvisor": true,
+        "minEnergyToMaintain": 10,
+        "landOwnership": true,
+        "energyInvested": 45,
+        "nextAction": "ExpandMining",
+        "agent_type": "StrategistAgent(Per-Miner,OptionalAdvisor)",
+        "transactionHistory": [
+            {
+                "date": "2023-01-01",
+                "amount": 100,
+                "type": "initial"
+            }
+        ],
+        "lastAction": "AnalyzeMarket",
+        "id": "121"
+    },
+    {
+        "name": "Lena Green",
+        "energyLevel": 50,
+        "currentCell": 0,
+        "currentStatus": "available",
+        "resourceExploited": 0,
+        "strategyLevel": 5,
+        "isAdvisor": false,
+        "minEnergyToMaintain": 10,
+        "landOwnership": false,
+        "energyInvested": 30,
+        "nextAction": "RequestAdvisor",
+        "agent_type": "StrategistAgent(Per-Miner,OptionalAdvisor)",
+        "transactionHistory": [
+            {
+                "date": "2023-01-01",
+                "amount": 100,
+                "type": "initial"
+            }
+        ],
+        "lastAction": "MineResources",
+        "id": "122"
+    },
+    {
+        "name": "Max Black",
+        "energyLevel": 50,
+        "currentCell": 0,
+        "currentStatus": "available",
+        "resourceExploited": 0,
+        "strategyLevel": 8,
+        "isAdvisor": true,
+        "minEnergyToMaintain": 10,
+        "landOwnership": true,
+        "energyInvested": 50,
+        "nextAction": "ReviewStrategies",
+        "agent_type": "StrategistAgent(Per-Miner,OptionalAdvisor)",
+        "transactionHistory": [
+            {
+                "date": "2023-01-01",
+                "amount": 100,
+                "type": "initial"
+            }
+        ],
+        "lastAction": "NegotiateContracts",
+        "id": "123"
+    },
+    {
+        "name": "Eva White",
+        "energyLevel": 50,
+        "currentCell": 0,
+        "currentStatus": "available",
+        "resourceExploited": 0,
+        "strategyLevel": 6,
+        "isAdvisor": false,
+        "minEnergyToMaintain": 10,
+        "landOwnership": false,
+        "energyInvested": 25,
+        "nextAction": "RequestAdvisor",
+        "agent_type": "StrategistAgent(Per-Miner,OptionalAdvisor)",
+        "transactionHistory": [
+            {
+                "date": "2023-01-01",
+                "amount": 100,
+                "type": "initial"
+            }
+        ],
+        "lastAction": "MineResources",
+        "id": "124"
+    },
+    {
+        "name": "Chris Brown",
+        "energyLevel": 50,
+        "currentCell": 0,
+        "currentStatus": "available",
+        "resourceExploited": 0,
+        "strategyLevel": 4,
+        "isAdvisor": false,
+        "minEnergyToMaintain": 10,
+        "landOwnership": false,
+        "energyInvested": 20,
+        "nextAction": "RequestAdvisor",
+        "agent_type": "StrategistAgent(Per-Miner,OptionalAdvisor)",
+        "transactionHistory": [
+            {
+                "date": "2023-01-01",
+                "amount": 100,
+                "type": "initial"
+            }
+        ],
+        "lastAction": "MineResources",
+        "id": "125"
+    },
+    {
+        "name": "Sophia Lee",
+        "energyLevel": 50,
+        "currentCell": 0,
+        "currentStatus": "available",
+        "resourceExploited": 0,
+        "strategyLevel": 9,
+        "isAdvisor": true,
+        "minEnergyToMaintain": 10,
+        "landOwnership": true,
+        "energyInvested": 60,
+        "nextAction": "ExpandMining",
+        "agent_type": "StrategistAgent(Per-Miner,OptionalAdvisor)",
+        "transactionHistory": [
+            {
+                "date": "2023-01-01",
+                "amount": 100,
+                "type": "initial"
+            }
+        ],
+        "lastAction": "AnalyzeMarket",
+        "id": "126"
+    },
+    {
+        "name": "Jordan Smith",
+        "energyLevel": 50,
+        "currentCell": 0,
+        "currentStatus": "available",
+        "resourceExploited": 0,
+        "strategyLevel": 3,
+        "isAdvisor": false,
+        "minEnergyToMaintain": 10,
+        "landOwnership": false,
+        "energyInvested": 15,
+        "nextAction": "RequestAdvisor",
+        "agent_type": "StrategistAgent(Per-Miner,OptionalAdvisor)",
+        "transactionHistory": [
+            {
+                "date": "2023-01-01",
+                "amount": 100,
+                "type": "initial"
+            }
+        ],
+        "lastAction": "MineResources",
+        "id": "127"
+    },
+    {
+        "name": "Olivia Jones",
+        "energyLevel": 50,
+        "currentCell": 0,
+        "currentStatus": "available",
+        "resourceExploited": 0,
+        "strategyLevel": 7,
+        "isAdvisor": true,
+        "minEnergyToMaintain": 10,
+        "landOwnership": true,
+        "energyInvested": 40,
+        "nextAction": "ReviewStrategies",
+        "agent_type": "StrategistAgent(Per-Miner,OptionalAdvisor)",
+        "transactionHistory": [
+            {
+                "date": "2023-01-01",
+                "amount": 100,
+                "type": "initial"
+            }
+        ],
+        "lastAction": "NegotiateContracts",
+        "id": "128"
+    },
+    {
+        "name": "Aiden Clark",
+        "energyLevel": 50,
+        "currentCell": 0,
+        "currentStatus": "available",
+        "resourceExploited": 0,
+        "strategyLevel": 5,
+        "isAdvisor": false,
+        "minEnergyToMaintain": 10,
+        "landOwnership": false,
+        "energyInvested": 28,
+        "nextAction": "RequestAdvisor",
+        "agent_type": "StrategistAgent(Per-Miner,OptionalAdvisor)",
+        "transactionHistory": [
+            {
+                "date": "2023-01-01",
+                "amount": 100,
+                "type": "initial"
+            }
+        ],
+        "lastAction": "MineResources",
+        "id": "129"
+    },
+    {
+        "name": "Mia Davis",
+        "energyLevel": 50,
+        "currentCell": 0,
+        "currentStatus": "available",
+        "resourceExploited": 0,
+        "strategyLevel": 6,
+        "isAdvisor": false,
+        "minEnergyToMaintain": 10,
+        "landOwnership": false,
+        "energyInvested": 22,
+        "nextAction": "RequestAdvisor",
+        "agent_type": "StrategistAgent(Per-Miner,OptionalAdvisor)",
+        "transactionHistory": [
+            {
+                "date": "2023-01-01",
+                "amount": 100,
+                "type": "initial"
+            }
+        ],
+        "lastAction": "MineResources",
+        "id": "130"
+    },
+    {
+        "name": "Aiden",
+        "energyLevel": 50,
+        "currentCell": 0,
+        "currentStatus": "available",
+        "resourceExploited": 0,
+        "strategyLevel": 5,
+        "isAdvisor": true,
+        "minEnergyToMaintain": 10,
+        "landOwnership": true,
+        "energyInvested": 150,
+        "nextAction": "Optimize resource allocation",
+        "agent_type": "StrategistAgent(Per-Miner,OptionalAdvisor)",
+        "transactionHistory": [
+            {
+                "date": "2023-01-01",
+                "amount": 100,
+                "type": "initial"
+            }
+        ],
+        "lastAction": "Analyzed market trends",
+        "id": "131"
+    },
+    {
+        "name": "Sophia",
+        "energyLevel": 50,
+        "currentCell": 0,
+        "currentStatus": "available",
+        "resourceExploited": 0,
+        "strategyLevel": 3,
+        "isAdvisor": false,
+        "minEnergyToMaintain": 10,
+        "landOwnership": false,
+        "energyInvested": 90,
+        "nextAction": "Develop new investment strategy",
+        "agent_type": "StrategistAgent(Per-Miner,OptionalAdvisor)",
+        "transactionHistory": [
+            {
+                "date": "2023-01-01",
+                "amount": 100,
+                "type": "initial"
+            }
+        ],
+        "lastAction": "Reviewed financial reports",
+        "id": "132"
+    },
+    {
+        "name": "Jackson",
+        "energyLevel": 50,
+        "currentCell": 0,
+        "currentStatus": "available",
+        "resourceExploited": 0,
+        "strategyLevel": 4,
+        "isAdvisor": true,
+        "minEnergyToMaintain": 10,
+        "landOwnership": true,
+        "energyInvested": 120,
+        "nextAction": "Expand market reach",
+        "agent_type": "StrategistAgent(Per-Miner,OptionalAdvisor)",
+        "transactionHistory": [
+            {
+                "date": "2023-01-01",
+                "amount": 100,
+                "type": "initial"
+            }
+        ],
+        "lastAction": "Conducted risk analysis",
+        "id": "133"
+    },
+    {
+        "name": "Emma",
+        "energyLevel": 50,
+        "currentCell": 0,
+        "currentStatus": "available",
+        "resourceExploited": 0,
+        "strategyLevel": 2,
+        "isAdvisor": false,
+        "minEnergyToMaintain": 10,
+        "landOwnership": false,
+        "energyInvested": 75,
+        "nextAction": "Enhance digital presence",
+        "agent_type": "StrategistAgent(Per-Miner,OptionalAdvisor)",
+        "transactionHistory": [
+            {
+                "date": "2023-01-01",
+                "amount": 100,
+                "type": "initial"
+            }
+        ],
+        "lastAction": "Researched competitor tactics",
+        "id": "134"
+    },
+    {
+        "name": "Oliver",
+        "energyLevel": 50,
+        "currentCell": 0,
+        "currentStatus": "available",
+        "resourceExploited": 0,
+        "strategyLevel": 6,
+        "isAdvisor": true,
+        "minEnergyToMaintain": 10,
+        "landOwnership": true,
+        "energyInvested": 200,
+        "nextAction": "Formulate contingency plans",
+        "agent_type": "StrategistAgent(Per-Miner,OptionalAdvisor)",
+        "transactionHistory": [
+            {
+                "date": "2023-01-01",
+                "amount": 100,
+                "type": "initial"
+            }
+        ],
+        "lastAction": "Evaluated client portfolios",
+        "id": "135"
+    },
+    {
+        "name": "Isabella",
+        "energyLevel": 50,
+        "currentCell": 0,
+        "currentStatus": "available",
+        "resourceExploited": 0,
+        "strategyLevel": 3,
+        "isAdvisor": false,
+        "minEnergyToMaintain": 10,
+        "landOwnership": false,
+        "energyInvested": 95,
+        "nextAction": "Launch marketing campaign",
+        "agent_type": "StrategistAgent(Per-Miner,OptionalAdvisor)",
+        "transactionHistory": [
+            {
+                "date": "2023-01-01",
+                "amount": 100,
+                "type": "initial"
+            }
+        ],
+        "lastAction": "Managed team projects",
+        "id": "136"
+    },
+    {
+        "name": "Lucas",
+        "energyLevel": 50,
+        "currentCell": 0,
+        "currentStatus": "available",
+        "resourceExploited": 0,
+        "strategyLevel": 5,
+        "isAdvisor": true,
+        "minEnergyToMaintain": 10,
+        "landOwnership": true,
+        "energyInvested": 170,
+        "nextAction": "Strengthen brand loyalty",
+        "agent_type": "StrategistAgent(Per-Miner,OptionalAdvisor)",
+        "transactionHistory": [
+            {
+                "date": "2023-01-01",
+                "amount": 100,
+                "type": "initial"
+            }
+        ],
+        "lastAction": "Negotiated strategic partnerships",
+        "id": "137"
+    },
+    {
+        "name": "Mia",
+        "energyLevel": 50,
+        "currentCell": 0,
+        "currentStatus": "available",
+        "resourceExploited": 0,
+        "strategyLevel": 4,
+        "isAdvisor": false,
+        "minEnergyToMaintain": 10,
+        "landOwnership": false,
+        "energyInvested": 110,
+        "nextAction": "Secure funding for new ventures",
+        "agent_type": "StrategistAgent(Per-Miner,OptionalAdvisor)",
+        "transactionHistory": [
+            {
+                "date": "2023-01-01",
+                "amount": 100,
+                "type": "initial"
+            }
+        ],
+        "lastAction": "Explored investment opportunities",
+        "id": "138"
+    },
+    {
+        "name": "Ethan",
+        "energyLevel": 50,
+        "currentCell": 0,
+        "currentStatus": "available",
+        "resourceExploited": 0,
+        "strategyLevel": 2,
+        "isAdvisor": true,
+        "minEnergyToMaintain": 10,
+        "landOwnership": true,
+        "energyInvested": 85,
+        "nextAction": "Boost product innovation",
+        "agent_type": "StrategistAgent(Per-Miner,OptionalAdvisor)",
+        "transactionHistory": [
+            {
+                "date": "2023-01-01",
+                "amount": 100,
+                "type": "initial"
+            }
+        ],
+        "lastAction": "Implemented cost-saving measures",
+        "id": "139"
+    },
+    {
+        "name": "Ava",
+        "energyLevel": 50,
+        "currentCell": 0,
+        "currentStatus": "available",
+        "resourceExploited": 0,
+        "strategyLevel": 5,
+        "isAdvisor": true,
+        "minEnergyToMaintain": 10,
+        "landOwnership": true,
+        "energyInvested": 160,
+        "nextAction": "Spearhead global expansion",
+        "agent_type": "StrategistAgent(Per-Miner,OptionalAdvisor)",
+        "transactionHistory": [
+            {
+                "date": "2023-01-01",
+                "amount": 100,
+                "type": "initial"
+            }
+        ],
+        "lastAction": "Facilitated leadership workshops",
+        "id": "140"
+    }
+]

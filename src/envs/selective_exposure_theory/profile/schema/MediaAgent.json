@@ -1,0 +1,80 @@
+{
+    "name": {
+        "type": "str",
+        "default": "MediaAgent",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's designated name in the simulation"
+    },
+    "media_bias_score": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "default"
+    },
+    "political_bias": {
+        "type": "str",
+        "default": "neutral",
+        "private": true,
+        "sampling": "random",
+        "choices": [
+            "left",
+            "right",
+            "neutral",
+            "libertarian",
+            "authoritarian"
+        ]
+    },
+    "content_type": {
+        "type": "str",
+        "default": "news",
+        "private": false,
+        "sampling": "llm",
+        "description": "Type of content the media agent provides"
+    },
+    "influence_factor": {
+        "type": "float",
+        "default": 1.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "audience_reach": {
+        "type": "int",
+        "default": 1000,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            500,
+            5000
+        ]
+    },
+    "content_frequency": {
+        "type": "int",
+        "default": 10,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            1,
+            20
+        ]
+    },
+    "initial_reputation": {
+        "type": "int",
+        "default": 50,
+        "private": true,
+        "sampling": "default"
+    },
+    "current_status": {
+        "type": "str",
+        "default": "active",
+        "private": false,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

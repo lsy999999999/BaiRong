@@ -1,0 +1,126 @@
+{
+    "-1": {
+        "id": -1,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "Pollster",
+        "to_action_name": "select_voter",
+        "from_action_id": 0,
+        "to_action_id": 1,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for pollster to begin voter selection",
+        "fields": []
+    },
+    "1": {
+        "id": 1,
+        "from_agent_type": "Pollster",
+        "from_action_name": "select_voter",
+        "to_agent_type": "Voter",
+        "to_action_name": "participate_in_poll",
+        "from_action_id": 1,
+        "to_action_id": 3,
+        "event_name": "VoterSelectedEvent",
+        "event_info": "Pollster selects a voter to participate in the opinion poll",
+        "fields": [
+            {
+                "name": "voter_id",
+                "type": "string",
+                "default_value": "",
+                "description": "Unique identifier for the selected voter"
+            },
+            {
+                "name": "pollster_id",
+                "type": "string",
+                "default_value": "",
+                "description": "Unique identifier for the pollster conducting the selection"
+            }
+        ]
+    },
+    "2": {
+        "id": 2,
+        "from_agent_type": "Pollster",
+        "from_action_name": "record_opinion",
+        "to_agent_type": "EnvAgent",
+        "to_action_name": "terminate",
+        "from_action_id": 2,
+        "to_action_id": -1,
+        "event_name": "OpinionRecordedEvent",
+        "event_info": "Pollster records the opinion data and outputs it for analysis",
+        "fields": [
+            {
+                "name": "pollster_id",
+                "type": "string",
+                "default_value": "",
+                "description": "Unique identifier for the pollster recording the opinion"
+            },
+            {
+                "name": "opinion_data",
+                "type": "object",
+                "default_value": "{}",
+                "description": "Data structure containing recorded opinions and preferences"
+            },
+            {
+                "name": "completion_status",
+                "type": "string",
+                "default_value": "pending",
+                "description": "Status of the opinion recording process"
+            }
+        ]
+    },
+    "3": {
+        "id": 3,
+        "from_agent_type": "Voter",
+        "from_action_name": "participate_in_poll",
+        "to_agent_type": "Pollster",
+        "to_action_name": "record_opinion",
+        "from_action_id": 3,
+        "to_action_id": 2,
+        "event_name": "ExpressOpinionEvent",
+        "event_info": "Voter expresses policy preferences during the poll",
+        "fields": [
+            {
+                "name": "voter_id",
+                "type": "string",
+                "default_value": "",
+                "description": "Unique identifier for the voter expressing opinion"
+            },
+            {
+                "name": "policy_preferences",
+                "type": "object",
+                "default_value": "{}",
+                "description": "Data structure containing voter's policy preferences"
+            }
+        ]
+    },
+    "4": {
+        "id": 4,
+        "from_agent_type": "Voter",
+        "from_action_name": "participate_in_poll",
+        "to_agent_type": "EnvAgent",
+        "to_action_name": "terminate",
+        "from_action_id": 3,
+        "to_action_id": -1,
+        "event_name": "PreferencesAdjustedEvent",
+        "event_info": "Voter adjusts policy preferences based on pollster interaction",
+        "fields": [
+            {
+                "name": "voter_id",
+                "type": "string",
+                "default_value": "",
+                "description": "Unique identifier for the voter adjusting preferences"
+            },
+            {
+                "name": "adjusted_preferences",
+                "type": "object",
+                "default_value": "{}",
+                "description": "Data structure containing adjusted policy preferences"
+            },
+            {
+                "name": "interaction_trust_level",
+                "type": "float",
+                "default_value": 0.0,
+                "description": "Level of trust in the interaction with the pollster"
+            }
+        ]
+    }
+}

@@ -1,0 +1,40 @@
+{
+    "environment": {
+        "variables": []
+    },
+    "agents": {
+        "Pollster": {
+            "variables": [
+                {
+                    "name": "selected_voter_id",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "opinion_data",
+                    "type": "object",
+                    "default_value": null
+                },
+                {
+                    "name": "completion_status",
+                    "type": "string",
+                    "default_value": null
+                }
+            ]
+        },
+        "Voter": {
+            "variables": [
+                {
+                    "name": "selected_voter_id",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "expressed_preferences",
+                    "type": "object",
+                    "default_value": null
+                }
+            ]
+        }
+    }
+}

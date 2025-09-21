@@ -1,0 +1,147 @@
+{
+    "ResourceMiner": [
+        {
+            "id": 1,
+            "name": "observe_global_map",
+            "condition": null,
+            "description": "This action involves observing the global map to assess the current state of the grid and resource availability, laying the groundwork for subsequent strategic decisions.",
+            "type": "OR",
+            "required_variables": [],
+            "output_updates": [
+                {
+                    "name": "map_state",
+                    "type": "list",
+                    "context": "agent",
+                    "description": "A representation of the current state of the grid map, including resource availability."
+                }
+            ],
+            "code": ""
+        },
+        {
+            "id": 2,
+            "name": "decide_action",
+            "condition": "Global map state observed",
+            "description": "This action entails making strategic decisions regarding whether to occupy, maintain, or compete for land ownership based on observed map data.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "map_state",
+                    "type": "list",
+                    "context": "agent",
+                    "description": "Current observed state of the grid map to inform decision making."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "action_plan",
+                    "type": "dict",
+                    "context": "agent",
+                    "description": "The plan detailing whether the agent will occupy, maintain, or compete for a cell."
+                }
+            ],
+            "code": ""
+        },
+        {
+            "id": 3,
+            "name": "execute_occupy_or_maintain",
+            "condition": "Decision to occupy or maintain land ownership",
+            "description": "In this action, the agent undertakes to occupy new land or maintain control over already owned land by investing energy.",
+            "type": "XOR",
+            "required_variables": [
+                {
+                    "name": "energy_investment",
+                    "type": "int",
+                    "context": "event",
+                    "description": "Energy the agent has decided to invest in occupying or maintaining land."
+                },
+                {
+                    "name": "cell_coordinates",
+                    "type": "tuple",
+                    "context": "event",
+                    "description": "Coordinates of the grid cell targeted for occupation or maintenance."
+                },
+                {
+                    "name": "previous_owner",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Identifier of the previous owner of the land, if applicable."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "new_land_status",
+                    "type": "dict",
+                    "context": "env",
+                    "description": "Updates the ownership status of the targeted cell in the environment."
+                }
+            ],
+            "code": ""
+        },
+        {
+            "id": 4,
+            "name": "execute_compete",
+            "condition": "Decision to compete for land ownership",
+            "description": "This action involves competing with other miners for the acquisition of land ownership by investing strategic amounts of energy.",
+            "type": "XOR",
+            "required_variables": [
+                {
+                    "name": "energy_investment",
+                    "type": "int",
+                    "context": "event",
+                    "description": "Energy the agent has decided to invest in competing for land ownership."
+                },
+                {
+                    "name": "cell_coordinates",
+                    "type": "tuple",
+                    "context": "event",
+                    "description": "Coordinates of the grid cell targeted for competition."
+                },
+                {
+                    "name": "current_owner",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Identifier of the current owner of the land being competed for."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "competition_result",
+                    "type": "dict",
+                    "context": "env",
+                    "description": "Updates the environment with the result of the competition for the targeted cell."
+                }
+            ],
+            "code": ""
+        },
+        {
+            "id": 5,
+            "name": "exploit_resources",
+            "condition": "Land ownership secured",
+            "description": "The agent exploits the resources of a grid cell they have successfully occupied, maintained, or won via competition.",
+            "type": "AND",
+            "required_variables": [
+                {
+                    "name": "new_owner",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Identifier of the agent now owning the land."
+                },
+                {
+                    "name": "cell_coordinates",
+                    "type": "tuple",
+                    "context": "event",
+                    "description": "Coordinates of the grid cell being exploited for resources."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "resource_count",
+                    "type": "int",
+                    "context": "agent",
+                    "description": "Number of resource units successfully extracted from the grid cell."
+                }
+            ],
+            "code": ""
+        }
+    ]
+}

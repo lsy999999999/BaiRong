@@ -1,0 +1,77 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Late Majority Agent",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's identification within the simulation"
+    },
+    "broad_acceptance_evaluation": {
+        "type": "bool",
+        "default": true,
+        "private": false,
+        "sampling": "default"
+    },
+    "social_influence": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "innovation_adoption_status": {
+        "type": "str",
+        "default": "not_adopted",
+        "private": false,
+        "sampling": "default"
+    },
+    "network_connections": {
+        "type": "list",
+        "default": [
+            "agent_1",
+            "agent_2"
+        ],
+        "private": true,
+        "sampling": "default"
+    },
+    "decision_threshold": {
+        "type": "float",
+        "default": 0.7,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.5,
+            1.0
+        ]
+    },
+    "trust_in_innovation": {
+        "type": "float",
+        "default": 0.6,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "communication_frequency": {
+        "type": "int",
+        "default": 3,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            1,
+            10
+        ]
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

@@ -1,0 +1,99 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Standard Recruitment Channel",
+        "private": false,
+        "sampling": "llm",
+        "description": "A name suitable for a recruitment channel in the labor market."
+    },
+    "type": {
+        "type": "str",
+        "choices": [
+            "online",
+            "offline",
+            "agency",
+            "referral"
+        ],
+        "default": "online",
+        "private": false,
+        "sampling": "random"
+    },
+    "reach": {
+        "type": "int",
+        "range": [
+            0,
+            1000000
+        ],
+        "default": 1000,
+        "private": false,
+        "sampling": "random"
+    },
+    "cost": {
+        "type": "float",
+        "range": [
+            0.0,
+            10000.0
+        ],
+        "default": 500.0,
+        "private": false,
+        "sampling": "random"
+    },
+    "information_richness": {
+        "type": "str",
+        "choices": [
+            "low",
+            "medium",
+            "high"
+        ],
+        "default": "medium",
+        "private": false,
+        "sampling": "random"
+    },
+    "filtering_mechanism": {
+        "type": "str",
+        "choices": [
+            "manual",
+            "automated",
+            "hybrid"
+        ],
+        "default": "automated",
+        "private": false,
+        "sampling": "random"
+    },
+    "matching_algorithm": {
+        "type": "str",
+        "choices": [
+            "simple",
+            "complex",
+            "AI-based"
+        ],
+        "default": "simple",
+        "private": false,
+        "sampling": "random"
+    },
+    "interaction_logs": {
+        "type": "list",
+        "default": [],
+        "private": true,
+        "sampling": "default"
+    },
+    "status_indicator": {
+        "type": "str",
+        "default": "",
+        "private": false,
+        "sampling": "default"
+    },
+    "performance_score": {
+        "type": "float",
+        "default": 0.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "int",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

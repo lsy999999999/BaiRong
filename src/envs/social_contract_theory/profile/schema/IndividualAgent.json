@@ -1,0 +1,89 @@
+{
+    "name": {
+        "type": "str",
+        "default": "John Doe",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's full name representing an individual in the social contract simulation"
+    },
+    "individual_interests": {
+        "type": "list",
+        "default": [
+            "freedom",
+            "security"
+        ],
+        "private": true,
+        "sampling": "default"
+    },
+    "proposal_details": {
+        "type": "str",
+        "default": "Initial proposal for contract negotiation",
+        "private": false,
+        "sampling": "default"
+    },
+    "negotiation_terms": {
+        "type": "dict",
+        "default": {
+            "rights": "basic",
+            "duties": "minimal"
+        },
+        "private": true,
+        "sampling": "default"
+    },
+    "negotiation_status": {
+        "type": "str",
+        "default": "awaiting_response",
+        "private": false,
+        "sampling": "default"
+    },
+    "personal_goals": {
+        "type": "list",
+        "default": [
+            "maximize freedom",
+            "ensure security"
+        ],
+        "private": true,
+        "sampling": "llm",
+        "description": "Goals that the individual agent aims to achieve through the social contract"
+    },
+    "historical_influence": {
+        "type": "int",
+        "default": 50,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0,
+            100
+        ]
+    },
+    "social_context": {
+        "type": "str",
+        "default": "stable",
+        "private": false,
+        "sampling": "default"
+    },
+    "contract_adaptability": {
+        "type": "float",
+        "default": 0.75,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "interaction_pattern": {
+        "type": "str",
+        "default": "negotiation",
+        "private": false,
+        "sampling": "llm",
+        "description": "Preferred interaction pattern for the agent in the simulation"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

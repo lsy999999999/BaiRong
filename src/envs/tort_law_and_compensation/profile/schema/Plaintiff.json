@@ -1,0 +1,73 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Jane Doe",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's full name representing the Plaintiff"
+    },
+    "compensation_amount": {
+        "type": "float",
+        "default": 10000.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "damage_description": {
+        "type": "str",
+        "default": "Physical injury due to negligence",
+        "private": false,
+        "sampling": "default"
+    },
+    "evidence_list": {
+        "type": "list",
+        "default": [
+            {
+                "type": "medical_report",
+                "date": "2023-05-15"
+            }
+        ],
+        "private": true,
+        "sampling": "default"
+    },
+    "compensation_request_submitted": {
+        "type": "bool",
+        "default": false,
+        "private": false,
+        "sampling": "default"
+    },
+    "legal_experience": {
+        "type": "int",
+        "default": 5,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0,
+            20
+        ]
+    },
+    "communication_style": {
+        "type": "str",
+        "default": "assertive",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "assertive",
+            "passive",
+            "aggressive"
+        ]
+    },
+    "initial_strategy": {
+        "type": "str",
+        "default": "settlement negotiation",
+        "private": true,
+        "sampling": "llm",
+        "description": "The strategy the Plaintiff initially employs in the case"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

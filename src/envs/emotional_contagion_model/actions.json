@@ -1,0 +1,129 @@
+{
+    "IndividualAgent": [
+        {
+            "id": 1,
+            "name": "initialize_emotional_state",
+            "condition": null,
+            "description": "Sets the initial emotional state of the agent based on predefined or random values.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "initial_emotional_state",
+                    "type": "string",
+                    "context": "env",
+                    "description": "The starting emotional state of the agent, sourced from environment settings."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "emotional_state",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "The current emotional state of the agent after initialization."
+                }
+            ]
+        },
+        {
+            "id": 4,
+            "name": "adjust_emotional_state",
+            "condition": "EmotionalInfluenceEvaluatedEvent received",
+            "description": "Modifies the agent's emotional state based on evaluated emotional influences.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "evaluation_result",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Result of the emotional influence evaluation received from DecisionAgent."
+                },
+                {
+                    "name": "adjustment_factor",
+                    "type": "float",
+                    "context": "event",
+                    "description": "Factor indicating the degree of change needed for the emotional state."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "emotional_state",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Updated emotional state of the agent after adjustment."
+                }
+            ]
+        }
+    ],
+    "CommunicationAgent": [
+        {
+            "id": 2,
+            "name": "transmit_emotion",
+            "condition": "EmotionalStateInitializedEvent received",
+            "description": "Conveys the current emotional state of the agent to other agents for evaluation.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "emotional_state",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "The current emotional state of the agent to be transmitted."
+                },
+                {
+                    "name": "intensity",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "The intensity level of the emotion being transmitted."
+                },
+                {
+                    "name": "frequency_of_contact",
+                    "type": "int",
+                    "context": "agent",
+                    "description": "Frequency of interaction between agents affecting transmission."
+                }
+            ],
+            "output_updates": []
+        }
+    ],
+    "DecisionAgent": [
+        {
+            "id": 3,
+            "name": "evaluate_emotional_influence",
+            "condition": "EmotionTransmittedEvent received",
+            "description": "Assesses the impact of received emotions on the agent's emotional state.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "emotion_type",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Type of emotion received from CommunicationAgent."
+                },
+                {
+                    "name": "intensity",
+                    "type": "float",
+                    "context": "event",
+                    "description": "Intensity level of the emotion received."
+                },
+                {
+                    "name": "frequency_of_contact",
+                    "type": "int",
+                    "context": "event",
+                    "description": "Frequency of interaction with the transmitting agent."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "evaluation_result",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Result of the emotional influence evaluation."
+                },
+                {
+                    "name": "adjustment_factor",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Factor by which emotional state needs adjustment."
+                }
+            ]
+        }
+    ]
+}

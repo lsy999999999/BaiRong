@@ -1,0 +1,122 @@
+{
+    "environment": {
+        "variables": []
+    },
+    "agents": {
+        "OrdinaryUser": {
+            "variables": [
+                {
+                    "name": "information_content",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "credibility_score",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "verification_tendency",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "evaluation_result",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "expression_willingness",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "isolation_fear",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "expressed_opinion",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "target_audience",
+                    "type": "list",
+                    "default_value": null
+                }
+            ]
+        },
+        "OpinionLeader": {
+            "variables": [
+                {
+                    "name": "content_creation",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "created_content",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "amplified_content",
+                    "type": "str",
+                    "default_value": null
+                }
+            ]
+        },
+        "MediaOrganization": {
+            "variables": [
+                {
+                    "name": "editorial_policy",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "selected_content",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "published_content",
+                    "type": "str",
+                    "default_value": null
+                }
+            ]
+        },
+        "FactCheckOrganization": {
+            "variables": [
+                {
+                    "name": "detected_rumors",
+                    "type": "list",
+                    "default_value": null
+                },
+                {
+                    "name": "verification_result",
+                    "type": "str",
+                    "default_value": null
+                }
+            ]
+        },
+        "PlatformRegulator": {
+            "variables": [
+                {
+                    "name": "monitored_content",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "risk_level",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "intervention_status",
+                    "type": "str",
+                    "default_value": null
+                }
+            ]
+        }
+    }
+}

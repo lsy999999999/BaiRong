@@ -1,0 +1,65 @@
+{
+    "name": {
+        "type": "str",
+        "default": "EnvironmentAgent",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's name representing external factors affecting decisions"
+    },
+    "uncertainty_level": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "risk_factor": {
+        "type": "float",
+        "default": 0.3,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "resource_constraints": {
+        "type": "list",
+        "default": [
+            "limited_budget",
+            "time_pressure"
+        ],
+        "private": false,
+        "sampling": "default",
+        "sample_size": 2
+    },
+    "external_conditions": {
+        "type": "str",
+        "default": "stable",
+        "private": true,
+        "sampling": "default"
+    },
+    "information_availability": {
+        "type": "str",
+        "default": "partial",
+        "private": false,
+        "sampling": "default"
+    },
+    "variables": {
+        "type": "list",
+        "default": [],
+        "private": false,
+        "sampling": "default",
+        "sample_size": 0
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

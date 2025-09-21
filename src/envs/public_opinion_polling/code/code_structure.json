@@ -1,0 +1,247 @@
+{
+  "agents": {
+    "Pollster": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "1": {
+          "code": "async def select_voter(self, event: Event) -> List[Event]:\n        # Generate the reaction to select a voter\n        instruction = \"\"\"\n        You are a pollster initiating the polling process by selecting a voter. \n        Your task is to identify one or more voters to participate in the opinion poll.\n        Please return the information in the following JSON format:\n\n        {\n        \"selected_voter_id\": [\"<The string ID(s) of the selected Voter(s)>\"]\n        }\n        \"\"\"\n\n        # Generate the reaction to select voter(s)\n        result = await self.generate_reaction(instruction)\n\n        # Retrieve the selected voter ID(s)\n        selected_voter_ids = result.get('selected_voter_id', [])\n        if not isinstance(selected_voter_ids, list):\n            selected_voter_ids = [selected_voter_ids]\n\n        # If no voters are selected, handle this explicitly\n        if not selected_voter_ids:\n            logger.warning(\"No voters were selected. Check the selection criteria or process.\")\n            return []\n\n        # Prepare and send the VoterSelectedEvent to each selected voter\n        events = []\n        pollster_id = self.profile_id\n        for voter_id in selected_voter_ids:\n            voter_selected_event = VoterSelectedEvent(pollster_id, voter_id, voter_id=voter_id, pollster_id=pollster_id)\n            events.append(voter_selected_event)\n\n        return events",
+          "metadata": {
+            "id": 1,
+            "name": "select_voter",
+            "condition": null,
+            "description": "The pollster selects a voter randomly to participate in the opinion poll, initiating the polling process.",
+            "type": "OR",
+            "required_variables": [],
+            "output_updates": [
+              {
+                "name": "selected_voter_id",
+                "type": "string",
+                "context": "agent",
+                "description": "Unique identifier for the voter selected for polling."
+              }
+            ]
+          }
+        },
+        "2": {
+          "code": "async def record_opinion(self, event: Event) -> List[Event]:\n        # Condition Check: Ensure voter has participated in the poll\n        if not isinstance(event, ExpressOpinionEvent):\n            return []\n\n        # Access event data\n        voter_id = event.voter_id\n        policy_preferences = event.policy_preferences\n\n        # Update agent's state with opinion_data and completion_status\n        self.profile.update_data(\"opinion_data\", policy_preferences)\n        self.profile.update_data(\"completion_status\", \"completed\")\n\n        # Prepare instruction for generating reaction\n        instruction = \"\"\"\n        Please prepare the opinion data for analysis. Ensure the data is formatted correctly and include the target_ids for sending the OpinionRecordedEvent. \n        The response should be in the following JSON format:\n\n        {\n        \"opinion_data\": \"<Formatted opinion data>\",\n        \"completion_status\": \"completed\",\n        \"target_ids\": [\"<The string ID(s) of the EnvAgent or other target agents>\"]\n        }\n        \"\"\"\n        observation = f\"Voter ID: {voter_id}, Policy Preferences: {policy_preferences}\"\n\n        # Generate reaction using LLM\n        result = await self.generate_reaction(instruction, observation)\n\n        # Extract and validate response data\n        opinion_data = result.get('opinion_data', policy_preferences)\n        completion_status = result.get('completion_status', \"completed\")\n        target_ids = result.get('target_ids', [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Prepare and send OpinionRecordedEvent to target agents\n        events = []\n        pollster_id = self.profile_id\n        for target_id in target_ids:\n            opinion_event = OpinionRecordedEvent(pollster_id, target_id, pollster_id=pollster_id, opinion_data=opinion_data, completion_status=completion_status)\n            events.append(opinion_event)\n\n        return events",
+          "metadata": {
+            "id": 2,
+            "name": "record_opinion",
+            "condition": "Voter has participated in the poll",
+            "description": "Pollster records the opinions expressed by the voter during the poll and prepares the data for analysis.",
+            "type": "AND",
+            "required_variables": [
+              {
+                "name": "voter_id",
+                "type": "string",
+                "context": "event",
+                "description": "Unique identifier for the voter expressing opinion."
+              },
+              {
+                "name": "policy_preferences",
+                "type": "object",
+                "context": "event",
+                "description": "Data structure containing voter's policy preferences."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "opinion_data",
+                "type": "object",
+                "context": "agent",
+                "description": "Data structure containing recorded opinions and preferences."
+              },
+              {
+                "name": "completion_status",
+                "type": "string",
+                "context": "agent",
+                "description": "Status of the opinion recording process."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "Voter": {
+      "imports": "from typing import Any, List\nimport asyncio\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "3": {
+          "code": "async def participate_in_poll(self, event: Event) -> List[Event]:\n        # Check if voter_id is present in the event\n        if not event.voter_id:\n            return []  # Return empty list if voter_id is not provided\n\n        # Retrieve necessary data from the event and agent profile\n        selected_voter_id = event.voter_id\n        pollster_id = event.pollster_id\n    \n        # Generate the instruction for LLM\n        instruction = \"\"\"You are a voter participating in a poll. Based on your current policy preferences, \n        decide how to express these preferences during the poll. Additionally, determine if your preferences \n        should be adjusted based on the interaction with the pollster. The response should be in the following JSON format:\n        \n        {\n        \"expressed_preferences\": \"<A data structure containing your expressed policy preferences>\",\n        \"adjusted_preferences\": \"<A data structure containing adjusted policy preferences>\",\n        \"interaction_trust_level\": <A float value representing the trust level in the interaction>,\n        \"target_ids\": [\"<The string ID of the Pollster agent>\", \"<The string ID of the EnvAgent if preferences are adjusted>\"]\n        }\n        \"\"\"\n        \n        observation = f\"Selected voter ID: {selected_voter_id}, Pollster ID: {pollster_id}\"\n        \n        # Generate reaction using the instruction\n        result = await self.generate_reaction(instruction, observation)\n    \n        # Parse the LLM's response\n        expressed_preferences = result.get('expressed_preferences', {})\n        adjusted_preferences = result.get('adjusted_preferences', {})\n        interaction_trust_level = result.get('interaction_trust_level', 0.0)\n        target_ids = result.get('target_ids', [])\n    \n        # Ensure target_ids is a list\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n    \n        # Create and send appropriate events\n        events = []\n        env_agent_id = self.profile.get_data(\"env_agent_id\", \"EnvAgent\")  # Use configuration or constant for \"EnvAgent\"\n        for target_id in target_ids:\n            if target_id == pollster_id:\n                # Create ExpressOpinionEvent\n                opinion_event = ExpressOpinionEvent(selected_voter_id, pollster_id, expressed_preferences)\n                events.append(opinion_event)\n            elif target_id == env_agent_id:\n                # Create PreferencesAdjustedEvent\n                adjusted_event = PreferencesAdjustedEvent(selected_voter_id, env_agent_id, adjusted_preferences, interaction_trust_level)\n                events.append(adjusted_event)\n    \n        return events",
+          "metadata": {
+            "id": 3,
+            "name": "participate_in_poll",
+            "condition": null,
+            "description": "Voter participates in the poll by expressing their policy preferences to the pollster.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "selected_voter_id",
+                "type": "string",
+                "context": "agent",
+                "description": "Unique identifier for the voter selected for polling."
+              },
+              {
+                "name": "pollster_id",
+                "type": "string",
+                "context": "event",
+                "description": "Unique identifier for the pollster conducting the selection."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "expressed_preferences",
+                "type": "object",
+                "context": "agent",
+                "description": "Data structure containing voter's expressed policy preferences."
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "events": {
+    "imports": "from onesim.events import Event\nfrom typing import Any",
+    "definitions": {
+      "-1": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": -1,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "Pollster",
+          "to_action_name": "select_voter",
+          "from_action_id": 0,
+          "to_action_id": 1,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for pollster to begin voter selection",
+          "fields": []
+        }
+      },
+      "1": {
+        "code": "class VoterSelectedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        voter_id: str = \"\",\n        pollster_id: str = \"\",\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.voter_id = voter_id\n        self.pollster_id = pollster_id",
+        "metadata": {
+          "id": 1,
+          "from_agent_type": "Pollster",
+          "from_action_name": "select_voter",
+          "to_agent_type": "Voter",
+          "to_action_name": "participate_in_poll",
+          "from_action_id": 1,
+          "to_action_id": 3,
+          "event_name": "VoterSelectedEvent",
+          "event_info": "Pollster selects a voter to participate in the opinion poll",
+          "fields": [
+            {
+              "name": "voter_id",
+              "type": "string",
+              "default_value": "",
+              "description": "Unique identifier for the selected voter"
+            },
+            {
+              "name": "pollster_id",
+              "type": "string",
+              "default_value": "",
+              "description": "Unique identifier for the pollster conducting the selection"
+            }
+          ]
+        }
+      },
+      "2": {
+        "code": "class OpinionRecordedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        pollster_id: str = \"\",\n        opinion_data: object = None,\n        completion_status: str = 'pending',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.pollster_id = pollster_id\n        self.opinion_data = opinion_data if opinion_data is not None else {}\n        self.completion_status = completion_status",
+        "metadata": {
+          "id": 2,
+          "from_agent_type": "Pollster",
+          "from_action_name": "record_opinion",
+          "to_agent_type": "EnvAgent",
+          "to_action_name": "terminate",
+          "from_action_id": 2,
+          "to_action_id": -1,
+          "event_name": "OpinionRecordedEvent",
+          "event_info": "Pollster records the opinion data and outputs it for analysis",
+          "fields": [
+            {
+              "name": "pollster_id",
+              "type": "string",
+              "default_value": "",
+              "description": "Unique identifier for the pollster recording the opinion"
+            },
+            {
+              "name": "opinion_data",
+              "type": "object",
+              "default_value": "{}",
+              "description": "Data structure containing recorded opinions and preferences"
+            },
+            {
+              "name": "completion_status",
+              "type": "string",
+              "default_value": "pending",
+              "description": "Status of the opinion recording process"
+            }
+          ]
+        }
+      },
+      "3": {
+        "code": "class ExpressOpinionEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        voter_id: str = \"\",\n        policy_preferences: object = None,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.voter_id = voter_id\n        self.policy_preferences = policy_preferences if policy_preferences is not None else {}",
+        "metadata": {
+          "id": 3,
+          "from_agent_type": "Voter",
+          "from_action_name": "participate_in_poll",
+          "to_agent_type": "Pollster",
+          "to_action_name": "record_opinion",
+          "from_action_id": 3,
+          "to_action_id": 2,
+          "event_name": "ExpressOpinionEvent",
+          "event_info": "Voter expresses policy preferences during the poll",
+          "fields": [
+            {
+              "name": "voter_id",
+              "type": "string",
+              "default_value": "",
+              "description": "Unique identifier for the voter expressing opinion"
+            },
+            {
+              "name": "policy_preferences",
+              "type": "object",
+              "default_value": "{}",
+              "description": "Data structure containing voter's policy preferences"
+            }
+          ]
+        }
+      },
+      "4": {
+        "code": "class PreferencesAdjustedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        voter_id: str = \"\",\n        adjusted_preferences: object = None,\n        interaction_trust_level: float = 0.0,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.voter_id = voter_id\n        self.adjusted_preferences = adjusted_preferences if adjusted_preferences is not None else {}\n        self.interaction_trust_level = interaction_trust_level",
+        "metadata": {
+          "id": 4,
+          "from_agent_type": "Voter",
+          "from_action_name": "participate_in_poll",
+          "to_agent_type": "EnvAgent",
+          "to_action_name": "terminate",
+          "from_action_id": 3,
+          "to_action_id": -1,
+          "event_name": "PreferencesAdjustedEvent",
+          "event_info": "Voter adjusts policy preferences based on pollster interaction",
+          "fields": [
+            {
+              "name": "voter_id",
+              "type": "string",
+              "default_value": "",
+              "description": "Unique identifier for the voter adjusting preferences"
+            },
+            {
+              "name": "adjusted_preferences",
+              "type": "object",
+              "default_value": "{}",
+              "description": "Data structure containing adjusted policy preferences"
+            },
+            {
+              "name": "interaction_trust_level",
+              "type": "float",
+              "default_value": 0.0,
+              "description": "Level of trust in the interaction with the pollster"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

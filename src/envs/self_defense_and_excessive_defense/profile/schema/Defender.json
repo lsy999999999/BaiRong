@@ -1,0 +1,92 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Alex Defender",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's full name representing the defender in the scenario"
+    },
+    "defensive_action_type": {
+        "type": "str",
+        "default": "verbal_warning",
+        "private": true,
+        "sampling": "default"
+    },
+    "defense_intensity": {
+        "type": "int",
+        "default": 50,
+        "private": true,
+        "sampling": "default"
+    },
+    "evidence_collected": {
+        "type": "list",
+        "default": [
+            {
+                "type": "video",
+                "timestamp": "2023-10-01T10:00:00Z"
+            }
+        ],
+        "private": true,
+        "sampling": "default"
+    },
+    "initial_response_time": {
+        "type": "int",
+        "default": 5,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            1,
+            10
+        ]
+    },
+    "legal_knowledge_level": {
+        "type": "int",
+        "default": 75,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            50,
+            100
+        ]
+    },
+    "stress_tolerance": {
+        "type": "int",
+        "default": 60,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            30,
+            80
+        ]
+    },
+    "defense_strategy": {
+        "type": "str",
+        "default": "evasive",
+        "private": false,
+        "sampling": "llm",
+        "description": "The strategy the defender uses to respond to threats"
+    },
+    "communication_skill": {
+        "type": "int",
+        "default": 70,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            50,
+            90
+        ]
+    },
+    "current_status": {
+        "type": "str",
+        "default": "ready",
+        "private": false,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

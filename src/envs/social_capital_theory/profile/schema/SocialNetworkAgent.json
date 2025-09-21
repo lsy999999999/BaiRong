@@ -1,0 +1,91 @@
+{
+    "name": {
+        "type": "str",
+        "default": "SocialNetworkAgent",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's identifier within the social network"
+    },
+    "analysis_summary": {
+        "type": "str",
+        "default": "Initial analysis pending",
+        "private": true,
+        "sampling": "default"
+    },
+    "potential_updates": {
+        "type": "list",
+        "default": [
+            "Update connections",
+            "Increase social capital"
+        ],
+        "private": false,
+        "sampling": "default"
+    },
+    "update_status": {
+        "type": "str",
+        "default": "ready",
+        "private": false,
+        "sampling": "default"
+    },
+    "changes_applied": {
+        "type": "list",
+        "default": [
+            {
+                "date": "2023-10-01",
+                "change": "Initial setup"
+            }
+        ],
+        "private": true,
+        "sampling": "default"
+    },
+    "social_capital": {
+        "type": "float",
+        "default": 50.0,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            100.0
+        ]
+    },
+    "trust_level": {
+        "type": "int",
+        "default": 50,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0,
+            100
+        ]
+    },
+    "interaction_history": {
+        "type": "list",
+        "default": [
+            {
+                "interaction": "initial",
+                "result": "neutral"
+            }
+        ],
+        "private": true,
+        "sampling": "default"
+    },
+    "relationship_status": {
+        "type": "str",
+        "default": "neutral",
+        "private": false,
+        "sampling": "default"
+    },
+    "resource_access": {
+        "type": "str",
+        "default": "limited",
+        "private": false,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

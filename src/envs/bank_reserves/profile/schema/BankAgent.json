@@ -1,0 +1,79 @@
+{
+    "name": {
+        "type": "str",
+        "default": "BankAgent",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's designated name in the simulation"
+    },
+    "reserve_level": {
+        "type": "float",
+        "default": 1000000.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "decision_status": {
+        "type": "str",
+        "default": "pending_approval",
+        "private": false,
+        "sampling": "default"
+    },
+    "lending_capacity": {
+        "type": "float",
+        "default": 500000.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "reserve_requirement": {
+        "type": "float",
+        "default": 0.1,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.05,
+            0.2
+        ]
+    },
+    "economic_cycle": {
+        "type": "str",
+        "default": "growth",
+        "private": true,
+        "sampling": "random",
+        "choices": [
+            "growth",
+            "recession",
+            "stability"
+        ]
+    },
+    "loan_approval_rate": {
+        "type": "float",
+        "default": 0.75,
+        "private": false,
+        "sampling": "default"
+    },
+    "transaction_history": {
+        "type": "list",
+        "default": [
+            {
+                "date": "2025-01-01",
+                "amount": 100000.0,
+                "type": "loan_approved"
+            }
+        ],
+        "private": true,
+        "sampling": "default"
+    },
+    "customer_interaction_count": {
+        "type": "int",
+        "default": 0,
+        "private": false,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

@@ -1,0 +1,82 @@
+[
+    {
+        "name": "Johnathan Reed",
+        "case_load": 7,
+        "communication_protocol": "Formal and concise, with an emphasis on clarity and legal precision.",
+        "legal_system_type": "common law",
+        "public_attention": 0.8998789157228383,
+        "agent_type": "Prosecutor",
+        "evidence_quality": 0.75,
+        "conviction_likelihood": 0.6,
+        "prosecution_decision": "pending_review",
+        "strategy": [
+            "evidence presentation",
+            "witness examination"
+        ],
+        "id": "5"
+    },
+    {
+        "name": "Samantha Lee",
+        "case_load": 16,
+        "communication_protocol": "Structured and methodical, prioritizing logical argumentation and factual evidence.",
+        "legal_system_type": "common law",
+        "public_attention": 0.6725970401864448,
+        "agent_type": "Prosecutor",
+        "evidence_quality": 0.75,
+        "conviction_likelihood": 0.6,
+        "prosecution_decision": "pending_review",
+        "strategy": [
+            "evidence presentation",
+            "witness examination"
+        ],
+        "id": "6"
+    },
+    {
+        "name": "Michael Tran",
+        "case_load": 15,
+        "communication_protocol": "Assertive and strategic, focusing on persuasive rhetoric and comprehensive case analysis.",
+        "legal_system_type": "common law",
+        "public_attention": 0.8570610010953872,
+        "agent_type": "Prosecutor",
+        "evidence_quality": 0.75,
+        "conviction_likelihood": 0.6,
+        "prosecution_decision": "pending_review",
+        "strategy": [
+            "evidence presentation",
+            "witness examination"
+        ],
+        "id": "7"
+    },
+    {
+        "name": "Elena Rodriguez",
+        "case_load": 1,
+        "communication_protocol": "Collaborative and empathetic, ensuring clear understanding and respectful dialogue.",
+        "legal_system_type": "civil law",
+        "public_attention": 0.1536112024544415,
+        "agent_type": "Prosecutor",
+        "evidence_quality": 0.75,
+        "conviction_likelihood": 0.6,
+        "prosecution_decision": "pending_review",
+        "strategy": [
+            "evidence presentation",
+            "witness examination"
+        ],
+        "id": "8"
+    },
+    {
+        "name": "David Chen",
+        "case_load": 7,
+        "communication_protocol": "Analytical and detail-oriented, emphasizing thorough examination and legal accuracy.",
+        "legal_system_type": "common law",
+        "public_attention": 0.1823155128216596,
+        "agent_type": "Prosecutor",
+        "evidence_quality": 0.75,
+        "conviction_likelihood": 0.6,
+        "prosecution_decision": "pending_review",
+        "strategy": [
+            "evidence presentation",
+            "witness examination"
+        ],
+        "id": "9"
+    }
+]

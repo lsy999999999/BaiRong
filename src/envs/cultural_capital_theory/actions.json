@@ -1,0 +1,127 @@
+{
+    "IndividualAgent": [
+        {
+            "id": 1,
+            "name": "evaluate_cultural_capital",
+            "condition": null,
+            "description": "Assess the individual's current level of cultural capital to inform decisions on education and job opportunities.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "social_class",
+                    "type": "string",
+                    "context": "event",
+                    "description": "The assessed social class of the individual influencing cultural capital evaluation."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "cultural_capital_level",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "The updated level of cultural capital for the individual after evaluation."
+                },
+                {
+                    "name": "education_decision",
+                    "type": "bool",
+                    "context": "agent",
+                    "description": "Decision made by the individual to pursue further education based on cultural capital evaluation."
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "name": "pursue_education",
+            "condition": "Cultural capital level assessment",
+            "description": "Engage in educational activities to improve cultural capital and enhance job prospects.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "cultural_capital_level",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "The current level of cultural capital influencing education pursuit."
+                },
+                {
+                    "name": "education_decision",
+                    "type": "bool",
+                    "context": "agent",
+                    "description": "Decision to pursue education based on cultural capital evaluation."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "education_level",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "The level of education completed by the individual."
+                },
+                {
+                    "name": "job_search_status",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Status of job search after education completion."
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "name": "seek_job_opportunities",
+            "condition": null,
+            "description": "Search for job opportunities utilizing the cultural capital and education acquired.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "education_level",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "The level of education completed by the individual, guiding job search."
+                },
+                {
+                    "name": "job_search_status",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Current status of job search process."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "job_position",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "The job position found by the individual."
+                },
+                {
+                    "name": "workflow_completion_status",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Status indicating completion of job search workflow."
+                }
+            ]
+        }
+    ],
+    "SocialStructureAgent": [
+        {
+            "id": 4,
+            "name": "assess_social_class",
+            "condition": null,
+            "description": "Determine the social class of individuals to influence their cultural capital evaluation.",
+            "type": "OR",
+            "required_variables": [],
+            "output_updates": [
+                {
+                    "name": "social_class",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "The assessed social class of the individual."
+                },
+                {
+                    "name": "influence_on_cultural_capital",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "The influence of social class assessment on the individual's cultural capital evaluation."
+                }
+            ]
+        }
+    ]
+}

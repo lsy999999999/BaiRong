@@ -1,0 +1,92 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Judge Doe",
+        "private": false,
+        "sampling": "llm",
+        "description": "The judge's full name"
+    },
+    "experience_years": {
+        "type": "int",
+        "default": 15,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            5,
+            40
+        ]
+    },
+    "current_case_status": {
+        "type": "str",
+        "default": "awaiting_verdict",
+        "private": false,
+        "sampling": "default"
+    },
+    "legal_knowledge_level": {
+        "type": "int",
+        "default": 90,
+        "private": true,
+        "sampling": "random",
+        "range": [
+            70,
+            100
+        ]
+    },
+    "cases_resolved": {
+        "type": "int",
+        "default": 120,
+        "private": false,
+        "sampling": "default"
+    },
+    "overtime_law_comprehension": {
+        "type": "float",
+        "default": 0.85,
+        "private": true,
+        "sampling": "random",
+        "range": [
+            0.7,
+            1.0
+        ]
+    },
+    "recent_rulings": {
+        "type": "list",
+        "default": [
+            {
+                "case_id": "C001",
+                "outcome": "favor_employee",
+                "date": "2023-09-15"
+            },
+            {
+                "case_id": "C002",
+                "outcome": "favor_employer",
+                "date": "2023-09-20"
+            }
+        ],
+        "private": true,
+        "sampling": "default"
+    },
+    "communication_style": {
+        "type": "str",
+        "default": "formal",
+        "private": false,
+        "sampling": "llm",
+        "description": "The style of communication used by the judge in court"
+    },
+    "decision_making_speed": {
+        "type": "int",
+        "default": 3,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            1,
+            5
+        ]
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

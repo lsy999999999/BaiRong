@@ -1,0 +1,86 @@
+{
+    "name": {
+        "type": "str",
+        "default": "PublicAgent",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's identifier within the simulation"
+    },
+    "received_information": {
+        "type": "str",
+        "default": "awaiting_input",
+        "private": false,
+        "sampling": "default"
+    },
+    "public_agent_reaction": {
+        "type": "str",
+        "default": "neutral",
+        "private": false,
+        "sampling": "default"
+    },
+    "completion_status": {
+        "type": "str",
+        "default": "incomplete",
+        "private": false,
+        "sampling": "default"
+    },
+    "belief_strength": {
+        "type": "int",
+        "default": 50,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0,
+            100
+        ]
+    },
+    "social_connections": {
+        "type": "list",
+        "default": [
+            {
+                "name": "OpinionLeader1",
+                "relationship_strength": 30
+            }
+        ],
+        "private": true,
+        "sampling": "default",
+        "sample_size": 5
+    },
+    "information_delay": {
+        "type": "float",
+        "default": 1.5,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.5,
+            5.0
+        ]
+    },
+    "communication_frequency": {
+        "type": "int",
+        "default": 10,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            5,
+            20
+        ]
+    },
+    "opinion_change_rate": {
+        "type": "float",
+        "default": 0.1,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

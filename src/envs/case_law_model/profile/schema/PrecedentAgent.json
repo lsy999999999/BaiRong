@@ -1,0 +1,75 @@
+{
+    "name": {
+        "type": "str",
+        "default": "PrecedentAgent",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's name representing its role in storing legal precedents"
+    },
+    "stored_principles": {
+        "type": "str",
+        "default": "Principles regarding case law precedents and legal interpretations",
+        "private": true,
+        "sampling": "default"
+    },
+    "legal_field": {
+        "type": "str",
+        "default": "contract law",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "criminal law",
+            "civil law",
+            "contract law",
+            "administrative law"
+        ]
+    },
+    "precedent_count": {
+        "type": "int",
+        "default": 100,
+        "private": false,
+        "sampling": "default"
+    },
+    "influence_factor": {
+        "type": "float",
+        "default": 0.75,
+        "private": false,
+        "sampling": "default"
+    },
+    "historical_data": {
+        "type": "list",
+        "default": [
+            {
+                "year": 2020,
+                "case": "Smith vs. Jones",
+                "outcome": "favorable"
+            }
+        ],
+        "private": true,
+        "sampling": "default"
+    },
+    "interpretation_method": {
+        "type": "str",
+        "default": "textual analysis",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "textual analysis",
+            "statistical modeling",
+            "expert consultation"
+        ]
+    },
+    "active_status": {
+        "type": "str",
+        "default": "active",
+        "private": false,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

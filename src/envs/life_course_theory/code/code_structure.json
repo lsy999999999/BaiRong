@@ -1,0 +1,611 @@
+{
+  "agents": {
+    "IndividualAgent": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "1": {
+          "code": "async def begin_life_stage(self, event: Event) -> List[Event]:\n        if event.__class__.__name__ != 'StartEvent':\n            return []\n\n        socioeconomic_status = await self.get_env_data(\"socioeconomic_status\", \"unknown\")\n        initial_health_status = await self.get_env_data(\"initial_health_status\", \"unknown\")\n\n        current_life_stage = self.profile.get_data(\"current_life_stage\", \"unknown\")\n        instruction_stage = \"\"\"\n        Determine the new life stage based on the current life stage and socioeconomic factors.\n        Please return the information in the following JSON format:\n\n        {\n        \"new_stage\": \"<The new life stage>\"\n        }\n        \"\"\"\n        observation_stage = f\"Socioeconomic Status: {socioeconomic_status}, Current Life Stage: {current_life_stage}\"\n        result_stage = await self.generate_reaction(instruction_stage, observation_stage)\n        new_stage = result_stage.get('new_stage', \"unknown_stage\")\n        self.profile.update_data(\"current_life_stage\", new_stage)\n\n        instruction = \"\"\"\n        Initiate the 'begin_life_stage' process by assessing the impact of socioeconomic and health factors.\n        Please return the information in the following JSON format:\n\n        {\n        \"target_ids\": [\"<The string ID(s) of the EducationSystemAgent and HealthcareSystemAgent>\"]\n        }\n        \"\"\"\n        observation = f\"Socioeconomic Status: {socioeconomic_status}, Initial Health Status: {initial_health_status}, Current Life Stage: {new_stage}\"\n\n        result = await self.generate_reaction(instruction, observation)\n\n        target_ids = result.get('target_ids', [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        events = []\n        for target_id in target_ids:\n            if target_id == 'EducationSystemAgent':\n                life_stage_progress_event = LifeStageProgressEvent(\n                    self.profile_id, target_id, educational_impact=0.0, life_stage=new_stage\n                )\n                events.append(life_stage_progress_event)\n            elif target_id == 'HealthcareSystemAgent':\n                life_stage_health_event = LifeStageHealthEvent(\n                    self.profile_id, target_id, health_services_impact=0.0, health_status=initial_health_status\n                )\n                events.append(life_stage_health_event)\n\n        return events",
+          "metadata": {
+            "id": 1,
+            "name": "begin_life_stage",
+            "condition": null,
+            "description": "Initiates the simulation of an individual's new life stage, setting initial conditions for education, health, and policy adaptation.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "socioeconomic_status",
+                "type": "string",
+                "context": "env",
+                "description": "The individual's socioeconomic status at the beginning of the life stage."
+              },
+              {
+                "name": "initial_health_status",
+                "type": "string",
+                "context": "env",
+                "description": "The individual's health status at the beginning of the life stage."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "current_life_stage",
+                "type": "string",
+                "context": "agent",
+                "description": "The life stage that the individual is currently in."
+              }
+            ]
+          }
+        },
+        "2": {
+          "code": "async def receive_family_support(self, event: Event) -> List[Event]:\n        support_type = event.support_type\n        support_level = event.support_level\n\n        instruction = \"\"\"\n        You are processing a family support event for an individual agent. \n        The event includes support_type and support_level which impact the individual's state.\n        Your task is to determine the integration status of the family support and decide the target_ids for sending a final event.\n        Return the information in the following JSON format:\n\n        {\n        \"family_support_status\": \"<The status of family support integration>\",\n        \"target_ids\": [\"<The string ID of the EnvAgent>\"]\n        }\n        \"\"\"\n\n        observation = f\"Support Type: {support_type}, Support Level: {support_level}\"\n        result = await self.generate_reaction(instruction, observation)\n\n        family_support_status = result.get('family_support_status', None)\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        self.profile.update_data(\"family_support_status\", family_support_status)\n\n        events = []\n        for target_id in target_ids:\n            integration_event = FamilySupportIntegratedEvent(self.profile_id, target_id, integration_status=family_support_status)\n            events.append(integration_event)\n\n        return events",
+          "metadata": {
+            "id": 2,
+            "name": "receive_family_support",
+            "condition": null,
+            "description": "Processes and integrates family support into the individual's life, affecting health and educational outcomes.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "support_type",
+                "type": "string",
+                "context": "event",
+                "description": "Type of family support provided to the individual."
+              },
+              {
+                "name": "support_level",
+                "type": "float",
+                "context": "event",
+                "description": "Quantitative level of support provided."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "family_support_status",
+                "type": "string",
+                "context": "agent",
+                "description": "Status of family support integration."
+              }
+            ]
+          }
+        },
+        "3": {
+          "code": "async def adapt_to_education_outcome(self, event: Event) -> List[Event]:\n        education_outcome = event.education_outcome\n        adaptation_level = event.adaptation_level\n\n        instruction = \"\"\"\n        You are tasked with adapting an individual's behavior and decisions based on educational outcomes.\n        Use the 'education_outcome' and 'adaptation_level' to determine the adaptation status.\n        Please return the information in the following JSON format:\n\n        {\n        \"education_adaptation_status\": \"<Status of the individual's adaptation>\",\n        \"target_ids\": [\"<The string ID(s) of the target agent(s) or 'ENV'>\"]\n        }\n        \"\"\"\n        observation = f\"Education Outcome: {education_outcome}, Adaptation Level: {adaptation_level}\"\n        result = await self.generate_reaction(instruction, observation)\n\n        education_adaptation_status = result.get('education_adaptation_status', None)\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        self.profile.update_data(\"education_adaptation_status\", education_adaptation_status)\n\n        events = []\n        for target_id in target_ids:\n            adaptation_event = EducationAdaptationCompletedEvent(\n                from_agent_id=self.profile_id,\n                to_agent_id=target_id,\n                adaptation_status=education_adaptation_status\n            )\n            events.append(adaptation_event)\n\n        return events",
+          "metadata": {
+            "id": 3,
+            "name": "adapt_to_education_outcome",
+            "condition": null,
+            "description": "Adjusts the individual's behavior and decisions based on the educational outcomes received.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "education_outcome",
+                "type": "string",
+                "context": "event",
+                "description": "Description of the educational outcome for the individual."
+              },
+              {
+                "name": "adaptation_level",
+                "type": "float",
+                "context": "event",
+                "description": "Quantitative measure of adaptation to educational outcomes."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "education_adaptation_status",
+                "type": "string",
+                "context": "agent",
+                "description": "Status of the individual's adaptation to educational outcomes."
+              }
+            ]
+          }
+        },
+        "4": {
+          "code": "async def integrate_health_outcome(self, event: Event) -> List[Event]:\n        health_outcome = event.health_outcome\n        service_quality = event.service_quality\n\n        observation = f\"Health outcome: {health_outcome}, Service quality: {service_quality}\"\n        instruction = \"\"\"Integrate the received health service outcome into the individual's life. \n        Update the 'health_integration_status' based on the health outcome and service quality. \n        Determine the appropriate target_ids for sending the HealthIntegrationCompletedEvent. \n        Please return the information in the following JSON format:\n\n        {\n        \"health_integration_status\": \"<Updated status of health service outcome integration>\",\n        \"target_ids\": [\"<The string ID(s) of the target agent(s)>\"]\n        }\n        \"\"\"\n\n        result = await self.generate_reaction(instruction, observation)\n\n        health_integration_status = result.get('health_integration_status', None)\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        self.profile.update_data(\"health_integration_status\", health_integration_status)\n\n        events = []\n        for target_id in target_ids:\n            integration_event = HealthIntegrationCompletedEvent(self.profile_id, target_id, integration_status=health_integration_status)\n            events.append(integration_event)\n\n        return events",
+          "metadata": {
+            "id": 4,
+            "name": "integrate_health_outcome",
+            "condition": null,
+            "description": "Incorporates health service outcomes into the individual's life, influencing future health decisions.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "health_outcome",
+                "type": "string",
+                "context": "event",
+                "description": "Description of the healthcare service outcome for the individual."
+              },
+              {
+                "name": "service_quality",
+                "type": "float",
+                "context": "event",
+                "description": "Quantitative measure of healthcare service quality."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "health_integration_status",
+                "type": "string",
+                "context": "agent",
+                "description": "Status of health service outcome integration."
+              }
+            ]
+          }
+        },
+        "5": {
+          "code": "async def adjust_to_policy_changes(self, event: Event) -> List[Event]:\n        policy_effect = event.policy_effect\n        impact_level = event.impact_level\n\n        observation = f\"Policy effect: {policy_effect}, Impact level: {impact_level}\"\n\n        instruction = \"\"\"Based on the policy effect and impact level, determine how the individual agent should adjust its decisions and behaviors. \n        This adjustment should be reflected in the agent's profile by updating the 'adjustment_status'. \n        The agent's relationships are provided, and you need to decide which target_ids should receive the outgoing event. \n        Return the information in the following JSON format:\n\n        {\n        \"adjustment_status\": \"<Updated status of policy adjustment>\",\n        \"target_ids\": [\"<The string ID(s) of target agents>\"]\n        }\n        \"\"\"\n\n        result = await self.generate_reaction(instruction, observation)\n\n        adjustment_status = result.get('adjustment_status', None)\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        self.profile.update_data(\"adjustment_status\", adjustment_status)\n\n        events = []\n        for target_id in target_ids:\n            adjustment_event = PolicyAdjustmentCompletedEvent(self.profile_id, target_id, adjustment_status=adjustment_status)\n            events.append(adjustment_event)\n\n        return events",
+          "metadata": {
+            "id": 5,
+            "name": "adjust_to_policy_changes",
+            "condition": null,
+            "description": "Modifies the individual's decisions and behaviors in response to government policy changes.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "policy_effect",
+                "type": "string",
+                "context": "event",
+                "description": "Description of the policy impact on the individual."
+              },
+              {
+                "name": "impact_level",
+                "type": "float",
+                "context": "event",
+                "description": "Quantitative measure of the policy impact level."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "policy_adjustment_status",
+                "type": "string",
+                "context": "agent",
+                "description": "Status of the individual's adjustment to policy changes."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "FamilyAgent": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "6": {
+          "code": "async def initiate_family_influence(self, event: Event) -> List[Event]:\n        # Check if the event is relevant for triggering the action\n        if event.__class__.__name__ != \"StartEvent\":\n            return []\n\n        # Retrieve necessary agent data\n        family_resources = self.profile.get_data(\"family_resources\", 0.0)\n\n        # Generate instruction for the LLM\n        instruction = f\"\"\"\n        Begin the process of providing support and influence to individual agents, impacting their health and education.\n        Consider the available family resources ({family_resources}) and determine the type and level of support to provide.\n        Please return the information in the following JSON format:\n\n        {{\n        \"support_type\": \"<Type of family support provided>\",\n        \"support_level\": <Quantitative level of support>,\n        \"target_ids\": [\"<The string ID(s) of the IndividualAgent(s)>\"]\n        }}\n        \"\"\"\n\n        # Generate reaction using the LLM\n        observation = f\"Current family resources: {family_resources}\"\n        result = await self.generate_reaction(instruction, observation)\n\n        # Extract data from the LLM response\n        support_type = result.get(\"support_type\", \"\")\n        support_level = result.get(\"support_level\", 0.0)\n        target_ids = result.get(\"target_ids\", None)\n        if target_ids is None:\n            return []\n\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Update agent data\n        self.profile.update_data(\"family_support_provided\", True)\n\n        # Prepare and send FamilySupportEvent to each target individual agent\n        events = []\n        for target_id in target_ids:\n            family_support_event = FamilySupportEvent(\n                self.profile_id, target_id, support_type=support_type, support_level=support_level\n            )\n            events.append(family_support_event)\n\n        return events",
+          "metadata": {
+            "id": 6,
+            "name": "initiate_family_influence",
+            "condition": null,
+            "description": "Begins the process of providing support and influence to individual agents, impacting their health and education.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "family_resources",
+                "type": "float",
+                "context": "agent",
+                "description": "Available resources for supporting individual agents."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "family_support_provided",
+                "type": "boolean",
+                "context": "agent",
+                "description": "Indicates whether family support has been initiated."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "EducationSystemAgent": {
+      "imports": "from typing import Any, List, Optional\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "7": {
+          "code": "async def assess_education_impact(self, event: Event) -> List[Event]:\n        # Condition Check\n        current_life_stage = event.life_stage\n        socioeconomic_background = self.profile.get_data(\"socioeconomic_background\", \"default\")\n        \n        if not (current_life_stage and socioeconomic_background):\n            return []  # Return an empty list if condition is not met\n    \n        # Data Access\n        educational_resources = await self.get_env_data(\"educational_resources\", 0.0)\n        educational_impact = event.educational_impact\n    \n        # Decision Making\n        instruction = \"\"\"Evaluate the impact of educational systems on individual agents based on their current life stage and socioeconomic background.\n        Provide details on the educational outcome and adaptation level for the individual.\n        Return the information in the following JSON format:\n    \n        {\n            \"education_outcome\": \"<Description of the educational outcome>\",\n            \"adaptation_level\": <Quantitative measure of adaptation>,\n            \"target_ids\": [\"<ID of the target IndividualAgent>\"]\n        }\n        \"\"\"\n        \n        observation = f\"Life Stage: {current_life_stage}, Socioeconomic Background: {socioeconomic_background}, Educational Impact: {educational_impact}, Resources: {educational_resources}\"\n        \n        result = await self.generate_reaction(instruction, observation)\n        \n        education_outcome = result.get('education_outcome', \"\")\n        adaptation_level = result.get('adaptation_level', 0.0)\n        target_ids = result.get('target_ids', [])\n        \n        if target_ids is None:\n            target_ids = []\n        elif not isinstance(target_ids, list):\n            target_ids = [target_ids]\n    \n        # Response Processing\n        events = []\n        for target_id in target_ids:\n            education_event = EducationOutcomeEvent(self.profile_id, target_id, education_outcome, adaptation_level)\n            events.append(education_event)\n        \n        return events",
+          "metadata": {
+            "id": 7,
+            "name": "assess_education_impact",
+            "condition": "IndividualAgent's current life stage and socioeconomic background",
+            "description": "Evaluates the impact of educational systems on individual agents, influencing their adaptation and future opportunities.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "educational_resources",
+                "type": "float",
+                "context": "env",
+                "description": "Resources available in the educational system."
+              },
+              {
+                "name": "current_life_stage",
+                "type": "string",
+                "context": "event",
+                "description": "Current life stage of the individual."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "education_impact_assessed",
+                "type": "boolean",
+                "context": "agent",
+                "description": "Indicates whether the educational impact has been assessed."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "HealthcareSystemAgent": {
+      "imports": "from typing import Any, List, Optional\nimport asyncio\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import Event\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "8": {
+          "code": "async def evaluate_health_services(self, event: Event) -> List[Event]:\n        # Condition Check\n        healthcare_resources = await self.get_env_data(\"healthcare_resources\", 0.0)\n        current_health_status = event.health_status\n\n        if not current_health_status or healthcare_resources <= 0.0:\n            return []\n\n        # Instruction for LLM\n        instruction = \"\"\"Evaluate the impact of healthcare services on the individual's health status.\n        Consider the healthcare resources available and the individual's current health status.\n        Return the results in the following JSON format:\n\n        {\n        \"health_outcome\": \"<Description of the healthcare service outcome>\",\n        \"service_quality\": <Quantitative measure of healthcare service quality>,\n        \"target_ids\": [\"<The string ID(s) of the target Individual agent(s)>\"]\n        }\n        \"\"\"\n        observation = f\"Current health status: {current_health_status}, Healthcare resources: {healthcare_resources}\"\n\n        result = await self.generate_reaction(instruction, observation)\n\n        # Parse LLM response\n        health_outcome = result.get('health_outcome', \"\")\n        service_quality = result.get('service_quality', 0.0)\n        target_ids = result.get('target_ids', None)\n\n        if target_ids is None:\n            target_ids = []\n        elif not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Update agent state\n        self.profile.update_data(\"health_services_evaluated\", True)\n\n        # Prepare and send HealthServiceOutcomeEvent\n        events = []\n        for target_id in target_ids:\n            outcome_event = HealthServiceOutcomeEvent(self.profile_id, target_id, health_outcome, service_quality)\n            events.append(outcome_event)\n\n        return events",
+          "metadata": {
+            "id": 8,
+            "name": "evaluate_health_services",
+            "condition": "IndividualAgent's health status and accessibility to healthcare",
+            "description": "Analyzes the effectiveness of healthcare services provided to individual agents, affecting their health outcomes.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "healthcare_resources",
+                "type": "float",
+                "context": "env",
+                "description": "Resources available in the healthcare system."
+              },
+              {
+                "name": "current_health_status",
+                "type": "string",
+                "context": "event",
+                "description": "Current health status of the individual."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "health_services_evaluated",
+                "type": "boolean",
+                "context": "agent",
+                "description": "Indicates whether the health services have been evaluated."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "GovernmentAgent": {
+      "imports": "from typing import Any, List\nimport asyncio\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import Event\nfrom onesim.relationship import RelationshipManager\nfrom .events import PolicyImpactEvent, StartEvent",
+      "handlers": {
+        "9": {
+          "code": "async def implement_policy(self, event: Event) -> List[Event]:\n        # Check if the event is 'StartEvent' and proceed if it is\n        if not isinstance(event, StartEvent):\n            return []\n\n        # Retrieve current socioeconomic conditions and policy requirements\n        socioeconomic_conditions = await self.get_env_data(\"socioeconomic_conditions\", \"default\")\n        policy_requirements = await self.get_env_data(\"policy_requirements\", \"default\")\n\n        # Check condition: Current socioeconomic conditions and policy requirements\n        if not (socioeconomic_conditions and policy_requirements):\n            return []\n\n        # Retrieve policy details from agent's profile\n        policy_details = self.profile.get_data(\"policy_details\", \"default\")\n\n        # Generate reaction using generate_reaction\n        instruction = \"\"\"\n        Please determine the target individual agents affected by the policy implementation.\n        Consider the current socioeconomic conditions and the policy details.\n        Return the information in the following JSON format:\n\n        {\n        \"target_ids\": [\"<A list of target individual agent IDs>\"],\n        \"policy_effect\": \"<Description of the policy impact on the individual>\",\n        \"impact_level\": <Quantitative measure of the policy impact level>\n        }\n        \"\"\"\n        observation = f\"Policy Details: {policy_details}, Socioeconomic Conditions: {socioeconomic_conditions}\"\n        result = await self.generate_reaction(instruction, observation)\n\n        # Parse the LLM's JSON response\n        target_ids = result.get('target_ids', [])\n        policy_effect = result.get('policy_effect', \"\")\n        impact_level = result.get('impact_level', 0.0)\n\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids] if target_ids is not None else []\n\n        # Update agent's profile to indicate the policy has been implemented\n        self.profile.update_data(\"policy_implemented\", True)\n\n        # Prepare and send PolicyImpactEvent to each target individual agent\n        events = []\n        for target_id in target_ids:\n            policy_impact_event = PolicyImpactEvent(self.profile_id, target_id, policy_effect=policy_effect, impact_level=impact_level)\n            events.append(policy_impact_event)\n\n        return events",
+          "metadata": {
+            "id": 9,
+            "name": "implement_policy",
+            "condition": "Current socioeconomic conditions and policy requirements",
+            "description": "Enacts government policies that influence the socioeconomic environment and individual agent decisions.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "policy_details",
+                "type": "string",
+                "context": "agent",
+                "description": "Details of the policy to be implemented."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "policy_implemented",
+                "type": "boolean",
+                "context": "agent",
+                "description": "Indicates whether the policy has been successfully implemented."
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "events": {
+    "imports": "from onesim.events import Event\nfrom typing import Any",
+    "definitions": {
+      "-1": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": -1,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "IndividualAgent",
+          "to_action_name": "begin_life_stage",
+          "from_action_id": 0,
+          "to_action_id": 1,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for individual life stage simulation",
+          "fields": []
+        }
+      },
+      "-2": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": -2,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "FamilyAgent",
+          "to_action_name": "initiate_family_influence",
+          "from_action_id": 0,
+          "to_action_id": 6,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for family influence on individual agents",
+          "fields": []
+        }
+      },
+      "-3": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": -3,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "GovernmentAgent",
+          "to_action_name": "implement_policy",
+          "from_action_id": 0,
+          "to_action_id": 9,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for government policy implementation",
+          "fields": []
+        }
+      },
+      "1": {
+        "code": "class LifeStageProgressEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        educational_impact: float = 0.0,\n        life_stage: str = \"\",\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.educational_impact = educational_impact\n        self.life_stage = life_stage",
+        "metadata": {
+          "id": 1,
+          "from_agent_type": "IndividualAgent",
+          "from_action_name": "begin_life_stage",
+          "to_agent_type": "EducationSystemAgent",
+          "to_action_name": "assess_education_impact",
+          "from_action_id": 1,
+          "to_action_id": 7,
+          "event_name": "LifeStageProgressEvent",
+          "event_info": "Event to assess educational impact on life stage",
+          "fields": [
+            {
+              "name": "educational_impact",
+              "type": "float",
+              "default_value": "0.0",
+              "description": "Quantitative measure of educational impact on the individual's life stage"
+            },
+            {
+              "name": "life_stage",
+              "type": "string",
+              "default_value": "",
+              "description": "Current life stage of the individual"
+            }
+          ]
+        }
+      },
+      "2": {
+        "code": "class LifeStageHealthEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        health_services_impact: float = 0.0,\n        health_status: str = \"\",\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.health_services_impact = health_services_impact\n        self.health_status = health_status",
+        "metadata": {
+          "id": 2,
+          "from_agent_type": "IndividualAgent",
+          "from_action_name": "begin_life_stage",
+          "to_agent_type": "HealthcareSystemAgent",
+          "to_action_name": "evaluate_health_services",
+          "from_action_id": 1,
+          "to_action_id": 8,
+          "event_name": "LifeStageHealthEvent",
+          "event_info": "Event to evaluate health services impact on life stage",
+          "fields": [
+            {
+              "name": "health_services_impact",
+              "type": "float",
+              "default_value": "0.0",
+              "description": "Quantitative measure of health services impact on the individual's life stage"
+            },
+            {
+              "name": "health_status",
+              "type": "string",
+              "default_value": "",
+              "description": "Current health status of the individual"
+            }
+          ]
+        }
+      },
+      "3": {
+        "code": "class FamilySupportIntegratedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        integration_status: str = 'completed',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.integration_status = integration_status",
+        "metadata": {
+          "id": 3,
+          "from_agent_type": "IndividualAgent",
+          "from_action_name": "receive_family_support",
+          "to_agent_type": "EnvAgent",
+          "to_action_name": "terminate",
+          "from_action_id": 2,
+          "to_action_id": -1,
+          "event_name": "FamilySupportIntegratedEvent",
+          "event_info": "Final event indicating integration of family support",
+          "fields": [
+            {
+              "name": "integration_status",
+              "type": "string",
+              "default_value": "completed",
+              "description": "Status indicating completion of family support integration"
+            }
+          ]
+        }
+      },
+      "4": {
+        "code": "class EducationAdaptationCompletedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        adaptation_status: str = 'completed',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.adaptation_status = adaptation_status",
+        "metadata": {
+          "id": 4,
+          "from_agent_type": "IndividualAgent",
+          "from_action_name": "adapt_to_education_outcome",
+          "to_agent_type": "EnvAgent",
+          "to_action_name": "terminate",
+          "from_action_id": 3,
+          "to_action_id": -1,
+          "event_name": "EducationAdaptationCompletedEvent",
+          "event_info": "Final event indicating adaptation to education outcome",
+          "fields": [
+            {
+              "name": "adaptation_status",
+              "type": "string",
+              "default_value": "completed",
+              "description": "Status indicating completion of education adaptation"
+            }
+          ]
+        }
+      },
+      "5": {
+        "code": "class HealthIntegrationCompletedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        integration_status: str = 'completed',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.integration_status = integration_status",
+        "metadata": {
+          "id": 5,
+          "from_agent_type": "IndividualAgent",
+          "from_action_name": "integrate_health_outcome",
+          "to_agent_type": "EnvAgent",
+          "to_action_name": "terminate",
+          "from_action_id": 4,
+          "to_action_id": -1,
+          "event_name": "HealthIntegrationCompletedEvent",
+          "event_info": "Final event indicating integration of health outcome",
+          "fields": [
+            {
+              "name": "integration_status",
+              "type": "string",
+              "default_value": "completed",
+              "description": "Status indicating completion of health outcome integration"
+            }
+          ]
+        }
+      },
+      "6": {
+        "code": "class PolicyAdjustmentCompletedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        adjustment_status: str = 'completed',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.adjustment_status = adjustment_status",
+        "metadata": {
+          "id": 6,
+          "from_agent_type": "IndividualAgent",
+          "from_action_name": "adjust_to_policy_changes",
+          "to_agent_type": "EnvAgent",
+          "to_action_name": "terminate",
+          "from_action_id": 5,
+          "to_action_id": -1,
+          "event_name": "PolicyAdjustmentCompletedEvent",
+          "event_info": "Final event indicating adjustment to policy changes",
+          "fields": [
+            {
+              "name": "adjustment_status",
+              "type": "string",
+              "default_value": "completed",
+              "description": "Status indicating completion of policy adjustment"
+            }
+          ]
+        }
+      },
+      "7": {
+        "code": "class FamilySupportEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        support_type: str = \"\",\n        support_level: float = 0.0,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.support_type = support_type\n        self.support_level = support_level",
+        "metadata": {
+          "id": 7,
+          "from_agent_type": "FamilyAgent",
+          "from_action_name": "initiate_family_influence",
+          "to_agent_type": "IndividualAgent",
+          "to_action_name": "receive_family_support",
+          "from_action_id": 6,
+          "to_action_id": 2,
+          "event_name": "FamilySupportEvent",
+          "event_info": "Event to provide family support to individual agents",
+          "fields": [
+            {
+              "name": "support_type",
+              "type": "string",
+              "default_value": "",
+              "description": "Type of family support provided to the individual"
+            },
+            {
+              "name": "support_level",
+              "type": "float",
+              "default_value": "0.0",
+              "description": "Quantitative level of support provided"
+            }
+          ]
+        }
+      },
+      "8": {
+        "code": "class EducationOutcomeEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        education_outcome: str = \"\",\n        adaptation_level: float = 0.0,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.education_outcome = education_outcome\n        self.adaptation_level = adaptation_level",
+        "metadata": {
+          "id": 8,
+          "from_agent_type": "EducationSystemAgent",
+          "from_action_name": "assess_education_impact",
+          "to_agent_type": "IndividualAgent",
+          "to_action_name": "adapt_to_education_outcome",
+          "from_action_id": 7,
+          "to_action_id": 3,
+          "event_name": "EducationOutcomeEvent",
+          "event_info": "Event reflecting the educational outcome adaptation",
+          "fields": [
+            {
+              "name": "education_outcome",
+              "type": "string",
+              "default_value": "",
+              "description": "Description of the educational outcome for the individual"
+            },
+            {
+              "name": "adaptation_level",
+              "type": "float",
+              "default_value": "0.0",
+              "description": "Quantitative measure of adaptation to educational outcomes"
+            }
+          ]
+        }
+      },
+      "9": {
+        "code": "class HealthServiceOutcomeEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        health_outcome: str = \"\",\n        service_quality: float = 0.0,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.health_outcome = health_outcome\n        self.service_quality = service_quality",
+        "metadata": {
+          "id": 9,
+          "from_agent_type": "HealthcareSystemAgent",
+          "from_action_name": "evaluate_health_services",
+          "to_agent_type": "IndividualAgent",
+          "to_action_name": "integrate_health_outcome",
+          "from_action_id": 8,
+          "to_action_id": 4,
+          "event_name": "HealthServiceOutcomeEvent",
+          "event_info": "Event reflecting healthcare service outcome integration",
+          "fields": [
+            {
+              "name": "health_outcome",
+              "type": "string",
+              "default_value": "",
+              "description": "Description of the healthcare service outcome for the individual"
+            },
+            {
+              "name": "service_quality",
+              "type": "float",
+              "default_value": "0.0",
+              "description": "Quantitative measure of healthcare service quality"
+            }
+          ]
+        }
+      },
+      "10": {
+        "code": "class PolicyImpactEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        policy_effect: str = \"\",\n        impact_level: float = 0.0,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.policy_effect = policy_effect\n        self.impact_level = impact_level",
+        "metadata": {
+          "id": 10,
+          "from_agent_type": "GovernmentAgent",
+          "from_action_name": "implement_policy",
+          "to_agent_type": "IndividualAgent",
+          "to_action_name": "adjust_to_policy_changes",
+          "from_action_id": 9,
+          "to_action_id": 5,
+          "event_name": "PolicyImpactEvent",
+          "event_info": "Event reflecting policy impact on individual agents",
+          "fields": [
+            {
+              "name": "policy_effect",
+              "type": "string",
+              "default_value": "",
+              "description": "Description of the policy impact on the individual"
+            },
+            {
+              "name": "impact_level",
+              "type": "float",
+              "default_value": "0.0",
+              "description": "Quantitative measure of the policy impact level"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

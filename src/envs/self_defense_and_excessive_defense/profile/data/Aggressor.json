@@ -1,0 +1,97 @@
+[
+    {
+        "name": "Corporate Saboteur",
+        "threat_level": 50,
+        "aggression_type": "psychological",
+        "motivation": "To damage the reputation of a rival company and gain a competitive edge in the market.",
+        "aggression_intensity": 27,
+        "communication_style": "aggressive",
+        "agent_type": "Aggressor",
+        "aggressor_behavior": "initiating_conflict",
+        "defender_id": "unknown_defender",
+        "conflict_history": [
+            {
+                "date": "2023-10-01",
+                "event": "verbal_threat",
+                "intensity": 60
+            }
+        ],
+        "id": "0"
+    },
+    {
+        "name": "Political Extremist",
+        "threat_level": 50,
+        "aggression_type": "psychological",
+        "motivation": "To promote a radical ideology and disrupt the existing political system.",
+        "aggression_intensity": 40,
+        "communication_style": "assertive",
+        "agent_type": "Aggressor",
+        "aggressor_behavior": "initiating_conflict",
+        "defender_id": "unknown_defender",
+        "conflict_history": [
+            {
+                "date": "2023-10-01",
+                "event": "verbal_threat",
+                "intensity": 60
+            }
+        ],
+        "id": "1"
+    },
+    {
+        "name": "Cyber Hacker",
+        "threat_level": 50,
+        "aggression_type": "verbal",
+        "motivation": "To steal sensitive data for financial gain and to sell it on the black market.",
+        "aggression_intensity": 73,
+        "communication_style": "aggressive",
+        "agent_type": "Aggressor",
+        "aggressor_behavior": "initiating_conflict",
+        "defender_id": "unknown_defender",
+        "conflict_history": [
+            {
+                "date": "2023-10-01",
+                "event": "verbal_threat",
+                "intensity": 60
+            }
+        ],
+        "id": "2"
+    },
+    {
+        "name": "Eco-Terrorist",
+        "threat_level": 50,
+        "aggression_type": "verbal",
+        "motivation": "To draw attention to environmental issues by sabotaging industrial facilities.",
+        "aggression_intensity": 78,
+        "communication_style": "assertive",
+        "agent_type": "Aggressor",
+        "aggressor_behavior": "initiating_conflict",
+        "defender_id": "unknown_defender",
+        "conflict_history": [
+            {
+                "date": "2023-10-01",
+                "event": "verbal_threat",
+                "intensity": 60
+            }
+        ],
+        "id": "3"
+    },
+    {
+        "name": "Revenge Seeker",
+        "threat_level": 50,
+        "aggression_type": "physical",
+        "motivation": "To retaliate against a perceived injustice or personal grievance.",
+        "aggression_intensity": 73,
+        "communication_style": "assertive",
+        "agent_type": "Aggressor",
+        "aggressor_behavior": "initiating_conflict",
+        "defender_id": "unknown_defender",
+        "conflict_history": [
+            {
+                "date": "2023-10-01",
+                "event": "verbal_threat",
+                "intensity": 60
+            }
+        ],
+        "id": "4"
+    }
+]

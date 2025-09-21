@@ -1,0 +1,90 @@
+{
+    "company_names": [
+        "TechCorp Inc.",
+        "GreenEnergy Solutions",
+        "UrbanRetail Group",
+        "HealthCare Dynamics",
+        "AutoMotive Innovations"
+    ],
+    "bank_names": [
+        "Global Finance Bank",
+        "Community Trust Bank",
+        "Capital Investment Partners"
+    ],
+    "consumer_profiles": [
+        "Young Professionals",
+        "Families with Children",
+        "Retirees"
+    ],
+    "cash_reserves": [
+        523000,
+        1125000,
+        375000,
+        980000,
+        645000
+    ],
+    "loan_interest_rates": [
+        3.75,
+        4.25,
+        5.0
+    ],
+    "consumer_spending_habits": [
+        "High-tech gadgets",
+        "Organic groceries",
+        "Luxury automobiles"
+    ],
+    "company_credit_ratings": [
+        "A+",
+        "B-",
+        "BBB",
+        "AA",
+        "CCC"
+    ],
+    "projected_revenue": [
+        750000,
+        2100000,
+        450000,
+        1250000,
+        600000
+    ],
+    "expenditure": [
+        530000,
+        1800000,
+        300000,
+        850000,
+        450000
+    ],
+    "debt_levels": [
+        250000,
+        500000,
+        150000,
+        400000,
+        200000
+    ],
+    "default_risk": [
+        false,
+        true,
+        false,
+        false,
+        true
+    ],
+    "loan_amounts": [
+        150000,
+        300000,
+        100000,
+        250000,
+        180000
+    ],
+    "repayment_history": [
+        "Good",
+        "Average",
+        "Poor",
+        "Excellent",
+        "Fair"
+    ],
+    "economic_conditions": [
+        "Stable",
+        "Growing",
+        "Recession"
+    ]
+}

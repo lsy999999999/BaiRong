@@ -1,0 +1,256 @@
+{
+    "-1": {
+        "id": -1,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "IndividualAgent",
+        "to_action_name": "form_initial_judgment",
+        "from_action_id": 0,
+        "to_action_id": 1,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for individuals to form initial opinions",
+        "fields": []
+    },
+    "-2": {
+        "id": -2,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "GroupAgent",
+        "to_action_name": "track_opinion_distribution",
+        "from_action_id": 0,
+        "to_action_id": 4,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for groups to start tracking opinions",
+        "fields": []
+    },
+    "-3": {
+        "id": -3,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "OpinionLeaderAgent",
+        "to_action_name": "exert_influence",
+        "from_action_id": 0,
+        "to_action_id": 6,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for opinion leaders to exert influence",
+        "fields": []
+    },
+    "1": {
+        "id": 1,
+        "from_agent_type": "IndividualAgent",
+        "from_action_name": "form_initial_judgment",
+        "to_agent_type": "GroupAgent",
+        "to_action_name": "update_group_opinion",
+        "from_action_id": 1,
+        "to_action_id": 5,
+        "event_name": "InitialJudgmentFormedEvent",
+        "event_info": "Individual's initial judgment is shared with the group",
+        "fields": [
+            {
+                "name": "individual_id",
+                "type": "str",
+                "default_value": "",
+                "description": "Unique identifier of the individual forming the judgment"
+            },
+            {
+                "name": "initial_judgment",
+                "type": "str",
+                "default_value": "",
+                "description": "The initial judgment or opinion formed by the individual"
+            }
+        ]
+    },
+    "2": {
+        "id": 2,
+        "from_agent_type": "IndividualAgent",
+        "from_action_name": "decide_conformity",
+        "to_agent_type": "GroupAgent",
+        "to_action_name": "update_group_opinion",
+        "from_action_id": 2,
+        "to_action_id": 5,
+        "event_name": "ConformityDecisionEvent",
+        "event_info": "Individual's decision to conform or not is shared with the group",
+        "fields": [
+            {
+                "name": "individual_id",
+                "type": "str",
+                "default_value": "",
+                "description": "Unique identifier of the individual making the conformity decision"
+            },
+            {
+                "name": "conformity_decision",
+                "type": "bool",
+                "default_value": false,
+                "description": "Whether the individual decides to conform (true) or not (false)"
+            }
+        ]
+    },
+    "3": {
+        "id": 3,
+        "from_agent_type": "IndividualAgent",
+        "from_action_name": "update_internal_belief",
+        "to_agent_type": "GroupAgent",
+        "to_action_name": "update_group_opinion",
+        "from_action_id": 3,
+        "to_action_id": 5,
+        "event_name": "BeliefUpdatedEvent",
+        "event_info": "Individual updates belief and shares with the group",
+        "fields": [
+            {
+                "name": "individual_id",
+                "type": "str",
+                "default_value": "",
+                "description": "Unique identifier of the individual updating their belief"
+            },
+            {
+                "name": "updated_belief",
+                "type": "str",
+                "default_value": "",
+                "description": "The new belief or opinion after the update"
+            }
+        ]
+    },
+    "4": {
+        "id": 4,
+        "from_agent_type": "GroupAgent",
+        "from_action_name": "track_opinion_distribution",
+        "to_agent_type": "DecisionContextAgent",
+        "to_action_name": "handle_decision_context",
+        "from_action_id": 4,
+        "to_action_id": 7,
+        "event_name": "OpinionDistributionTrackedEvent",
+        "event_info": "Group's opinion distribution is tracked and sent to decision context",
+        "fields": [
+            {
+                "name": "group_id",
+                "type": "str",
+                "default_value": "",
+                "description": "Unique identifier of the group whose opinion distribution is tracked"
+            },
+            {
+                "name": "opinion_distribution",
+                "type": "dict",
+                "default_value": {},
+                "description": "Current distribution of opinions within the group"
+            }
+        ]
+    },
+    "5": {
+        "id": 5,
+        "from_agent_type": "GroupAgent",
+        "from_action_name": "update_group_opinion",
+        "to_agent_type": "DecisionContextAgent",
+        "to_action_name": "handle_decision_context",
+        "from_action_id": 5,
+        "to_action_id": 7,
+        "event_name": "GroupOpinionUpdatedEvent",
+        "event_info": "Group opinion updated based on individual inputs and sent to decision context",
+        "fields": [
+            {
+                "name": "group_id",
+                "type": "str",
+                "default_value": "",
+                "description": "Unique identifier of the group updating its opinion"
+            },
+            {
+                "name": "updated_group_opinion",
+                "type": "str",
+                "default_value": "",
+                "description": "The updated collective opinion of the group"
+            }
+        ]
+    },
+    "6": {
+        "id": 6,
+        "from_agent_type": "OpinionLeaderAgent",
+        "from_action_name": "exert_influence",
+        "to_agent_type": "IndividualAgent",
+        "to_action_name": "decide_conformity",
+        "from_action_id": 6,
+        "to_action_id": 2,
+        "event_name": "InfluenceExertedEvent",
+        "event_info": "Leader's influence exerted on individuals for conformity decision",
+        "fields": [
+            {
+                "name": "leader_id",
+                "type": "str",
+                "default_value": "",
+                "description": "Unique identifier of the opinion leader exerting influence"
+            },
+            {
+                "name": "target_individual_id",
+                "type": "str",
+                "default_value": "",
+                "description": "Unique identifier of the individual being influenced"
+            },
+            {
+                "name": "influence_strength",
+                "type": "float",
+                "default_value": 0.0,
+                "description": "Strength of the influence exerted by the leader"
+            }
+        ]
+    },
+    "7": {
+        "id": 7,
+        "from_agent_type": "OpinionLeaderAgent",
+        "from_action_name": "exert_influence",
+        "to_agent_type": "IndividualAgent",
+        "to_action_name": "update_internal_belief",
+        "from_action_id": 6,
+        "to_action_id": 3,
+        "event_name": "LeaderInfluenceUpdatedEvent",
+        "event_info": "Leader's influence leads to belief update in individuals",
+        "fields": [
+            {
+                "name": "leader_id",
+                "type": "str",
+                "default_value": "",
+                "description": "Unique identifier of the opinion leader whose influence is being updated"
+            },
+            {
+                "name": "target_individual_id",
+                "type": "str",
+                "default_value": "",
+                "description": "Unique identifier of the individual whose belief is updated"
+            },
+            {
+                "name": "updated_belief",
+                "type": "str",
+                "default_value": "",
+                "description": "The new belief of the individual after leader's influence"
+            }
+        ]
+    },
+    "8": {
+        "id": 8,
+        "from_agent_type": "DecisionContextAgent",
+        "from_action_name": "handle_decision_context",
+        "to_agent_type": "EnvAgent",
+        "to_action_name": "terminate",
+        "from_action_id": 7,
+        "to_action_id": -1,
+        "event_name": "DecisionContextHandledEvent",
+        "event_info": "Decision context processed and results sent to environment for termination",
+        "fields": [
+            {
+                "name": "decision_context_id",
+                "type": "str",
+                "default_value": "",
+                "description": "Unique identifier of the decision context being handled"
+            },
+            {
+                "name": "completion_status",
+                "type": "str",
+                "default_value": "pending",
+                "description": "Status of the decision context processing, e.g., completed, pending"
+            },
+            {
+                "name": "results",
+                "type": "dict",
+                "default_value": {},
+                "description": "Results or outcomes of the decision context handling"
+            }
+        ]
+    }
+}

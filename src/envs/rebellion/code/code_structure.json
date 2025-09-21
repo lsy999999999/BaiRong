@@ -1,0 +1,323 @@
+{
+  "agents": {
+    "Citizen": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "1": {
+          "code": "async def evaluate_grievance(self, event: Event) -> List[Event]:\n        if event.__class__.__name__ != \"StartEvent\":\n            return []\n\n        personal_experience = self.profile.get_data(\"personal_experience\", 0.0)\n        social_influence = await self.get_env_data(\"social_influence\", 0.0)\n\n        instruction = \"\"\"Evaluate the citizen's grievance level based on their personal experience and social influence.\n        Return the evaluation in the following JSON format:\n\n        {\n        \"grievance_level\": <Calculated grievance level as a float>,\n        \"target_ids\": [\"<The string ID(s) of the Citizen agent(s) to decide on rebellion>\"]\n        }\n        \"\"\"\n\n        observation = f\"Personal experience: {personal_experience}, Social influence: {social_influence}\"\n\n        result = await self.generate_reaction(instruction, observation)\n\n        grievance_level = result.get('grievance_level', 0.0)\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        self.profile.update_data(\"grievance_level\", grievance_level)\n\n        events = []\n        for target_id in target_ids:\n            grievance_event = GrievanceEvaluatedEvent(self.profile_id, target_id, grievance_level=grievance_level, citizen_id=self.profile_id)\n            events.append(grievance_event)\n\n        return events",
+          "metadata": {
+            "id": 1,
+            "name": "evaluate_grievance",
+            "condition": null,
+            "description": "The citizen evaluates their personal level of grievance to determine if the current regime is unjust enough to consider rebellion.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "personal_experience",
+                "type": "float",
+                "context": "agent",
+                "description": "The citizen's personal experience of injustice and dissatisfaction."
+              },
+              {
+                "name": "social_influence",
+                "type": "float",
+                "context": "env",
+                "description": "The influence of social networks and media on the citizen's perception of injustice."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "grievance_level",
+                "type": "float",
+                "context": "agent",
+                "description": "Updated grievance level after evaluation."
+              }
+            ]
+          }
+        },
+        "2": {
+          "code": "async def decide_rebellion(self, event: Event) -> List[Event]:\n        if event.__class__.__name__ != \"GrievanceEvaluatedEvent\":\n            return []\n\n        grievance_level = event.grievance_level\n        citizen_id = event.citizen_id\n\n        grievance_level = self.profile.get_data(\"grievance_level\", grievance_level)\n\n        observation = f\"Grievance level: {grievance_level}, Citizen ID: {citizen_id}\"\n        instruction = \"\"\"Based on the grievance level, decide whether to participate in rebellion.\n        If grievance_level exceeds a predefined threshold, decide to rebel. Otherwise, decide not to rebel.\n        Return the decision and target_ids in the following JSON format:\n        \n        {\n        \"rebellion_decision\": \"<true or false>\",\n        \"target_ids\": [\"<The string ID(s) of the Government agent(s) or 'ENV'>\"]\n        }\n        \"\"\"\n\n        result = await self.generate_reaction(instruction, observation)\n\n        rebellion_decision = result.get('rebellion_decision', \"false\")\n        rebellion_decision = rebellion_decision.lower() == \"true\"\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        self.profile.update_data(\"rebellion_decision\", rebellion_decision)\n\n        events = []\n        if rebellion_decision:\n            for target_id in target_ids:\n                rebellion_event = RebellionDecisionEvent(citizen_id, target_id, citizen_id=citizen_id, decision=True)\n                events.append(rebellion_event)\n        else:\n            for target_id in target_ids:\n                no_rebellion_event = NoRebellionEvent(citizen_id, target_id, citizen_id=citizen_id, decision=False)\n                events.append(no_rebellion_event)\n\n        return events",
+          "metadata": {
+            "id": 2,
+            "name": "decide_rebellion",
+            "condition": "GrievanceEvaluatedEvent",
+            "description": "After evaluating their grievance, the citizen decides whether to participate in rebellion based on their grievance level.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "grievance_level",
+                "type": "float",
+                "context": "agent",
+                "description": "The level of grievance evaluated by the citizen."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "rebellion_decision",
+                "type": "bool",
+                "context": "agent",
+                "description": "Indicates whether the citizen decides to participate in rebellion."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "Government": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "3": {
+          "code": "async def assess_rebellion(self, event: Event) -> List[Event]:\n        # Retrieve required environmental data\n        public_discontent = await self.get_env_data(\"public_discontent\", 0.0)\n        reported_incidents = await self.get_env_data(\"reported_incidents\", 0)\n\n        # Prepare observation and instruction for the LLM\n        observation = f\"Public discontent: {public_discontent}, Reported incidents: {reported_incidents}\"\n        instruction = \"\"\"\n        Calculate the rebellion level based on public discontent and reported incidents.\n        Please return the information in the following JSON format:\n        \n        {\n        \"rebellion_level\": <Calculated rebellion level as a float>,\n        \"target_ids\": [\"<The string ID of the Government agent(s) to receive the RebellionAssessedEvent>\"]\n        }\n        \"\"\"\n\n        # Generate reaction using the LLM\n        result = await self.generate_reaction(instruction, observation)\n\n        # Extract results from the LLM's response\n        rebellion_level = result.get('rebellion_level', 0.0)\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Prepare and send the RebellionAssessedEvent to the specified target_ids\n        events = []\n        for target_id in target_ids:\n            rebellion_assessed_event = RebellionAssessedEvent(\n                self.profile_id,\n                target_id,\n                rebellion_level=rebellion_level,\n                government_id=self.profile_id\n            )\n            events.append(rebellion_assessed_event)\n\n        return events",
+          "metadata": {
+            "id": 3,
+            "name": "assess_rebellion",
+            "condition": null,
+            "description": "The government assesses the current level of rebellion activity to determine the necessary response.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "public_discontent",
+                "type": "float",
+                "context": "env",
+                "description": "Overall level of public discontent as perceived by the government."
+              },
+              {
+                "name": "reported_incidents",
+                "type": "int",
+                "context": "env",
+                "description": "Number of rebellion incidents reported to the government."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "rebellion_level",
+                "type": "float",
+                "context": "agent",
+                "description": "The assessed level of rebellion by the government."
+              }
+            ]
+          }
+        },
+        "4": {
+          "code": "async def implement_repression(self, event: Event) -> List[Event]:\n        # Condition Check\n        if event.__class__.__name__ not in [\"RebellionAssessedEvent\", \"RebellionDecisionEvent\"]:\n            return []\n\n        # Retrieve required variables\n        rebellion_level = getattr(event, 'rebellion_level', self.profile.get_data(\"rebellion_level\", 0.0))\n        available_resources = await self.get_env_data(\"available_resources\", 0.0)\n\n        # Generate decision using LLM\n        observation = f\"Rebellion Level: {rebellion_level}, Available Resources: {available_resources}\"\n        instruction = \"\"\"Decide on a repression strategy to manage rebellion based on the rebellion level and available resources. \n        Please return the information in the following JSON format:\n    \n        {\n        \"repression_strategy\": \"<The strategy implemented by the government>\",\n        \"effectiveness\": <The effectiveness of the strategy as a float>,\n        \"target_ids\": [\"<The string ID of the EnvAgent>\"]\n        }\n        \"\"\"\n        \n        result = await self.generate_reaction(instruction, observation)\n\n        # Parse response\n        repression_strategy = result.get('repression_strategy', \"none\")\n        effectiveness = result.get('effectiveness', 0.0)\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Update agent state\n        self.profile.update_data(\"repression_strategy\", repression_strategy)\n        self.profile.update_data(\"effectiveness\", effectiveness)\n\n        # Create and send events\n        events = []\n        for target_id in target_ids:\n            repression_event = RepressionImplementedEvent(self.profile_id, target_id, repression_strategy, effectiveness, self.profile_id)\n            events.append(repression_event)\n\n        return events",
+          "metadata": {
+            "id": 4,
+            "name": "implement_repression",
+            "condition": "RebellionAssessedEvent OR RebellionDecisionEvent",
+            "description": "The government implements a repression strategy to manage rebellion based on the assessed rebellion level.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "rebellion_level",
+                "type": "float",
+                "context": "agent",
+                "description": "The assessed level of rebellion by the government."
+              },
+              {
+                "name": "available_resources",
+                "type": "float",
+                "context": "env",
+                "description": "Resources available to the government for implementing repression."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "repression_strategy",
+                "type": "string",
+                "context": "agent",
+                "description": "The strategy implemented by the government to manage rebellion."
+              },
+              {
+                "name": "effectiveness",
+                "type": "float",
+                "context": "agent",
+                "description": "The effectiveness of the repression strategy."
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "events": {
+    "imports": "from onesim.events import Event\nfrom typing import Any",
+    "definitions": {
+      "-1": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n                 from_agent_id: str,\n                 to_agent_id: str,\n                 **kwargs: Any\n                 ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": -1,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "Citizen",
+          "to_action_name": "evaluate_grievance",
+          "from_action_id": 0,
+          "to_action_id": 1,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for citizens to assess their grievances",
+          "fields": []
+        }
+      },
+      "-2": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n                 from_agent_id: str,\n                 to_agent_id: str,\n                 **kwargs: Any\n                 ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": -2,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "Government",
+          "to_action_name": "assess_rebellion",
+          "from_action_id": 0,
+          "to_action_id": 3,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for the government to assess the rebellion situation",
+          "fields": []
+        }
+      },
+      "1": {
+        "code": "class GrievanceEvaluatedEvent(Event):\n    def __init__(self,\n                 from_agent_id: str,\n                 to_agent_id: str,\n                 grievance_level: float = 0.0,\n                 citizen_id: str = \"N/A\",\n                 **kwargs: Any\n                 ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.grievance_level = grievance_level\n        self.citizen_id = citizen_id",
+        "metadata": {
+          "id": 1,
+          "from_agent_type": "Citizen",
+          "from_action_name": "evaluate_grievance",
+          "to_agent_type": "Citizen",
+          "to_action_name": "decide_rebellion",
+          "from_action_id": 1,
+          "to_action_id": 2,
+          "event_name": "GrievanceEvaluatedEvent",
+          "event_info": "Citizen evaluates grievance level to decide on rebellion",
+          "fields": [
+            {
+              "name": "grievance_level",
+              "type": "float",
+              "default_value": "0.0",
+              "description": "The level of grievance evaluated by the citizen"
+            },
+            {
+              "name": "citizen_id",
+              "type": "string",
+              "default_value": "N/A",
+              "description": "Unique identifier for the citizen evaluating grievance"
+            }
+          ]
+        }
+      },
+      "2": {
+        "code": "class RebellionDecisionEvent(Event):\n    def __init__(self,\n                 from_agent_id: str,\n                 to_agent_id: str,\n                 citizen_id: str = \"N/A\",\n                 decision: bool = False,\n                 **kwargs: Any\n                 ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.citizen_id = citizen_id\n        self.decision = decision",
+        "metadata": {
+          "id": 2,
+          "from_agent_type": "Citizen",
+          "from_action_name": "decide_rebellion",
+          "to_agent_type": "Government",
+          "to_action_name": "implement_repression",
+          "from_action_id": 2,
+          "to_action_id": 4,
+          "event_name": "RebellionDecisionEvent",
+          "event_info": "Citizen decides to participate in rebellion",
+          "fields": [
+            {
+              "name": "citizen_id",
+              "type": "string",
+              "default_value": "N/A",
+              "description": "Unique identifier for the citizen deciding to rebel"
+            },
+            {
+              "name": "decision",
+              "type": "bool",
+              "default_value": "false",
+              "description": "Indicates if the citizen decided to participate in rebellion"
+            }
+          ]
+        }
+      },
+      "3": {
+        "code": "class NoRebellionEvent(Event):\n    def __init__(self,\n                 from_agent_id: str,\n                 to_agent_id: str,\n                 citizen_id: str = \"N/A\",\n                 decision: bool = True,\n                 **kwargs: Any\n                 ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.citizen_id = citizen_id\n        self.decision = decision",
+        "metadata": {
+          "id": 3,
+          "from_agent_type": "Citizen",
+          "from_action_name": "decide_rebellion",
+          "to_agent_type": "EnvAgent",
+          "to_action_name": "terminate",
+          "from_action_id": 2,
+          "to_action_id": -1,
+          "event_name": "NoRebellionEvent",
+          "event_info": "Citizen decides not to participate in rebellion",
+          "fields": [
+            {
+              "name": "citizen_id",
+              "type": "string",
+              "default_value": "N/A",
+              "description": "Unique identifier for the citizen deciding not to rebel"
+            },
+            {
+              "name": "decision",
+              "type": "bool",
+              "default_value": "true",
+              "description": "Indicates if the citizen decided not to participate in rebellion"
+            }
+          ]
+        }
+      },
+      "4": {
+        "code": "class RebellionAssessedEvent(Event):\n    def __init__(self,\n                 from_agent_id: str,\n                 to_agent_id: str,\n                 rebellion_level: float = 0.0,\n                 government_id: str = \"N/A\",\n                 **kwargs: Any\n                 ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.rebellion_level = rebellion_level\n        self.government_id = government_id",
+        "metadata": {
+          "id": 4,
+          "from_agent_type": "Government",
+          "from_action_name": "assess_rebellion",
+          "to_agent_type": "Government",
+          "to_action_name": "implement_repression",
+          "from_action_id": 3,
+          "to_action_id": 4,
+          "event_name": "RebellionAssessedEvent",
+          "event_info": "Government assesses the level of rebellion",
+          "fields": [
+            {
+              "name": "rebellion_level",
+              "type": "float",
+              "default_value": "0.0",
+              "description": "The assessed level of rebellion by the government"
+            },
+            {
+              "name": "government_id",
+              "type": "string",
+              "default_value": "N/A",
+              "description": "Unique identifier for the government assessing rebellion"
+            }
+          ]
+        }
+      },
+      "5": {
+        "code": "class RepressionImplementedEvent(Event):\n    def __init__(self,\n                 from_agent_id: str,\n                 to_agent_id: str,\n                 repression_strategy: str = \"none\",\n                 effectiveness: float = 0.0,\n                 government_id: str = \"N/A\",\n                 **kwargs: Any\n                 ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.repression_strategy = repression_strategy\n        self.effectiveness = effectiveness\n        self.government_id = government_id",
+        "metadata": {
+          "id": 5,
+          "from_agent_type": "Government",
+          "from_action_name": "implement_repression",
+          "to_agent_type": "EnvAgent",
+          "to_action_name": "terminate",
+          "from_action_id": 4,
+          "to_action_id": -1,
+          "event_name": "RepressionImplementedEvent",
+          "event_info": "Government implements repression strategy to manage rebellion",
+          "fields": [
+            {
+              "name": "repression_strategy",
+              "type": "string",
+              "default_value": "none",
+              "description": "The strategy implemented by the government to manage rebellion"
+            },
+            {
+              "name": "effectiveness",
+              "type": "float",
+              "default_value": "0.0",
+              "description": "The effectiveness of the repression strategy"
+            },
+            {
+              "name": "government_id",
+              "type": "string",
+              "default_value": "N/A",
+              "description": "Unique identifier for the government implementing repression"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

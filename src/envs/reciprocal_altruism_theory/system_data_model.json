@@ -1,0 +1,64 @@
+{
+    "environment": {
+        "variables": [
+            {
+                "name": "network_id",
+                "type": "string",
+                "default_value": null
+            },
+            {
+                "name": "spread_result",
+                "type": "string",
+                "default_value": null
+            },
+            {
+                "name": "completion_status",
+                "type": "boolean",
+                "default_value": null
+            }
+        ]
+    },
+    "agents": {
+        "HealthBehaviorAdvocate": {
+            "variables": [
+                {
+                    "name": "advocate_id",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "behavior_type",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "intensity",
+                    "type": "integer",
+                    "default_value": null
+                },
+                {
+                    "name": "recipient_id",
+                    "type": "string",
+                    "default_value": null
+                }
+            ]
+        },
+        "BehaviorChangeRecipient": {
+            "variables": [
+                {
+                    "name": "commitment_level",
+                    "type": "integer",
+                    "default_value": null
+                },
+                {
+                    "name": "spread_target",
+                    "type": "string",
+                    "default_value": null
+                }
+            ]
+        },
+        "CommunityNetworkFacilitator": {
+            "variables": []
+        }
+    }
+}

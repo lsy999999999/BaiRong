@@ -1,0 +1,97 @@
+[
+    {
+        "name": "Alex Mercer",
+        "age": 41,
+        "manipulation_skill": 60,
+        "social_norm_violation_tendency": 0.8208825768235692,
+        "current_status": "active",
+        "personal_gain_focus": 93,
+        "communication_style": "Charming and manipulative, often using flattery to influence others",
+        "agent_type": "SocialEnvironmentAgent",
+        "empathy_level": 18,
+        "interaction_history": [
+            {
+                "interaction_type": "manipulation",
+                "success": true,
+                "date": "2023-10-01"
+            }
+        ],
+        "id": "5"
+    },
+    {
+        "name": "Jordan Blake",
+        "age": 24,
+        "manipulation_skill": 67,
+        "social_norm_violation_tendency": 0.6443379545424546,
+        "current_status": "active",
+        "personal_gain_focus": 88,
+        "communication_style": "Direct and persuasive, often employing emotional manipulation",
+        "agent_type": "SocialEnvironmentAgent",
+        "empathy_level": 2,
+        "interaction_history": [
+            {
+                "interaction_type": "manipulation",
+                "success": true,
+                "date": "2023-10-01"
+            }
+        ],
+        "id": "6"
+    },
+    {
+        "name": "Taylor Reed",
+        "age": 37,
+        "manipulation_skill": 80,
+        "social_norm_violation_tendency": 0.6734498443076224,
+        "current_status": "active",
+        "personal_gain_focus": 75,
+        "communication_style": "Calculating and strategic, using logic and reason to manipulate situations",
+        "agent_type": "SocialEnvironmentAgent",
+        "empathy_level": 13,
+        "interaction_history": [
+            {
+                "interaction_type": "manipulation",
+                "success": true,
+                "date": "2023-10-01"
+            }
+        ],
+        "id": "7"
+    },
+    {
+        "name": "Morgan Quinn",
+        "age": 56,
+        "manipulation_skill": 61,
+        "social_norm_violation_tendency": 0.7009316771410059,
+        "current_status": "active",
+        "personal_gain_focus": 95,
+        "communication_style": "Subtle and indirect, often using passive-aggressive tactics to sway opinions",
+        "agent_type": "SocialEnvironmentAgent",
+        "empathy_level": 0,
+        "interaction_history": [
+            {
+                "interaction_type": "manipulation",
+                "success": true,
+                "date": "2023-10-01"
+            }
+        ],
+        "id": "8"
+    },
+    {
+        "name": "Casey Hunter",
+        "age": 53,
+        "manipulation_skill": 51,
+        "social_norm_violation_tendency": 0.7697703553193983,
+        "current_status": "active",
+        "personal_gain_focus": 76,
+        "communication_style": "Assertive and domineering, frequently using intimidation to achieve goals",
+        "agent_type": "SocialEnvironmentAgent",
+        "empathy_level": 20,
+        "interaction_history": [
+            {
+                "interaction_type": "manipulation",
+                "success": true,
+                "date": "2023-10-01"
+            }
+        ],
+        "id": "9"
+    }
+]

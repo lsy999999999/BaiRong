@@ -1,0 +1,125 @@
+{
+    "name": {
+        "type": "str",
+        "default": "CommunityAgent",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's designated name in the simulation"
+    },
+    "community_health_data": {
+        "type": "object",
+        "default": {
+            "health_index": 75,
+            "resources": {
+                "clinics": 5,
+                "hospitals": 2
+            }
+        },
+        "private": true,
+        "sampling": "default"
+    },
+    "community_norms": {
+        "type": "list",
+        "default": [
+            "no smoking in public areas",
+            "exercise encouraged"
+        ],
+        "private": false,
+        "sampling": "default",
+        "sample_size": 2
+    },
+    "perceived_susceptibility": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "perceived_severity": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "perceived_benefits": {
+        "type": "float",
+        "default": 0.7,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "perceived_barriers": {
+        "type": "float",
+        "default": 0.3,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "self_efficacy": {
+        "type": "float",
+        "default": 0.6,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "external_cues": {
+        "type": "list",
+        "default": [
+            "health campaign",
+            "community meeting"
+        ],
+        "private": false,
+        "sampling": "default",
+        "sample_size": 2
+    },
+    "interaction_patterns": {
+        "type": "list",
+        "default": [
+            "family_support",
+            "media_influence"
+        ],
+        "private": false,
+        "sampling": "default",
+        "sample_size": 2
+    },
+    "decision_algorithm": {
+        "type": "str",
+        "default": "HBM-based decision making",
+        "private": true,
+        "sampling": "llm",
+        "description": "Algorithm used by the agent to make health-related decisions"
+    },
+    "available_resources": {
+        "type": "list",
+        "default": [
+            "local clinic",
+            "community center"
+        ],
+        "private": false,
+        "sampling": "default",
+        "sample_size": 2
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

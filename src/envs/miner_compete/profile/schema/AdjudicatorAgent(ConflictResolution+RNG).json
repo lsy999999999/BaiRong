@@ -1,0 +1,135 @@
+{
+  "name": {
+    "type": "str",
+    "default": "AdjudicatorAgent",
+    "private": false,
+    "sampling": "llm",
+    "description": "The agent's name"
+  },
+  "energyLevel": {
+    "type": "int",
+    "default": 100,
+    "private": false,
+    "sampling": "random",
+    "range": [
+      50,
+      200
+    ]
+  },
+  "currentStatus": {
+    "type": "str",
+    "default": "ready",
+    "private": false,
+    "sampling": "llm"
+  },
+  "conflictResolutionStrategy": {
+    "type": "str",
+    "default": "highestEnergyWins",
+    "private": false,
+    "sampling": "llm",
+    "choices": [
+      "highestEnergyWins",
+      "randomResolution"
+    ]
+  },
+  "lastDecision": {
+    "type": "str",
+    "default": "awaitingDecision",
+    "private": false,
+    "sampling": "default"
+  },
+  "decisionHistory": {
+    "type": "list",
+    "default": [
+      "initialDecision"
+    ],
+    "private": true,
+    "sampling": "llm",
+    "sample_size": 1
+  },
+  "randomSeed": {
+    "type": "int",
+    "default": 42,
+    "private": true,
+    "sampling": "preset",
+    "range": [
+      1,
+      100
+    ]
+  },
+  "gridPosition": {
+    "type": "list",
+    "default": [
+      5,
+      5
+    ],
+    "private": false,
+    "sampling": "random",
+    "range": [
+      0,
+      9
+    ],
+    "sample_size": 2
+  },
+  "resourceExploitationHistory": {
+    "type": "list",
+    "default": [
+      "initialExploitation"
+    ],
+    "private": true,
+    "sampling": "default",
+    "sample_size": 1
+  },
+  "energyInvestmentHistory": {
+    "type": "list",
+    "default": [
+      "initialInvestment"
+    ],
+    "private": true,
+    "sampling": "default",
+    "sample_size": 1
+  },
+  "landOwnershipStatus": {
+    "type": "str",
+    "default": "unoccupied",
+    "private": false,
+    "sampling": "random",
+    "choices": [
+      "unoccupied",
+      "occupied"
+    ]
+  },
+  "lastConflictOutcome": {
+    "type": "str",
+    "default": "none",
+    "private": false,
+    "sampling": "default"
+  },
+  "energyMaintenanceCost": {
+    "type": "int",
+    "default": 5,
+    "private": false,
+    "sampling": "preset",
+    "range": [
+      5,
+      20
+    ]
+  },
+  "resourceExploitationRate": {
+    "type": "int",
+    "default": 3,
+    "private": false,
+    "sampling": "llm",
+    "range": [
+      1,
+      5
+    ]
+  },
+  "id": {
+    "type": "str",
+    "default": "0",
+    "private": true,
+    "sampling": "default",
+    "description": "Unique id of agent"
+  }
+}

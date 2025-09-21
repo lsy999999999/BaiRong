@@ -1,0 +1,95 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Smith Family",
+        "private": false,
+        "sampling": "llm",
+        "description": "The family name represented by the agent"
+    },
+    "family_health_priorities": {
+        "type": "list",
+        "default": [
+            "exercise",
+            "balanced diet"
+        ],
+        "private": false,
+        "sampling": "default",
+        "sample_size": 2
+    },
+    "support_provided": {
+        "type": "str",
+        "default": "emotional",
+        "private": false,
+        "sampling": "default"
+    },
+    "influence_level": {
+        "type": "int",
+        "default": 50,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0,
+            100
+        ]
+    },
+    "financial_resources": {
+        "type": "float",
+        "default": 1000.0,
+        "private": true,
+        "sampling": "default"
+    },
+    "communication_style": {
+        "type": "str",
+        "default": "supportive",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "supportive",
+            "directive",
+            "collaborative"
+        ]
+    },
+    "health_education_level": {
+        "type": "int",
+        "default": 3,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            1,
+            5
+        ]
+    },
+    "decision_making_speed": {
+        "type": "float",
+        "default": 1.5,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.5,
+            3.0
+        ]
+    },
+    "social_support_network": {
+        "type": "list",
+        "default": [
+            "community center",
+            "local health group"
+        ],
+        "private": false,
+        "sampling": "default",
+        "sample_size": 2
+    },
+    "perceived_health_threat": {
+        "type": "int",
+        "default": 50,
+        "private": false,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

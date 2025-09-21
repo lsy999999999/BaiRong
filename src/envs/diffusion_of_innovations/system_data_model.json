@@ -1,0 +1,73 @@
+{
+    "environment": {
+        "variables": [
+            {
+                "name": "innovation_id",
+                "type": "str",
+                "default_value": null
+            },
+            {
+                "name": "network_connections",
+                "type": "list",
+                "default_value": null
+            },
+            {
+                "name": "relative_advantage",
+                "type": "float",
+                "default_value": null
+            },
+            {
+                "name": "completion_status",
+                "type": "bool",
+                "default_value": null
+            }
+        ]
+    },
+    "agents": {
+        "Innovators": {
+            "variables": [
+                {
+                    "name": "spread_status",
+                    "type": "bool",
+                    "default_value": null
+                }
+            ]
+        },
+        "EarlyAdopters": {
+            "variables": [
+                {
+                    "name": "adoption_decision",
+                    "type": "bool",
+                    "default_value": null
+                }
+            ]
+        },
+        "EarlyMajority": {
+            "variables": [
+                {
+                    "name": "consideration_status",
+                    "type": "bool",
+                    "default_value": null
+                }
+            ]
+        },
+        "LateMajority": {
+            "variables": [
+                {
+                    "name": "broad_acceptance_evaluation",
+                    "type": "bool",
+                    "default_value": null
+                }
+            ]
+        },
+        "Laggards": {
+            "variables": [
+                {
+                    "name": "adoption_status",
+                    "type": "bool",
+                    "default_value": null
+                }
+            ]
+        }
+    }
+}

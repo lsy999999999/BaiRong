@@ -1,0 +1,137 @@
+[
+    {
+        "name": "HydrationHelper",
+        "physiological_needs_status": "awaiting_input",
+        "resources_required": [
+            "water",
+            "food"
+        ],
+        "motivation_level": 50,
+        "current_focus": "physiological",
+        "emotional_state": "neutral",
+        "collaboration_score": 60,
+        "performance_rating": 3.5,
+        "agent_type": "PhysiologicalAgent",
+        "interaction_history": [
+            {
+                "date": "2023-10-01",
+                "interaction_type": "initial_contact"
+            }
+        ],
+        "feedback_received": [
+            {
+                "source": "peer",
+                "feedback": "positive"
+            }
+        ],
+        "id": "0"
+    },
+    {
+        "name": "NutritionNavigator",
+        "physiological_needs_status": "awaiting_input",
+        "resources_required": [
+            "water",
+            "food"
+        ],
+        "motivation_level": 50,
+        "current_focus": "physiological",
+        "emotional_state": "neutral",
+        "collaboration_score": 60,
+        "performance_rating": 3.5,
+        "agent_type": "PhysiologicalAgent",
+        "interaction_history": [
+            {
+                "date": "2023-10-01",
+                "interaction_type": "initial_contact"
+            }
+        ],
+        "feedback_received": [
+            {
+                "source": "peer",
+                "feedback": "positive"
+            }
+        ],
+        "id": "1"
+    },
+    {
+        "name": "SleepSupporter",
+        "physiological_needs_status": "awaiting_input",
+        "resources_required": [
+            "water",
+            "food"
+        ],
+        "motivation_level": 50,
+        "current_focus": "physiological",
+        "emotional_state": "neutral",
+        "collaboration_score": 60,
+        "performance_rating": 3.5,
+        "agent_type": "PhysiologicalAgent",
+        "interaction_history": [
+            {
+                "date": "2023-10-01",
+                "interaction_type": "initial_contact"
+            }
+        ],
+        "feedback_received": [
+            {
+                "source": "peer",
+                "feedback": "positive"
+            }
+        ],
+        "id": "2"
+    },
+    {
+        "name": "BreathBalancer",
+        "physiological_needs_status": "awaiting_input",
+        "resources_required": [
+            "water",
+            "food"
+        ],
+        "motivation_level": 50,
+        "current_focus": "physiological",
+        "emotional_state": "neutral",
+        "collaboration_score": 60,
+        "performance_rating": 3.5,
+        "agent_type": "PhysiologicalAgent",
+        "interaction_history": [
+            {
+                "date": "2023-10-01",
+                "interaction_type": "initial_contact"
+            }
+        ],
+        "feedback_received": [
+            {
+                "source": "peer",
+                "feedback": "positive"
+            }
+        ],
+        "id": "3"
+    },
+    {
+        "name": "RestorationRegulator",
+        "physiological_needs_status": "awaiting_input",
+        "resources_required": [
+            "water",
+            "food"
+        ],
+        "motivation_level": 50,
+        "current_focus": "physiological",
+        "emotional_state": "neutral",
+        "collaboration_score": 60,
+        "performance_rating": 3.5,
+        "agent_type": "PhysiologicalAgent",
+        "interaction_history": [
+            {
+                "date": "2023-10-01",
+                "interaction_type": "initial_contact"
+            }
+        ],
+        "feedback_received": [
+            {
+                "source": "peer",
+                "feedback": "positive"
+            }
+        ],
+        "id": "4"
+    }
+]

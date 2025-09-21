@@ -1,0 +1,86 @@
+{
+    "Pollster": [
+        {
+            "id": 1,
+            "name": "select_voter",
+            "condition": null,
+            "description": "The pollster selects a voter randomly to participate in the opinion poll, initiating the polling process.",
+            "type": "OR",
+            "required_variables": [],
+            "output_updates": [
+                {
+                    "name": "selected_voter_id",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Unique identifier for the voter selected for polling."
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "name": "record_opinion",
+            "condition": "Voter has participated in the poll",
+            "description": "Pollster records the opinions expressed by the voter during the poll and prepares the data for analysis.",
+            "type": "AND",
+            "required_variables": [
+                {
+                    "name": "voter_id",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Unique identifier for the voter expressing opinion."
+                },
+                {
+                    "name": "policy_preferences",
+                    "type": "object",
+                    "context": "event",
+                    "description": "Data structure containing voter's policy preferences."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "opinion_data",
+                    "type": "object",
+                    "context": "agent",
+                    "description": "Data structure containing recorded opinions and preferences."
+                },
+                {
+                    "name": "completion_status",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Status of the opinion recording process."
+                }
+            ]
+        }
+    ],
+    "Voter": [
+        {
+            "id": 3,
+            "name": "participate_in_poll",
+            "condition": null,
+            "description": "Voter participates in the poll by expressing their policy preferences to the pollster.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "selected_voter_id",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Unique identifier for the voter selected for polling."
+                },
+                {
+                    "name": "pollster_id",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Unique identifier for the pollster conducting the selection."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "expressed_preferences",
+                    "type": "object",
+                    "context": "agent",
+                    "description": "Data structure containing voter's expressed policy preferences."
+                }
+            ]
+        }
+    ]
+}

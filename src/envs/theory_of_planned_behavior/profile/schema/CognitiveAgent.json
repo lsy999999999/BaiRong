@@ -1,0 +1,93 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Cognitive Agent",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's designated name for identification in simulations"
+    },
+    "attitude": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "default"
+    },
+    "subjective_norm": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "default"
+    },
+    "perceived_behavioral_control": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "default"
+    },
+    "behavioral_intentions": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "default"
+    },
+    "final_behavior": {
+        "type": "str",
+        "default": "undecided",
+        "private": false,
+        "sampling": "default"
+    },
+    "completion_status": {
+        "type": "str",
+        "default": "incomplete",
+        "private": false,
+        "sampling": "default"
+    },
+    "social_norm_intensity": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0,
+            1
+        ]
+    },
+    "resource_availability": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0,
+            1
+        ]
+    },
+    "communication_log": {
+        "type": "list",
+        "default": [
+            {
+                "timestamp": "2025-01-01T00:00:00Z",
+                "message": "initial log"
+            }
+        ],
+        "private": true,
+        "sampling": "default"
+    },
+    "decision_threshold": {
+        "type": "float",
+        "default": 0.75,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.5,
+            1.0
+        ]
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

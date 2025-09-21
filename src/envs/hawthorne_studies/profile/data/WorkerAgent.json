@@ -1,0 +1,97 @@
+[
+    {
+        "name": "Alex Johnson",
+        "emotional_state": "neutral",
+        "leadership_attention_level": 50,
+        "productivity_level": 75,
+        "experience_years": 16,
+        "skills": [
+            "Data Analysis",
+            "Python Programming",
+            "Machine Learning"
+        ],
+        "job_satisfaction": 70,
+        "motivation_level": 80,
+        "team_interaction_level": 65,
+        "agent_type": "WorkerAgent",
+        "work_environment_preference": "flexible",
+        "feedback_responsiveness": 60,
+        "id": "0"
+    },
+    {
+        "name": "Maria Garcia",
+        "emotional_state": "neutral",
+        "leadership_attention_level": 50,
+        "productivity_level": 75,
+        "experience_years": 3,
+        "skills": [
+            "Project Management",
+            "Agile Methodologies",
+            "Team Leadership"
+        ],
+        "job_satisfaction": 70,
+        "motivation_level": 80,
+        "team_interaction_level": 65,
+        "agent_type": "WorkerAgent",
+        "work_environment_preference": "flexible",
+        "feedback_responsiveness": 60,
+        "id": "1"
+    },
+    {
+        "name": "James Smith",
+        "emotional_state": "neutral",
+        "leadership_attention_level": 50,
+        "productivity_level": 75,
+        "experience_years": 25,
+        "skills": [
+            "Web Development",
+            "JavaScript",
+            "React.js"
+        ],
+        "job_satisfaction": 70,
+        "motivation_level": 80,
+        "team_interaction_level": 65,
+        "agent_type": "WorkerAgent",
+        "work_environment_preference": "flexible",
+        "feedback_responsiveness": 60,
+        "id": "2"
+    },
+    {
+        "name": "Linda Martinez",
+        "emotional_state": "neutral",
+        "leadership_attention_level": 50,
+        "productivity_level": 75,
+        "experience_years": 23,
+        "skills": [
+            "Graphic Design",
+            "Adobe Photoshop",
+            "Illustration"
+        ],
+        "job_satisfaction": 70,
+        "motivation_level": 80,
+        "team_interaction_level": 65,
+        "agent_type": "WorkerAgent",
+        "work_environment_preference": "independent",
+        "feedback_responsiveness": 60,
+        "id": "3"
+    },
+    {
+        "name": "Robert Brown",
+        "emotional_state": "neutral",
+        "leadership_attention_level": 50,
+        "productivity_level": 75,
+        "experience_years": 17,
+        "skills": [
+            "Network Security",
+            "Cybersecurity",
+            "Linux Administration"
+        ],
+        "job_satisfaction": 70,
+        "motivation_level": 80,
+        "team_interaction_level": 65,
+        "agent_type": "WorkerAgent",
+        "work_environment_preference": "collaborative",
+        "feedback_responsiveness": 60,
+        "id": "4"
+    }
+]

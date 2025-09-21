@@ -1,0 +1,12 @@
+[
+    {
+        "source_agent": "CognitiveAgent",
+        "target_agent": "SocialNormAgent",
+        "direction": "bidirectional"
+    },
+    {
+        "source_agent": "CognitiveAgent",
+        "target_agent": "EnvironmentalAgent",
+        "direction": "bidirectional"
+    }
+]

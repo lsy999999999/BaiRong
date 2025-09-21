@@ -1,0 +1,75 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Participant B",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's role identifier in the simulation"
+    },
+    "behavior_type": {
+        "type": "str",
+        "default": "cooperative",
+        "private": false,
+        "sampling": "default"
+    },
+    "intended_outcome": {
+        "type": "str",
+        "default": "successful collaboration",
+        "private": false,
+        "sampling": "default"
+    },
+    "current_mood": {
+        "type": "str",
+        "default": "neutral",
+        "private": false,
+        "sampling": "default"
+    },
+    "interaction_count": {
+        "type": "int",
+        "default": 0,
+        "private": false,
+        "sampling": "default"
+    },
+    "performance_level": {
+        "type": "int",
+        "default": 50,
+        "private": false,
+        "sampling": "default"
+    },
+    "feedback_received": {
+        "type": "list",
+        "default": [],
+        "private": true,
+        "sampling": "default"
+    },
+    "attribution_decision": {
+        "type": "str",
+        "default": "undecided",
+        "private": true,
+        "sampling": "default"
+    },
+    "communication_style": {
+        "type": "str",
+        "default": "assertive",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's preferred method of communication"
+    },
+    "task_complexity": {
+        "type": "int",
+        "default": 3,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            1,
+            5
+        ]
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

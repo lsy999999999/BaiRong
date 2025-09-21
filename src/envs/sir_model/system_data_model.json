@@ -1,0 +1,73 @@
+{
+    "environment": {
+        "variables": []
+    },
+    "agents": {
+        "IndividualAgent": {
+            "variables": [
+                {
+                    "name": "current_health_state",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "risk_level",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "previous_health_state",
+                    "type": "string",
+                    "default_value": null
+                }
+            ]
+        },
+        "GroupAgent": {
+            "variables": [
+                {
+                    "name": "contact_pattern",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "updated_contact_pattern",
+                    "type": "string",
+                    "default_value": null
+                }
+            ]
+        },
+        "GovernmentAgent": {
+            "variables": [
+                {
+                    "name": "policy_id",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "policy_effect",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "policy_status",
+                    "type": "string",
+                    "default_value": null
+                }
+            ]
+        },
+        "HealthcareSystemAgent": {
+            "variables": [
+                {
+                    "name": "treatment_status",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "recovery_status",
+                    "type": "string",
+                    "default_value": null
+                }
+            ]
+        }
+    }
+}

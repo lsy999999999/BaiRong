@@ -1,0 +1,1366 @@
+/* Element Plus 暗黑模式样式覆盖 */
+
+.dark-theme .el-message-box {
+    background-color: var(--bg-color);
+    border-color: var(--border-color);
+    color: var(--text-color);
+}
+
+.dark-theme .el-message-box__title {
+    color: var(--text-color);
+}
+
+.dark-theme .el-message-box__content {
+    color: var(--secondary-color);
+}
+
+.dark-theme .el-message-box__headerbtn .el-message-box__close {
+    color: var(--secondary-color);
+}
+
+
+/* 使用更高优先级的选择器来覆盖Element Plus样式 */
+
+
+/* 暗黑模式按钮样式覆盖 */
+
+html.dark-theme body .el-message-box .el-message-box__btns .el-button {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-color) !important;
+}
+
+html.dark-theme body .el-message-box .el-message-box__btns .el-button:hover {
+    background-color: rgba(255, 255, 255, 0.15) !important;
+    border-color: var(--border-color) !important;
+}
+
+html.dark-theme body .el-message-box .el-message-box__btns .el-button--primary {
+    background-color: var(--accent-color) !important;
+    border-color: transparent !important;
+    color: white !important;
+}
+
+html.dark-theme body .el-message-box .el-message-box__btns .el-button--primary:hover {
+    background-color: #4170f3 !important;
+    border-color: transparent !important;
+}
+
+
+/* 亮色模式按钮样式覆盖 */
+
+html.light-theme body .el-message-box .el-message-box__btns .el-button {
+    background-color: rgba(0, 0, 0, 0.05) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-color) !important;
+}
+
+html.light-theme body .el-message-box .el-message-box__btns .el-button:hover {
+    background-color: rgba(0, 0, 0, 0.08) !important;
+    border-color: var(--border-color) !important;
+}
+
+html.light-theme body .el-message-box .el-message-box__btns .el-button--primary {
+    background-color: var(--accent-color) !important;
+    border-color: transparent !important;
+    color: white !important;
+}
+
+html.light-theme body .el-message-box .el-message-box__btns .el-button--primary:hover {
+    background-color: #4170f3 !important;
+    border-color: transparent !important;
+}
+
+
+/* 修复确认弹窗中按钮的暗色模式样式 */
+
+.dark-theme .el-message-box__btns .el-button {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: var(--border-color);
+    color: var(--text-color);
+}
+
+.dark-theme .el-message-box__btns .el-button:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-color: var(--border-color);
+}
+
+.dark-theme .el-message-box__btns .el-button--primary {
+    background-color: var(--accent-color);
+    border-color: transparent;
+    color: white;
+}
+
+.dark-theme .el-message-box__btns .el-button--primary:hover {
+    background-color: #4170f3;
+    border-color: transparent;
+}
+
+.dark-theme .el-button--default {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: var(--border-color);
+    color: var(--text-color);
+}
+
+.dark-theme .el-button--primary {
+    background-color: var(--accent-color);
+}
+
+
+/* 光亮模式样式覆盖 */
+
+.light-theme .el-message-box {
+    background-color: var(--bg-color);
+    border-color: var(--border-color);
+    color: var(--text-color);
+}
+
+.light-theme .el-message-box__title {
+    color: var(--text-color);
+}
+
+.light-theme .el-message-box__content {
+    color: var(--secondary-color);
+}
+
+
+/* 修复确认弹窗中按钮的亮色模式样式 */
+
+.light-theme .el-message-box__btns .el-button {
+    background-color: rgba(0, 0, 0, 0.05);
+    border-color: var(--border-color);
+    color: var(--text-color);
+}
+
+.light-theme .el-message-box__btns .el-button:hover {
+    background-color: rgba(0, 0, 0, 0.08);
+    border-color: var(--border-color);
+}
+
+.light-theme .el-message-box__btns .el-button--primary {
+    background-color: var(--accent-color);
+    border-color: transparent;
+    color: white;
+}
+
+.light-theme .el-message-box__btns .el-button--primary:hover {
+    background-color: #4170f3;
+    border-color: transparent;
+}
+
+.light-theme .el-button--default {
+    background-color: rgba(0, 0, 0, 0.05);
+    border-color: var(--border-color);
+    color: var(--text-color);
+}
+
+.light-theme .el-button--primary {
+    background-color: var(--accent-color);
+    color: white;
+}
+
+
+/* Select 下拉框样式 */
+
+
+/* 暗色模式 */
+
+.dark-theme .el-select .el-select__wrapper {
+    background-color: var(--input-bg);
+    border-color: var(--border-color);
+    color: var(--text-color);
+}
+
+.dark-theme .el-select-dropdown {
+    background-color: var(--sidebar-bg);
+    border-color: var(--border-color);
+}
+
+.dark-theme .el-select-dropdown__item {
+    color: var(--text-color);
+}
+
+.dark-theme .el-select-dropdown__item.hover,
+.dark-theme .el-select-dropdown__item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark-theme .el-select-dropdown__item.selected {
+    color: var(--primary-color);
+    background-color: rgba(64, 158, 255, 0.15);
+}
+
+.dark-theme .el-input.is-focus .el-input__inner {
+    border-color: var(--primary-color);
+}
+
+.dark-theme .el-input__inner:hover {
+    border-color: var(--border-color-hover);
+}
+
+.dark-theme .el-input.is-disabled .el-input__inner {
+    background-color: var(--disabled-bg);
+    border-color: var(--border-color);
+    color: var(--disabled-color);
+}
+
+.dark-theme .el-select__placeholder {
+    color: var(--text-color);
+}
+
+
+/* 亮色模式 */
+
+.light-theme .el-select-dropdown {
+    background-color: #fff;
+    border-color: #e4e7ed;
+}
+
+.light-theme .el-select-dropdown__item {
+    color: #606266;
+}
+
+.light-theme .el-select-dropdown__item.hover,
+.light-theme .el-select-dropdown__item:hover {
+    background-color: #f5f7fa;
+}
+
+.light-theme .el-select-dropdown__item.selected {
+    color: var(--primary-color);
+    background-color: rgba(64, 158, 255, 0.1);
+}
+
+.light-theme .el-input.is-focus .el-input__inner {
+    border-color: var(--primary-color);
+}
+
+.light-theme .el-input__inner:hover {
+    border-color: #c0c4cc;
+}
+
+.light-theme .el-input.is-disabled .el-input__inner {
+    background-color: #f5f7fa;
+    border-color: #e4e7ed;
+    color: #c0c4cc;
+}
+
+.light-theme .el-select__placeholder {
+    color: var(--text-color);
+}
+
+
+/* Drawer 样式 */
+
+
+/* 暗色模式 */
+
+.dark-theme .el-drawer {
+    background-color: #232323;
+    color: var(--text-color);
+}
+
+.dark-theme .el-drawer__header {
+    color: #eee;
+    margin-bottom: 15px;
+}
+
+.dark-theme .el-drawer__title {
+    color: #eee;
+}
+
+.dark-theme .el-drawer__close-btn {
+    color: #aaa;
+}
+
+.dark-theme .el-drawer__close-btn:hover {
+    color: white;
+}
+
+.dark-theme .el-drawer__body {
+    background-color: #232323;
+}
+
+
+/* 亮色模式 */
+
+.light-theme .el-drawer {
+    background-color: #fff;
+    color: var(--text-color);
+}
+
+.light-theme .el-drawer__header {
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.light-theme .el-drawer__title {
+    color: #333;
+}
+
+.light-theme .el-drawer__close-btn {
+    color: #666;
+}
+
+.light-theme .el-drawer__close-btn:hover {
+    color: #333;
+}
+
+.light-theme .el-drawer__body {
+    background-color: #fff;
+}
+
+
+/* 暗色模式 */
+
+.dark-theme .el-select-dropdown__item.is-hovering {
+    background-color: #3a3a3a;
+}
+
+
+/* 亮色模式 */
+
+.light-theme .el-select-dropdown__item.is-hovering {
+    background-color: #f5f7fa;
+}
+
+
+/* Table 表格样式 */
+
+
+/* 暗色模式 */
+
+.dark-theme .el-table {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    --el-table-border-color: var(--border-color);
+    --el-table-header-bg-color: #2a2a2a;
+    --el-table-row-hover-bg-color: #333;
+    --el-table-fixed-box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    --el-table-tr-bg-color: #1f1f1f;
+}
+
+.dark-theme .el-table th {
+    background-color: #2a2a2a;
+    color: var(--text-color);
+    border-bottom-color: #333;
+}
+
+.dark-theme .el-table td,
+.dark-theme .el-table th.is-leaf {
+    border-bottom-color: #333;
+}
+
+.dark-theme .el-table--border .el-table__cell {
+    border-right-color: #333;
+}
+
+.dark-theme .el-table--striped .el-table__body tr.el-table__row--striped td {
+    background-color: #2a2a2a;
+}
+
+.dark-theme .el-table__body tr.hover-row>td.el-table__cell {
+    background-color: #333 !important;
+}
+
+.dark-theme .el-table__footer-wrapper {
+    background-color: #2a2a2a;
+}
+
+.dark-theme .el-table__empty-text {
+    color: #aaa;
+}
+
+
+/* 亮色模式 */
+
+.light-theme .el-table {
+    background-color: #fff;
+    color: #606266;
+}
+
+.light-theme .el-table th {
+    background-color: #f5f7fa;
+}
+
+
+/* Dialog 对话框样式 */
+
+
+/* 暗色模式 */
+
+.dark-theme .el-dialog {
+    background-color: #232323;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+}
+
+.dark-theme .el-dialog__title {
+    color: #eee;
+}
+
+.dark-theme .el-dialog__headerbtn .el-dialog__close {
+    color: #aaa;
+}
+
+.dark-theme .el-dialog__headerbtn .el-dialog__close:hover {
+    color: #fff;
+}
+
+.dark-theme .el-dialog__header {
+    border-bottom: 1px solid #444;
+}
+
+.dark-theme .el-dialog__footer {
+    border-top: 1px solid #444;
+    padding: 15px 20px;
+}
+
+
+/* 亮色模式 */
+
+.light-theme .el-dialog {
+    background-color: #fff;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.light-theme .el-dialog__title {
+    color: #333;
+}
+
+.light-theme .el-dialog__header {
+    border-bottom: 1px solid #eee;
+}
+
+.light-theme .el-dialog__footer {
+    border-top: 1px solid #eee;
+    padding: 15px 20px;
+}
+
+
+/* Form 表单样式 */
+
+
+/* 暗色模式 */
+
+.dark-theme .el-form-item__label {
+    color: #ccc;
+}
+
+.dark-theme .el-input__wrapper {
+    background-color: #333;
+    border-color: #444;
+    box-shadow: 0 0 0 1px #444 inset;
+}
+
+.dark-theme .el-input__wrapper:hover {
+    box-shadow: 0 0 0 1px #555 inset;
+}
+
+.dark-theme .el-input__wrapper.is-focus {
+    box-shadow: 0 0 0 1px var(--primary-color) inset;
+}
+
+.dark-theme .el-input__inner {
+    color: #eee;
+    background-color: transparent;
+}
+
+.dark-theme .el-textarea__inner {
+    background-color: #333;
+    border-color: #444;
+    color: #eee;
+}
+
+.dark-theme .el-textarea__inner:hover {
+    border-color: #555;
+}
+
+.dark-theme .el-textarea__inner:focus {
+    border-color: var(--primary-color);
+}
+
+
+/* 亮色模式 */
+
+.light-theme .el-form-item__label {
+    color: #606266;
+}
+
+
+/* Pagination 分页样式 */
+
+
+/* 暗色模式 */
+
+.dark-theme .el-pagination {
+    color: #ccc;
+    --el-pagination-bg-color: transparent;
+    --el-pagination-hover-color: #fff;
+    --el-pagination-button-color: #ccc;
+    --el-pagination-button-disabled-color: #666;
+}
+
+.dark-theme .el-pagination .el-select .el-input .el-select__caret {
+    color: #ccc;
+}
+
+.dark-theme .el-pagination button {
+    background-color: #333;
+    color: #ccc;
+}
+
+.dark-theme .el-pagination button:hover {
+    color: #fff;
+}
+
+.dark-theme .el-pagination button:disabled {
+    background-color: #2a2a2a;
+    color: #666;
+}
+
+.dark-theme .el-pagination .el-pagination__total,
+.dark-theme .el-pagination .el-pagination__jump {
+    color: #ccc;
+}
+
+.dark-theme .el-pagination .el-pagination__sizes .el-input .el-input__inner {
+    background-color: #333;
+    color: #ccc;
+    border-color: #444;
+}
+
+.dark-theme .el-pagination .el-pager li {
+    background-color: #333;
+    color: #ccc;
+}
+
+.dark-theme .el-pagination .el-pager li.active {
+    background-color: var(--primary-color);
+    color: #fff;
+}
+
+.dark-theme .el-pagination .el-pager li:hover {
+    color: var(--primary-color);
+}
+
+
+/* 亮色模式 */
+
+.light-theme .el-pagination {
+    color: #606266;
+}
+
+.light-theme .el-pagination button:disabled {
+    background-color: #f4f4f5;
+    color: #c0c4cc;
+}
+
+
+/* Loading 加载样式 */
+
+
+/* 暗色模式 */
+
+.dark-theme .el-loading-mask {
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+.dark-theme .el-loading-spinner {
+    color: var(--primary-color);
+}
+
+.dark-theme .el-loading-spinner .path {
+    stroke: var(--primary-color);
+}
+
+.dark-theme .el-loading-spinner .el-loading-text {
+    color: var(--primary-color);
+}
+
+
+/* InputNumber 数字输入框样式 */
+
+
+/* 暗色模式 */
+
+.dark-theme .el-input-number {
+    --el-input-number-bg-color: #333;
+    --el-input-number-hover-border-color: #555;
+    --el-input-number-disabled-bg-color: #1f1f1f;
+    --el-input-number-disabled-color: #666;
+}
+
+.dark-theme .el-input-number__decrease,
+.dark-theme .el-input-number__increase {
+    background-color: #2a2a2a;
+    color: #ccc;
+    border-color: #444;
+}
+
+.dark-theme .el-input-number__decrease:hover,
+.dark-theme .el-input-number__increase:hover {
+    color: #fff;
+}
+
+
+/* 标签页样式 */
+
+
+/* 暗色模式 */
+
+.dark-theme .el-tabs__header {
+    border-bottom-color: #444;
+}
+
+.dark-theme .el-tabs__item {
+    color: #aaa;
+}
+
+.dark-theme .el-tabs__item.is-active {
+    color: var(--primary-color);
+}
+
+.dark-theme .el-tabs__item:hover {
+    color: var(--primary-color);
+}
+
+.dark-theme .el-tabs__nav-wrap::after {
+    background-color: #444;
+}
+
+.dark-theme .el-tabs__active-bar {
+    background-color: var(--primary-color);
+}
+
+
+/* 亮色模式 */
+
+.light-theme .el-tabs__item {
+    color: #606266;
+}
+
+.light-theme .el-tabs__item.is-active {
+    color: var(--primary-color);
+}
+
+
+/* 描述列表样式 */
+
+
+/* 暗色模式 */
+
+.dark-theme .el-descriptions {
+    --el-descriptions-item-bordered-label-background: #2a2a2a;
+    --el-descriptions-border-color: #444;
+}
+
+.dark-theme .el-descriptions__title {
+    color: #eee;
+}
+
+.dark-theme .el-descriptions__label {
+    color: #aaa;
+}
+
+.dark-theme .el-descriptions__content {
+    color: #eee;
+}
+
+.dark-theme .el-descriptions--bordered .el-descriptions-item__cell {
+    border-color: #444;
+}
+
+.dark-theme .el-descriptions--bordered .el-descriptions-item__label {
+    background-color: #2a2a2a;
+}
+
+
+/* 亮色模式 */
+
+.light-theme .el-descriptions__title {
+    color: #333;
+}
+
+.light-theme .el-descriptions__label {
+    color: #606266;
+}
+
+.light-theme .el-descriptions__content {
+    color: #333;
+}
+
+
+/* 进度条样式 */
+
+
+/* 暗色模式 */
+
+.dark-theme .el-progress {
+    --el-progress-bg-color: #444;
+}
+
+.dark-theme .el-progress__text {
+    color: #ccc;
+}
+
+
+/* 时间线样式 */
+
+
+/* 暗色模式 */
+
+.dark-theme .el-timeline-item__node {
+    background-color: var(--primary-color);
+}
+
+.dark-theme .el-timeline-item__tail {
+    border-left-color: #444;
+}
+
+.dark-theme .el-timeline-item__timestamp {
+    color: #999;
+}
+
+.dark-theme .el-timeline-item__content {
+    color: #eee;
+}
+
+
+/* 空状态样式 */
+
+
+/* 暗色模式 */
+
+.dark-theme .el-empty {
+    --el-empty-fill-color-0: #333;
+    --el-empty-fill-color-1: #444;
+    --el-empty-fill-color-2: #555;
+}
+
+.dark-theme .el-empty__description {
+    color: #aaa;
+}
+
+.dark-theme .el-empty__image {
+    opacity: 0.7;
+}
+
+
+/* 标签样式 */
+
+
+/* 暗色模式 */
+
+.dark-theme .el-tag {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.dark-theme .el-tag--info {
+    background-color: #333;
+    border-color: #444;
+    color: #aaa;
+}
+
+.dark-theme .el-tag--success {
+    background-color: rgba(103, 194, 58, 0.2);
+    border-color: rgba(103, 194, 58, 0.3);
+    color: #67c23a;
+}
+
+.dark-theme .el-tag--warning {
+    background-color: rgba(230, 162, 60, 0.2);
+    border-color: rgba(230, 162, 60, 0.3);
+    color: #e6a23c;
+}
+
+.dark-theme .el-tag--danger {
+    background-color: rgba(245, 108, 108, 0.2);
+    border-color: rgba(245, 108, 108, 0.3);
+    color: #f56c6c;
+}
+
+.dark-theme .el-tag--primary {
+    background-color: rgba(64, 158, 255, 0.2);
+    border-color: rgba(64, 158, 255, 0.3);
+    color: #409eff;
+}
+
+
+/* 头像样式 */
+
+
+/* 暗色模式 */
+
+.dark-theme .el-avatar {
+    background-color: #555;
+    color: #eee;
+}
+
+
+/* 栅格布局样式 */
+
+.dark-theme .el-row--flex {
+    background-color: transparent;
+}
+
+.dark-theme .el-col {
+    background-color: transparent;
+}
+
+
+/* 面包屑样式 */
+
+.dark-theme .el-breadcrumb__inner {
+    color: #aaa;
+}
+
+.dark-theme .el-breadcrumb__inner.is-link:hover {
+    color: var(--primary-color);
+}
+
+.dark-theme .el-breadcrumb__item:last-child .el-breadcrumb__inner {
+    color: #eee;
+}
+
+.dark-theme .el-breadcrumb__separator {
+    color: #aaa;
+}
+
+
+/* 全局样式变量覆盖 */
+
+.dark-theme {
+    --el-color-white: #222;
+    --el-color-black: #eee;
+    --el-color-primary: var(--primary-color);
+    --el-text-color-primary: #eee;
+    --el-text-color-regular: #ccc;
+    --el-text-color-secondary: #aaa;
+    --el-border-color: #444;
+    --el-border-color-light: #444;
+    --el-border-color-lighter: #333;
+    --el-fill-color: #333;
+    --el-fill-color-light: #2a2a2a;
+    --el-fill-color-lighter: #1f1f1f;
+    --el-bg-color: #1f1f1f;
+    --el-bg-color-page: #1a1a1a;
+    --el-disabled-bg-color: #1f1f1f;
+    --el-disabled-text-color: #666;
+}
+
+.light-theme {
+    --el-color-white: #fff;
+    --el-color-black: #000;
+    --el-color-primary: var(--primary-color);
+    --el-text-color-primary: #333;
+    --el-text-color-regular: #606266;
+    --el-text-color-secondary: #909399;
+    --el-border-color: #dcdfe6;
+    --el-border-color-light: #e4e7ed;
+    --el-border-color-lighter: #ebeef5;
+    --el-fill-color: #f0f2f5;
+    --el-fill-color-light: #f5f7fa;
+    --el-fill-color-lighter: #fafafa;
+    --el-bg-color: #fff;
+    --el-bg-color-page: #f2f3f5;
+    --el-disabled-bg-color: #f5f7fa;
+    --el-disabled-text-color: #c0c4cc;
+}
+
+
+/* 补充完善Element Plus组件深色模式样式 */
+
+
+/* 描述列表强化样式 */
+
+.dark-theme .el-descriptions__cell {
+    background-color: var(--bg-color);
+}
+
+.dark-theme .el-descriptions__content {
+    background-color: var(--bg-color);
+}
+
+
+/* 进度条强化样式 */
+
+.dark-theme .el-progress-bar__outer {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark-theme .el-progress-bar__inner {
+    transition: width 0.6s ease;
+}
+
+.dark-theme .el-progress__text {
+    color: var(--text-color);
+}
+
+.dark-theme .el-progress-circle {
+    color: var(--text-color);
+}
+
+
+/* Dashboard类型进度条 */
+
+.dark-theme .el-progress--dashboard .el-progress__text {
+    color: var(--text-color);
+}
+
+.dark-theme .el-progress-circle__track {
+    stroke: rgba(255, 255, 255, 0.1);
+}
+
+
+/* 修复tabs在暗黑模式下的底部边框 */
+
+.dark-theme .el-tabs__nav-wrap::after {
+    background-color: var(--border-color);
+}
+
+.dark-theme .el-tabs__content {
+    color: var(--text-color);
+}
+
+
+/* 修复avatar头像组件样式 */
+
+.dark-theme .el-avatar {
+    background-color: #444;
+    color: #eee;
+}
+
+
+/* 修复表格更多样式 */
+
+.dark-theme .el-table .el-table__cell {
+    background-color: var(--bg-color);
+}
+
+.dark-theme .el-table tr {
+    background-color: var(--bg-color);
+}
+
+.dark-theme .el-table--enable-row-hover .el-table__body tr:hover>td.el-table__cell {
+    background-color: var(--bg-color-light);
+}
+
+
+/* 修复表格边框样式 */
+
+.dark-theme .el-table--border .el-table__inner-wrapper::after,
+.dark-theme .el-table--border .el-table__inner-wrapper::before,
+.dark-theme .el-table--border::after,
+.dark-theme .el-table--border::before {
+    background-color: var(--border-color);
+}
+
+
+/* 卡片样式统一 */
+
+.dark-theme .stat-card {
+    background-color: var(--bg-color-light);
+    border: 1px solid var(--border-color);
+}
+
+
+/* Timeline 时间线深色模式 */
+
+.dark-theme .el-timeline-item__wrapper {
+    color: var(--text-color);
+}
+
+.dark-theme .el-timeline-item__timestamp {
+    color: var(--text-color-light);
+}
+
+.dark-theme .el-timeline-item__node--normal {
+    background-color: var(--primary-color);
+}
+
+.dark-theme .el-timeline-item__node--primary {
+    background-color: var(--primary-color);
+}
+
+.dark-theme .el-timeline-item__node--success {
+    background-color: #67c23a;
+}
+
+.dark-theme .el-timeline-item__node--warning {
+    background-color: #e6a23c;
+}
+
+.dark-theme .el-timeline-item__node--danger {
+    background-color: #f56c6c;
+}
+
+.dark-theme .el-timeline-item__node--info {
+    background-color: #909399;
+}
+
+
+/* Empty 空状态组件 */
+
+.dark-theme .el-empty__description {
+    color: var(--text-color-light);
+}
+
+.dark-theme .el-empty__image svg {
+    fill: var(--text-color-light);
+    opacity: 0.5;
+}
+
+
+/* 修复按钮在表格中的样式 */
+
+.dark-theme .el-table .el-button--small {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: var(--border-color);
+    color: var(--text-color);
+}
+
+.dark-theme .el-table .el-button--small:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+
+/* Row 行和 Col 列 */
+
+.dark-theme .el-row {
+    margin-bottom: 20px;
+}
+
+.dark-theme .el-col {
+    border-radius: 4px;
+}
+
+
+/* 修复描述列表中长文本的样式 */
+
+.dark-theme .el-descriptions__cell .long-text {
+    color: var(--text-color);
+}
+
+
+/* 修复drawer背景的统一性 */
+
+.dark-theme .el-drawer__body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+
+/* 统一面板卡片样式 */
+
+.dark-theme .behavior-content,
+.dark-theme .relationship-section,
+.dark-theme .activity-section {
+    background-color: var(--bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+}
+
+
+/* 防止嵌套背景问题 */
+
+.dark-theme .el-tab-pane {
+    background-color: transparent;
+}
+
+
+/* 改进表格的表头固定和水平滚动样式 */
+
+.dark-theme .el-table__fixed-right,
+.dark-theme .el-table__fixed {
+    background-color: var(--bg-color);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.dark-theme .el-table__fixed-right::before,
+.dark-theme .el-table__fixed::before {
+    background-color: var(--border-color);
+}
+
+.dark-theme .el-table .is-scrolling-left th.el-table-fixed-column--left,
+.dark-theme .el-table .is-scrolling-middle th.el-table-fixed-column--left,
+.dark-theme .el-table .is-scrolling-right th.el-table-fixed-column--left {
+    background-color: var(--bg-color-light);
+}
+
+
+/* 统一字体颜色 */
+
+.dark-theme {
+    --el-color-primary-light-3: var(--primary-color-light);
+    --el-color-primary-light-5: var(--primary-color-lighter);
+    --el-color-primary-light-7: var(--primary-color-lightest);
+    --el-color-primary-light-9: rgba(64, 158, 255, 0.1);
+    --el-color-primary-dark-2: var(--primary-color-dark);
+}
+
+
+/* 补充表单中select下拉菜单项的暗色模式 */
+
+.dark-theme .el-select-dropdown__item.selected {
+    color: var(--primary-color);
+    font-weight: bold;
+}
+
+
+/* 补充文字按钮暗色模式 */
+
+.dark-theme .el-button.is-text {
+    color: var(--text-color);
+    background-color: transparent;
+}
+
+.dark-theme .el-button.is-text:hover {
+    color: var(--primary-color);
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+
+/* 补充弹出层深色模式 */
+
+.dark-theme .el-popper.is-dark {
+    background-color: var(--bg-color-light);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+}
+
+.dark-theme .el-popper.is-light {
+    background-color: var(--bg-color);
+    border: 1px solid var(--border-color);
+}
+
+.dark-theme .el-popper.is-light .el-popper__arrow::before {
+    background-color: var(--bg-color);
+    border: 1px solid var(--border-color);
+}
+
+
+/* 表单验证错误信息深色模式 */
+
+.dark-theme .el-form-item__error {
+    color: #f56c6c;
+}
+
+
+/* 滚动条样式 */
+
+.dark-theme .el-scrollbar__thumb {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.dark-theme .el-scrollbar__thumb:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.dark-theme .el-scrollbar__bar {
+    background-color: transparent;
+}
+
+
+/* 输入框前后缀图标 */
+
+.dark-theme .el-input__prefix-icon,
+.dark-theme .el-input__suffix-icon {
+    color: var(--text-color-light);
+}
+
+
+/* 修复日期选择器深色模式 */
+
+.dark-theme .el-date-picker {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    border-color: var(--border-color);
+}
+
+.dark-theme .el-date-table th,
+.dark-theme .el-date-table td {
+    color: var(--text-color);
+}
+
+.dark-theme .el-date-table td.available:hover {
+    color: var(--primary-color);
+}
+
+.dark-theme .el-date-table td.current:not(.disabled) {
+    color: #fff;
+    background-color: var(--primary-color);
+}
+
+.dark-theme .el-date-picker__header-label {
+    color: var(--text-color);
+}
+
+.nndrawer {
+    padding-top: 76px;
+    height: calc(100vh - 76px);
+}
+
+.simulation-layout .el-overlay {
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.light-theme .el-radio__inner:after {
+    background-color: #000;
+}
+
+.dark-theme .el-radio__inner:after {
+    background-color: #fff;
+}
+
+
+/* Switch 开关样式 */
+
+
+/* 暗色模式 */
+
+.dark-theme .el-switch__core {
+    background-color: #4c4c4c !important;
+    border-color: #4c4c4c !important;
+    transition: all 0.3s ease-in-out !important;
+}
+
+.dark-theme .el-switch__core .el-switch__action {
+    background-color: #333 !important;
+    /* 暗色模式下滑块为深色 */
+    border: 1px solid #666 !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4) !important;
+    transition: all 0.3s ease-in-out, transform 0.3s cubic-bezier(0.34, 1.61, 0.7, 1) !important;
+}
+
+.dark-theme .el-switch.is-checked .el-switch__core {
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+}
+
+.dark-theme .el-switch.is-checked .el-switch__core .el-switch__action {
+    background-color: #222 !important;
+    /* 暗色模式下启用状态滑块为更深色 */
+    border: 1px solid #555 !important;
+    box-shadow: 0 2px 6px rgba(64, 158, 255, 0.5) !important;
+}
+
+
+/* 亮色模式 */
+
+.light-theme .el-switch__core {
+    background-color: #dcdfe6 !important;
+    border-color: #dcdfe6 !important;
+    transition: all 0.3s ease-in-out !important;
+}
+
+.light-theme .el-switch__core .el-switch__action {
+    background-color: #fff !important;
+    /* 亮色模式下滑块为白色 */
+    border: 1px solid #d9d9d9 !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+    transition: all 0.3s ease-in-out, transform 0.3s cubic-bezier(0.34, 1.61, 0.7, 1) !important;
+}
+
+.light-theme .el-switch.is-checked .el-switch__core {
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+}
+
+.light-theme .el-switch.is-checked .el-switch__core .el-switch__action {
+    background-color: #fff !important;
+    /* 亮色模式下启用状态滑块为白色 */
+    box-shadow: 0 2px 6px rgba(64, 158, 255, 0.3) !important;
+}
+
+
+/* 为工具栏中的开关额外添加样式 */
+
+.toolbar-controls .el-switch__label {
+    color: var(--text-color) !important;
+    transition: color 0.3s ease-in-out !important;
+}
+
+
+/* 增强昼夜模式下开关的文字可见度 */
+
+.dark-theme .el-switch__label {
+    color: #ddd !important;
+}
+
+.dark-theme .el-switch__label.is-active {
+    color: #fff !important;
+    font-weight: bold;
+    text-shadow: 0 0 2px rgba(255, 255, 255, 0.2) !important;
+}
+
+.light-theme .el-switch__label {
+    color: #606266 !important;
+}
+
+.light-theme .el-switch__label.is-active {
+    color: var(--primary-color) !important;
+    font-weight: bold;
+}
+
+
+/* 鼠标悬停效果 */
+
+.el-switch:hover .el-switch__core {
+    opacity: 0.9 !important;
+}
+
+
+/* 工具栏中的开关控制区域样式 */
+
+.toolbar-controls {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.toolbar-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.toolbar-title {
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+
+/* 更精确定位工具栏中的开关 */
+
+.toolbar-controls .el-switch {
+    height: 24px;
+}
+
+.toolbar-controls .el-switch__core {
+    height: 22px !important;
+    border-radius: 11px !important;
+}
+
+.toolbar-controls .el-switch__core .el-switch__action {
+    height: 18px !important;
+    width: 18px !important;
+    border-radius: 9px !important;
+    top: 1px !important;
+}
+
+
+/* 确保暗色模式下的文字标签正确着色 */
+
+.dark-theme .toolbar-title {
+    color: #eee;
+}
+
+.dark-theme .toolbar-controls .el-switch__label {
+    color: #aaa !important;
+}
+
+.dark-theme .toolbar-controls .el-switch__label.is-active {
+    color: #fff !important;
+}

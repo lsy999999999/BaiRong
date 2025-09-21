@@ -1,0 +1,17 @@
+[
+    {
+        "source_agent": "CommunityLeader",
+        "target_agent": "CommunityMember",
+        "direction": "unidirectional"
+    },
+    {
+        "source_agent": "CommunityMember",
+        "target_agent": "CommunityMember",
+        "direction": "unidirectional"
+    },
+    {
+        "source_agent": "PublicHealthExpert",
+        "target_agent": "CommunityLeader",
+        "direction": "unidirectional"
+    }
+]

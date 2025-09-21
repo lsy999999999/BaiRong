@@ -1,0 +1,12 @@
+[
+    {
+        "source_agent": "TaskExecutor",
+        "target_agent": "Monitor",
+        "direction": "bidirectional"
+    },
+    {
+        "source_agent": "TaskExecutor",
+        "target_agent": "Evaluator",
+        "direction": "unidirectional"
+    }
+]

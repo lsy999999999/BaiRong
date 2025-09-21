@@ -1,0 +1,82 @@
+[
+    {
+        "name": "Strategic Leader",
+        "attention_level": 75.0,
+        "motivation_strategy": "goal_setting",
+        "communication_frequency": 6,
+        "team_support": [
+            "weekly_meetings",
+            "one-on-one sessions"
+        ],
+        "task_allocation_strategy": "performance_based",
+        "initial_state": "active",
+        "agent_type": "LeaderAgent",
+        "feedback_log": "No feedback yet",
+        "evaluation_outcome": "pending",
+        "id": "5"
+    },
+    {
+        "name": "Operational Leader",
+        "attention_level": 75.0,
+        "motivation_strategy": "goal_setting",
+        "communication_frequency": 7,
+        "team_support": [
+            "weekly_meetings",
+            "one-on-one sessions"
+        ],
+        "task_allocation_strategy": "random",
+        "initial_state": "active",
+        "agent_type": "LeaderAgent",
+        "feedback_log": "No feedback yet",
+        "evaluation_outcome": "pending",
+        "id": "6"
+    },
+    {
+        "name": "Innovative Leader",
+        "attention_level": 75.0,
+        "motivation_strategy": "constructive_feedback",
+        "communication_frequency": 5,
+        "team_support": [
+            "weekly_meetings",
+            "one-on-one sessions"
+        ],
+        "task_allocation_strategy": "skill_based",
+        "initial_state": "active",
+        "agent_type": "LeaderAgent",
+        "feedback_log": "No feedback yet",
+        "evaluation_outcome": "pending",
+        "id": "7"
+    },
+    {
+        "name": "Collaborative Leader",
+        "attention_level": 75.0,
+        "motivation_strategy": "positive_reinforcement",
+        "communication_frequency": 7,
+        "team_support": [
+            "weekly_meetings",
+            "one-on-one sessions"
+        ],
+        "task_allocation_strategy": "skill_based",
+        "initial_state": "active",
+        "agent_type": "LeaderAgent",
+        "feedback_log": "No feedback yet",
+        "evaluation_outcome": "pending",
+        "id": "8"
+    },
+    {
+        "name": "Visionary Leader",
+        "attention_level": 75.0,
+        "motivation_strategy": "goal_setting",
+        "communication_frequency": 1,
+        "team_support": [
+            "weekly_meetings",
+            "one-on-one sessions"
+        ],
+        "task_allocation_strategy": "skill_based",
+        "initial_state": "active",
+        "agent_type": "LeaderAgent",
+        "feedback_log": "No feedback yet",
+        "evaluation_outcome": "pending",
+        "id": "9"
+    }
+]

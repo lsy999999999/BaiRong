@@ -1,0 +1,359 @@
+{
+  "agents": {
+    "CustomerAgent": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "1": {
+          "code": "async def apply_for_loan(self, event: Event) -> List[Event]:\n        # Since the condition is None, proceed directly with the handler logic\n        \n        # Retrieve required variables\n        customer_id = self.profile.get_data(\"customer_id\", \"\")\n        loan_amount = self.profile.get_data(\"loan_amount\", 0.0)\n        economic_conditions = await self.get_env_data(\"economic_conditions\", \"stable\")\n        \n        # Prepare the instruction for the LLM\n        instruction = \"\"\"You are processing a loan application for a customer. \n        Please decide which bank(s) to send the loan application to based on the current economic conditions.\n        Return the information in the following JSON format:\n        \n        {\n        \"target_ids\": [\"<The string ID of the Bank agent(s)>\"]\n        }\n        \n        Ensure that the target_ids can be a single ID or a list of IDs. Use the provided agent relationships to determine the appropriate target(s).\n        \"\"\"\n        \n        # Current context as observation\n        observation = f\"Customer ID: {customer_id}, Loan Amount: {loan_amount}, Economic Conditions: {economic_conditions}\"\n        \n        # Generate reaction using LLM\n        result = await self.generate_reaction(instruction, observation)\n        \n        # Parse the LLM's JSON response\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n        \n        # Prepare and send LoanApplicationEvent to each BankAgent\n        events = []\n        for target_id in target_ids:\n            loan_application_event = LoanApplicationEvent(\n                self.profile_id, target_id, customer_id=customer_id, loan_amount=loan_amount, economic_conditions=economic_conditions\n            )\n            events.append(loan_application_event)\n        \n        return events",
+          "metadata": {
+            "id": 1,
+            "name": "apply_for_loan",
+            "condition": null,
+            "description": "The customer initiates a request for a loan based on their personal financial needs and prevailing economic conditions.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "customer_id",
+                "type": "str",
+                "context": "agent",
+                "description": "Unique identifier for the customer applying for the loan"
+              },
+              {
+                "name": "loan_amount",
+                "type": "float",
+                "context": "agent",
+                "description": "The amount of money the customer is applying for"
+              },
+              {
+                "name": "economic_conditions",
+                "type": "str",
+                "context": "env",
+                "description": "Current economic conditions affecting the loan application"
+              }
+            ],
+            "output_updates": []
+          }
+        },
+        "2": {
+          "code": "async def receive_loan_decision(self, event: Event) -> List[Event]:\n        # Condition Check\n        if event.__class__.__name__ not in [\"LoanApprovalEvent\", \"LoanRejectionEvent\"]:\n            return []\n        \n        # Data Access\n        customer_id = event.customer_id\n        loan_status = \"approved\" if event.__class__.__name__ == \"LoanApprovalEvent\" else \"rejected\"\n        \n        # Decision Making\n        observation = f\"Event: {event.__class__.__name__}, Customer ID: {customer_id}, Loan Status: {loan_status}\"\n        instruction = \"\"\"The CustomerAgent should update its financial status based on the loan decision received.\n        Please return the information in the following JSON format:\n        \n        {\n        \"financial_status\": \"<Updated financial status of the customer>\",\n        \"target_ids\": [\"<The string ID of the EnvAgent or other target>\"]\n        }\n        \"\"\"\n        \n        result = await self.generate_reaction(instruction, observation)\n        \n        # Data Modification\n        financial_status = result.get('financial_status', None)\n        if financial_status is not None:\n            self.profile.update_data(\"financial_status\", financial_status)\n        \n        # Response Processing\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n        \n        # Prepare and send the LoanDecisionProcessedEvent to the next target(s)\n        events = []\n        for target_id in target_ids:\n            processed_event = LoanDecisionProcessedEvent(self.profile_id, target_id, customer_id, loan_status)\n            events.append(processed_event)\n        \n        return events",
+          "metadata": {
+            "id": 2,
+            "name": "receive_loan_decision",
+            "condition": "Customer must have received a LoanApprovalEvent or LoanRejectionEvent",
+            "description": "The customer receives and processes the bank's decision on their loan application, updating their financial status accordingly.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "customer_id",
+                "type": "str",
+                "context": "event",
+                "description": "Unique identifier for the customer processing the loan decision"
+              },
+              {
+                "name": "loan_status",
+                "type": "str",
+                "context": "event",
+                "description": "The status of the loan after processing (e.g., approved, rejected)"
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "financial_status",
+                "type": "str",
+                "context": "agent",
+                "description": "Updated financial status of the customer after loan decision"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "BankAgent": {
+      "imports": "from typing import Any, List, Optional\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "3": {
+          "code": "async def evaluate_loan_application(self, event: Event) -> List[Event]:\n        if event.__class__.__name__ != \"LoanApplicationEvent\":\n            return []\n\n        customer_id = event.customer_id\n        loan_amount = event.loan_amount\n        reserve_level = self.profile.get_data(\"reserve_level\", 0.0)\n        reserve_requirement = await self.get_env_data(\"reserve_requirement\", 0.0)\n\n        observation = f\"Loan Amount: {loan_amount}, Reserve Level: {reserve_level}, Reserve Requirement: {reserve_requirement}\"\n        instruction = \"\"\"Evaluate the loan application based on the current reserve levels compared to reserve requirements. \n        Approve the loan if the reserve level is above the reserve requirement. Reject the loan if reserves are insufficient. \n        Consider partial approval if reserves are marginally below the requirement. \n        Please return the decision status ('approved' or 'rejected') and the target_ids in the following JSON format:\n\n        {\n        \"decision_status\": \"<approved/rejected>\",\n        \"target_ids\": [\"<CustomerAgent ID>\", \"<BankAgent ID for reserve adjustment if needed>\"]\n        }\n        \"\"\"\n\n        result = await self.generate_reaction(instruction, observation)\n\n        decision_status = result.get('decision_status', None)\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        self.profile.update_data(\"decision_status\", decision_status)\n\n        events = []\n        for target_id in target_ids:\n            if decision_status == \"approved\":\n                approved_amount = min(loan_amount, reserve_level)\n                loan_approval_event = LoanApprovalEvent(self.profile_id, target_id, customer_id, approved_amount)\n                events.append(loan_approval_event)\n            elif decision_status == \"rejected\":\n                rejection_reason = \"insufficient_reserves\"\n                loan_rejection_event = LoanRejectionEvent(self.profile_id, target_id, customer_id, rejection_reason)\n                events.append(loan_rejection_event)\n            \n            if target_id == self.profile_id:\n                adjustment_amount = -min(loan_amount, reserve_level) if decision_status == \"approved\" else 0\n                new_reserve_level = reserve_level + adjustment_amount\n                reserve_adjustment_event = ReserveAdjustmentEvent(self.profile_id, target_id, self.profile_id, adjustment_amount, new_reserve_level)\n                events.append(reserve_adjustment_event)\n\n        return events",
+          "metadata": {
+            "id": 3,
+            "name": "evaluate_loan_application",
+            "condition": "Bank must have received a LoanApplicationEvent",
+            "description": "The bank assesses the loan application based on its reserve levels and decides whether to approve or reject the loan.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "customer_id",
+                "type": "str",
+                "context": "event",
+                "description": "Unique identifier for the customer whose loan application is being evaluated"
+              },
+              {
+                "name": "loan_amount",
+                "type": "float",
+                "context": "event",
+                "description": "The amount of money the customer is applying for"
+              },
+              {
+                "name": "reserve_level",
+                "type": "float",
+                "context": "agent",
+                "description": "Current reserve level of the bank"
+              },
+              {
+                "name": "reserve_requirement",
+                "type": "float",
+                "context": "env",
+                "description": "Minimum reserve requirement imposed on the bank"
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "decision_status",
+                "type": "str",
+                "context": "agent",
+                "description": "The decision status of the loan application (approved or rejected)"
+              }
+            ]
+          }
+        },
+        "4": {
+          "code": "async def manage_reserves(self, event: Event) -> List[Event]:\n        loan_decision_completed = self.profile.get_data(\"decision_status\", None) in [\"approved\", \"rejected\"]\n        if not loan_decision_completed:\n            return []\n\n        bank_id = event.bank_id\n        if bank_id != self.profile_id:\n            return []\n\n        adjustment_amount = event.adjustment_amount\n        new_reserve_level = event.new_reserve_level\n\n        self.profile.update_data(\"reserve_level\", new_reserve_level)\n\n        instruction = \"\"\"\n        The bank has adjusted its reserves post loan decision. \n        Please determine the target_id(s) for sending the ReserveManagementCompletedEvent.\n        Ensure the response format is JSON with a 'target_ids' field containing the ID(s) as a list.\n        \"\"\"\n        observation = f\"Bank ID: {bank_id}, New Reserve Level: {new_reserve_level}\"\n        result = await self.generate_reaction(instruction, observation)\n\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        events = []\n        for target_id in target_ids:\n            completion_event = ReserveManagementCompletedEvent(\n                self.profile_id, target_id, bank_id=bank_id, completion_status=\"success\"\n            )\n            events.append(completion_event)\n\n        return events",
+          "metadata": {
+            "id": 4,
+            "name": "manage_reserves",
+            "condition": "Bank must adjust reserves post loan decision",
+            "description": "The bank adjusts its reserve levels after processing loan applications to ensure compliance with reserve requirements.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "bank_id",
+                "type": "str",
+                "context": "event",
+                "description": "Unique identifier for the bank adjusting its reserves"
+              },
+              {
+                "name": "adjustment_amount",
+                "type": "float",
+                "context": "event",
+                "description": "The amount by which the bank's reserves are adjusted"
+              },
+              {
+                "name": "new_reserve_level",
+                "type": "float",
+                "context": "event",
+                "description": "The new reserve level after adjustment"
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "reserve_level",
+                "type": "float",
+                "context": "agent",
+                "description": "Updated reserve level of the bank after adjustment"
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "events": {
+    "imports": "from onesim.events import Event\nfrom typing import Any",
+    "definitions": {
+      "-1": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": -1,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "CustomerAgent",
+          "to_action_name": "apply_for_loan",
+          "from_action_id": 0,
+          "to_action_id": 1,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for customers to apply for loans",
+          "fields": []
+        }
+      },
+      "1": {
+        "code": "class LoanApplicationEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        customer_id: str = \"\",\n        loan_amount: float = 0.0,\n        economic_conditions: str = \"stable\",\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.customer_id = customer_id\n        self.loan_amount = loan_amount\n        self.economic_conditions = economic_conditions",
+        "metadata": {
+          "id": 1,
+          "from_agent_type": "CustomerAgent",
+          "from_action_name": "apply_for_loan",
+          "to_agent_type": "BankAgent",
+          "to_action_name": "evaluate_loan_application",
+          "from_action_id": 1,
+          "to_action_id": 3,
+          "event_name": "LoanApplicationEvent",
+          "event_info": "Customer applies for a loan based on economic conditions",
+          "fields": [
+            {
+              "name": "customer_id",
+              "type": "str",
+              "default_value": "",
+              "description": "Unique identifier for the customer applying for the loan"
+            },
+            {
+              "name": "loan_amount",
+              "type": "float",
+              "default_value": 0.0,
+              "description": "The amount of money the customer is applying for"
+            },
+            {
+              "name": "economic_conditions",
+              "type": "str",
+              "default_value": "stable",
+              "description": "Current economic conditions affecting the loan application"
+            }
+          ]
+        }
+      },
+      "2": {
+        "code": "class LoanDecisionProcessedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        customer_id: str = \"\",\n        loan_status: str = \"pending\",\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.customer_id = customer_id\n        self.loan_status = loan_status",
+        "metadata": {
+          "id": 2,
+          "from_agent_type": "CustomerAgent",
+          "from_action_name": "receive_loan_decision",
+          "to_agent_type": "EnvAgent",
+          "to_action_name": "terminate",
+          "from_action_id": 2,
+          "to_action_id": -1,
+          "event_name": "LoanDecisionProcessedEvent",
+          "event_info": "Customer processes the loan decision and completes their part of the workflow",
+          "fields": [
+            {
+              "name": "customer_id",
+              "type": "str",
+              "default_value": "",
+              "description": "Unique identifier for the customer processing the loan decision"
+            },
+            {
+              "name": "loan_status",
+              "type": "str",
+              "default_value": "pending",
+              "description": "The status of the loan after processing (e.g., approved, rejected)"
+            }
+          ]
+        }
+      },
+      "3": {
+        "code": "class LoanApprovalEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        customer_id: str = \"\",\n        approved_amount: float = 0.0,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.customer_id = customer_id\n        self.approved_amount = approved_amount",
+        "metadata": {
+          "id": 3,
+          "from_agent_type": "BankAgent",
+          "from_action_name": "evaluate_loan_application",
+          "to_agent_type": "CustomerAgent",
+          "to_action_name": "receive_loan_decision",
+          "from_action_id": 3,
+          "to_action_id": 2,
+          "event_name": "LoanApprovalEvent",
+          "event_info": "Bank approves the loan application",
+          "fields": [
+            {
+              "name": "customer_id",
+              "type": "str",
+              "default_value": "",
+              "description": "Unique identifier for the customer whose loan was approved"
+            },
+            {
+              "name": "approved_amount",
+              "type": "float",
+              "default_value": 0.0,
+              "description": "The amount of money approved by the bank"
+            }
+          ]
+        }
+      },
+      "4": {
+        "code": "class LoanRejectionEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        customer_id: str = \"\",\n        rejection_reason: str = \"insufficient_reserves\",\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.customer_id = customer_id\n        self.rejection_reason = rejection_reason",
+        "metadata": {
+          "id": 4,
+          "from_agent_type": "BankAgent",
+          "from_action_name": "evaluate_loan_application",
+          "to_agent_type": "CustomerAgent",
+          "to_action_name": "receive_loan_decision",
+          "from_action_id": 3,
+          "to_action_id": 2,
+          "event_name": "LoanRejectionEvent",
+          "event_info": "Bank rejects the loan application",
+          "fields": [
+            {
+              "name": "customer_id",
+              "type": "str",
+              "default_value": "",
+              "description": "Unique identifier for the customer whose loan was rejected"
+            },
+            {
+              "name": "rejection_reason",
+              "type": "str",
+              "default_value": "insufficient_reserves",
+              "description": "Reason for the loan rejection"
+            }
+          ]
+        }
+      },
+      "5": {
+        "code": "class ReserveAdjustmentEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        bank_id: str = \"\",\n        adjustment_amount: float = 0.0,\n        new_reserve_level: float = 0.0,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.bank_id = bank_id\n        self.adjustment_amount = adjustment_amount\n        self.new_reserve_level = new_reserve_level",
+        "metadata": {
+          "id": 5,
+          "from_agent_type": "BankAgent",
+          "from_action_name": "evaluate_loan_application",
+          "to_agent_type": "BankAgent",
+          "to_action_name": "manage_reserves",
+          "from_action_id": 3,
+          "to_action_id": 4,
+          "event_name": "ReserveAdjustmentEvent",
+          "event_info": "Post decision, bank adjusts reserves",
+          "fields": [
+            {
+              "name": "bank_id",
+              "type": "str",
+              "default_value": "",
+              "description": "Unique identifier for the bank adjusting its reserves"
+            },
+            {
+              "name": "adjustment_amount",
+              "type": "float",
+              "default_value": 0.0,
+              "description": "The amount by which the bank's reserves are adjusted"
+            },
+            {
+              "name": "new_reserve_level",
+              "type": "float",
+              "default_value": 0.0,
+              "description": "The new reserve level after adjustment"
+            }
+          ]
+        }
+      },
+      "6": {
+        "code": "class ReserveManagementCompletedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        bank_id: str = \"\",\n        completion_status: str = \"success\",\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.bank_id = bank_id\n        self.completion_status = completion_status",
+        "metadata": {
+          "id": 6,
+          "from_agent_type": "BankAgent",
+          "from_action_name": "manage_reserves",
+          "to_agent_type": "EnvAgent",
+          "to_action_name": "terminate",
+          "from_action_id": 4,
+          "to_action_id": -1,
+          "event_name": "ReserveManagementCompletedEvent",
+          "event_info": "Bank completes reserve management and workflow",
+          "fields": [
+            {
+              "name": "bank_id",
+              "type": "str",
+              "default_value": "",
+              "description": "Unique identifier for the bank completing reserve management"
+            },
+            {
+              "name": "completion_status",
+              "type": "str",
+              "default_value": "success",
+              "description": "Status of the reserve management process"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

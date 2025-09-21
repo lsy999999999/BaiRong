@@ -1,0 +1,75 @@
+{
+    "name": {
+        "type": "str",
+        "default": "TaskExecutor",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's role as a task executor within the multi-agent system"
+    },
+    "task_status": {
+        "type": "str",
+        "default": "awaiting_task",
+        "private": false,
+        "sampling": "default"
+    },
+    "reflection_summary": {
+        "type": "str",
+        "default": "initial_reflection",
+        "private": true,
+        "sampling": "default"
+    },
+    "strategy_changes": {
+        "type": "str",
+        "default": "no_changes",
+        "private": true,
+        "sampling": "default"
+    },
+    "adjustment_reason": {
+        "type": "str",
+        "default": "none",
+        "private": true,
+        "sampling": "default"
+    },
+    "cognitive_load": {
+        "type": "int",
+        "default": 50,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0,
+            100
+        ]
+    },
+    "metacognitive_strategy": {
+        "type": "str",
+        "default": "reflection",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "reflection",
+            "planning",
+            "evaluation"
+        ]
+    },
+    "feedback_received": {
+        "type": "list",
+        "default": [
+            "No feedback yet"
+        ],
+        "private": false,
+        "sampling": "default"
+    },
+    "performance_score": {
+        "type": "float",
+        "default": 0.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

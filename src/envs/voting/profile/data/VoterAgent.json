@@ -1,0 +1,77 @@
+[
+    {
+        "name": "Alice Johnson",
+        "participation_decision": false,
+        "selected_candidate": "candidate_1",
+        "voting_time_limit": 47,
+        "interaction_pattern": "Regular updates with high engagement",
+        "communication_protocol": "Secure Email",
+        "agent_type": "VoterAgent",
+        "personal_preferences": [
+            "policy_1",
+            "policy_2"
+        ],
+        "preference_score": 0.75,
+        "id": "0"
+    },
+    {
+        "name": "Bob Smith",
+        "participation_decision": false,
+        "selected_candidate": "candidate_1",
+        "voting_time_limit": 68,
+        "interaction_pattern": "Occasional updates with moderate engagement",
+        "communication_protocol": "Encrypted Messaging",
+        "agent_type": "VoterAgent",
+        "personal_preferences": [
+            "policy_1",
+            "policy_2"
+        ],
+        "preference_score": 0.75,
+        "id": "1"
+    },
+    {
+        "name": "Carol Lee",
+        "participation_decision": false,
+        "selected_candidate": "candidate_1",
+        "voting_time_limit": 79,
+        "interaction_pattern": "Real-time feedback with high responsiveness",
+        "communication_protocol": "Voice Call",
+        "agent_type": "VoterAgent",
+        "personal_preferences": [
+            "policy_1",
+            "policy_2"
+        ],
+        "preference_score": 0.75,
+        "id": "2"
+    },
+    {
+        "name": "David Kim",
+        "participation_decision": true,
+        "selected_candidate": "candidate_1",
+        "voting_time_limit": 84,
+        "interaction_pattern": "Scheduled updates with low engagement",
+        "communication_protocol": "Online Portal",
+        "agent_type": "VoterAgent",
+        "personal_preferences": [
+            "policy_1",
+            "policy_2"
+        ],
+        "preference_score": 0.75,
+        "id": "3"
+    },
+    {
+        "name": "Eve Martinez",
+        "participation_decision": false,
+        "selected_candidate": "candidate_1",
+        "voting_time_limit": 81,
+        "interaction_pattern": "Infrequent updates with passive engagement",
+        "communication_protocol": "SMS Text",
+        "agent_type": "VoterAgent",
+        "personal_preferences": [
+            "policy_1",
+            "policy_2"
+        ],
+        "preference_score": 0.75,
+        "id": "4"
+    }
+]

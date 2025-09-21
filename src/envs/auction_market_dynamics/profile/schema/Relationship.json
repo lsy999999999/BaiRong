@@ -1,0 +1,22 @@
+[
+    {
+        "source_agent": "AuctionPlatform",
+        "target_agent": "Buyer",
+        "direction": "bidirectional"
+    },
+    {
+        "source_agent": "AuctionPlatform",
+        "target_agent": "Seller",
+        "direction": "bidirectional"
+    },
+    {
+        "source_agent": "AuctionPlatform",
+        "target_agent": "Speculator",
+        "direction": "bidirectional"
+    },
+    {
+        "source_agent": "AuctionPlatform",
+        "target_agent": "AuctionPlatform",
+        "direction": "unidirectional"
+    }
+]

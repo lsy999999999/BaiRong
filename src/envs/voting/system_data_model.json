@@ -1,0 +1,47 @@
+{
+    "environment": {
+        "variables": [
+            {
+                "name": "external_influences",
+                "type": "list",
+                "default_value": null
+            },
+            {
+                "name": "candidate_list",
+                "type": "list",
+                "default_value": null
+            }
+        ]
+    },
+    "agents": {
+        "VoterAgent": {
+            "variables": [
+                {
+                    "name": "voter_id",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "personal_preferences",
+                    "type": "list",
+                    "default_value": null
+                },
+                {
+                    "name": "participation_decision",
+                    "type": "boolean",
+                    "default_value": null
+                },
+                {
+                    "name": "selected_candidate_id",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "preference_score",
+                    "type": "float",
+                    "default_value": null
+                }
+            ]
+        }
+    }
+}

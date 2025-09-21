@@ -1,0 +1,99 @@
+{
+  "domain": "Communication",
+  "scene_name": "uses_and_gratifications_theory",
+  "odd_protocol": {
+    "overview": {
+      "system_goal": "Simulate how audiences choose and use different types of media based on personal needs to validate the basic assumptions of the uses and gratifications theory.",
+      "agent_types": "Audience Agents representing individuals with varying needs and preferences, and Media Agents representing different media types.",
+      "environment_description": "A diverse media environment where agents interact with multiple media types to satisfy varying needs such as entertainment, information, and social interaction.",
+      "system_assumptions": "Agents actively choose media content based on personal needs, with media diversity and content differentiation influencing choices and emotional responses."
+    },
+    "design_concepts": {
+      "interaction_patterns": "Agents choose media content based on needs and adjust future choices based on satisfaction levels, influencing dependency on media types.",
+      "communication_protocols": "Agents provide feedback on media satisfaction, adjusting their reliance on different media types accordingly.",
+      "decision_mechanisms": "Agents select media based on need satisfaction, availability, and social influence, adjusting strategies based on feedback.",
+      "network_structure": "Agents connect with multiple media agents, simulating social network interactions and media consumption."
+    },
+    "details": {
+      "agent_behaviors": "Audience agents select media based on needs like entertainment, information, and social interaction. Media agents offer specific content types and record audience feedback.",
+      "decision_algorithms": "Agents adjust media choices based on satisfaction feedback, increasing selection probability for satisfying media and decreasing for unsatisfactory ones.",
+      "specific_constraints": "Media types must provide content that can satisfy diverse audience needs, influencing agent satisfaction and future choices.",
+      "simulation_process": "Initialize agents with varying needs, select media, consume content, and adjust preferences based on satisfaction, repeating to simulate behavior adjustments."
+    }
+  },
+  "agent_types": {
+    "AudienceAgent": "Represents individuals with varying needs and preferences, selecting media based on personal satisfaction, availability, and social influence.",
+    "MediaAgent": "Represents different media types, offering specific content and recording audience feedback to adjust content offerings and strategies."
+  },
+  "portrait": {
+    "AudienceAgent": 5,
+    "MediaAgent": 4
+  },
+  "metrics": [
+    {
+      "id": "average_satisfaction_level",
+      "name": "average_satisfaction_level",
+      "description": "Measures the average satisfaction level of AudienceAgents with the media they consume.",
+      "visualization_type": "line",
+      "update_frequency": 5,
+      "variables": [
+        {
+          "name": "satisfaction_level",
+          "source_type": "agent",
+          "agent_type": "AudienceAgent",
+          "path": "satisfaction_level",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Calculate the average of the satisfaction_level values from all AudienceAgents. Handle edge cases by ignoring None values and empty lists. If all values are None or the list is empty, return a default average satisfaction level of 0.",
+      "function_name": "average_satisfaction_level"
+    },
+    {
+      "id": "media_type_selection_distribution",
+      "name": "media_type_selection_distribution",
+      "description": "Shows the distribution of selected media types by AudienceAgents.",
+      "visualization_type": "bar",
+      "update_frequency": 5,
+      "variables": [
+        {
+          "name": "selected_media",
+          "source_type": "agent",
+          "agent_type": "AudienceAgent",
+          "path": "selected_media",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Count the occurrences of each media type ID in the selected_media list from AudienceAgents. Handle edge cases by ignoring None values and type errors. Return a dictionary with media type IDs as keys and their counts as values. If the list is empty, return an empty dictionary.",
+      "function_name": "media_type_selection_distribution"
+    },
+    {
+      "id": "feedback_satisfaction_correlation",
+      "name": "feedback_satisfaction_correlation",
+      "description": "Analyzes the correlation between feedback history and satisfaction levels of AudienceAgents.",
+      "visualization_type": "line",
+      "update_frequency": 5,
+      "variables": [
+        {
+          "name": "satisfaction_level",
+          "source_type": "agent",
+          "agent_type": "AudienceAgent",
+          "path": "satisfaction_level",
+          "required": true,
+          "is_list": true
+        },
+        {
+          "name": "feedback_history",
+          "source_type": "agent",
+          "agent_type": "AudienceAgent",
+          "path": "feedback_history",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Calculate the correlation between satisfaction_level and feedback_history for each AudienceAgent. Handle edge cases by ignoring None values and empty lists. Use a default correlation value of 0 for agents with insufficient data. Return a dictionary with agent IDs as keys and correlation values as series.",
+      "function_name": "feedback_satisfaction_correlation"
+    }
+  ]
+}

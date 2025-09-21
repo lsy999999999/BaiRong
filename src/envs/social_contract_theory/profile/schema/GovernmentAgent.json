@@ -1,0 +1,73 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Government Agent",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's role within the government structure"
+    },
+    "law_details": {
+        "type": "str",
+        "default": "Pending legislation review",
+        "private": true,
+        "sampling": "default"
+    },
+    "enforcement_status": {
+        "type": "str",
+        "default": "active",
+        "private": false,
+        "sampling": "default"
+    },
+    "review_status": {
+        "type": "str",
+        "default": "under_review",
+        "private": true,
+        "sampling": "default"
+    },
+    "government_legitimacy": {
+        "type": "int",
+        "default": 85,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            50,
+            100
+        ]
+    },
+    "social_contract_adaptability": {
+        "type": "float",
+        "default": 0.75,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "interaction_history": {
+        "type": "list",
+        "default": [
+            {
+                "event": "contract_negotiation",
+                "outcome": "successful",
+                "date": "2023-10-01"
+            }
+        ],
+        "private": true,
+        "sampling": "default"
+    },
+    "current_policy_focus": {
+        "type": "str",
+        "default": "economic_growth",
+        "private": false,
+        "sampling": "llm",
+        "description": "Current priority in policy development"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

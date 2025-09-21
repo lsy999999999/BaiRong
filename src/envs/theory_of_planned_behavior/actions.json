@@ -1,0 +1,181 @@
+{
+    "CognitiveAgent": [
+        {
+            "id": 1,
+            "name": "initialize_intentions",
+            "condition": null,
+            "description": "This action initializes the agent's behavioral intentions using the Theory of Planned Behavior components.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "attitude",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "The agent's initial attitude towards the behavior."
+                },
+                {
+                    "name": "subjective_norm",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "The agent's perception of social pressure to perform the behavior."
+                },
+                {
+                    "name": "perceived_behavioral_control",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "The agent's perceived ease or difficulty of performing the behavior."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "behavioral_intentions",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Initialized value of the agent's behavioral intentions."
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "name": "calculate_behavioral_intentions",
+            "condition": "Requires subjective norms and perceived behavioral control inputs",
+            "description": "This action calculates the agent's behavioral intentions based on updated TPB components.",
+            "type": "AND",
+            "required_variables": [
+                {
+                    "name": "adjusted_subjective_norms",
+                    "type": "dict",
+                    "context": "event",
+                    "description": "Adjusted subjective norms received from SocialNormAgent."
+                },
+                {
+                    "name": "social_norms_score",
+                    "type": "float",
+                    "context": "event",
+                    "description": "Score representing the influence of social norms on the agent's intentions."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "behavioral_intentions",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Updated value of the agent's behavioral intentions after calculation."
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "name": "finalize_behavior",
+            "condition": "Requires ConstraintsAssessedEvent",
+            "description": "This action finalizes the agent's behavior based on the calculated intentions and environmental constraints.",
+            "type": "AND",
+            "required_variables": [
+                {
+                    "name": "resource_availability",
+                    "type": "float",
+                    "context": "event",
+                    "description": "Assessment of resources available to perform the intended behavior."
+                },
+                {
+                    "name": "situational_constraints",
+                    "type": "dict",
+                    "context": "event",
+                    "description": "Evaluated situational constraints affecting behavior."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "final_behavior",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "The finalized behavior outcome based on intention and environmental constraints."
+                },
+                {
+                    "name": "completion_status",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Status indicating whether the behavior determination process is complete."
+                }
+            ]
+        }
+    ],
+    "SocialNormAgent": [
+        {
+            "id": 4,
+            "name": "evaluate_social_norms",
+            "condition": null,
+            "description": "This action evaluates the social norms affecting the agent and quantifies their influence.",
+            "type": "OR",
+            "required_variables": [],
+            "output_updates": [
+                {
+                    "name": "social_norms_score",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Score representing the influence of social norms on the agent's intentions."
+                }
+            ]
+        },
+        {
+            "id": 5,
+            "name": "adjust_subjective_norms",
+            "condition": "Requires IntentionInitializedEvent",
+            "description": "This action adjusts the agent's subjective norms based on the evaluated social norms.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "social_norms_score",
+                    "type": "float",
+                    "context": "event",
+                    "description": "Score representing the influence of social norms on the agent's intentions."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "adjusted_subjective_norms",
+                    "type": "dict",
+                    "context": "agent",
+                    "description": "Dictionary containing adjusted values for subjective norms based on social influence."
+                }
+            ]
+        }
+    ],
+    "EnvironmentalAgent": [
+        {
+            "id": 6,
+            "name": "assess_environmental_constraints",
+            "condition": "Requires BehavioralIntentionCalculatedEvent",
+            "description": "This action assesses the environmental constraints such as resource availability and situational factors.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "resource_availability",
+                    "type": "float",
+                    "context": "env",
+                    "description": "Current level of resources available in the environment."
+                },
+                {
+                    "name": "situational_factors",
+                    "type": "dict",
+                    "context": "env",
+                    "description": "Current situational factors and constraints present in the environment."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "resource_availability",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Assessment of resources available to perform the intended behavior."
+                },
+                {
+                    "name": "situational_constraints",
+                    "type": "dict",
+                    "context": "agent",
+                    "description": "Dictionary containing evaluated situational constraints affecting behavior."
+                }
+            ]
+        }
+    ]
+}

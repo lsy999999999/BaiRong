@@ -1,0 +1,82 @@
+[
+    {
+        "name": "Alex Johnson",
+        "task_completion_status": "pending",
+        "performance_adjustment_status": "normal",
+        "skill_level": 84,
+        "assigned_tasks": [
+            "initial_task"
+        ],
+        "motivation_level": 75.0,
+        "workflow_adherence": "flexible",
+        "feedback_responsiveness": "responsive",
+        "incentive_sensitivity": 62,
+        "agent_type": "WorkerAgent",
+        "communication_style": "formal",
+        "id": "0"
+    },
+    {
+        "name": "Jamie Lee",
+        "task_completion_status": "pending",
+        "performance_adjustment_status": "normal",
+        "skill_level": 65,
+        "assigned_tasks": [
+            "initial_task"
+        ],
+        "motivation_level": 75.0,
+        "workflow_adherence": "flexible",
+        "feedback_responsiveness": "responsive",
+        "incentive_sensitivity": 77,
+        "agent_type": "WorkerAgent",
+        "communication_style": "informal",
+        "id": "1"
+    },
+    {
+        "name": "Morgan Smith",
+        "task_completion_status": "pending",
+        "performance_adjustment_status": "normal",
+        "skill_level": 69,
+        "assigned_tasks": [
+            "initial_task"
+        ],
+        "motivation_level": 75.0,
+        "workflow_adherence": "adaptive",
+        "feedback_responsiveness": "responsive",
+        "incentive_sensitivity": 9,
+        "agent_type": "WorkerAgent",
+        "communication_style": "indirect",
+        "id": "2"
+    },
+    {
+        "name": "Taylor Brown",
+        "task_completion_status": "pending",
+        "performance_adjustment_status": "normal",
+        "skill_level": 100,
+        "assigned_tasks": [
+            "initial_task"
+        ],
+        "motivation_level": 75.0,
+        "workflow_adherence": "strict",
+        "feedback_responsiveness": "responsive",
+        "incentive_sensitivity": 81,
+        "agent_type": "WorkerAgent",
+        "communication_style": "indirect",
+        "id": "3"
+    },
+    {
+        "name": "Jordan Davis",
+        "task_completion_status": "pending",
+        "performance_adjustment_status": "normal",
+        "skill_level": 13,
+        "assigned_tasks": [
+            "initial_task"
+        ],
+        "motivation_level": 75.0,
+        "workflow_adherence": "strict",
+        "feedback_responsiveness": "responsive",
+        "incentive_sensitivity": 47,
+        "agent_type": "WorkerAgent",
+        "communication_style": "direct",
+        "id": "4"
+    }
+]

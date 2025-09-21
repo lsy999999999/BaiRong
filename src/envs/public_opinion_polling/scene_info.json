@@ -1,0 +1,99 @@
+{
+  "domain": "Politics",
+  "scene_name": "public_opinion_polling",
+  "odd_protocol": {
+    "overview": {
+      "system_goal": "Study how public opinion polling gathers information through voter interaction, analyze dynamic changes in voter preferences, and understand how polling data influences policy choices.",
+      "agent_types": "Voters, who are participants in opinion polls and express preferences for policies or candidates; Pollsters, who collect voter opinions and may interact with voters during polling.",
+      "environment_description": "The environment consists of voters and pollsters interacting within a political context where voters express preferences and pollsters gather data.",
+      "state_variables_description": "Policy preference represents each voter's preference for policies, which may change based on polling interaction; Polling data reflects the popularity of different candidates or policies; Trust level indicates the degree of trust voters have in pollsters when providing information."
+    },
+    "design_concepts": {
+      "interaction_patterns": "Pollsters randomly select voters to conduct opinion polls, asking questions to gather information about policy preferences.",
+      "communication_protocols": "Pollsters communicate with voters through structured questions to collect data on policy preferences.",
+      "decision_mechanisms": "Voters may adjust their policy preferences based on the interaction with pollsters, influenced by their trust level.",
+      "dynamic_update_process": "After each poll, voters adjust their trust level and policy preferences based on feedback, which may influence policy choices or political decisions."
+    },
+    "details": {
+      "agent_behaviors": "Voters participate in polls expressing policy preferences and adjust their preferences based on interactions; Pollsters conduct surveys and record results, influencing voter trust and policy preference dynamics.",
+      "decision_algorithms": "Algorithms determine how voters adjust their policy preferences and trust levels based on interactions with pollsters.",
+      "specific_constraints": "The system operates within a set number of time steps, after which polling data is outputted for analysis.",
+      "termination_conditions": "The system concludes after a specified duration, providing polling data for analysis of its impact on voter behavior."
+    }
+  },
+  "agent_types": {
+    "Voter": "Participants in opinion polls who express preferences for policies or candidates and may adjust their preferences based on interactions with pollsters.",
+    "Pollster": "Agents who conduct surveys, collect voter opinions, interact with voters during polling, and influence voter trust and policy preference dynamics."
+  },
+  "portrait": {
+    "Voter": 5,
+    "Pollster": 1
+  },
+  "metrics": [
+    {
+      "id": "Pollster_Completion_Rate",
+      "name": "Pollster Completion Rate",
+      "description": "Measures the percentage of polls completed by pollsters.",
+      "visualization_type": "bar",
+      "update_interval": 5,
+      "variables": [
+        {
+          "name": "completion_status",
+          "source_type": "agent",
+          "agent_type": "Pollster",
+          "path": "completion_status",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Calculate the proportion of 'completed' status in the completion_status list. Handle None values and unexpected types by skipping them. Count total entries and completed entries, and return the percentage as a dictionary with 'Completed' and 'Incomplete' as keys.",
+      "function_name": "Pollster_Completion_Rate"
+    },
+    {
+      "id": "Voter_Preference_Dynamics",
+      "name": "Voter Preference Dynamics",
+      "description": "Tracks changes in voter preferences over time to analyze dynamic shifts.",
+      "visualization_type": "line",
+      "update_interval": 5,
+      "variables": [
+        {
+          "name": "expressed_preferences",
+          "source_type": "agent",
+          "agent_type": "Voter",
+          "path": "expressed_preferences",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Aggregate preferences from the expressed_preferences list by counting occurrences of each preference. Handle None values and unexpected types by skipping them. Return a dictionary where each key is a preference and value is the count, allowing multiple series for line chart visualization.",
+      "function_name": "Voter_Preference_Dynamics"
+    },
+    {
+      "id": "Pollster_Voter_Interaction_Count",
+      "name": "Pollster_Voter Interaction Count",
+      "description": "Counts the number of interactions between pollsters and voters.",
+      "visualization_type": "bar",
+      "update_interval": 5,
+      "variables": [
+        {
+          "name": "selected_voter_id",
+          "source_type": "agent",
+          "agent_type": "Pollster",
+          "path": "selected_voter_id",
+          "required": true,
+          "is_list": true
+        },
+        {
+          "name": "selected_voter_id",
+          "source_type": "agent",
+          "agent_type": "Voter",
+          "path": "selected_voter_id",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Compare the lists of selected_voter_id from Pollsters and Voters to count unique interactions. Handle None values and unexpected types by skipping them. Return the count of unique interactions as a bar chart with categories like 'Total Interactions'.",
+      "function_name": "Pollster_Voter_Interaction_Count"
+    }
+  ]
+}

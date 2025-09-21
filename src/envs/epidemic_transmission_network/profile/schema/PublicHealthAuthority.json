@@ -1,0 +1,81 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Public Health Authority",
+        "private": false,
+        "sampling": "llm",
+        "description": "A suitable name for a public health authority agent."
+    },
+    "testing_capacity": {
+        "type": "int",
+        "default": 1000,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            500,
+            5000
+        ]
+    },
+    "contact_tracing_efficiency": {
+        "type": "float",
+        "default": 0.75,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "policy_options": {
+        "type": "list",
+        "default": [],
+        "private": false,
+        "sampling": "default"
+    },
+    "communication_strategy": {
+        "type": "str",
+        "choices": [
+            "media_campaign",
+            "community_engagement",
+            "digital_platforms"
+        ],
+        "default": "media_campaign",
+        "private": false,
+        "sampling": "random"
+    },
+    "credibility": {
+        "type": "float",
+        "default": 0.8,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "resource_allocation": {
+        "type": "list",
+        "default": [],
+        "private": false,
+        "sampling": "default"
+    },
+    "intervention_strategies": {
+        "type": "list",
+        "default": [],
+        "private": true,
+        "sampling": "default"
+    },
+    "active_interventions": {
+        "type": "list",
+        "default": [],
+        "private": true,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "int",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

@@ -1,0 +1,45 @@
+{
+    "environment": {
+        "variables": [
+            {
+                "name": "collective_success",
+                "type": "bool",
+                "default_value": null
+            },
+            {
+                "name": "total_cooperation",
+                "type": "float",
+                "default_value": null
+            },
+            {
+                "name": "group_benefit",
+                "type": "float",
+                "default_value": null
+            }
+        ]
+    },
+    "agents": {
+        "Individual": {
+            "variables": [
+                {
+                    "name": "personal_cost",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "personal_benefit",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "cooperation_willingness",
+                    "type": "float",
+                    "default_value": null
+                }
+            ]
+        },
+        "Group": {
+            "variables": []
+        }
+    }
+}

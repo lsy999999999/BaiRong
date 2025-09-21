@@ -1,0 +1,80 @@
+{
+    "VoterAgent": [
+        {
+            "id": 1,
+            "name": "decide_participation",
+            "condition": null,
+            "description": "This action involves the voter deciding whether to participate in the voting process based on their preferences and external influences.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "voter_id",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Unique identifier for the voter making the participation decision"
+                },
+                {
+                    "name": "external_influences",
+                    "type": "list",
+                    "context": "env",
+                    "description": "List of external factors that may affect the voter's decision to participate"
+                },
+                {
+                    "name": "personal_preferences",
+                    "type": "list",
+                    "context": "agent",
+                    "description": "List of personal preferences that guide the voter's decision-making process"
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "participation_decision",
+                    "type": "boolean",
+                    "context": "agent",
+                    "description": "Indicates whether the voter decides to participate in voting"
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "name": "select_candidate",
+            "condition": "Voter has decided to participate",
+            "description": "This action involves the voter choosing a candidate to vote for, based on their preferences and the information available.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "voter_id",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Unique identifier for the voter selecting a candidate"
+                },
+                {
+                    "name": "candidate_list",
+                    "type": "list",
+                    "context": "env",
+                    "description": "List of available candidates for the voter to choose from"
+                },
+                {
+                    "name": "personal_preferences",
+                    "type": "list",
+                    "context": "agent",
+                    "description": "List of personal preferences that influence the voter's candidate selection"
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "selected_candidate_id",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Identifier for the candidate selected by the voter"
+                },
+                {
+                    "name": "preference_score",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Score representing the voter's preference for the selected candidate"
+                }
+            ]
+        }
+    ]
+}

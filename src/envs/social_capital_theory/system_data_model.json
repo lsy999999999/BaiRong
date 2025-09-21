@@ -1,0 +1,66 @@
+{
+    "environment": {
+        "variables": [
+            {
+                "name": "individual_id",
+                "type": "str",
+                "default_value": null
+            },
+            {
+                "name": "network_id",
+                "type": "str",
+                "default_value": null
+            }
+        ]
+    },
+    "agents": {
+        "IndividualAgent": {
+            "variables": [
+                {
+                    "name": "initial_social_capital",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "social_capital_value",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "cooperation_potential",
+                    "type": "bool",
+                    "default_value": null
+                },
+                {
+                    "name": "decision",
+                    "type": "str",
+                    "default_value": null
+                }
+            ]
+        },
+        "SocialNetworkAgent": {
+            "variables": [
+                {
+                    "name": "analysis_summary",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "potential_updates",
+                    "type": "list",
+                    "default_value": null
+                },
+                {
+                    "name": "update_status",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "changes_applied",
+                    "type": "list",
+                    "default_value": null
+                }
+            ]
+        }
+    }
+}

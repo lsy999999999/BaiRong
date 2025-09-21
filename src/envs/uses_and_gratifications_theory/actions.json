@@ -1,0 +1,116 @@
+{
+    "AudienceAgent": [
+        {
+            "id": 1,
+            "name": "select_media",
+            "condition": "null",
+            "description": "Audience agent selects a media type that best satisfies their current needs such as entertainment, information, or social interaction.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "current_needs",
+                    "type": "list",
+                    "context": "agent",
+                    "description": "List of current needs that the audience agent seeks to satisfy."
+                },
+                {
+                    "name": "available_media",
+                    "type": "list",
+                    "context": "env",
+                    "description": "List of media types available in the environment for selection."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "selected_media",
+                    "type": "int",
+                    "context": "agent",
+                    "description": "Identifier of the media type selected by the audience agent."
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "name": "provide_feedback",
+            "condition": "Content received from MediaAgent",
+            "description": "Audience agent provides feedback on the satisfaction level derived from the consumed media content.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "selected_media",
+                    "type": "int",
+                    "context": "agent",
+                    "description": "Identifier of the media type that was consumed and is being evaluated."
+                },
+                {
+                    "name": "satisfaction_level",
+                    "type": "int",
+                    "context": "agent",
+                    "description": "Numeric scale representing the satisfaction level with the consumed media content."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "feedback_history",
+                    "type": "list",
+                    "context": "agent",
+                    "description": "Updated list of past feedback entries including the latest feedback."
+                }
+            ]
+        }
+    ],
+    "MediaAgent": [
+        {
+            "id": 3,
+            "name": "provide_content",
+            "condition": "Media request from AudienceAgent",
+            "description": "Media agent delivers content to the audience agent that aims to satisfy their specified needs.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "content_type",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Type of content being provided by the media agent."
+                },
+                {
+                    "name": "target_need",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Need that the content aims to satisfy for the audience agent."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "delivered_content",
+                    "type": "dict",
+                    "context": "agent",
+                    "description": "Details of the content delivered to the audience agent."
+                }
+            ]
+        },
+        {
+            "id": 4,
+            "name": "record_feedback",
+            "condition": "Feedback received from AudienceAgent",
+            "description": "Media agent records the feedback provided by the audience agent to adjust future content offerings.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "feedback_data",
+                    "type": "dict",
+                    "context": "event",
+                    "description": "Feedback information received from the audience agent."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "feedback_records",
+                    "type": "list",
+                    "context": "agent",
+                    "description": "Updated record of feedback entries from audience agents."
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,92 @@
+[
+    {
+        "name": "Sarah Thompson",
+        "mobilization_status": "planning",
+        "influence_level": 67,
+        "experience_years": 15,
+        "communication_channels": [
+            "Email",
+            "Phone",
+            "Zoom"
+        ],
+        "resource_allocated": 1000.0,
+        "cultural_context_awareness": 91,
+        "agent_type": "CommunityLeader",
+        "community_engagements": [
+            "initial_meeting"
+        ],
+        "id": "0"
+    },
+    {
+        "name": "David Chen",
+        "mobilization_status": "planning",
+        "influence_level": 51,
+        "experience_years": 23,
+        "communication_channels": [
+            "WhatsApp",
+            "Slack",
+            "Microsoft Teams"
+        ],
+        "resource_allocated": 1000.0,
+        "cultural_context_awareness": 48,
+        "agent_type": "CommunityLeader",
+        "community_engagements": [
+            "initial_meeting"
+        ],
+        "id": "1"
+    },
+    {
+        "name": "Emily Rodriguez",
+        "mobilization_status": "planning",
+        "influence_level": 97,
+        "experience_years": 14,
+        "communication_channels": [
+            "Email",
+            "Google Meet",
+            "Phone"
+        ],
+        "resource_allocated": 1000.0,
+        "cultural_context_awareness": 68,
+        "agent_type": "CommunityLeader",
+        "community_engagements": [
+            "initial_meeting"
+        ],
+        "id": "2"
+    },
+    {
+        "name": "Michael Johnson",
+        "mobilization_status": "planning",
+        "influence_level": 87,
+        "experience_years": 7,
+        "communication_channels": [
+            "Zoom",
+            "Slack",
+            "Email"
+        ],
+        "resource_allocated": 1000.0,
+        "cultural_context_awareness": 58,
+        "agent_type": "CommunityLeader",
+        "community_engagements": [
+            "initial_meeting"
+        ],
+        "id": "3"
+    },
+    {
+        "name": "Fatima Ali",
+        "mobilization_status": "planning",
+        "influence_level": 36,
+        "experience_years": 8,
+        "communication_channels": [
+            "Phone",
+            "WhatsApp",
+            "Email"
+        ],
+        "resource_allocated": 1000.0,
+        "cultural_context_awareness": 55,
+        "agent_type": "CommunityLeader",
+        "community_engagements": [
+            "initial_meeting"
+        ],
+        "id": "4"
+    }
+]

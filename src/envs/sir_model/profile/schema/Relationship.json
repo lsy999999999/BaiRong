@@ -1,0 +1,22 @@
+[
+    {
+        "source_agent": "IndividualAgent",
+        "target_agent": "GroupAgent",
+        "direction": "bidirectional"
+    },
+    {
+        "source_agent": "IndividualAgent",
+        "target_agent": "HealthcareSystemAgent",
+        "direction": "unidirectional"
+    },
+    {
+        "source_agent": "GovernmentAgent",
+        "target_agent": "IndividualAgent",
+        "direction": "unidirectional"
+    },
+    {
+        "source_agent": "GovernmentAgent",
+        "target_agent": "GroupAgent",
+        "direction": "unidirectional"
+    }
+]

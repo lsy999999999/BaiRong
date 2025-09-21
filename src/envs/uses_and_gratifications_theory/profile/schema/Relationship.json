@@ -1,0 +1,7 @@
+[
+    {
+        "source_agent": "AudienceAgent",
+        "target_agent": "MediaAgent",
+        "direction": "bidirectional"
+    }
+]

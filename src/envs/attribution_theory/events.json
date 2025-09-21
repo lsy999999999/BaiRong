@@ -1,0 +1,114 @@
+{
+    "-1": {
+        "id": -1,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "ParticipantB",
+        "to_action_name": "display_behavior",
+        "from_action_id": 0,
+        "to_action_id": 3,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for Participant B to display behavior",
+        "fields": []
+    },
+    "1": {
+        "id": 1,
+        "from_agent_type": "ParticipantA",
+        "from_action_name": "observe_behavior",
+        "to_agent_type": "ParticipantA",
+        "to_action_name": "attribute_behavior",
+        "from_action_id": 1,
+        "to_action_id": 2,
+        "event_name": "BehaviorObservedEvent",
+        "event_info": "Participant A observes Participant B's behavior",
+        "fields": [
+            {
+                "name": "behavior_description",
+                "type": "string",
+                "default_value": "",
+                "description": "Description of the behavior observed by Participant A"
+            },
+            {
+                "name": "observation_context",
+                "type": "string",
+                "default_value": "",
+                "description": "Context in which the behavior was observed"
+            }
+        ]
+    },
+    "2": {
+        "id": 2,
+        "from_agent_type": "ParticipantA",
+        "from_action_name": "attribute_behavior",
+        "to_agent_type": "FeedbackerC",
+        "to_action_name": "evaluate_attribution",
+        "from_action_id": 2,
+        "to_action_id": 4,
+        "event_name": "AttributionDecisionEvent",
+        "event_info": "Participant A decides on internal or external attribution",
+        "fields": [
+            {
+                "name": "attribution_type",
+                "type": "string",
+                "default_value": "external",
+                "description": "Type of attribution decided by Participant A: internal or external"
+            },
+            {
+                "name": "reasoning",
+                "type": "string",
+                "default_value": "",
+                "description": "Reasoning behind Participant A's attribution decision"
+            }
+        ]
+    },
+    "3": {
+        "id": 3,
+        "from_agent_type": "ParticipantB",
+        "from_action_name": "display_behavior",
+        "to_agent_type": "ParticipantA",
+        "to_action_name": "observe_behavior",
+        "from_action_id": 3,
+        "to_action_id": 1,
+        "event_name": "BehaviorDisplayedEvent",
+        "event_info": "Participant B displays behavior for observation",
+        "fields": [
+            {
+                "name": "behavior_type",
+                "type": "string",
+                "default_value": "",
+                "description": "Type of behavior displayed by Participant B"
+            },
+            {
+                "name": "intended_outcome",
+                "type": "string",
+                "default_value": "",
+                "description": "Intended outcome of the behavior displayed by Participant B"
+            }
+        ]
+    },
+    "4": {
+        "id": 4,
+        "from_agent_type": "FeedbackerC",
+        "from_action_name": "evaluate_attribution",
+        "to_agent_type": "EnvAgent",
+        "to_action_name": "terminate",
+        "from_action_id": 4,
+        "to_action_id": -1,
+        "event_name": "AttributionFeedbackEvent",
+        "event_info": "Feedbacker C evaluates attribution bias and provides feedback",
+        "fields": [
+            {
+                "name": "bias_detected",
+                "type": "boolean",
+                "default_value": false,
+                "description": "Indicates whether an attribution bias was detected by Feedbacker C"
+            },
+            {
+                "name": "feedback_message",
+                "type": "string",
+                "default_value": "",
+                "description": "Feedback provided by Feedbacker C regarding the attribution decision"
+            }
+        ]
+    }
+}

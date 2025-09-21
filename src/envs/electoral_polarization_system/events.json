@@ -1,0 +1,213 @@
+{
+    "-1": {
+        "id": -1,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "Media",
+        "to_action_name": "set_agenda",
+        "from_action_id": 0,
+        "to_action_id": 1,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for media to set agenda and frame issues",
+        "fields": []
+    },
+    "-2": {
+        "id": -2,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "Party",
+        "to_action_name": "position_policy",
+        "from_action_id": 0,
+        "to_action_id": 2,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for parties to position policies based on electoral context",
+        "fields": []
+    },
+    "-3": {
+        "id": -3,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "InterestGroup",
+        "to_action_name": "influence_media",
+        "from_action_id": 0,
+        "to_action_id": 4,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for interest groups to influence media agendas",
+        "fields": []
+    },
+    "1": {
+        "id": 1,
+        "from_agent_type": "Media",
+        "from_action_name": "set_agenda",
+        "to_agent_type": "Voter",
+        "to_action_name": "consume_media",
+        "from_action_id": 1,
+        "to_action_id": 5,
+        "event_name": "AgendaSetEvent",
+        "event_info": "Media sets the agenda and frames issues for voters",
+        "fields": [
+            {
+                "name": "agenda_topics",
+                "type": "list",
+                "default_value": "[]",
+                "description": "List of topics set by the media as the agenda for voters."
+            },
+            {
+                "name": "framing_strategy",
+                "type": "str",
+                "default_value": "",
+                "description": "The strategy used by the media to frame issues."
+            }
+        ]
+    },
+    "2": {
+        "id": 2,
+        "from_agent_type": "Party",
+        "from_action_name": "position_policy",
+        "to_agent_type": "Voter",
+        "to_action_name": "evaluate_candidates",
+        "from_action_id": 2,
+        "to_action_id": 6,
+        "event_name": "PolicyPositionedEvent",
+        "event_info": "Parties position their policies to attract voters",
+        "fields": [
+            {
+                "name": "policy_positions",
+                "type": "dict",
+                "default_value": "{}",
+                "description": "Dictionary of policy positions that the party is advocating."
+            },
+            {
+                "name": "target_voter_demographics",
+                "type": "list",
+                "default_value": "[]",
+                "description": "Demographics of voters targeted by the party's policy positions."
+            }
+        ]
+    },
+    "3": {
+        "id": 3,
+        "from_agent_type": "Party",
+        "from_action_name": "adapt_strategy",
+        "to_agent_type": "Voter",
+        "to_action_name": "evaluate_candidates",
+        "from_action_id": 3,
+        "to_action_id": 6,
+        "event_name": "StrategyAdaptedEvent",
+        "event_info": "Parties adapt strategies based on voter feedback",
+        "fields": [
+            {
+                "name": "feedback_data",
+                "type": "dict",
+                "default_value": "{}",
+                "description": "Data collected from voter feedback that influences strategy adaptation."
+            },
+            {
+                "name": "new_strategy",
+                "type": "str",
+                "default_value": "",
+                "description": "Description of the new strategy adopted by the party."
+            }
+        ]
+    },
+    "4": {
+        "id": 4,
+        "from_agent_type": "InterestGroup",
+        "from_action_name": "influence_media",
+        "to_agent_type": "Media",
+        "to_action_name": "set_agenda",
+        "from_action_id": 4,
+        "to_action_id": 1,
+        "event_name": "MediaInfluencedEvent",
+        "event_info": "Interest groups influence media to set favorable agendas",
+        "fields": [
+            {
+                "name": "influence_strategy",
+                "type": "str",
+                "default_value": "",
+                "description": "Strategy used by interest groups to influence media."
+            },
+            {
+                "name": "target_media_outlets",
+                "type": "list",
+                "default_value": "[]",
+                "description": "List of media outlets targeted by the interest group."
+            }
+        ]
+    },
+    "5": {
+        "id": 5,
+        "from_agent_type": "Voter",
+        "from_action_name": "consume_media",
+        "to_agent_type": "Voter",
+        "to_action_name": "update_attitudes",
+        "from_action_id": 5,
+        "to_action_id": 7,
+        "event_name": "MediaConsumedEvent",
+        "event_info": "Voters consume media content and update their attitudes",
+        "fields": [
+            {
+                "name": "content_type",
+                "type": "str",
+                "default_value": "",
+                "description": "Type of media content consumed by voters."
+            },
+            {
+                "name": "attitude_change",
+                "type": "float",
+                "default_value": "0.0",
+                "description": "Degree of attitude change in voters after consuming media."
+            }
+        ]
+    },
+    "6": {
+        "id": 6,
+        "from_agent_type": "Voter",
+        "from_action_name": "evaluate_candidates",
+        "to_agent_type": "EnvAgent",
+        "to_action_name": "terminate",
+        "from_action_id": 6,
+        "to_action_id": -1,
+        "event_name": "CandidatesEvaluatedEvent",
+        "event_info": "Voters evaluate candidates based on media and party policies",
+        "fields": [
+            {
+                "name": "evaluation_criteria",
+                "type": "list",
+                "default_value": "[]",
+                "description": "List of criteria used by voters to evaluate candidates."
+            },
+            {
+                "name": "evaluation_results",
+                "type": "dict",
+                "default_value": "{}",
+                "description": "Results of the candidate evaluation process."
+            }
+        ]
+    },
+    "7": {
+        "id": 7,
+        "from_agent_type": "Voter",
+        "from_action_name": "update_attitudes",
+        "to_agent_type": "Party",
+        "to_action_name": "adapt_strategy",
+        "from_action_id": 7,
+        "to_action_id": 3,
+        "event_name": "AttitudesUpdatedEvent",
+        "event_info": "Voters update attitudes, influencing party strategies",
+        "fields": [
+            {
+                "name": "updated_attitudes",
+                "type": "dict",
+                "default_value": "{}",
+                "description": "Dictionary of updated voter attitudes affecting party strategies."
+            },
+            {
+                "name": "influence_factors",
+                "type": "list",
+                "default_value": "[]",
+                "description": "Factors that influenced the update in voter attitudes."
+            }
+        ]
+    }
+}

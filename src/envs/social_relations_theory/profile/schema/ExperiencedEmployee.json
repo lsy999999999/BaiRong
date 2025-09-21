@@ -1,0 +1,90 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Experienced Employee",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's role as an experienced employee in the organization"
+    },
+    "initiator_emotion": {
+        "type": "str",
+        "default": "ready",
+        "private": true,
+        "sampling": "default"
+    },
+    "interaction_status": {
+        "type": "str",
+        "default": "active",
+        "private": false,
+        "sampling": "default"
+    },
+    "emotional_state": {
+        "type": "str",
+        "default": "satisfied",
+        "private": false,
+        "sampling": "default"
+    },
+    "work_motivation": {
+        "type": "str",
+        "default": "high",
+        "private": false,
+        "sampling": "default"
+    },
+    "years_of_experience": {
+        "type": "int",
+        "default": 5,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            1,
+            20
+        ]
+    },
+    "team_support_level": {
+        "type": "float",
+        "default": 75.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "relationship_quality": {
+        "type": "str",
+        "default": "positive",
+        "private": false,
+        "sampling": "default"
+    },
+    "feedback_received": {
+        "type": "list",
+        "default": [
+            "Great job on the recent project!",
+            "Keep up the good work!"
+        ],
+        "private": true,
+        "sampling": "default"
+    },
+    "social_needs": {
+        "type": "str",
+        "default": "fulfilled",
+        "private": false,
+        "sampling": "default"
+    },
+    "communication_style": {
+        "type": "str",
+        "default": "collaborative",
+        "private": false,
+        "sampling": "llm",
+        "description": "Preferred communication style of the agent"
+    },
+    "sense_of_belonging": {
+        "type": "float",
+        "default": 90.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

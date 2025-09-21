@@ -1,0 +1,355 @@
+{
+  "agents": {
+    "IndividualAgent": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "1": {
+          "code": "async def evaluate_social_capital(self, event: Event) -> List[Event]:\n        # Retrieve required variables from event or initialize\n        individual_id = self.profile.get_data(\"individual_id\", \"\")\n        initial_social_capital = self.profile.get_data(\"initial_social_capital\", 0.0)\n\n        # Prepare instruction for LLM\n        instruction = \"\"\"\n        Evaluate the social capital of the individual based on the initial social capital and any additional criteria you deem necessary. \n        Determine the updated social capital value and whether the individual has the potential to cooperate.\n        Please return the information in the following JSON format:\n    \n        {\n        \"social_capital_value\": <Updated social capital value as a float>,\n        \"cooperation_potential\": <Boolean indicating cooperation potential>,\n        \"target_ids\": [\"<The string ID(s) of the target agent(s)>\"]\n        }\n        \"\"\"\n        \n        # Generate reaction using LLM\n        observation = f\"Individual ID: {individual_id}, Initial Social Capital: {initial_social_capital}\"\n        result = await self.generate_reaction(instruction=instruction, observation=observation)\n        \n        # Extract results from LLM response\n        social_capital_value = result.get('social_capital_value', initial_social_capital)\n        cooperation_potential = result.get('cooperation_potential', False)\n        target_ids = result.get('target_ids', [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n        \n        # Update agent profile with new values\n        self.profile.update_data(\"social_capital_value\", social_capital_value)\n        self.profile.update_data(\"cooperation_potential\", cooperation_potential)\n        \n        # Prepare outgoing events\n        events = []\n        for target_id in target_ids:\n            event = SocialCapitalEvaluatedEvent(\n                self.profile_id, target_id, individual_id, social_capital_value, cooperation_potential\n            )\n            events.append(event)\n        \n        return events",
+          "metadata": {
+            "id": 1,
+            "name": "evaluate_social_capital",
+            "condition": null,
+            "description": "Assess the social capital of the individual based on predefined criteria and calculate its value.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "individual_id",
+                "type": "str",
+                "context": "env",
+                "description": "The unique identifier of the individual whose social capital is being evaluated."
+              },
+              {
+                "name": "initial_social_capital",
+                "type": "float",
+                "context": "agent",
+                "description": "The initial social capital value assigned to the individual."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "social_capital_value",
+                "type": "float",
+                "context": "agent",
+                "description": "Updated value of the individual's social capital after evaluation."
+              },
+              {
+                "name": "cooperation_potential",
+                "type": "bool",
+                "context": "agent",
+                "description": "Determines if the individual is likely to cooperate based on their evaluated social capital."
+              }
+            ]
+          }
+        },
+        "2": {
+          "code": "async def decide_cooperation(self, event: Event) -> List[Event]:\n        # Condition Check: Ensure event is an instance of SocialCapitalEvaluatedEvent\n        if not isinstance(event, SocialCapitalEvaluatedEvent):\n            return []\n    \n        individual_id = event.individual_id\n        social_capital_value = event.social_capital_value\n        cooperation_potential = event.cooperation_potential\n    \n        # Decision Making using generate_reaction\n        observation = f\"Individual ID: {individual_id}, Social Capital Value: {social_capital_value}, Cooperation Potential: {cooperation_potential}\"\n        instruction = \"\"\"\n        Evaluate the social capital and trust levels of the individual to decide on cooperation. \n        If the social capital value is above a certain threshold and the cooperation potential is true, decide to cooperate. \n        Otherwise, decide not to cooperate. Return the result in the following JSON format:\n        {\n            \"decision\": \"<'cooperate' or 'not_cooperate'>\",\n            \"impact_on_network\": \"<The expected impact based on the decision>\",\n            \"target_ids\": [\"<The string ID(s) of the SocialNetworkAgent(s)>\"]\n        }\n        \"\"\"\n    \n        result = await self.generate_reaction(instruction=instruction, observation=observation)\n    \n        decision = result.get('decision', 'not_cooperate')\n        impact_on_network = result.get('impact_on_network', 'none')\n        target_ids = result.get('target_ids', [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n    \n        # Update agent's state with the decision\n        self.profile.update_data(\"decision\", decision)\n    \n        # Prepare and send the CooperationDecisionEvent to the SocialNetworkAgent\n        events = []\n        for target_id in target_ids:\n            cooperation_event = CooperationDecisionEvent(\n                from_agent_id=self.profile_id,\n                to_agent_id=target_id,\n                individual_id=individual_id,\n                decision=decision,\n                impact_on_network=impact_on_network\n            )\n            events.append(cooperation_event)\n    \n        return events",
+          "metadata": {
+            "id": 2,
+            "name": "decide_cooperation",
+            "condition": "Social capital and trust levels assessed",
+            "description": "Decide whether to cooperate with others based on the evaluated social capital and trust levels.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "individual_id",
+                "type": "str",
+                "context": "event",
+                "description": "Unique identifier for the individual making the cooperation decision."
+              },
+              {
+                "name": "social_capital_value",
+                "type": "float",
+                "context": "event",
+                "description": "The evaluated social capital value of the individual."
+              },
+              {
+                "name": "cooperation_potential",
+                "type": "bool",
+                "context": "event",
+                "description": "Indicates whether the individual is likely to cooperate based on social capital."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "decision",
+                "type": "str",
+                "context": "agent",
+                "description": "The decision made by the individual regarding cooperation ('cooperate' or 'not_cooperate')."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "SocialNetworkAgent": {
+      "imports": "from typing import Any, List, Optional\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "3": {
+          "code": "async def analyze_relationships(self, event: Event) -> List[Event]:\n        network_id = self.profile.get_data(\"network_id\", \"\")\n        observation = f\"Network ID: {network_id}\"\n        instruction = \"\"\"\n        You are tasked with analyzing the relationships within a social network to identify potential connections and resource flow.\n        Based on this analysis, generate a summary and list potential updates to the network.\n        Please return the information in the following JSON format:\n\n        {\n        \"analysis_summary\": \"<Summary of the relationship analysis>\",\n        \"potential_updates\": [\"<List of potential updates>\"],\n        \"target_ids\": [\"<List of target agent IDs for network update>\"]\n        }\n        \"\"\"\n        result = await self.generate_reaction(instruction, observation)\n        analysis_summary = result.get('analysis_summary', \"Analysis pending\")\n        potential_updates = result.get('potential_updates', [])\n        target_ids = result.get('target_ids', [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n        self.profile.update_data(\"analysis_summary\", analysis_summary)\n        self.profile.update_data(\"potential_updates\", potential_updates)\n        events = []\n        for target_id in target_ids:\n            event = RelationshipsAnalyzedEvent(\n                self.profile_id,\n                target_id,\n                network_id=network_id,\n                analysis_summary=analysis_summary,\n                potential_updates=potential_updates\n            )\n            events.append(event)\n        return events",
+          "metadata": {
+            "id": 3,
+            "name": "analyze_relationships",
+            "condition": null,
+            "description": "Examine the relationships within the social network to identify potential connections and resource flow.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "network_id",
+                "type": "str",
+                "context": "env",
+                "description": "Identifier for the social network being analyzed."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "analysis_summary",
+                "type": "str",
+                "context": "agent",
+                "description": "Summary of the relationship analysis within the network."
+              },
+              {
+                "name": "potential_updates",
+                "type": "list",
+                "context": "agent",
+                "description": "List of potential updates to the network based on analysis."
+              }
+            ]
+          }
+        },
+        "4": {
+          "code": "async def update_network(self, event: Event) -> List[Event]:\n        cooperation_decision_received = self.profile.get_data(\"cooperation_decision_received\", False)\n        relationships_analyzed_received = self.profile.get_data(\"relationships_analyzed_received\", False)\n\n        individual_id = \"\"\n        decision = \"\"\n        impact_on_network = \"\"\n        network_id = \"\"\n        analysis_summary = \"\"\n        potential_updates = []\n\n        if isinstance(event, CooperationDecisionEvent):\n            cooperation_decision_received = True\n            self.profile.update_data(\"cooperation_decision_received\", True)\n            individual_id = event.individual_id\n            decision = event.decision\n            impact_on_network = event.impact_on_network\n        elif isinstance(event, RelationshipsAnalyzedEvent):\n            relationships_analyzed_received = True\n            self.profile.update_data(\"relationships_analyzed_received\", True)\n            network_id = event.network_id\n            analysis_summary = event.analysis_summary\n            potential_updates = event.potential_updates\n        else:\n            return []\n\n        if not (cooperation_decision_received and relationships_analyzed_received):\n            return []\n\n        observation = f\"Individual ID: {individual_id}, Decision: {decision}, Impact: {impact_on_network}, \" \\\n                      f\"Network ID: {network_id}, Analysis Summary: {analysis_summary}, \" \\\n                      f\"Potential Updates: {potential_updates}\"\n        instruction = \"\"\"Based on the observation, update the network accordingly. \n        Ensure to decide on the target_ids which can be a single ID or a list of IDs. \n        Provide the results in the following JSON format:\n        \n        {\n            \"target_ids\": [\"<List of target IDs>\"],\n            \"update_status\": \"<Status of the update>\",\n            \"changes_applied\": [\"<List of changes applied to the network>\"]\n        }\n        \"\"\"\n        result = await self.generate_reaction(instruction, observation)\n        update_status = result.get('update_status', 'incomplete')\n        changes_applied = result.get('changes_applied', [])\n        target_ids = result.get('target_ids', [])\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        self.profile.update_data(\"update_status\", update_status)\n        self.profile.update_data(\"changes_applied\", changes_applied)\n        self.profile.update_data(\"cooperation_decision_received\", False)\n        self.profile.update_data(\"relationships_analyzed_received\", False)\n\n        events = []\n        for target_id in target_ids:\n            network_updated_event = NetworkUpdatedEvent(\n                self.profile_id, target_id, network_id=network_id,\n                update_status=update_status, changes_applied=changes_applied\n            )\n            events.append(network_updated_event)\n\n        return events",
+          "metadata": {
+            "id": 4,
+            "name": "update_network",
+            "condition": "Inputs from CooperationDecisionEvent and RelationshipsAnalyzedEvent",
+            "description": "Update the social network based on cooperation decisions and analyzed relationships.",
+            "type": "AND",
+            "required_variables": [
+              {
+                "name": "individual_id",
+                "type": "str",
+                "context": "event",
+                "description": "Unique identifier for the individual making the cooperation decision."
+              },
+              {
+                "name": "decision",
+                "type": "str",
+                "context": "event",
+                "description": "The decision made by the individual regarding cooperation ('cooperate' or 'not_cooperate')."
+              },
+              {
+                "name": "impact_on_network",
+                "type": "str",
+                "context": "event",
+                "description": "The expected impact of the cooperation decision on the social network."
+              },
+              {
+                "name": "network_id",
+                "type": "str",
+                "context": "event",
+                "description": "Identifier for the social network that was updated."
+              },
+              {
+                "name": "analysis_summary",
+                "type": "str",
+                "context": "event",
+                "description": "Summary of the relationship analysis."
+              },
+              {
+                "name": "potential_updates",
+                "type": "list",
+                "context": "event",
+                "description": "List of potential updates to the network based on analysis."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "update_status",
+                "type": "str",
+                "context": "agent",
+                "description": "Status of the network update process."
+              },
+              {
+                "name": "changes_applied",
+                "type": "list",
+                "context": "agent",
+                "description": "List of changes that were applied to the network."
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "events": {
+    "imports": "from onesim.events import Event\nfrom typing import Any, List",
+    "definitions": {
+      "-1": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": -1,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "IndividualAgent",
+          "to_action_name": "evaluate_social_capital",
+          "from_action_id": 0,
+          "to_action_id": 1,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for evaluating individual social capital",
+          "fields": []
+        }
+      },
+      "-2": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": -2,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "SocialNetworkAgent",
+          "to_action_name": "analyze_relationships",
+          "from_action_id": 0,
+          "to_action_id": 3,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for analyzing social network relationships",
+          "fields": []
+        }
+      },
+      "1": {
+        "code": "class SocialCapitalEvaluatedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        individual_id: str = \"\",\n        social_capital_value: float = 0.0,\n        cooperation_potential: bool = False,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.individual_id = individual_id\n        self.social_capital_value = social_capital_value\n        self.cooperation_potential = cooperation_potential",
+        "metadata": {
+          "id": 1,
+          "from_agent_type": "IndividualAgent",
+          "from_action_name": "evaluate_social_capital",
+          "to_agent_type": "IndividualAgent",
+          "to_action_name": "decide_cooperation",
+          "from_action_id": 1,
+          "to_action_id": 2,
+          "event_name": "SocialCapitalEvaluatedEvent",
+          "event_info": "Evaluation of social capital completed, prompting decision on cooperation",
+          "fields": [
+            {
+              "name": "individual_id",
+              "type": "str",
+              "default_value": "",
+              "description": "Unique identifier for the individual whose social capital is evaluated."
+            },
+            {
+              "name": "social_capital_value",
+              "type": "float",
+              "default_value": 0.0,
+              "description": "The evaluated social capital value of the individual."
+            },
+            {
+              "name": "cooperation_potential",
+              "type": "bool",
+              "default_value": false,
+              "description": "Indicates whether the individual is likely to cooperate based on social capital."
+            }
+          ]
+        }
+      },
+      "2": {
+        "code": "class CooperationDecisionEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        individual_id: str = \"\",\n        decision: str = 'undecided',\n        impact_on_network: str = 'none',\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.individual_id = individual_id\n        self.decision = decision\n        self.impact_on_network = impact_on_network",
+        "metadata": {
+          "id": 2,
+          "from_agent_type": "IndividualAgent",
+          "from_action_name": "decide_cooperation",
+          "to_agent_type": "SocialNetworkAgent",
+          "to_action_name": "update_network",
+          "from_action_id": 2,
+          "to_action_id": 4,
+          "event_name": "CooperationDecisionEvent",
+          "event_info": "Decision on cooperation made, updating social network",
+          "fields": [
+            {
+              "name": "individual_id",
+              "type": "str",
+              "default_value": "",
+              "description": "Unique identifier for the individual making the cooperation decision."
+            },
+            {
+              "name": "decision",
+              "type": "str",
+              "default_value": "undecided",
+              "description": "The decision made by the individual regarding cooperation ('cooperate' or 'not_cooperate')."
+            },
+            {
+              "name": "impact_on_network",
+              "type": "str",
+              "default_value": "none",
+              "description": "The expected impact of the cooperation decision on the social network."
+            }
+          ]
+        }
+      },
+      "3": {
+        "code": "class RelationshipsAnalyzedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        network_id: str = \"\",\n        analysis_summary: str = 'pending',\n        potential_updates: List[Any] = [],\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.network_id = network_id\n        self.analysis_summary = analysis_summary\n        self.potential_updates = potential_updates",
+        "metadata": {
+          "id": 3,
+          "from_agent_type": "SocialNetworkAgent",
+          "from_action_name": "analyze_relationships",
+          "to_agent_type": "SocialNetworkAgent",
+          "to_action_name": "update_network",
+          "from_action_id": 3,
+          "to_action_id": 4,
+          "event_name": "RelationshipsAnalyzedEvent",
+          "event_info": "Relationships analyzed, preparing to update network",
+          "fields": [
+            {
+              "name": "network_id",
+              "type": "str",
+              "default_value": "",
+              "description": "Identifier for the social network being analyzed."
+            },
+            {
+              "name": "analysis_summary",
+              "type": "str",
+              "default_value": "pending",
+              "description": "Summary of the relationship analysis."
+            },
+            {
+              "name": "potential_updates",
+              "type": "list",
+              "default_value": [],
+              "description": "List of potential updates to the network based on analysis."
+            }
+          ]
+        }
+      },
+      "4": {
+        "code": "class NetworkUpdatedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        network_id: str = \"\",\n        update_status: str = 'incomplete',\n        changes_applied: List[Any] = [],\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.network_id = network_id\n        self.update_status = update_status\n        self.changes_applied = changes_applied",
+        "metadata": {
+          "id": 4,
+          "from_agent_type": "SocialNetworkAgent",
+          "from_action_name": "update_network",
+          "to_agent_type": "EnvAgent",
+          "to_action_name": "terminate",
+          "from_action_id": 4,
+          "to_action_id": -1,
+          "event_name": "NetworkUpdatedEvent",
+          "event_info": "Social network updated based on cooperation decisions and relationship analysis",
+          "fields": [
+            {
+              "name": "network_id",
+              "type": "str",
+              "default_value": "",
+              "description": "Identifier for the social network that was updated."
+            },
+            {
+              "name": "update_status",
+              "type": "str",
+              "default_value": "incomplete",
+              "description": "Status of the network update process."
+            },
+            {
+              "name": "changes_applied",
+              "type": "list",
+              "default_value": [],
+              "description": "List of changes that were applied to the network."
+            }
+          ]
+        }
+      }
+    }
+  }
+}

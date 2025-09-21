@@ -1,0 +1,67 @@
+{
+    "name": {
+        "type": "str",
+        "default": "BehaviorChangeRecipient",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's designated role in the simulation"
+    },
+    "commitment_level": {
+        "type": "int",
+        "default": 50,
+        "private": false,
+        "sampling": "default"
+    },
+    "spread_target": {
+        "type": "str",
+        "default": "initial_target",
+        "private": false,
+        "sampling": "default"
+    },
+    "interaction_frequency": {
+        "type": "int",
+        "default": 5,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            1,
+            10
+        ]
+    },
+    "social_support_received": {
+        "type": "int",
+        "default": 75,
+        "private": false,
+        "sampling": "default"
+    },
+    "health_behavior_status": {
+        "type": "str",
+        "default": "active",
+        "private": false,
+        "sampling": "default"
+    },
+    "network_influence": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "default"
+    },
+    "reciprocal_promises": {
+        "type": "list",
+        "default": [
+            {
+                "promise": "help_others",
+                "status": "pending"
+            }
+        ],
+        "private": true,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

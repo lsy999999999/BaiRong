@@ -1,0 +1,92 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Judge Anderson",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's full name"
+    },
+    "judgment_result": {
+        "type": "str",
+        "default": "pending",
+        "private": false,
+        "sampling": "default"
+    },
+    "legal_reasons": {
+        "type": "str",
+        "default": "awaiting_evaluation",
+        "private": true,
+        "sampling": "default"
+    },
+    "threat_assessment": {
+        "type": "int",
+        "default": 50,
+        "private": false,
+        "sampling": "default"
+    },
+    "defense_assessment": {
+        "type": "int",
+        "default": 50,
+        "private": false,
+        "sampling": "default"
+    },
+    "completion_status": {
+        "type": "str",
+        "default": "in_progress",
+        "private": false,
+        "sampling": "default"
+    },
+    "years_of_experience": {
+        "type": "int",
+        "default": 15,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            5,
+            40
+        ]
+    },
+    "specialty": {
+        "type": "str",
+        "default": "criminal_law",
+        "private": false,
+        "sampling": "llm",
+        "description": "The legal specialty of the judge, e.g., criminal law, civil law"
+    },
+    "reputation_score": {
+        "type": "float",
+        "default": 75.0,
+        "private": true,
+        "sampling": "default"
+    },
+    "decision_making_style": {
+        "type": "str",
+        "default": "analytical",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "analytical",
+            "intuitive",
+            "balanced"
+        ]
+    },
+    "previous_cases": {
+        "type": "list",
+        "default": [
+            {
+                "case_id": "1234",
+                "outcome": "justified"
+            }
+        ],
+        "private": true,
+        "sampling": "default",
+        "sample_size": 5
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

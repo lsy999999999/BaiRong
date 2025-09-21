@@ -1,0 +1,67 @@
+[
+    {
+        "name": "Anderson",
+        "family_income": 99486.57196690523,
+        "nutrition_quality": "High",
+        "education_investment": 986.2140131358354,
+        "children_count": 5,
+        "health_behavior_score": 70,
+        "social_support_level": "Strong",
+        "community_involvement": "Active",
+        "agent_type": "FamilyAgent",
+        "family_health_status": "stable",
+        "id": "5"
+    },
+    {
+        "name": "Nguyen",
+        "family_income": 87446.80338538112,
+        "nutrition_quality": "Moderate",
+        "education_investment": 3756.9034220235003,
+        "children_count": 0,
+        "health_behavior_score": 70,
+        "social_support_level": "Moderate",
+        "community_involvement": "Occasional",
+        "agent_type": "FamilyAgent",
+        "family_health_status": "stable",
+        "id": "6"
+    },
+    {
+        "name": "Martinez",
+        "family_income": 100579.50672103479,
+        "nutrition_quality": "Low",
+        "education_investment": 3992.810473236174,
+        "children_count": 4,
+        "health_behavior_score": 70,
+        "social_support_level": "Weak",
+        "community_involvement": "Minimal",
+        "agent_type": "FamilyAgent",
+        "family_health_status": "stable",
+        "id": "7"
+    },
+    {
+        "name": "Patel",
+        "family_income": 77239.37102022191,
+        "nutrition_quality": "High",
+        "education_investment": 4859.484953436607,
+        "children_count": 1,
+        "health_behavior_score": 70,
+        "social_support_level": "Strong",
+        "community_involvement": "Very Active",
+        "agent_type": "FamilyAgent",
+        "family_health_status": "stable",
+        "id": "8"
+    },
+    {
+        "name": "Smith",
+        "family_income": 104155.28269466439,
+        "nutrition_quality": "Moderate",
+        "education_investment": 4467.16964571654,
+        "children_count": 0,
+        "health_behavior_score": 70,
+        "social_support_level": "Strong",
+        "community_involvement": "Active",
+        "agent_type": "FamilyAgent",
+        "family_health_status": "stable",
+        "id": "9"
+    }
+]

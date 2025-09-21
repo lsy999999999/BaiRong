@@ -1,0 +1,27 @@
+[
+    {
+        "source_agent": "Individual",
+        "target_agent": "Individual",
+        "direction": "unidirectional"
+    },
+    {
+        "source_agent": "Family",
+        "target_agent": "EducationalInstitution",
+        "direction": "bidirectional"
+    },
+    {
+        "source_agent": "Family",
+        "target_agent": "Family",
+        "direction": "unidirectional"
+    },
+    {
+        "source_agent": "EducationalInstitution",
+        "target_agent": "EducationalInstitution",
+        "direction": "unidirectional"
+    },
+    {
+        "source_agent": "Employer",
+        "target_agent": "Employer",
+        "direction": "unidirectional"
+    }
+]

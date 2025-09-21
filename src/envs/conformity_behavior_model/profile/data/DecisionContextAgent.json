@@ -1,0 +1,67 @@
+[
+    {
+        "name": "StrategicPlanner",
+        "type": "ambiguous",
+        "ambiguity": 0.35023814293281685,
+        "stakes": 3,
+        "time_pressure": 62,
+        "feedback_immediacy": 51,
+        "objective_truth": "",
+        "status": "",
+        "agent_type": "DecisionContextAgent",
+        "decision_history": [],
+        "id": "15"
+    },
+    {
+        "name": "RiskAnalyzer",
+        "type": "simple",
+        "ambiguity": 0.5971758696444486,
+        "stakes": 5,
+        "time_pressure": 68,
+        "feedback_immediacy": 68,
+        "objective_truth": "",
+        "status": "",
+        "agent_type": "DecisionContextAgent",
+        "decision_history": [],
+        "id": "16"
+    },
+    {
+        "name": "MarketEvaluator",
+        "type": "simple",
+        "ambiguity": 0.5696171556707968,
+        "stakes": 5,
+        "time_pressure": 16,
+        "feedback_immediacy": 35,
+        "objective_truth": "",
+        "status": "",
+        "agent_type": "DecisionContextAgent",
+        "decision_history": [],
+        "id": "17"
+    },
+    {
+        "name": "ResourceAllocator",
+        "type": "ambiguous",
+        "ambiguity": 0.7274606814763924,
+        "stakes": 7,
+        "time_pressure": 41,
+        "feedback_immediacy": 19,
+        "objective_truth": "",
+        "status": "",
+        "agent_type": "DecisionContextAgent",
+        "decision_history": [],
+        "id": "18"
+    },
+    {
+        "name": "PerformanceOptimizer",
+        "type": "complex",
+        "ambiguity": 0.9616006089572405,
+        "stakes": 8,
+        "time_pressure": 14,
+        "feedback_immediacy": 64,
+        "objective_truth": "",
+        "status": "",
+        "agent_type": "DecisionContextAgent",
+        "decision_history": [],
+        "id": "19"
+    }
+]

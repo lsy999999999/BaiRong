@@ -1,0 +1,83 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Citizens Group",
+        "private": false,
+        "sampling": "llm",
+        "description": "The name representing the group of citizens"
+    },
+    "acceptance_level": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "default"
+    },
+    "compliance_level": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "default"
+    },
+    "satisfaction_level": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "default"
+    },
+    "adjustment_reason": {
+        "type": "str",
+        "default": "initial_policy",
+        "private": true,
+        "sampling": "default"
+    },
+    "political_views": {
+        "type": "str",
+        "default": "neutral",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "neutral",
+            "conservative",
+            "liberal",
+            "progressive"
+        ]
+    },
+    "daily_activity_pattern": {
+        "type": "list",
+        "default": [
+            "morning_news",
+            "work",
+            "evening_discussion"
+        ],
+        "private": true,
+        "sampling": "default"
+    },
+    "economic_status": {
+        "type": "str",
+        "default": "middle_class",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "low_income",
+            "middle_class",
+            "high_income"
+        ]
+    },
+    "age_group": {
+        "type": "int",
+        "default": 30,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            18,
+            65
+        ]
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

@@ -1,0 +1,113 @@
+{
+    "environment": {
+        "variables": [
+            {
+                "name": "environmental_factors",
+                "type": "dict",
+                "default_value": null
+            },
+            {
+                "name": "social_pressure",
+                "type": "float",
+                "default_value": null
+            },
+            {
+                "name": "completion_status",
+                "type": "str",
+                "default_value": null
+            },
+            {
+                "name": "results",
+                "type": "dict",
+                "default_value": null
+            }
+        ]
+    },
+    "agents": {
+        "IndividualAgent": {
+            "variables": [
+                {
+                    "name": "conformity_tendency",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "self_confidence",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "opinion_visibility",
+                    "type": "bool",
+                    "default_value": null
+                },
+                {
+                    "name": "initial_judgment",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "conformity_threshold",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "conformity_decision",
+                    "type": "bool",
+                    "default_value": null
+                },
+                {
+                    "name": "belief_certainty",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "updated_belief",
+                    "type": "str",
+                    "default_value": null
+                }
+            ]
+        },
+        "GroupAgent": {
+            "variables": [
+                {
+                    "name": "member_opinions",
+                    "type": "list",
+                    "default_value": null
+                },
+                {
+                    "name": "opinion_distribution",
+                    "type": "dict",
+                    "default_value": null
+                },
+                {
+                    "name": "updated_group_opinion",
+                    "type": "str",
+                    "default_value": null
+                }
+            ]
+        },
+        "OpinionLeaderAgent": {
+            "variables": [
+                {
+                    "name": "charisma",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "credibility",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "influence_strength",
+                    "type": "float",
+                    "default_value": null
+                }
+            ]
+        },
+        "DecisionContextAgent": {
+            "variables": []
+        }
+    }
+}

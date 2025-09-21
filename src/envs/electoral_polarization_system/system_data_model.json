@@ -1,0 +1,114 @@
+{
+    "environment": {
+        "variables": [
+            {
+                "name": "current_issues",
+                "type": "list",
+                "default_value": null
+            },
+            {
+                "name": "voter_issue_positions",
+                "type": "dict",
+                "default_value": null
+            },
+            {
+                "name": "candidate_profiles",
+                "type": "list",
+                "default_value": null
+            }
+        ]
+    },
+    "agents": {
+        "Media": {
+            "variables": [
+                {
+                    "name": "media_ideology_bias",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "agenda_setting_power",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "agenda_topics",
+                    "type": "list",
+                    "default_value": null
+                }
+            ]
+        },
+        "Party": {
+            "variables": [
+                {
+                    "name": "party_ideology",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "policy_positions",
+                    "type": "dict",
+                    "default_value": null
+                },
+                {
+                    "name": "current_strategy",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "new_strategy",
+                    "type": "str",
+                    "default_value": null
+                }
+            ]
+        },
+        "InterestGroup": {
+            "variables": [
+                {
+                    "name": "influence_strategy",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "connections",
+                    "type": "list",
+                    "default_value": null
+                },
+                {
+                    "name": "media_influence_effect",
+                    "type": "dict",
+                    "default_value": null
+                }
+            ]
+        },
+        "Voter": {
+            "variables": [
+                {
+                    "name": "voter_information_level",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "attitude_change",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "evaluation_results",
+                    "type": "dict",
+                    "default_value": null
+                },
+                {
+                    "name": "current_attitudes",
+                    "type": "dict",
+                    "default_value": null
+                },
+                {
+                    "name": "updated_attitudes",
+                    "type": "dict",
+                    "default_value": null
+                }
+            ]
+        }
+    }
+}

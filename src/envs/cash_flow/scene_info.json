@@ -1,0 +1,55 @@
+{
+  "domain": "Economics",
+  "scene_name": "cash_flow",
+  "odd_protocol": {
+    "overview": {
+      "system_goal": "The goal is to simulate a simple economic system where multiple companies manage cash flow and make decisions to sustain operations, aiming to study the impact of cash flow on company decision-making, capital efficiency, and survival capability.",
+      "agent_types": "Companies managing cash flow, Banks providing loan services, Consumers affecting company revenue.",
+      "environment_description": "The environment includes companies with varying cash reserves, banks with loan conditions and interest rates, and consumers whose spending habits affect company revenue.",
+      "initialization_process": "Create several company agents with random initialization of cash reserves, revenue, expenditure, and debt. Create bank agents with set loan conditions and interest rates. Create consumer agents with spending habits affecting company revenue."
+    },
+    "design_concepts": {
+      "interaction_patterns": "Companies interact with banks to apply for loans based on cash reserves, debt levels, and credit ratings. Consumers influence company revenue through their spending behavior.",
+      "communication_protocols": "Banks assess company credit ratings and debt status to decide on loan issuance. Companies communicate their financial status to banks for loan applications.",
+      "decision_mechanisms": "Companies decide on borrowing based on cash reserves, projected revenue, and expenditure. Banks adjust loan rates based on market conditions and company credit ratings.",
+      "economic_impact": "Consumer spending levels fluctuate with the overall economic situation, indirectly affecting company revenue and cash flow."
+    },
+    "details": {
+      "agent_behaviors": "Companies manage cash flow by paying expenses, repaying debt, and handling taxes based on income. Banks offer loans based on credit ratings and market rates. Consumers spend on goods, affecting company revenue.",
+      "decision_algorithms": "Companies use algorithms to decide loan amounts based on debt and credit rating. Banks adjust loan conditions based on repayment history and economic conditions.",
+      "specific_constraints": "Companies face default risk if overburdened with debt. Banks limit loan issuance based on credit ratings.",
+      "termination_conditions": "The model ends after a set maximum number of rounds or early if specific debt default conditions are met."
+    }
+  },
+  "agent_types": {
+    "CompanyAgent": "Manages cash flow by paying expenses, repaying debt, and handling taxes based on income. Decides on borrowing based on cash reserves, projected revenue, and expenditure.",
+    "BankAgent": "Provides loan services by assessing company credit ratings and debt status. Adjusts loan rates based on market conditions and company credit ratings.",
+    "ConsumerAgent": "Influences company revenue through spending behavior, affecting the financial dynamics within the economic system."
+  },
+  "portrait": {
+    "CompanyAgent": 4,
+    "BankAgent": 1,
+    "ConsumerAgent": 5
+  },
+  "metrics": [
+    {
+      "id": "Total_Loan_Amount_Approved_by_Banks",
+      "name": "Total Loan Amount Approved by Banks",
+      "description": "Tracks the total amount of loans approved by all BankAgents, indicating the level of financial support provided to companies.",
+      "visualization_type": "line",
+      "update_interval": 5,
+      "variables": [
+        {
+          "name": "approved_loan_amount",
+          "source_type": "agent",
+          "agent_type": "BankAgent",
+          "path": "approved_loan_amount",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Sum the 'approved_loan_amount' for all BankAgents. Ignore None values during summation. If the list is empty or all values are None, return 0 as the total loan amount.",
+      "function_name": "Total_Loan_Amount_Approved_by_Banks"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "environment": {
+    "name": "dynamic_culture_dissemination",
+    "mode": "round",
+    "max_rounds": 50
+  },
+  "agent": {
+    "profile": {
+      "CulturalAgent": {
+        "count": 100,
+        "max_count": 100,
+        "portrait": 5
+      }
+    },
+    "planning": "COTPlanning",
+    "memory": "ListStrategy"
+  },
+  "model": {
+    "chat": "/data/pretrain_dir/Qwen2.5-14B-Instruct",
+    "embedding": "/data/pretrain_dir/bge-base-en-v1.5"
+  }
+}

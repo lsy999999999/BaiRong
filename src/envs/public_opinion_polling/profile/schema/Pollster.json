@@ -1,0 +1,72 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Pollster Agent",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's name representing its role in the polling process"
+    },
+    "selected_voter": {
+        "type": "str",
+        "default": "awaiting_selection",
+        "private": true,
+        "sampling": "default"
+    },
+    "opinion_data": {
+        "type": "list",
+        "default": [
+            {
+                "question": "Policy preference?",
+                "response": "undecided"
+            }
+        ],
+        "private": true,
+        "sampling": "default"
+    },
+    "completion_status": {
+        "type": "str",
+        "default": "pending",
+        "private": false,
+        "sampling": "default"
+    },
+    "interaction_count": {
+        "type": "int",
+        "default": 0,
+        "private": false,
+        "sampling": "default"
+    },
+    "trust_level": {
+        "type": "float",
+        "default": 50.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "polling_method": {
+        "type": "str",
+        "default": "structured_questions",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "structured_questions",
+            "open_discussion",
+            "survey"
+        ]
+    },
+    "experience_years": {
+        "type": "int",
+        "default": 5,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            1,
+            20
+        ]
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

@@ -1,0 +1,27 @@
+[
+    {
+        "source_agent": "JudgeAgent",
+        "target_agent": "CaseAgent",
+        "direction": "unidirectional"
+    },
+    {
+        "source_agent": "CaseAgent",
+        "target_agent": "PrecedentAgent",
+        "direction": "unidirectional"
+    },
+    {
+        "source_agent": "CaseAgent",
+        "target_agent": "LegalExpertAgent",
+        "direction": "unidirectional"
+    },
+    {
+        "source_agent": "PrecedentAgent",
+        "target_agent": "JudgeAgent",
+        "direction": "unidirectional"
+    },
+    {
+        "source_agent": "SocioPoliticalAgent",
+        "target_agent": "JudgeAgent",
+        "direction": "unidirectional"
+    }
+]

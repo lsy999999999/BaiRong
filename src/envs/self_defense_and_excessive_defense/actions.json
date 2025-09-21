@@ -1,0 +1,154 @@
+{
+    "Aggressor": [
+        {
+            "id": 1,
+            "name": "initiate_threat",
+            "condition": null,
+            "description": "The aggressor begins a threatening action towards the defender, setting the stage for the conflict scenario.",
+            "type": "OR",
+            "required_variables": [],
+            "output_updates": [
+                {
+                    "name": "threat_level",
+                    "type": "int",
+                    "context": "agent",
+                    "description": "The severity of the threat posed by the aggressor."
+                },
+                {
+                    "name": "aggressor_id",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Unique identifier for the aggressor agent."
+                },
+                {
+                    "name": "defender_id",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Unique identifier for the defender agent."
+                }
+            ]
+        }
+    ],
+    "Defender": [
+        {
+            "id": 2,
+            "name": "react_to_threat",
+            "condition": "Threat level assessed",
+            "description": "The defender responds to the aggressor's threat with appropriate defensive measures.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "threat_level",
+                    "type": "int",
+                    "context": "event",
+                    "description": "Severity of the threat as communicated by the aggressor."
+                },
+                {
+                    "name": "aggressor_id",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Identifier for the aggressor agent."
+                },
+                {
+                    "name": "defender_id",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Identifier for the defender agent."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "defensive_action_type",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Type of defensive action taken by the defender."
+                },
+                {
+                    "name": "defense_intensity",
+                    "type": "int",
+                    "context": "agent",
+                    "description": "Intensity level of the defense action."
+                },
+                {
+                    "name": "evidence_collected",
+                    "type": "list",
+                    "context": "agent",
+                    "description": "Evidence collected during the defensive action."
+                }
+            ]
+        }
+    ],
+    "Judge": [
+        {
+            "id": 3,
+            "name": "evaluate_defense",
+            "condition": "Defense action and threat level data available",
+            "description": "The judge evaluates the defender's actions against the aggressor's threat to determine if the defense was justified or excessive.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "defensive_action_type",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Type of defensive action taken by the defender."
+                },
+                {
+                    "name": "defense_intensity",
+                    "type": "int",
+                    "context": "event",
+                    "description": "Intensity level of the defense action."
+                },
+                {
+                    "name": "evidence_collected",
+                    "type": "list",
+                    "context": "event",
+                    "description": "Evidence gathered during the defense."
+                },
+                {
+                    "name": "defender_id",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Identifier for the defender agent."
+                },
+                {
+                    "name": "judge_id",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Identifier for the judge agent."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "judgment_result",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Outcome of the judge's decision on the defense."
+                },
+                {
+                    "name": "legal_reasons",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Legal rationale for the judge's decision."
+                },
+                {
+                    "name": "threat_assessment",
+                    "type": "int",
+                    "context": "agent",
+                    "description": "Judge's assessment of the initial threat level."
+                },
+                {
+                    "name": "defense_assessment",
+                    "type": "int",
+                    "context": "agent",
+                    "description": "Judge's assessment of the defense action's proportionality and necessity."
+                },
+                {
+                    "name": "completion_status",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Status of the judgment process."
+                }
+            ]
+        }
+    ]
+}

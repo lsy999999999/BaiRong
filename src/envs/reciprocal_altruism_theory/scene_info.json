@@ -1,0 +1,95 @@
+{
+  "domain": "Sociology",
+  "scene_name": "reciprocal_altruism_theory",
+  "odd_protocol": {
+    "overview": {
+      "system_goal": "The goal of the simulation is to model how reciprocal behaviors in a social network can promote the spread of healthy behaviors.",
+      "agent_types": "Individual A as a health behavior advocate, Individual B as a recipient of health behavior change, Community Network as a facilitator of behavior spread.",
+      "environment_description": "The environment is a social network representing a community where reciprocal behaviors and health information are exchanged.",
+      "health_behavior_spread": "Simulation demonstrates how individuals influence others through reciprocal behaviors to promote health changes like smoking cessation and increased physical activity.",
+      "social_chain_reaction": "Understanding how health behaviors spread through social interaction chains and evaluating the effects in various scenarios."
+    },
+    "design_concepts": {
+      "interaction_patterns": "Individual A helps Individual B change health behaviors, and Individual B commits to helping others, forming a chain of health behavior spread.",
+      "communication_protocols": "Social support and information channels within the Community Network facilitate reciprocal interactions and health behavior dissemination.",
+      "decision_mechanisms": "Decisions are based on reciprocal promises and social support received, influencing individuals to change and promote health behaviors.",
+      "reciprocal_relationships": "Individual A establishes reciprocal relations by aiding Individual B, who in turn helps others for mutual benefits.",
+      "social_support_influence": "Community Network members provide emotional support, resources, and information to assist individuals in changing health behaviors."
+    },
+    "details": {
+      "agent_behaviors": "Individual A initiates health behavior change, Individual B receives and spreads the change, Community Network supports and extends behavior diffusion.",
+      "decision_algorithms": "Algorithms focus on reciprocal promises and community support dynamics affecting health behavior changes.",
+      "specific_constraints": "Constraints include the frequency and intensity of reciprocal interactions, and the availability of social support within the network.",
+      "simulation_steps": "Role setting, initiation of reciprocal behaviors, health behavior spread, community network influence, evaluation and feedback.",
+      "evaluation_metrics": "Health behavior change rate, reciprocal behavior spread effect, and the role of social support in behavior change."
+    }
+  },
+  "agent_types": {
+    "HealthBehaviorAdvocate": "This agent promotes and initiates health behavior changes within the social network, encouraging recipients to adopt healthier lifestyles.",
+    "BehaviorChangeRecipient": "This agent receives health behavior change initiatives and commits to spreading these changes to others, facilitating a chain reaction of health improvements.",
+    "CommunityNetworkFacilitator": "This agent supports and enhances the diffusion of health behaviors by providing social support and communication channels within the community network."
+  },
+  "portrait": {
+    "HealthBehaviorAdvocate": 2,
+    "BehaviorChangeRecipient": 5,
+    "CommunityNetworkFacilitator": 3
+  },
+  "metrics": [
+    {
+      "id": "health_behavior_spread_completion_rate",
+      "name": "health_behavior_spread_completion_rate",
+      "description": "Measures the proportion of completed health behavior spread efforts within the community network.",
+      "visualization_type": "pie",
+      "update_frequency": 5,
+      "variables": [
+        {
+          "name": "completion_status",
+          "source_type": "env",
+          "path": "completion_status",
+          "required": true,
+          "is_list": false
+        }
+      ],
+      "calculation_logic": "Counts the number of completed spread efforts by evaluating the 'completion_status' variable. If 'completion_status' is None, it is treated as incomplete. The pie chart shows the proportion of completed versus incomplete efforts.",
+      "function_name": "health_behavior_spread_completion_rate"
+    },
+    {
+      "id": "average_behavior_change_intensity",
+      "name": "average_behavior_change_intensity",
+      "description": "Calculates the average intensity of health behavior changes initiated by advocates.",
+      "visualization_type": "line",
+      "update_frequency": 5,
+      "variables": [
+        {
+          "name": "intensity",
+          "source_type": "agent",
+          "agent_type": "HealthBehaviorAdvocate",
+          "path": "intensity",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Aggregates the 'intensity' values from all HealthBehaviorAdvocate agents. If the list is empty or contains None values, those entries are ignored. The bar chart represents the average intensity of behavior changes initiated.",
+      "function_name": "average_behavior_change_intensity"
+    },
+    {
+      "id": "commitment_level_distribution",
+      "name": "commitment_level_distribution",
+      "description": "Shows the distribution of commitment levels among recipients of health behavior changes.",
+      "visualization_type": "line",
+      "update_frequency": 5,
+      "variables": [
+        {
+          "name": "commitment_level",
+          "source_type": "agent",
+          "agent_type": "BehaviorChangeRecipient",
+          "path": "commitment_level",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Calculates the frequency distribution of 'commitment_level' values among BehaviorChangeRecipient agents. If the list is empty or contains None values, those entries are ignored. The line chart depicts the distribution of commitment levels over time.",
+      "function_name": "commitment_level_distribution"
+    }
+  ]
+}

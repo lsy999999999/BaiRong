@@ -1,0 +1,58 @@
+{
+    "environment": {
+        "variables": [
+            {
+                "name": "feedback_data",
+                "type": "list",
+                "default_value": null
+            }
+        ]
+    },
+    "agents": {
+        "PhysiologicalAgent": {
+            "variables": [
+                {
+                    "name": "physiological_needs_status",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "resources_required",
+                    "type": "list",
+                    "default_value": null
+                }
+            ]
+        },
+        "SocialAgent": {
+            "variables": [
+                {
+                    "name": "social_needs_status",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "social_interactions_needed",
+                    "type": "list",
+                    "default_value": null
+                }
+            ]
+        },
+        "SelfActualizationAgent": {
+            "variables": [
+                {
+                    "name": "self_actualization_goals",
+                    "type": "list",
+                    "default_value": null
+                },
+                {
+                    "name": "self_actualization_status",
+                    "type": "str",
+                    "default_value": null
+                }
+            ]
+        },
+        "FeedbackAgent": {
+            "variables": []
+        }
+    }
+}

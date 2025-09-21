@@ -1,0 +1,105 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Alice Johnson",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's full name representing an individual in the simulation"
+    },
+    "current_life_stage": {
+        "type": "str",
+        "default": "young_adult",
+        "private": false,
+        "sampling": "default"
+    },
+    "family_support_status": {
+        "type": "str",
+        "default": "supported",
+        "private": true,
+        "sampling": "default"
+    },
+    "education_adaptation_status": {
+        "type": "str",
+        "default": "enrolled",
+        "private": false,
+        "sampling": "default"
+    },
+    "health_integration_status": {
+        "type": "str",
+        "default": "healthy",
+        "private": false,
+        "sampling": "default"
+    },
+    "policy_adjustment_status": {
+        "type": "str",
+        "default": "compliant",
+        "private": true,
+        "sampling": "default"
+    },
+    "age": {
+        "type": "int",
+        "default": 25,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            18,
+            65
+        ]
+    },
+    "income_level": {
+        "type": "float",
+        "default": 30000.0,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            15000.0,
+            100000.0
+        ]
+    },
+    "health_status": {
+        "type": "str",
+        "default": "stable",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "stable",
+            "critical",
+            "improving"
+        ]
+    },
+    "education_level": {
+        "type": "str",
+        "default": "bachelor",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "high_school",
+            "bachelor",
+            "master",
+            "doctorate"
+        ]
+    },
+    "social_network": {
+        "type": "list",
+        "default": [
+            "family",
+            "friends",
+            "colleagues"
+        ],
+        "private": true,
+        "sampling": "default"
+    },
+    "career_status": {
+        "type": "str",
+        "default": "employed",
+        "private": false,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

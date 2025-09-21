@@ -1,0 +1,102 @@
+[
+    {
+        "name": "CognitiveAgent-Alpha",
+        "attitude": 0.5,
+        "subjective_norm": 0.5,
+        "perceived_behavioral_control": 0.5,
+        "behavioral_intentions": 0.5,
+        "final_behavior": "undecided",
+        "completion_status": "incomplete",
+        "social_norm_intensity": 0.6866119390005581,
+        "resource_availability": 0.2667586283435548,
+        "decision_threshold": 0.8493221203352752,
+        "agent_type": "CognitiveAgent",
+        "communication_log": [
+            {
+                "timestamp": "2025-01-01T00:00:00Z",
+                "message": "initial log"
+            }
+        ],
+        "id": "0"
+    },
+    {
+        "name": "CognitiveAgent-Beta",
+        "attitude": 0.5,
+        "subjective_norm": 0.5,
+        "perceived_behavioral_control": 0.5,
+        "behavioral_intentions": 0.5,
+        "final_behavior": "undecided",
+        "completion_status": "incomplete",
+        "social_norm_intensity": 0.38716292255116314,
+        "resource_availability": 0.556213616376616,
+        "decision_threshold": 0.6980809535058825,
+        "agent_type": "CognitiveAgent",
+        "communication_log": [
+            {
+                "timestamp": "2025-01-01T00:00:00Z",
+                "message": "initial log"
+            }
+        ],
+        "id": "1"
+    },
+    {
+        "name": "CognitiveAgent-Gamma",
+        "attitude": 0.5,
+        "subjective_norm": 0.5,
+        "perceived_behavioral_control": 0.5,
+        "behavioral_intentions": 0.5,
+        "final_behavior": "undecided",
+        "completion_status": "incomplete",
+        "social_norm_intensity": 0.08054183395642622,
+        "resource_availability": 0.14367021530326507,
+        "decision_threshold": 0.9380033303623126,
+        "agent_type": "CognitiveAgent",
+        "communication_log": [
+            {
+                "timestamp": "2025-01-01T00:00:00Z",
+                "message": "initial log"
+            }
+        ],
+        "id": "2"
+    },
+    {
+        "name": "CognitiveAgent-Delta",
+        "attitude": 0.5,
+        "subjective_norm": 0.5,
+        "perceived_behavioral_control": 0.5,
+        "behavioral_intentions": 0.5,
+        "final_behavior": "undecided",
+        "completion_status": "incomplete",
+        "social_norm_intensity": 0.5952255860456945,
+        "resource_availability": 0.7403086585907882,
+        "decision_threshold": 0.696771820259391,
+        "agent_type": "CognitiveAgent",
+        "communication_log": [
+            {
+                "timestamp": "2025-01-01T00:00:00Z",
+                "message": "initial log"
+            }
+        ],
+        "id": "3"
+    },
+    {
+        "name": "CognitiveAgent-Epsilon",
+        "attitude": 0.5,
+        "subjective_norm": 0.5,
+        "perceived_behavioral_control": 0.5,
+        "behavioral_intentions": 0.5,
+        "final_behavior": "undecided",
+        "completion_status": "incomplete",
+        "social_norm_intensity": 0.6240278334086278,
+        "resource_availability": 0.9319156472783616,
+        "decision_threshold": 0.5971504570259941,
+        "agent_type": "CognitiveAgent",
+        "communication_log": [
+            {
+                "timestamp": "2025-01-01T00:00:00Z",
+                "message": "initial log"
+            }
+        ],
+        "id": "4"
+    }
+]

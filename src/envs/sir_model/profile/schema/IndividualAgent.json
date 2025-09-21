@@ -1,0 +1,101 @@
+{
+    "name": {
+        "type": "str",
+        "default": "John Doe",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's full name representing an individual in the simulation"
+    },
+    "current_health_state": {
+        "type": "str",
+        "default": "susceptible",
+        "private": false,
+        "sampling": "default"
+    },
+    "risk_level": {
+        "type": "float",
+        "default": 0.1,
+        "private": false,
+        "sampling": "default"
+    },
+    "previous_health_state": {
+        "type": "str",
+        "default": "none",
+        "private": false,
+        "sampling": "default"
+    },
+    "age": {
+        "type": "int",
+        "default": 30,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0,
+            100
+        ]
+    },
+    "social_group": {
+        "type": "str",
+        "default": "family",
+        "private": false,
+        "sampling": "llm",
+        "description": "The social group to which the agent belongs, influencing interaction patterns"
+    },
+    "mask_wearing_behavior": {
+        "type": "str",
+        "default": "occasionally",
+        "private": true,
+        "sampling": "random",
+        "choices": [
+            "always",
+            "occasionally",
+            "never"
+        ]
+    },
+    "contact_rate": {
+        "type": "float",
+        "default": 5.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "infection_probability": {
+        "type": "float",
+        "default": 0.05,
+        "private": true,
+        "sampling": "default"
+    },
+    "recovery_rate": {
+        "type": "float",
+        "default": 0.2,
+        "private": false,
+        "sampling": "default"
+    },
+    "policy_compliance_level": {
+        "type": "int",
+        "default": 75,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0,
+            100
+        ]
+    },
+    "social_network": {
+        "type": "list",
+        "default": [
+            "friend_1",
+            "friend_2"
+        ],
+        "private": true,
+        "sampling": "llm",
+        "sample_size": 5,
+        "description": "List of social connections influencing agent's interactions"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

@@ -1,0 +1,81 @@
+{
+  "domain": "Sociology",
+  "scene_name": "social_resource_exchange_network",
+  "odd_protocol": {
+    "overview": {
+      "system_goal": "Simulate reciprocal behaviors and social capital accumulation in social resource exchange networks, study how different initial resource endowments and exchange rules lead to social stratification, and explore mechanisms of social mobility and intergenerational transmission.",
+      "agent_types": "1. Family: characterized by id, members, collective resources, inheritance rules, education investment, social status, and residential area. 2. Educational Institution: characterized by type, quality, admission criteria, tuition fees, prestige, and alumni network.",
+      "environment_description": "The environment includes variables such as inequality index, social mobility rate, meritocracy level, welfare system strength, and economic growth rate."
+    },
+    "design_concepts": {
+      "interaction_patterns": "Families invest in education based on strategies and available resources. Educational institutions select students based on criteria.",
+      "communication_protocols": "Agents communicate through social networks and exchange interactions, considering trust levels and reciprocity expectations.",
+      "decision_mechanisms": "Families decide on education investments based on return estimates and child potential. Educational institutions evaluate candidates using weighted criteria."
+    },
+    "details": {
+      "agent_behaviors": "Families allocate resources for education and follow inheritance rules. Educational institutions select students based on type-specific criteria.",
+      "decision_algorithms": "Families use algorithms to decide on education investments. Educational institutions use scoring systems for student selection.",
+      "specific_constraints": "Families have limited resources for educational investments. Educational institutions have fixed admission quotas."
+    }
+  },
+  "agent_types": {
+    "Family": "A collective agent consisting of members who share resources, make educational investments, and follow inheritance rules to influence social status and mobility.",
+    "EducationalInstitution": "An entity that selects and educates students based on specific criteria, impacting social mobility through admission decisions and educational quality."
+  },
+  "metrics": [
+    {
+      "id": "Family_Education_Investment_Ratio",
+      "name": "Family Education Investment Ratio",
+      "description": "This metric measures the ratio of resources allocated to education versus total collective resources within families, indicating the prioritization of educational investments.",
+      "visualization_type": "pie",
+      "update_frequency": 5,
+      "variables": [
+        {
+          "name": "collective_resources",
+          "source_type": "agent",
+          "agent_type": "Family",
+          "path": "profile.collective_resources",
+          "required": true,
+          "is_list": true
+        },
+        {
+          "name": "education_investment",
+          "source_type": "agent",
+          "agent_type": "Family",
+          "path": "profile.education_investment",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "For each family, divide the education_investment by collective_resources, ignoring families where either value is None or where collective_resources is zero to avoid division errors. Aggregate the ratios to form a proportion of total education investment versus total resources.",
+      "function_name": "Family_Education_Investment_Ratio"
+    },
+    {
+      "id": "Student_Candidate_Selection_Effectiveness",
+      "name": "Student Candidate Selection Effectiveness",
+      "description": "This metric evaluates the effectiveness of educational institutions in selecting candidates by comparing the number of candidates evaluated versus those hired.",
+      "visualization_type": "line",
+      "update_frequency": 5,
+      "variables": [
+        {
+          "name": "all_applications_received",
+          "source_type": "agent",
+          "agent_type": "EducationalInstitution",
+          "path": "profile.all_applications_received",
+          "required": true,
+          "is_list": true
+        },
+        {
+          "name": "all_selected_students",
+          "source_type": "agent",
+          "agent_type": "EducationalInstitution",
+          "path": "profile.all_selected_students",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Count the number of candidates in candidates_list and the number of successful hiring decisions (non-None, non-empty string values) in hiring_decision. Calculate the effectiveness ratio by dividing the number of hires by the number of candidates, ignoring None values and empty lists.",
+      "function_name": "Student_Candidate_Selection_Effectiveness"
+    }
+  ]
+}

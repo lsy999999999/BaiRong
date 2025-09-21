@@ -1,0 +1,92 @@
+[
+    {
+        "name": "Alice Johnson",
+        "education_decision": true,
+        "education_level": "Bachelor's Degree in Computer Science",
+        "job_search_status": "actively_seeking",
+        "job_position": "Software Engineer",
+        "social_class": "middle_class",
+        "networking_activity": [
+            "attended_conference",
+            "joined_club"
+        ],
+        "social_resources_access": 3,
+        "agent_type": "IndividualAgent",
+        "cultural_capital_level": 50.0,
+        "workflow_completion_status": "in_progress",
+        "economic_capital": 130152.03690963562,
+        "id": "0"
+    },
+    {
+        "name": "Michael Smith",
+        "education_decision": true,
+        "education_level": "Master's Degree in Business Administration",
+        "job_search_status": "actively_seeking",
+        "job_position": "Project Manager",
+        "social_class": "working_class",
+        "networking_activity": [
+            "attended_conference",
+            "joined_club"
+        ],
+        "social_resources_access": 5,
+        "agent_type": "IndividualAgent",
+        "cultural_capital_level": 50.0,
+        "workflow_completion_status": "in_progress",
+        "economic_capital": 272720.99496607867,
+        "id": "1"
+    },
+    {
+        "name": "Jessica Brown",
+        "education_decision": true,
+        "education_level": "Doctorate in Environmental Science",
+        "job_search_status": "actively_seeking",
+        "job_position": "Research Scientist",
+        "social_class": "upper_class",
+        "networking_activity": [
+            "attended_conference",
+            "joined_club"
+        ],
+        "social_resources_access": 2,
+        "agent_type": "IndividualAgent",
+        "cultural_capital_level": 50.0,
+        "workflow_completion_status": "in_progress",
+        "economic_capital": 294726.17767034407,
+        "id": "2"
+    },
+    {
+        "name": "David Lee",
+        "education_decision": true,
+        "education_level": "Associate's Degree in Graphic Design",
+        "job_search_status": "actively_seeking",
+        "job_position": "Graphic Designer",
+        "social_class": "middle_class",
+        "networking_activity": [
+            "attended_conference",
+            "joined_club"
+        ],
+        "social_resources_access": 3,
+        "agent_type": "IndividualAgent",
+        "cultural_capital_level": 50.0,
+        "workflow_completion_status": "in_progress",
+        "economic_capital": 347278.7848488886,
+        "id": "3"
+    },
+    {
+        "name": "Emma Garcia",
+        "education_decision": true,
+        "education_level": "High School Diploma",
+        "job_search_status": "actively_seeking",
+        "job_position": "Customer Service Representative",
+        "social_class": "middle_class",
+        "networking_activity": [
+            "attended_conference",
+            "joined_club"
+        ],
+        "social_resources_access": 3,
+        "agent_type": "IndividualAgent",
+        "cultural_capital_level": 50.0,
+        "workflow_completion_status": "in_progress",
+        "economic_capital": 232013.95150358704,
+        "id": "4"
+    }
+]

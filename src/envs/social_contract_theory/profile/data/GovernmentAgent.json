@@ -1,0 +1,92 @@
+[
+    {
+        "name": "John Doe",
+        "enforcement_status": "active",
+        "government_legitimacy": 91,
+        "social_contract_adaptability": 0.1389163043251127,
+        "current_policy_focus": "Climate Change Mitigation",
+        "agent_type": "GovernmentAgent",
+        "law_details": "Pending legislation review",
+        "review_status": "under_review",
+        "interaction_history": [
+            {
+                "event": "contract_negotiation",
+                "outcome": "successful",
+                "date": "2023-10-01"
+            }
+        ],
+        "id": "5"
+    },
+    {
+        "name": "Sarah Johnson",
+        "enforcement_status": "active",
+        "government_legitimacy": 93,
+        "social_contract_adaptability": 0.5620471653623381,
+        "current_policy_focus": "Healthcare Reform",
+        "agent_type": "GovernmentAgent",
+        "law_details": "Pending legislation review",
+        "review_status": "under_review",
+        "interaction_history": [
+            {
+                "event": "contract_negotiation",
+                "outcome": "successful",
+                "date": "2023-10-01"
+            }
+        ],
+        "id": "6"
+    },
+    {
+        "name": "Michael Smith",
+        "enforcement_status": "active",
+        "government_legitimacy": 94,
+        "social_contract_adaptability": 0.9896302172748147,
+        "current_policy_focus": "Economic Growth and Job Creation",
+        "agent_type": "GovernmentAgent",
+        "law_details": "Pending legislation review",
+        "review_status": "under_review",
+        "interaction_history": [
+            {
+                "event": "contract_negotiation",
+                "outcome": "successful",
+                "date": "2023-10-01"
+            }
+        ],
+        "id": "7"
+    },
+    {
+        "name": "Emily Davis",
+        "enforcement_status": "active",
+        "government_legitimacy": 82,
+        "social_contract_adaptability": 0.8082839266295979,
+        "current_policy_focus": "Education System Improvement",
+        "agent_type": "GovernmentAgent",
+        "law_details": "Pending legislation review",
+        "review_status": "under_review",
+        "interaction_history": [
+            {
+                "event": "contract_negotiation",
+                "outcome": "successful",
+                "date": "2023-10-01"
+            }
+        ],
+        "id": "8"
+    },
+    {
+        "name": "Robert Brown",
+        "enforcement_status": "active",
+        "government_legitimacy": 55,
+        "social_contract_adaptability": 0.1957950239928884,
+        "current_policy_focus": "Cybersecurity Enhancement",
+        "agent_type": "GovernmentAgent",
+        "law_details": "Pending legislation review",
+        "review_status": "under_review",
+        "interaction_history": [
+            {
+                "event": "contract_negotiation",
+                "outcome": "successful",
+                "date": "2023-10-01"
+            }
+        ],
+        "id": "9"
+    }
+]

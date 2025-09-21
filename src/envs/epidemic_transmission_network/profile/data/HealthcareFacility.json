@@ -1,0 +1,67 @@
+[
+    {
+        "name": "Green Valley Hospital",
+        "location": "123 Elm Street, Springfield, IL",
+        "capacity": 282,
+        "staff_level": 17,
+        "treatment_effectiveness": 0.7834700911602448,
+        "agent_type": "HealthcareFacility",
+        "current_occupancy": 0,
+        "resource_level": {},
+        "resource_allocation": "",
+        "status_log": [],
+        "id": "15"
+    },
+    {
+        "name": "Lakeside Medical Center",
+        "location": "456 Oak Avenue, Lakeview, CA",
+        "capacity": 469,
+        "staff_level": 30,
+        "treatment_effectiveness": 0.7378464461022374,
+        "agent_type": "HealthcareFacility",
+        "current_occupancy": 0,
+        "resource_level": {},
+        "resource_allocation": "",
+        "status_log": [],
+        "id": "16"
+    },
+    {
+        "name": "Downtown Health Clinic",
+        "location": "789 Pine Road, Metropolis, NY",
+        "capacity": 103,
+        "staff_level": 153,
+        "treatment_effectiveness": 0.9051496508639116,
+        "agent_type": "HealthcareFacility",
+        "current_occupancy": 0,
+        "resource_level": {},
+        "resource_allocation": "",
+        "status_log": [],
+        "id": "17"
+    },
+    {
+        "name": "Sunrise Family Care",
+        "location": "101 Maple Lane, Sunnyvale, TX",
+        "capacity": 161,
+        "staff_level": 169,
+        "treatment_effectiveness": 0.5681819632913723,
+        "agent_type": "HealthcareFacility",
+        "current_occupancy": 0,
+        "resource_level": {},
+        "resource_allocation": "",
+        "status_log": [],
+        "id": "18"
+    },
+    {
+        "name": "Riverbend Orthopedic Institute",
+        "location": "202 Birch Boulevard, River City, FL",
+        "capacity": 376,
+        "staff_level": 47,
+        "treatment_effectiveness": 0.8837604212529215,
+        "agent_type": "HealthcareFacility",
+        "current_occupancy": 0,
+        "resource_level": {},
+        "resource_allocation": "",
+        "status_log": [],
+        "id": "19"
+    }
+]

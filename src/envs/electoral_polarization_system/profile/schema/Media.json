@@ -1,0 +1,88 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Media Outlet",
+        "private": false,
+        "sampling": "llm",
+        "description": "A name suitable for a media agent representing an outlet or channel."
+    },
+    "type": {
+        "type": "str",
+        "choices": [
+            "television",
+            "radio",
+            "newspaper",
+            "online"
+        ],
+        "default": "online",
+        "private": false,
+        "sampling": "random"
+    },
+    "media_ideology_bias": {
+        "type": "str",
+        "default": "",
+        "private": false,
+        "sampling": "default"
+    },
+    "audience_reach": {
+        "type": "float",
+        "default": 0.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "credibility": {
+        "type": "float",
+        "default": 0.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "framing_strategy": {
+        "type": "str",
+        "choices": [
+            "sensational",
+            "balanced",
+            "biased",
+            "neutral"
+        ],
+        "default": "balanced",
+        "private": false,
+        "sampling": "random"
+    },
+    "agenda_setting_power": {
+        "type": "float",
+        "default": 0.0,
+        "private": false,
+        "sampling": "default"
+    },
+    "content_selection_bias": {
+        "type": "str",
+        "choices": [
+            "political",
+            "economic",
+            "social",
+            "cultural"
+        ],
+        "default": "political",
+        "private": false,
+        "sampling": "random"
+    },
+    "audience_demographics": {
+        "type": "list",
+        "default": [],
+        "private": true,
+        "sampling": "default"
+    },
+    "agenda_topics": {
+        "type": "list",
+        "default": [],
+        "private": true,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "int",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

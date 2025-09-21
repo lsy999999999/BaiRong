@@ -1,0 +1,87 @@
+[
+    {
+        "name": "InnovateTech",
+        "team_size": 9,
+        "team_morale": 80,
+        "interaction_frequency": 2,
+        "current_task": "collaborative_project",
+        "communication_style": "Collaborative",
+        "productivity_level": 70,
+        "emotional_support": 75,
+        "cooperation_level": 85,
+        "agent_type": "TeamAgent",
+        "team_dynamics": [
+            "positive",
+            "supportive"
+        ],
+        "id": "10"
+    },
+    {
+        "name": "DataMasters",
+        "team_size": 4,
+        "team_morale": 80,
+        "interaction_frequency": 2,
+        "current_task": "collaborative_project",
+        "communication_style": "Analytical",
+        "productivity_level": 70,
+        "emotional_support": 75,
+        "cooperation_level": 85,
+        "agent_type": "TeamAgent",
+        "team_dynamics": [
+            "positive",
+            "supportive"
+        ],
+        "id": "11"
+    },
+    {
+        "name": "CreativePulse",
+        "team_size": 8,
+        "team_morale": 80,
+        "interaction_frequency": 1,
+        "current_task": "collaborative_project",
+        "communication_style": "Expressive",
+        "productivity_level": 70,
+        "emotional_support": 75,
+        "cooperation_level": 85,
+        "agent_type": "TeamAgent",
+        "team_dynamics": [
+            "positive",
+            "supportive"
+        ],
+        "id": "12"
+    },
+    {
+        "name": "EfficientOps",
+        "team_size": 4,
+        "team_morale": 80,
+        "interaction_frequency": 5,
+        "current_task": "collaborative_project",
+        "communication_style": "Direct",
+        "productivity_level": 70,
+        "emotional_support": 75,
+        "cooperation_level": 85,
+        "agent_type": "TeamAgent",
+        "team_dynamics": [
+            "positive",
+            "supportive"
+        ],
+        "id": "13"
+    },
+    {
+        "name": "SynergySolutions",
+        "team_size": 10,
+        "team_morale": 80,
+        "interaction_frequency": 1,
+        "current_task": "collaborative_project",
+        "communication_style": "Consensus-driven",
+        "productivity_level": 70,
+        "emotional_support": 75,
+        "cooperation_level": 85,
+        "agent_type": "TeamAgent",
+        "team_dynamics": [
+            "positive",
+            "supportive"
+        ],
+        "id": "14"
+    }
+]

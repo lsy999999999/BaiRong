@@ -1,0 +1,12 @@
+{
+    "innovation_id": "SocialMediaPlatformV2",
+    "network_connections": [
+        "Alice-Bob",
+        "Charlie-Dave",
+        "Eve-Frank",
+        "Grace-Helen",
+        "Ivy-Jack"
+    ],
+    "relative_advantage": 1.75,
+    "completion_status": true
+}

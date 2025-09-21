@@ -1,0 +1,72 @@
+[
+    {
+        "name": "Environmental Advocate",
+        "modified_information": "ready",
+        "target_public_agents": [
+            "Agent_001"
+        ],
+        "belief_strength": 40,
+        "information_credibility": 29,
+        "interaction_frequency": 8,
+        "agent_type": "OpinionLeaderAgent",
+        "original_information": "awaiting_input",
+        "communication_delay": 2.2900504803230475,
+        "id": "5"
+    },
+    {
+        "name": "Tech Innovator",
+        "modified_information": "ready",
+        "target_public_agents": [
+            "Agent_001"
+        ],
+        "belief_strength": 71,
+        "information_credibility": 24,
+        "interaction_frequency": 5,
+        "agent_type": "OpinionLeaderAgent",
+        "original_information": "awaiting_input",
+        "communication_delay": 2.5650632783185263,
+        "id": "6"
+    },
+    {
+        "name": "Health and Wellness Guru",
+        "modified_information": "ready",
+        "target_public_agents": [
+            "Agent_001"
+        ],
+        "belief_strength": 15,
+        "information_credibility": 16,
+        "interaction_frequency": 9,
+        "agent_type": "OpinionLeaderAgent",
+        "original_information": "awaiting_input",
+        "communication_delay": 0.8205245202662876,
+        "id": "7"
+    },
+    {
+        "name": "Financial Expert",
+        "modified_information": "ready",
+        "target_public_agents": [
+            "Agent_001"
+        ],
+        "belief_strength": 41,
+        "information_credibility": 57,
+        "interaction_frequency": 12,
+        "agent_type": "OpinionLeaderAgent",
+        "original_information": "awaiting_input",
+        "communication_delay": 0.9749681187814075,
+        "id": "8"
+    },
+    {
+        "name": "Social Justice Activist",
+        "modified_information": "ready",
+        "target_public_agents": [
+            "Agent_001"
+        ],
+        "belief_strength": 94,
+        "information_credibility": 82,
+        "interaction_frequency": 17,
+        "agent_type": "OpinionLeaderAgent",
+        "original_information": "awaiting_input",
+        "communication_delay": 2.9479547102646575,
+        "id": "9"
+    }
+]

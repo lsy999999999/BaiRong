@@ -1,0 +1,102 @@
+[
+    {
+        "name": "Judge Emily Carter",
+        "trial_phase": "ongoing",
+        "trial_status": "active",
+        "legal_system_type": "civil law",
+        "court_backlog": 50,
+        "public_attention": 70,
+        "precedent_strength": 80,
+        "procedural_rule_strictness": 90,
+        "trial_management": "coordinating",
+        "agent_type": "Judge",
+        "evidence_admissibility": "pending_review",
+        "evidence_ruling": [
+            {
+                "type": "initial",
+                "status": "awaiting_decision"
+            }
+        ],
+        "id": "15"
+    },
+    {
+        "name": "Judge Michael Thompson",
+        "trial_phase": "ongoing",
+        "trial_status": "active",
+        "legal_system_type": "civil law",
+        "court_backlog": 50,
+        "public_attention": 70,
+        "precedent_strength": 80,
+        "procedural_rule_strictness": 90,
+        "trial_management": "coordinating",
+        "agent_type": "Judge",
+        "evidence_admissibility": "pending_review",
+        "evidence_ruling": [
+            {
+                "type": "initial",
+                "status": "awaiting_decision"
+            }
+        ],
+        "id": "16"
+    },
+    {
+        "name": "Judge Sophia Rodriguez",
+        "trial_phase": "ongoing",
+        "trial_status": "active",
+        "legal_system_type": "common law",
+        "court_backlog": 50,
+        "public_attention": 70,
+        "precedent_strength": 80,
+        "procedural_rule_strictness": 90,
+        "trial_management": "coordinating",
+        "agent_type": "Judge",
+        "evidence_admissibility": "pending_review",
+        "evidence_ruling": [
+            {
+                "type": "initial",
+                "status": "awaiting_decision"
+            }
+        ],
+        "id": "17"
+    },
+    {
+        "name": "Judge Daniel Kim",
+        "trial_phase": "ongoing",
+        "trial_status": "active",
+        "legal_system_type": "common law",
+        "court_backlog": 50,
+        "public_attention": 70,
+        "precedent_strength": 80,
+        "procedural_rule_strictness": 90,
+        "trial_management": "coordinating",
+        "agent_type": "Judge",
+        "evidence_admissibility": "pending_review",
+        "evidence_ruling": [
+            {
+                "type": "initial",
+                "status": "awaiting_decision"
+            }
+        ],
+        "id": "18"
+    },
+    {
+        "name": "Judge Olivia Patel",
+        "trial_phase": "ongoing",
+        "trial_status": "active",
+        "legal_system_type": "common law",
+        "court_backlog": 50,
+        "public_attention": 70,
+        "precedent_strength": 80,
+        "procedural_rule_strictness": 90,
+        "trial_management": "coordinating",
+        "agent_type": "Judge",
+        "evidence_admissibility": "pending_review",
+        "evidence_ruling": [
+            {
+                "type": "initial",
+                "status": "awaiting_decision"
+            }
+        ],
+        "id": "19"
+    }
+]

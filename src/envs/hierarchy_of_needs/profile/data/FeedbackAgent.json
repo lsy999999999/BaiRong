@@ -1,0 +1,107 @@
+[
+    {
+        "name": "Alex Johnson",
+        "current_need_level": "physiological",
+        "interaction_count": 10,
+        "language_skill_level": 100,
+        "collaboration_tendency": 0.4722456514642638,
+        "work_performance": 80,
+        "social_network_size": 8,
+        "need_satisfaction_score": 0.75,
+        "agent_type": "FeedbackAgent",
+        "motivation_focus": "basic_resources",
+        "emotional_state": "neutral",
+        "feedback_received": [
+            {
+                "date": "2025-04-01",
+                "content": "Great job!",
+                "type": "positive"
+            }
+        ],
+        "id": "15"
+    },
+    {
+        "name": "Samantha Lee",
+        "current_need_level": "physiological",
+        "interaction_count": 10,
+        "language_skill_level": 84,
+        "collaboration_tendency": 0.7733241401080462,
+        "work_performance": 80,
+        "social_network_size": 15,
+        "need_satisfaction_score": 0.75,
+        "agent_type": "FeedbackAgent",
+        "motivation_focus": "basic_resources",
+        "emotional_state": "neutral",
+        "feedback_received": [
+            {
+                "date": "2025-04-01",
+                "content": "Great job!",
+                "type": "positive"
+            }
+        ],
+        "id": "16"
+    },
+    {
+        "name": "Michael Chen",
+        "current_need_level": "physiological",
+        "interaction_count": 10,
+        "language_skill_level": 99,
+        "collaboration_tendency": 0.22825172439235353,
+        "work_performance": 80,
+        "social_network_size": 2,
+        "need_satisfaction_score": 0.75,
+        "agent_type": "FeedbackAgent",
+        "motivation_focus": "basic_resources",
+        "emotional_state": "neutral",
+        "feedback_received": [
+            {
+                "date": "2025-04-01",
+                "content": "Great job!",
+                "type": "positive"
+            }
+        ],
+        "id": "17"
+    },
+    {
+        "name": "Jessica Patel",
+        "current_need_level": "physiological",
+        "interaction_count": 10,
+        "language_skill_level": 77,
+        "collaboration_tendency": 0.12363592785216337,
+        "work_performance": 80,
+        "social_network_size": 15,
+        "need_satisfaction_score": 0.75,
+        "agent_type": "FeedbackAgent",
+        "motivation_focus": "basic_resources",
+        "emotional_state": "neutral",
+        "feedback_received": [
+            {
+                "date": "2025-04-01",
+                "content": "Great job!",
+                "type": "positive"
+            }
+        ],
+        "id": "18"
+    },
+    {
+        "name": "David Smith",
+        "current_need_level": "physiological",
+        "interaction_count": 10,
+        "language_skill_level": 100,
+        "collaboration_tendency": 0.08406593652231698,
+        "work_performance": 80,
+        "social_network_size": 14,
+        "need_satisfaction_score": 0.75,
+        "agent_type": "FeedbackAgent",
+        "motivation_focus": "basic_resources",
+        "emotional_state": "neutral",
+        "feedback_received": [
+            {
+                "date": "2025-04-01",
+                "content": "Great job!",
+                "type": "positive"
+            }
+        ],
+        "id": "19"
+    }
+]

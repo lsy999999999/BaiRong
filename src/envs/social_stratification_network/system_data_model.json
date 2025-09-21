@@ -1,0 +1,55 @@
+{
+    "environment": {
+        "variables": []
+    },
+    "agents": {
+        "Family": {
+            "variables": [
+                {
+                    "name": "collective_resources",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "education_strategy",
+                    "type": "str",
+                    "default_value": null
+                },
+                {
+                    "name": "education_investment",
+                    "type": "float",
+                    "default_value": null
+                },
+                {
+                    "name": "admission_decisions",
+                    "type": "list",
+                    "default_value": null
+                },
+                {
+                    "name": "allocated_resources",
+                    "type": "float",
+                    "default_value": null
+                }
+            ]
+        },
+        "EducationalInstitution": {
+            "variables": [
+                {
+                    "name": "admission_criteria",
+                    "type": "dict",
+                    "default_value": null
+                },
+                {
+                    "name": "applications_received",
+                    "type": "list",
+                    "default_value": null
+                },
+                {
+                    "name": "selected_students",
+                    "type": "list",
+                    "default_value": null
+                }
+            ]
+        }
+    }
+}

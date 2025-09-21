@@ -1,0 +1,176 @@
+{
+    "-1": {
+        "id": -1,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "CustomerAgent",
+        "to_action_name": "apply_for_loan",
+        "from_action_id": 0,
+        "to_action_id": 1,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for customers to apply for loans",
+        "fields": []
+    },
+    "1": {
+        "id": 1,
+        "from_agent_type": "CustomerAgent",
+        "from_action_name": "apply_for_loan",
+        "to_agent_type": "BankAgent",
+        "to_action_name": "evaluate_loan_application",
+        "from_action_id": 1,
+        "to_action_id": 3,
+        "event_name": "LoanApplicationEvent",
+        "event_info": "Customer applies for a loan based on economic conditions",
+        "fields": [
+            {
+                "name": "customer_id",
+                "type": "str",
+                "default_value": "",
+                "description": "Unique identifier for the customer applying for the loan"
+            },
+            {
+                "name": "loan_amount",
+                "type": "float",
+                "default_value": 0.0,
+                "description": "The amount of money the customer is applying for"
+            },
+            {
+                "name": "economic_conditions",
+                "type": "str",
+                "default_value": "stable",
+                "description": "Current economic conditions affecting the loan application"
+            }
+        ]
+    },
+    "2": {
+        "id": 2,
+        "from_agent_type": "CustomerAgent",
+        "from_action_name": "receive_loan_decision",
+        "to_agent_type": "EnvAgent",
+        "to_action_name": "terminate",
+        "from_action_id": 2,
+        "to_action_id": -1,
+        "event_name": "LoanDecisionProcessedEvent",
+        "event_info": "Customer processes the loan decision and completes their part of the workflow",
+        "fields": [
+            {
+                "name": "customer_id",
+                "type": "str",
+                "default_value": "",
+                "description": "Unique identifier for the customer processing the loan decision"
+            },
+            {
+                "name": "loan_status",
+                "type": "str",
+                "default_value": "pending",
+                "description": "The status of the loan after processing (e.g., approved, rejected)"
+            }
+        ]
+    },
+    "3": {
+        "id": 3,
+        "from_agent_type": "BankAgent",
+        "from_action_name": "evaluate_loan_application",
+        "to_agent_type": "CustomerAgent",
+        "to_action_name": "receive_loan_decision",
+        "from_action_id": 3,
+        "to_action_id": 2,
+        "event_name": "LoanApprovalEvent",
+        "event_info": "Bank approves the loan application",
+        "fields": [
+            {
+                "name": "customer_id",
+                "type": "str",
+                "default_value": "",
+                "description": "Unique identifier for the customer whose loan was approved"
+            },
+            {
+                "name": "approved_amount",
+                "type": "float",
+                "default_value": 0.0,
+                "description": "The amount of money approved by the bank"
+            }
+        ]
+    },
+    "4": {
+        "id": 4,
+        "from_agent_type": "BankAgent",
+        "from_action_name": "evaluate_loan_application",
+        "to_agent_type": "CustomerAgent",
+        "to_action_name": "receive_loan_decision",
+        "from_action_id": 3,
+        "to_action_id": 2,
+        "event_name": "LoanRejectionEvent",
+        "event_info": "Bank rejects the loan application",
+        "fields": [
+            {
+                "name": "customer_id",
+                "type": "str",
+                "default_value": "",
+                "description": "Unique identifier for the customer whose loan was rejected"
+            },
+            {
+                "name": "rejection_reason",
+                "type": "str",
+                "default_value": "insufficient_reserves",
+                "description": "Reason for the loan rejection"
+            }
+        ]
+    },
+    "5": {
+        "id": 5,
+        "from_agent_type": "BankAgent",
+        "from_action_name": "evaluate_loan_application",
+        "to_agent_type": "BankAgent",
+        "to_action_name": "manage_reserves",
+        "from_action_id": 3,
+        "to_action_id": 4,
+        "event_name": "ReserveAdjustmentEvent",
+        "event_info": "Post decision, bank adjusts reserves",
+        "fields": [
+            {
+                "name": "bank_id",
+                "type": "str",
+                "default_value": "",
+                "description": "Unique identifier for the bank adjusting its reserves"
+            },
+            {
+                "name": "adjustment_amount",
+                "type": "float",
+                "default_value": 0.0,
+                "description": "The amount by which the bank's reserves are adjusted"
+            },
+            {
+                "name": "new_reserve_level",
+                "type": "float",
+                "default_value": 0.0,
+                "description": "The new reserve level after adjustment"
+            }
+        ]
+    },
+    "6": {
+        "id": 6,
+        "from_agent_type": "BankAgent",
+        "from_action_name": "manage_reserves",
+        "to_agent_type": "EnvAgent",
+        "to_action_name": "terminate",
+        "from_action_id": 4,
+        "to_action_id": -1,
+        "event_name": "ReserveManagementCompletedEvent",
+        "event_info": "Bank completes reserve management and workflow",
+        "fields": [
+            {
+                "name": "bank_id",
+                "type": "str",
+                "default_value": "",
+                "description": "Unique identifier for the bank completing reserve management"
+            },
+            {
+                "name": "completion_status",
+                "type": "str",
+                "default_value": "success",
+                "description": "Status of the reserve management process"
+            }
+        ]
+    }
+}

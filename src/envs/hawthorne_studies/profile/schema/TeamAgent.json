@@ -1,0 +1,82 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Team Alpha",
+        "private": false,
+        "sampling": "llm",
+        "description": "The name of the team represented by the TeamAgent"
+    },
+    "team_size": {
+        "type": "int",
+        "default": 5,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            3,
+            10
+        ]
+    },
+    "team_morale": {
+        "type": "int",
+        "default": 80,
+        "private": false,
+        "sampling": "default"
+    },
+    "interaction_frequency": {
+        "type": "int",
+        "default": 3,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            1,
+            5
+        ]
+    },
+    "current_task": {
+        "type": "str",
+        "default": "collaborative_project",
+        "private": false,
+        "sampling": "default"
+    },
+    "communication_style": {
+        "type": "str",
+        "default": "open",
+        "private": false,
+        "sampling": "llm",
+        "description": "The predominant communication style within the team"
+    },
+    "productivity_level": {
+        "type": "int",
+        "default": 70,
+        "private": false,
+        "sampling": "default"
+    },
+    "emotional_support": {
+        "type": "int",
+        "default": 75,
+        "private": false,
+        "sampling": "default"
+    },
+    "cooperation_level": {
+        "type": "int",
+        "default": 85,
+        "private": false,
+        "sampling": "default"
+    },
+    "team_dynamics": {
+        "type": "list",
+        "default": [
+            "positive",
+            "supportive"
+        ],
+        "private": true,
+        "sampling": "default"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

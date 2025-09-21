@@ -1,0 +1,12 @@
+[
+    {
+        "source_agent": "Government",
+        "target_agent": "Government",
+        "direction": "unidirectional"
+    },
+    {
+        "source_agent": "Citizens",
+        "target_agent": "Citizens",
+        "direction": "unidirectional"
+    }
+]

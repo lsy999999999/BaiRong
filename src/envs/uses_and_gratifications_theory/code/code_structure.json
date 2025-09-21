@@ -1,0 +1,286 @@
+{
+  "agents": {
+    "AudienceAgent": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "1": {
+          "code": "async def select_media(self, event: Event) -> List[Event]:\n        # Condition check\n        if event.__class__.__name__ != \"StartEvent\":\n            return []\n\n        # Retrieve necessary data\n        current_needs = self.profile.get_data(\"current_needs\", [])\n        available_media = await self.get_env_data(\"available_media\", [])\n\n        # Generate reaction to decide on media selection\n        instruction = \"\"\"Based on the current needs and available media, select the media type that best satisfies the audience agent's needs. \n        Ensure to return the selected media ID and target IDs in the following JSON format:\n\n        {\n        \"selected_media\": \"<The ID of the media chosen>\",\n        \"target_ids\": [\"<The string ID of the MediaAgent>\"]\n        }\n        \"\"\"\n\n        observation = f\"Current needs: {current_needs}, Available media: {available_media}\"\n        result = await self.generate_reaction(instruction, observation)\n\n        # Process the LLM's response\n        selected_media = result.get('selected_media', None)\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Validate selected_media before updating profile\n        if selected_media is None:\n            return []\n\n        self.profile.update_data(\"selected_media\", selected_media)\n\n        # Prepare and send MediaSelectedEvent to the MediaAgent(s)\n        events = []\n        need_type = current_needs[0] if current_needs else \"unknown\"\n        for target_id in target_ids:\n            media_selected_event = MediaSelectedEvent(self.profile_id, target_id, audience_id=self.profile_id, media_id=selected_media, need_type=need_type)\n            events.append(media_selected_event)\n\n        return events",
+          "metadata": {
+            "id": 1,
+            "name": "select_media",
+            "condition": "null",
+            "description": "Audience agent selects a media type that best satisfies their current needs such as entertainment, information, or social interaction.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "current_needs",
+                "type": "list",
+                "context": "agent",
+                "description": "List of current needs that the audience agent seeks to satisfy."
+              },
+              {
+                "name": "available_media",
+                "type": "list",
+                "context": "env",
+                "description": "List of media types available in the environment for selection."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "selected_media",
+                "type": "int",
+                "context": "agent",
+                "description": "Identifier of the media type selected by the audience agent."
+              }
+            ]
+          }
+        },
+        "2": {
+          "code": "async def provide_feedback(self, event: Event) -> List[Event]:\n        if event.__class__.__name__ != \"ContentProvidedEvent\":\n            return []\n\n        selected_media = self.profile.get_data(\"selected_media\", 0)\n        satisfaction_level = self.profile.get_data(\"satisfaction_level\", 0)\n\n        instruction = \"\"\"Please determine the target MediaAgent(s) that should receive feedback based on the provided satisfaction level and selected media.\n        Ensure to return the information in the following JSON format:\n        {\n        \"target_ids\": [\"<The string ID(s) of the MediaAgent(s)>\"],\n        \"satisfaction_level\": <The integer satisfaction level>,\n        \"selected_media\": <The integer identifier for the selected media>\n        }\n        \"\"\"\n        \n        observation = f\"Selected media: {selected_media}, Satisfaction level: {satisfaction_level}\"\n        result = await self.generate_reaction(instruction, observation)\n\n        target_ids = result.get('target_ids', None)\n        satisfaction_level = result.get('satisfaction_level', satisfaction_level)\n        selected_media = result.get('selected_media', selected_media)\n\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Validate satisfaction_level and selected_media before updating profile\n        if satisfaction_level is None or selected_media is None:\n            return []\n\n        feedback_history = self.profile.get_data(\"feedback_history\", [])\n        feedback_history.append({\"media_id\": selected_media, \"satisfaction_level\": satisfaction_level})\n        self.profile.update_data(\"feedback_history\", feedback_history)\n\n        events = []\n        for target_id in target_ids:\n            feedback_event = FeedbackProvidedEvent(self.profile_id, target_id, audience_id=self.profile_id, media_id=selected_media, satisfaction_level=satisfaction_level)\n            events.append(feedback_event)\n\n        return events",
+          "metadata": {
+            "id": 2,
+            "name": "provide_feedback",
+            "condition": "Content received from MediaAgent",
+            "description": "Audience agent provides feedback on the satisfaction level derived from the consumed media content.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "selected_media",
+                "type": "int",
+                "context": "agent",
+                "description": "Identifier of the media type that was consumed and is being evaluated."
+              },
+              {
+                "name": "satisfaction_level",
+                "type": "int",
+                "context": "agent",
+                "description": "Numeric scale representing the satisfaction level with the consumed media content."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "feedback_history",
+                "type": "list",
+                "context": "agent",
+                "description": "Updated list of past feedback entries including the latest feedback."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "MediaAgent": {
+      "imports": "from typing import Any, List, Optional\nimport json\nimport asyncio\nfrom loguru import logger\nfrom onesim.models import JsonBlockParser\nfrom onesim.agent import GeneralAgent\nfrom onesim.profile import AgentProfile\nfrom onesim.memory import MemoryStrategy\nfrom onesim.planning import PlanningBase\nfrom onesim.events import *\nfrom onesim.relationship import RelationshipManager\nfrom .events import *",
+      "handlers": {
+        "3": {
+          "code": "async def provide_content(self, event: Event) -> List[Event]:\n        # Condition Check: Ensure the event is from AudienceAgent and the action is 'select_media'\n        if not (event.from_agent_type == \"AudienceAgent\" and event.from_action_name == \"select_media\"):\n            return []\n\n        # Access event data\n        audience_id = event.audience_id\n        media_id = event.media_id\n        need_type = event.need_type\n\n        # Access agent data\n        content_type = self.profile.get_data(\"content_type\", \"unknown\")\n        target_need = self.profile.get_data(\"target_need\", \"unknown\")\n\n        # Generate reaction using LLM\n        observation = f\"Audience ID: {audience_id}, Media ID: {media_id}, Need Type: {need_type}\"\n        instruction = \"\"\"Please decide the appropriate content to provide based on the audience's need type and media selection. \n        Return the results in the following JSON format:\n        {\n            \"target_ids\": [\"<List of audience agent IDs>\"],\n            \"delivered_content\": {\n                \"content_type\": \"<Type of content being provided>\",\n                \"target_need\": \"<Need that the content aims to satisfy>\"\n            }\n        }\n        \"\"\"\n\n        result = await self.generate_reaction(instruction, observation)\n        \n        # Parse the LLM's JSON response\n        target_ids = result.get('target_ids', [])\n        delivered_content = result.get('delivered_content', {})\n        if not isinstance(delivered_content, dict):\n            return []  # Validate delivered_content structure\n        content_type = delivered_content.get('content_type', None)\n        target_need = delivered_content.get('target_need', None)\n        if not content_type or not target_need:\n            return []  # Ensure both fields are extracted correctly\n\n        # Ensure target_ids is a list\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Create and send ContentProvidedEvent to each target\n        events = []\n        for target_id in target_ids:\n            content_event = ContentProvidedEvent(\n                self.profile_id, target_id,\n                media_id=media_id,\n                content_type=content_type,\n                target_need=target_need\n            )\n            events.append(content_event)\n\n        return events",
+          "metadata": {
+            "id": 3,
+            "name": "provide_content",
+            "condition": "Media request from AudienceAgent",
+            "description": "Media agent delivers content to the audience agent that aims to satisfy their specified needs.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "content_type",
+                "type": "str",
+                "context": "agent",
+                "description": "Type of content being provided by the media agent."
+              },
+              {
+                "name": "target_need",
+                "type": "str",
+                "context": "agent",
+                "description": "Need that the content aims to satisfy for the audience agent."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "delivered_content",
+                "type": "dict",
+                "context": "agent",
+                "description": "Details of the content delivered to the audience agent."
+              }
+            ]
+          }
+        },
+        "4": {
+          "code": "async def record_feedback(self, event: Event) -> List[Event]:\n        # Condition Check: Ensure the event is from AudienceAgent\n        if event.from_agent_type != \"AudienceAgent\":\n            return []\n\n        # Access feedback data from event\n        audience_id = event.audience_id\n        media_id = event.media_id\n        satisfaction_level = event.satisfaction_level\n\n        # Update feedback_records in agent profile\n        feedback_data = {\n            \"audience_id\": audience_id,\n            \"media_id\": media_id,\n            \"satisfaction_level\": satisfaction_level\n        }\n        feedback_records = self.profile.get_data(\"feedback_records\", [])\n        if not isinstance(feedback_records, list):\n            feedback_records = []  # Reset feedback_records if not a list\n        feedback_records.append(feedback_data)\n        self.profile.update_data(\"feedback_records\", feedback_records)\n\n        # Decision Making: Generate reaction for target_ids selection\n        instruction = \"\"\"Record the feedback provided by the audience agent to adjust future content offerings.\n        Please return the information in the following JSON format:\n        {\n        \"target_ids\": [\"<The string ID of the EnvAgent>\"]\n        }\n        \"\"\"\n        observation = f\"Feedback recorded for media_id {media_id} with satisfaction level {satisfaction_level}\"\n        result = await self.generate_reaction(instruction, observation)\n\n        target_ids = result.get('target_ids', None)\n        if not isinstance(target_ids, list):\n            target_ids = [target_ids]\n\n        # Prepare and send FeedbackRecordedEvent to EnvAgent\n        events = []\n        for target_id in target_ids:\n            feedback_recorded_event = FeedbackRecordedEvent(\n                self.profile_id, target_id, media_id=media_id, completion_status=\"completed\"\n            )\n            events.append(feedback_recorded_event)\n\n        return events",
+          "metadata": {
+            "id": 4,
+            "name": "record_feedback",
+            "condition": "Feedback received from AudienceAgent",
+            "description": "Media agent records the feedback provided by the audience agent to adjust future content offerings.",
+            "type": "OR",
+            "required_variables": [
+              {
+                "name": "feedback_data",
+                "type": "dict",
+                "context": "event",
+                "description": "Feedback information received from the audience agent."
+              }
+            ],
+            "output_updates": [
+              {
+                "name": "feedback_records",
+                "type": "list",
+                "context": "agent",
+                "description": "Updated record of feedback entries from audience agents."
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "events": {
+    "imports": "from onesim.events import Event\nfrom typing import Any, List\nfrom datetime import datetime",
+    "definitions": {
+      "-1": {
+        "code": "class StartEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)",
+        "metadata": {
+          "id": -1,
+          "from_agent_type": "EnvAgent",
+          "from_action_name": "start",
+          "to_agent_type": "AudienceAgent",
+          "to_action_name": "select_media",
+          "from_action_id": 0,
+          "to_action_id": 1,
+          "event_name": "StartEvent",
+          "event_info": "Initial trigger for audience agent to start selecting media",
+          "fields": []
+        }
+      },
+      "1": {
+        "code": "class MediaSelectedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        audience_id: int = 0,\n        media_id: int = 0,\n        need_type: str = \"unknown\",\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.audience_id = audience_id\n        self.media_id = media_id\n        self.need_type = need_type",
+        "metadata": {
+          "id": 1,
+          "from_agent_type": "AudienceAgent",
+          "from_action_name": "select_media",
+          "to_agent_type": "MediaAgent",
+          "to_action_name": "provide_content",
+          "from_action_id": 1,
+          "to_action_id": 3,
+          "event_name": "MediaSelectedEvent",
+          "event_info": "Audience agent selects media based on personal needs",
+          "fields": [
+            {
+              "name": "audience_id",
+              "type": "int",
+              "default_value": "0",
+              "description": "Unique identifier for the audience agent selecting the media"
+            },
+            {
+              "name": "media_id",
+              "type": "int",
+              "default_value": "0",
+              "description": "Unique identifier for the media being selected"
+            },
+            {
+              "name": "need_type",
+              "type": "str",
+              "default_value": "unknown",
+              "description": "Type of need driving the media selection, e.g., entertainment, information"
+            }
+          ]
+        }
+      },
+      "2": {
+        "code": "class FeedbackProvidedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        audience_id: int = 0,\n        media_id: int = 0,\n        satisfaction_level: int = 0,\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.audience_id = audience_id\n        self.media_id = media_id\n        self.satisfaction_level = satisfaction_level",
+        "metadata": {
+          "id": 2,
+          "from_agent_type": "AudienceAgent",
+          "from_action_name": "provide_feedback",
+          "to_agent_type": "MediaAgent",
+          "to_action_name": "record_feedback",
+          "from_action_id": 2,
+          "to_action_id": 4,
+          "event_name": "FeedbackProvidedEvent",
+          "event_info": "Audience agent provides feedback on media satisfaction",
+          "fields": [
+            {
+              "name": "audience_id",
+              "type": "int",
+              "default_value": "0",
+              "description": "Unique identifier for the audience agent providing feedback"
+            },
+            {
+              "name": "media_id",
+              "type": "int",
+              "default_value": "0",
+              "description": "Unique identifier for the media on which feedback is being provided"
+            },
+            {
+              "name": "satisfaction_level",
+              "type": "int",
+              "default_value": "0",
+              "description": "Numeric scale representing satisfaction level with the media content"
+            }
+          ]
+        }
+      },
+      "3": {
+        "code": "class ContentProvidedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        media_id: int = 0,\n        content_type: str = \"unknown\",\n        target_need: str = \"unknown\",\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.media_id = media_id\n        self.content_type = content_type\n        self.target_need = target_need",
+        "metadata": {
+          "id": 3,
+          "from_agent_type": "MediaAgent",
+          "from_action_name": "provide_content",
+          "to_agent_type": "AudienceAgent",
+          "to_action_name": "provide_feedback",
+          "from_action_id": 3,
+          "to_action_id": 2,
+          "event_name": "ContentProvidedEvent",
+          "event_info": "Media agent delivers content to satisfy audience needs",
+          "fields": [
+            {
+              "name": "media_id",
+              "type": "int",
+              "default_value": "0",
+              "description": "Unique identifier for the media agent providing the content"
+            },
+            {
+              "name": "content_type",
+              "type": "str",
+              "default_value": "unknown",
+              "description": "Type of content being provided, e.g., article, video"
+            },
+            {
+              "name": "target_need",
+              "type": "str",
+              "default_value": "unknown",
+              "description": "Need that the content aims to satisfy, e.g., entertainment, information"
+            }
+          ]
+        }
+      },
+      "4": {
+        "code": "class FeedbackRecordedEvent(Event):\n    def __init__(self,\n        from_agent_id: str,\n        to_agent_id: str,\n        media_id: int = 0,\n        completion_status: str = \"completed\",\n        **kwargs: Any\n    ) -> None:\n        super().__init__(from_agent_id=from_agent_id, to_agent_id=to_agent_id, **kwargs)\n        self.media_id = media_id\n        self.completion_status = completion_status",
+        "metadata": {
+          "id": 4,
+          "from_agent_type": "MediaAgent",
+          "from_action_name": "record_feedback",
+          "to_agent_type": "EnvAgent",
+          "to_action_name": "terminate",
+          "from_action_id": 4,
+          "to_action_id": -1,
+          "event_name": "FeedbackRecordedEvent",
+          "event_info": "Feedback is recorded and process is completed",
+          "fields": [
+            {
+              "name": "media_id",
+              "type": "int",
+              "default_value": "0",
+              "description": "Unique identifier for the media agent whose feedback is being recorded"
+            },
+            {
+              "name": "completion_status",
+              "type": "str",
+              "default_value": "completed",
+              "description": "Status indicating the feedback recording process is complete"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

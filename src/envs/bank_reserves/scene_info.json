@@ -1,0 +1,60 @@
+{
+  "domain": "Economics",
+  "scene_name": "bank_reserves",
+  "odd_protocol": {
+    "overview": {
+      "system_goal": "Simulate the impact of reserve requirements on bank lending behavior and financial stability when reserves are insufficient.",
+      "agent_types": "Banks and Customers; banks perform lending operations based on reserve levels, while customers apply for loans based on economic conditions.",
+      "environment_description": "A banking system where banks and customers interact, influenced by economic cycles and reserve requirements.",
+      "initialization_details": "Set up a specific number of banks and customers with initial reserves and loan demands, along with reserve requirement ratios."
+    },
+    "design_concepts": {
+      "interaction_patterns": "Customers request loans from banks; banks decide on loan approvals based on reserve levels and requirements.",
+      "communication_protocols": "Direct application and approval/rejection communication between customers and banks.",
+      "decision_mechanisms": "Banks assess reserve levels relative to requirements to decide on loan approval, with adjustments post-transaction.",
+      "feedback_loops": "Banks adjust lending strategies based on remaining reserves after each transaction cycle."
+    },
+    "details": {
+      "agent_behaviors": "Banks manage reserves, decide on loan approvals, and adjust strategies based on reserve sufficiency; customers apply for loans based on personal and economic needs.",
+      "decision_algorithms": "Banks use reserve-to-requirement ratios to determine loan approval; may partially approve loans if reserves are insufficient.",
+      "specific_constraints": "Minimum reserve requirements restrict maximum lending capacity; economic fluctuations affect customer demand.",
+      "termination_conditions": "Model runs for a set number of rounds, analyzing bank loan quantities and reserve changes."
+    }
+  },
+  "agent_types": {
+    "BankAgent": "Responsible for managing reserves, performing lending operations, and deciding on loan approvals based on reserve levels and requirements.",
+    "CustomerAgent": "Applies for loans based on personal financial needs and prevailing economic conditions, interacting with banks to secure financing."
+  },
+  "portrait": {
+    "BankAgent": 4,
+    "CustomerAgent": 5
+  },
+  "metrics": [
+    {
+      "id": "Bank_Reserve_Utilization",
+      "name": "Bank Reserve Utilization",
+      "description": "Monitors the ratio of actual reserves to reserve requirements across all banks, indicating overall reserve sufficiency.",
+      "visualization_type": "line",
+      "update_interval": 5,
+      "variables": [
+        {
+          "name": "reserve_requirement",
+          "source_type": "env",
+          "path": "reserve_requirement",
+          "required": true,
+          "is_list": false
+        },
+        {
+          "name": "reserve_level",
+          "source_type": "agent",
+          "agent_type": "BankAgent",
+          "path": "reserve_level",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "For each bank, calculate the ratio of reserve level to reserve requirement. If the reserve requirement is None or zero, skip the calculation for that instance. Aggregate these ratios by calculating the average across all banks. Handle None values in reserve levels by excluding them from the calculation.",
+      "function_name": "Bank_Reserve_Utilization"
+    }
+  ]
+}

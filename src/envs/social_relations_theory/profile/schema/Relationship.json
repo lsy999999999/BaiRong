@@ -1,0 +1,27 @@
+[
+    {
+        "source_agent": "NewEmployee",
+        "target_agent": "TeamLeader",
+        "direction": "unidirectional"
+    },
+    {
+        "source_agent": "ExperiencedEmployee",
+        "target_agent": "TeamLeader",
+        "direction": "unidirectional"
+    },
+    {
+        "source_agent": "NeutralMember",
+        "target_agent": "TeamLeader",
+        "direction": "unidirectional"
+    },
+    {
+        "source_agent": "TeamLeader",
+        "target_agent": "EmotionalAnalyzer",
+        "direction": "unidirectional"
+    },
+    {
+        "source_agent": "EmotionalAnalyzer",
+        "target_agent": "ExperiencedEmployee",
+        "direction": "unidirectional"
+    }
+]

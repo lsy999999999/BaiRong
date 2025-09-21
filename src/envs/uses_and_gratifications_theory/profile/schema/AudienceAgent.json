@@ -1,0 +1,87 @@
+{
+    "name": {
+        "type": "str",
+        "default": "Jane Doe",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's full name"
+    },
+    "current_needs": {
+        "type": "list",
+        "default": [
+            "entertainment",
+            "information"
+        ],
+        "private": false,
+        "sampling": "default",
+        "sample_size": 2
+    },
+    "selected_media": {
+        "type": "int",
+        "default": 1,
+        "private": false,
+        "sampling": "default"
+    },
+    "satisfaction_level": {
+        "type": "int",
+        "default": 50,
+        "private": false,
+        "sampling": "default"
+    },
+    "feedback_history": {
+        "type": "list",
+        "default": [
+            {
+                "media_id": 1,
+                "satisfaction": 50
+            }
+        ],
+        "private": true,
+        "sampling": "default",
+        "sample_size": 1
+    },
+    "age": {
+        "type": "int",
+        "default": 30,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            18,
+            65
+        ]
+    },
+    "media_dependency": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "default"
+    },
+    "preferred_media_type": {
+        "type": "str",
+        "default": "social",
+        "private": false,
+        "sampling": "random",
+        "choices": [
+            "news",
+            "social",
+            "entertainment"
+        ]
+    },
+    "social_influence_factor": {
+        "type": "float",
+        "default": 0.3,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

@@ -1,0 +1,72 @@
+[
+    {
+        "name": "Alice Johnson",
+        "grievance_level": 50.0,
+        "rebellion_decision": false,
+        "age": 20,
+        "occupation": "Software Engineer",
+        "economic_status": "Middle Class",
+        "initial_motivation": 60.0,
+        "agent_type": "Citizen",
+        "personal_experience": 5.0,
+        "political_awareness": 70.0,
+        "social_network_size": 51,
+        "id": "0"
+    },
+    {
+        "name": "Michael Smith",
+        "grievance_level": 50.0,
+        "rebellion_decision": false,
+        "age": 43,
+        "occupation": "Teacher",
+        "economic_status": "Upper Middle Class",
+        "initial_motivation": 60.0,
+        "agent_type": "Citizen",
+        "personal_experience": 5.0,
+        "political_awareness": 70.0,
+        "social_network_size": 224,
+        "id": "1"
+    },
+    {
+        "name": "Sophia Brown",
+        "grievance_level": 50.0,
+        "rebellion_decision": false,
+        "age": 70,
+        "occupation": "Nurse",
+        "economic_status": "Middle Class",
+        "initial_motivation": 60.0,
+        "agent_type": "Citizen",
+        "personal_experience": 5.0,
+        "political_awareness": 70.0,
+        "social_network_size": 204,
+        "id": "2"
+    },
+    {
+        "name": "David Lee",
+        "grievance_level": 50.0,
+        "rebellion_decision": false,
+        "age": 57,
+        "occupation": "Entrepreneur",
+        "economic_status": "Affluent",
+        "initial_motivation": 60.0,
+        "agent_type": "Citizen",
+        "personal_experience": 5.0,
+        "political_awareness": 70.0,
+        "social_network_size": 156,
+        "id": "3"
+    },
+    {
+        "name": "Emily Davis",
+        "grievance_level": 50.0,
+        "rebellion_decision": false,
+        "age": 70,
+        "occupation": "Artist",
+        "economic_status": "Lower Middle Class",
+        "initial_motivation": 60.0,
+        "agent_type": "Citizen",
+        "personal_experience": 5.0,
+        "political_awareness": 70.0,
+        "social_network_size": 151,
+        "id": "4"
+    }
+]

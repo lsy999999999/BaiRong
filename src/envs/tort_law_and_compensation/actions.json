@@ -1,0 +1,189 @@
+{
+    "Plaintiff": [
+        {
+            "id": 1,
+            "name": "submit_compensation_request",
+            "condition": "null",
+            "description": "The Plaintiff submits a compensation request detailing the damages incurred and supporting evidence.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "compensation_amount",
+                    "type": "float",
+                    "context": "agent",
+                    "description": "Requested amount for compensation"
+                },
+                {
+                    "name": "damage_description",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Description of the damages incurred"
+                },
+                {
+                    "name": "evidence_list",
+                    "type": "list",
+                    "context": "agent",
+                    "description": "List of evidence supporting the compensation request"
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "compensation_request_submitted",
+                    "type": "bool",
+                    "context": "agent",
+                    "description": "Status indicating that the compensation request has been submitted"
+                }
+            ]
+        }
+    ],
+    "Defendant": [
+        {
+            "id": 2,
+            "name": "prepare_defense",
+            "condition": "null",
+            "description": "The Defendant prepares a defense to argue for liability reduction, including counter-evidence.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "liability_reduction_argument",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Argument prepared by the defendant for reducing liability"
+                },
+                {
+                    "name": "counter_evidence_list",
+                    "type": "list",
+                    "context": "agent",
+                    "description": "List of evidence countering the plaintiff's claims"
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "defense_prepared",
+                    "type": "bool",
+                    "context": "agent",
+                    "description": "Status indicating that the defense has been prepared"
+                }
+            ]
+        }
+    ],
+    "Judge": [
+        {
+            "id": 3,
+            "name": "evaluate_request",
+            "condition": "CompensationRequestEvent and DefensePreparedEvent received",
+            "description": "The Judge evaluates the compensation request submitted by the Plaintiff, considering the evidence provided.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "compensation_amount",
+                    "type": "float",
+                    "context": "event",
+                    "description": "Requested amount for compensation"
+                },
+                {
+                    "name": "damage_description",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Description of the damages incurred"
+                },
+                {
+                    "name": "evidence_list",
+                    "type": "list",
+                    "context": "event",
+                    "description": "List of evidence supporting the compensation request"
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "evaluation_status",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Status of the evaluation process"
+                },
+                {
+                    "name": "evaluation_notes",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Notes and observations made during the evaluation"
+                }
+            ]
+        },
+        {
+            "id": 4,
+            "name": "evaluate_defense",
+            "condition": "CompensationRequestEvent and DefensePreparedEvent received",
+            "description": "The Judge evaluates the defense arguments presented by the Defendant, assessing the counter-evidence provided.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "liability_reduction_argument",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Argument prepared by the defendant for reducing liability"
+                },
+                {
+                    "name": "counter_evidence_list",
+                    "type": "list",
+                    "context": "event",
+                    "description": "List of evidence countering the plaintiff's claims"
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "evaluation_status",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Status of the defense evaluation process"
+                },
+                {
+                    "name": "evaluation_notes",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Notes and observations made during the defense evaluation"
+                }
+            ]
+        },
+        {
+            "id": 5,
+            "name": "make_decision",
+            "condition": "null",
+            "description": "The Judge makes a final decision on the compensation case, concluding the legal process.",
+            "type": "AND",
+            "required_variables": [
+                {
+                    "name": "evaluation_status_request",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Status of the compensation request evaluation process"
+                },
+                {
+                    "name": "evaluation_status_defense",
+                    "type": "str",
+                    "context": "agent",
+                    "description": "Status of the defense evaluation process"
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "decision_outcome",
+                    "type": "str",
+                    "context": "env",
+                    "description": "Outcome of the case decision"
+                },
+                {
+                    "name": "compensation_awarded",
+                    "type": "float",
+                    "context": "env",
+                    "description": "Amount of compensation awarded to the plaintiff"
+                },
+                {
+                    "name": "completion_status",
+                    "type": "str",
+                    "context": "env",
+                    "description": "Status indicating completion of the case"
+                }
+            ]
+        }
+    ]
+}

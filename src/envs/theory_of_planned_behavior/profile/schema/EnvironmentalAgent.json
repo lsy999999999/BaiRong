@@ -1,0 +1,89 @@
+{
+    "name": {
+        "type": "str",
+        "default": "EnvironmentalAgent",
+        "private": false,
+        "sampling": "llm",
+        "description": "The agent's designated name within the simulation"
+    },
+    "attitude": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "default"
+    },
+    "subjective_norm": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "default"
+    },
+    "perceived_behavioral_control": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "default"
+    },
+    "behavioral_intention": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "default"
+    },
+    "actual_behavior": {
+        "type": "str",
+        "default": "undecided",
+        "private": false,
+        "sampling": "default"
+    },
+    "resource_availability": {
+        "type": "float",
+        "default": 1.0,
+        "private": true,
+        "sampling": "default"
+    },
+    "situational_constraints": {
+        "type": "dict",
+        "default": {
+            "constraint_type": "none",
+            "severity": 0
+        },
+        "private": true,
+        "sampling": "default"
+    },
+    "social_norm_intensity": {
+        "type": "float",
+        "default": 0.5,
+        "private": false,
+        "sampling": "random",
+        "range": [
+            0.0,
+            1.0
+        ]
+    },
+    "interaction_history": {
+        "type": "list",
+        "default": [
+            {
+                "interaction": "initial",
+                "timestamp": "2025-04-01T00:00:00"
+            }
+        ],
+        "private": true,
+        "sampling": "default"
+    },
+    "communication_protocol": {
+        "type": "str",
+        "default": "text-based",
+        "private": false,
+        "sampling": "llm",
+        "description": "Specifies the mode of communication used by the agent"
+    },
+    "id": {
+        "type": "str",
+        "default": "0",
+        "private": true,
+        "sampling": "default",
+        "description": "Unique id of agent"
+    }
+}

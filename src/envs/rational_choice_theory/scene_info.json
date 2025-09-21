@@ -1,0 +1,56 @@
+{
+  "domain": "Economics",
+  "scene_name": "rational_choice_theory",
+  "odd_protocol": {
+    "overview": {
+      "system_goal": "Simulate how individuals make choices based on rational decision-making, validating the basic assumptions of rational choice theory, focusing on how agents evaluate the utility of options and make decisions based on utility maximization.",
+      "agent_types": "Individual agents representing rational decision-making individuals, each with different resources, needs, and goals influencing their decision processes.",
+      "environment_description": "The simulation environment includes multiple scenarios or decision options, each with different costs and benefits, requiring agents to weigh these factors to make optimal decisions.",
+      "system_assumptions": "Each agent evaluates the costs and benefits of different options, aiming to maximize their utility. Agents have complete information and can understand the outcomes of each choice, making rational decisions based on expected returns. Agents adjust their strategies over multiple decisions to adapt to changing environments and new information."
+    },
+    "design_concepts": {
+      "interaction_patterns": "Agents interact through decision-making processes, evaluating the expected utility of each option. Utility is a numerical value based on agent goals such as wealth maximization, happiness enhancement, or risk minimization.",
+      "communication_protocols": "Agents may interact through social networks or market exchanges, adjusting their decisions based on the observed behaviors of other agents.",
+      "decision_mechanisms": "Agents evaluate the utility of each option based on personal goals, current resource status, and the risk associated with choices. Decisions are made to maximize expected utility.",
+      "feedback_mechanism": "Agents adjust future choices and behaviors based on the outcomes of their decisions, such as gains, losses, or satisfaction. If a choice does not yield the expected utility, agents may change their strategy."
+    },
+    "details": {
+      "agent_behaviors": "Agents evaluate a series of choices, assessing the utility of each based on personal goals, resources, and risks. They adapt their choice strategies over time to achieve long-term utility maximization.",
+      "decision_algorithms": "Utility function U = f(收益, 成本, 风险), where agents make decisions based on expected benefits, costs, and risks, choosing options that maximize utility.",
+      "specific_constraints": "Agents operate under the assumption of complete information and rational decision-making. They adjust strategies based on experience to maximize long-term utility.",
+      "simulation_process": "Initialize a set of agents with different preferences, resources, and goals. Provide multiple choices or scenarios, each with different expected utilities (benefits, costs, and risks). Agents evaluate expected utility and make decisions to maximize it. Based on choices and actual outcomes (e.g., gains or losses), agents adjust their future decision strategies. Observe how agents optimize decision strategies based on rational choice theory assumptions through multiple simulation rounds.",
+      "agent_quantity": "To simulate rational choice theory, the number of agents can be set based on the complexity of the simulation, typically 100-500 individuals. Each agent represents a rational decision-making individual, influencing and interacting with each other."
+    }
+  },
+  "agent_types": {
+    "RationalDecisionMaker": "Represents individuals making choices based on rational decision-making, focusing on utility maximization by evaluating costs and benefits.",
+    "UtilityEvaluator": "Assesses the expected utility of different options using personal goals, current resources, and risk factors to guide decision-making.",
+    "SocialNetworkInteractor": "Engages with other agents through social networks, adapting decisions based on observed behaviors and market exchanges."
+  },
+  "portrait": {
+    "RationalDecisionMaker": 1,
+    "UtilityEvaluator": 2,
+    "SocialNetworkInteractor": 5
+  },
+  "metrics": [
+    {
+      "id": "Average_Utility_Value",
+      "name": "Average Utility Value",
+      "description": "This metric measures the average utility value across all UtilityEvaluator agents, providing insight into overall satisfaction or effectiveness of decision-making.",
+      "visualization_type": "line",
+      "update_interval": 5,
+      "variables": [
+        {
+          "name": "utility_value",
+          "source_type": "agent",
+          "agent_type": "UtilityEvaluator",
+          "path": "utility_value",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "To calculate the average utility value, first filter out any None values from the utility_value list. If the list is empty after filtering, return a default value of 0. Otherwise, compute the average by summing the remaining values and dividing by their count. This metric will be plotted as a line chart to observe trends over time.",
+      "function_name": "Average_Utility_Value"
+    }
+  ]
+}
