@@ -64,5 +64,58 @@
       ],
       "code": ""
     }
+  ],
+  "EnvAgent": [
+    {
+      "id": 0,
+      "name": "start",
+      "condition": null,
+      "description": "Initialises the simulation round and dispatches the public observation package to each miner.",
+      "type": "OR",
+      "required_variables": [],
+      "output_updates": [
+        {
+          "name": "round_initialised",
+          "type": "bool",
+          "context": "env",
+          "description": "Flag indicating the environment has generated the start-of-round observation."
+        }
+      ],
+      "code": ""
+    },
+    {
+      "id": 1,
+      "name": "handle_action_bundle",
+      "condition": "Miner submits an action bundle",
+      "description": "Validates, sanitises, and stores the incoming action bundle prior to deterministic budget clipping and conflict resolution.",
+      "type": "AND",
+      "required_variables": [],
+      "output_updates": [
+        {
+          "name": "round_submissions",
+          "type": "dict",
+          "context": "env",
+          "description": "Collection of all miner action bundles received for the current round."
+        }
+      ],
+      "code": ""
+    },
+    {
+      "id": 2,
+      "name": "resolve_round",
+      "condition": "All miners have submitted",
+      "description": "Executes legality checks, deterministic conflict resolution, mining, and round summary generation before notifying miners.",
+      "type": "AND",
+      "required_variables": [],
+      "output_updates": [
+        {
+          "name": "round_results",
+          "type": "dict",
+          "context": "env",
+          "description": "Computed summaries including ownership updates, mining outputs, and public logs for the resolved round."
+        }
+      ],
+      "code": ""
+    }
   ]
 }

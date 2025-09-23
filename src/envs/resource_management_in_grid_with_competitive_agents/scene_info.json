@@ -22,9 +22,11 @@
     }
   },
   "agent_types": {
+    "EnvAgent": "Central environment orchestrator that validates submissions, enforces stamina budgets, resolves claims and raids deterministically, applies mining, and publishes public logs each round.",
     "ResourceMiner": "A self-interested miner that observes the public state each round, proposes a structured action bundle, and updates its strategy based on the resolved outcomes and personal rewards."
   },
   "portrait": {
+    "EnvAgent": 1,
     "ResourceMiner": 3
   },
   "metrics": [

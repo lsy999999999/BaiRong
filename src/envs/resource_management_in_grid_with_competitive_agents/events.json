@@ -26,7 +26,7 @@
     "to_agent_type": "EnvAgent",
     "to_action_name": "handle_action_bundle",
     "from_action_id": 2,
-    "to_action_id": -1,
+    "to_action_id": 1,
     "event_name": "ActionBundleEvent",
     "event_info": "Action bundle submission including claims, raids, defense commitments, mining allocations, and optional priority orders.",
     "fields": [
@@ -75,7 +75,7 @@
     "from_action_name": "resolve_round",
     "to_agent_type": "ResourceMiner",
     "to_action_name": "handle_round_resolution",
-    "from_action_id": -1,
+    "from_action_id": 2,
     "to_action_id": 3,
     "event_name": "RoundResolutionEvent",
     "event_info": "Environment summary describing executed actions, stamina usage, mining output, and ownership changes for the miner.",
