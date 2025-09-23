@@ -14,6 +14,19 @@
         },
         {
             "provider": "vllm",
+            "config_name": "vllm-qwen-7",
+            "model_name": "/data/pretrain_dir/Qwen3-8B",
+            "api_key": "sk-xxx",
+            "client_args": {
+                "max_retries": 3,
+                "base_url": "http://111.6.167.248:9887/v1/"
+            },
+            "generate_args": {
+                "temperature": 0
+            }
+        },
+        {
+            "provider": "vllm",
             "config_name": "vllm-qwen",
             "model_name": "/data/pretrain_dir/Qwen2.5-14B-Instruct",
             "api_key": "sk-xxx",
