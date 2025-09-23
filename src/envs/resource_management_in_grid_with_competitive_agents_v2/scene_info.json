@@ -1,0 +1,82 @@
+{
+  "domain": "",
+  "scene_name": "resource_management_in_grid_with_competitive_agents_v2",
+  "odd_protocol": {
+    "overview": {},
+    "design_concepts": {},
+    "details": {}
+  },
+  "agent_types": {
+    "DecisionMaker": "Responsible for making decisions based on the system's state and goals.",
+    "Communicator": "Handles the exchange of information between agents and with the environment."
+  },
+  "portrait": {
+    "DecisionMaker": 1,
+    "Communicator": 5
+  },
+  "metrics": [
+    {
+      "id": "SystemStatusOverTime",
+      "name": "SystemStatusOverTime",
+      "description": "Tracks the current status of the environment to monitor system health and transitions between states.",
+      "visualization_type": "line",
+      "update_interval": 5,
+      "variables": [
+        {
+          "name": "status",
+          "source_type": "env",
+          "path": "status",
+          "required": true,
+          "is_list": false
+        }
+      ],
+      "calculation_logic": "The metric value is the environment's 'status' variable. If the value is None, it is treated as 'unknown' and displayed as such. This provides a time-series view of system state transitions.",
+      "function_name": "SystemStatusOverTime"
+    },
+    {
+      "id": "DecisionMakerStatusDistribution",
+      "name": "DecisionMakerStatusDistribution",
+      "description": "Analyzes the distribution of statuses among DecisionMaker agents to identify common operational states or anomalies.",
+      "visualization_type": "bar",
+      "update_interval": 5,
+      "variables": [
+        {
+          "name": "status",
+          "source_type": "agent",
+          "agent_type": "DecisionMaker",
+          "path": "status",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Counts the frequency of each status value in the DecisionMaker agents' status list. None values are excluded. The result is a dictionary where keys are status values and values are counts. This provides a bar chart showing the distribution of agent statuses.",
+      "function_name": "DecisionMakerStatusDistribution"
+    },
+    {
+      "id": "ResponseDataConsistency",
+      "name": "ResponseDataConsistency",
+      "description": "Measures the percentage of DecisionMaker agents whose response_data matches the environment's response_data, indicating alignment between agent outputs and system state.",
+      "visualization_type": "line",
+      "update_interval": 5,
+      "variables": [
+        {
+          "name": "response_data",
+          "source_type": "env",
+          "path": "response_data",
+          "required": true,
+          "is_list": false
+        },
+        {
+          "name": "response_data",
+          "source_type": "agent",
+          "agent_type": "DecisionMaker",
+          "path": "response_data",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Compares each DecisionMaker's response_data with the environment's response_data. If the environment's response_data is None or the DecisionMaker list is empty, the consistency is 0. Otherwise, the percentage is calculated as (number of matching responses / total DecisionMakers) * 100. This provides a line chart showing the consistency over time.",
+      "function_name": "ResponseDataConsistency"
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+{
+    "environment": {
+        "variables": [
+            {
+                "name": "ownership_grid",
+                "type": "array",
+                "default_value": null
+            },
+            {
+                "name": "updated_ownership",
+                "type": "array",
+                "default_value": null
+            }
+        ]
+    },
+    "agents": {
+        "ResourceMiner": {
+            "variables": [
+                {
+                    "name": "stamina_budget",
+                    "type": "integer",
+                    "default_value": null
+                },
+                {
+                    "name": "action_bundle",
+                    "type": "object",
+                    "default_value": null
+                },
+                {
+                    "name": "validated_actions",
+                    "type": "object",
+                    "default_value": null
+                },
+                {
+                    "name": "budget_used",
+                    "type": "integer",
+                    "default_value": null
+                },
+                {
+                    "name": "errors",
+                    "type": "array",
+                    "default_value": null
+                },
+                {
+                    "name": "priority_order",
+                    "type": "array",
+                    "default_value": null
+                },
+                {
+                    "name": "clipped_actions",
+                    "type": "object",
+                    "default_value": null
+                },
+                {
+                    "name": "remaining_stamina",
+                    "type": "integer",
+                    "default_value": null
+                },
+                {
+                    "name": "resolved_claims",
+                    "type": "array",
+                    "default_value": null
+                },
+                {
+                    "name": "tie_breaker_hash",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "raid_outcomes",
+                    "type": "array",
+                    "default_value": null
+                },
+                {
+                    "name": "mined_gold",
+                    "type": "integer",
+                    "default_value": null
+                }
+            ]
+        }
+    }
+}

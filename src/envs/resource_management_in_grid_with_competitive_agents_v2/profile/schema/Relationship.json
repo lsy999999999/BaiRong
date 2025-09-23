@@ -1,0 +1,7 @@
+[
+    {
+        "source_agent": "DecisionMaker",
+        "target_agent": "Communicator",
+        "direction": "unidirectional"
+    }
+]

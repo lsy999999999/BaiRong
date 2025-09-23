@@ -1,0 +1,65 @@
+{
+    "DecisionMaker": [
+        {
+            "id": 1,
+            "name": "process_request",
+            "condition": null,
+            "description": "Processes the initial request, prepares the response data, and marks the request as processed.",
+            "type": "OR",
+            "required_variables": [],
+            "output_updates": [
+                {
+                    "name": "response_data",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "The data content ready to be sent as a response"
+                },
+                {
+                    "name": "status",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Indicates the processing status of the request"
+                }
+            ],
+            "code": ""
+        }
+    ],
+    "Communicator": [
+        {
+            "id": 2,
+            "name": "send_response",
+            "condition": null,
+            "description": "Sends the prepared response to the environment and updates the transmission status.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "response_data",
+                    "type": "string",
+                    "context": "event",
+                    "description": "The data content ready to be sent as a response"
+                },
+                {
+                    "name": "status",
+                    "type": "string",
+                    "context": "event",
+                    "description": "Indicates the processing status of the request"
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "status",
+                    "type": "string",
+                    "context": "env",
+                    "description": "Indicates the success status of response transmission"
+                },
+                {
+                    "name": "response_data",
+                    "type": "string",
+                    "context": "env",
+                    "description": "The data that was successfully sent to the environment"
+                }
+            ],
+            "code": ""
+        }
+    ]
+}

@@ -1,0 +1,35 @@
+{
+    "environment": {
+        "variables": [
+            {
+                "name": "status",
+                "type": "string",
+                "default_value": null
+            },
+            {
+                "name": "response_data",
+                "type": "string",
+                "default_value": null
+            }
+        ]
+    },
+    "agents": {
+        "DecisionMaker": {
+            "variables": [
+                {
+                    "name": "response_data",
+                    "type": "string",
+                    "default_value": null
+                },
+                {
+                    "name": "status",
+                    "type": "string",
+                    "default_value": null
+                }
+            ]
+        },
+        "Communicator": {
+            "variables": []
+        }
+    }
+}

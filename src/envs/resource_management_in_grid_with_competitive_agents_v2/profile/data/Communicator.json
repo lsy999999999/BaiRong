@@ -1,0 +1,262 @@
+[
+    {
+        "name": "Communicator",
+        "role": "Diplomat",
+        "communication_channels": [
+            "SMS",
+            "API"
+        ],
+        "status": "Active",
+        "messages": [
+            {
+                "content": "Initial message",
+                "timestamp": "2025-04-01T12:00:00Z"
+            }
+        ],
+        "communication_range": 50.959388778839894,
+        "last_active_time": "2025-04-01T12:00:00Z",
+        "priority": 2,
+        "connection_status": "Connected",
+        "response_time": 0.5,
+        "communication_mode": "Asynchronous",
+        "message_count": 0,
+        "network_latency": 0.1,
+        "message_priority": "Normal",
+        "communication_protocol": "TCP",
+        "message_type": "Text",
+        "message_status": "Pending",
+        "message_sender": "System",
+        "message_recipient": "User",
+        "message_timestamp": "2025-04-01T12:00:00Z",
+        "message_content": "Initial message",
+        "message_attachments": [
+            "file1.txt",
+            "file2.pdf"
+        ],
+        "message_metadata": "{}",
+        "agent_type": "Communicator",
+        "credentials": "secure_token_123",
+        "message_history": [
+            {
+                "timestamp": "2025-04-01T12:00:00Z",
+                "content": "Initial message"
+            }
+        ],
+        "authentication_token": "auth_token_456",
+        "error_logs": [
+            {
+                "timestamp": "2025-04-01T12:00:00Z",
+                "error": "Connection failed"
+            }
+        ],
+        "id": "6"
+    },
+    {
+        "name": "Communicator",
+        "role": "Diplomat",
+        "communication_channels": [
+            "SMS",
+            "API"
+        ],
+        "status": "Active",
+        "messages": [
+            {
+                "content": "Initial message",
+                "timestamp": "2025-04-01T12:00:00Z"
+            }
+        ],
+        "communication_range": 83.03021162577976,
+        "last_active_time": "2025-04-01T12:00:00Z",
+        "priority": 9,
+        "connection_status": "Connected",
+        "response_time": 0.5,
+        "communication_mode": "Asynchronous",
+        "message_count": 0,
+        "network_latency": 0.1,
+        "message_priority": "Normal",
+        "communication_protocol": "TCP",
+        "message_type": "Text",
+        "message_status": "Pending",
+        "message_sender": "System",
+        "message_recipient": "User",
+        "message_timestamp": "2025-04-01T12:00:00Z",
+        "message_content": "Initial message",
+        "message_attachments": [
+            "file1.txt",
+            "file2.pdf"
+        ],
+        "message_metadata": "{}",
+        "agent_type": "Communicator",
+        "credentials": "secure_token_123",
+        "message_history": [
+            {
+                "timestamp": "2025-04-01T12:00:00Z",
+                "content": "Initial message"
+            }
+        ],
+        "authentication_token": "auth_token_456",
+        "error_logs": [
+            {
+                "timestamp": "2025-04-01T12:00:00Z",
+                "error": "Connection failed"
+            }
+        ],
+        "id": "7"
+    },
+    {
+        "name": "Communicator",
+        "role": "Diplomat",
+        "communication_channels": [
+            "Email",
+            "Chat"
+        ],
+        "status": "Active",
+        "messages": [
+            {
+                "content": "Initial message",
+                "timestamp": "2025-04-01T12:00:00Z"
+            }
+        ],
+        "communication_range": 197.08547528651897,
+        "last_active_time": "2025-04-01T12:00:00Z",
+        "priority": 4,
+        "connection_status": "Connected",
+        "response_time": 0.5,
+        "communication_mode": "Asynchronous",
+        "message_count": 0,
+        "network_latency": 0.1,
+        "message_priority": "Normal",
+        "communication_protocol": "TCP",
+        "message_type": "Text",
+        "message_status": "Pending",
+        "message_sender": "System",
+        "message_recipient": "User",
+        "message_timestamp": "2025-04-01T12:00:00Z",
+        "message_content": "Initial message",
+        "message_attachments": [
+            "file1.txt",
+            "file2.pdf"
+        ],
+        "message_metadata": "{}",
+        "agent_type": "Communicator",
+        "credentials": "secure_token_123",
+        "message_history": [
+            {
+                "timestamp": "2025-04-01T12:00:00Z",
+                "content": "Initial message"
+            }
+        ],
+        "authentication_token": "auth_token_456",
+        "error_logs": [
+            {
+                "timestamp": "2025-04-01T12:00:00Z",
+                "error": "Connection failed"
+            }
+        ],
+        "id": "8"
+    },
+    {
+        "name": "Communicator",
+        "role": "Diplomat",
+        "communication_channels": [
+            "Chat",
+            "SMS"
+        ],
+        "status": "Active",
+        "messages": [
+            {
+                "content": "Initial message",
+                "timestamp": "2025-04-01T12:00:00Z"
+            }
+        ],
+        "communication_range": 184.92056814360257,
+        "last_active_time": "2025-04-01T12:00:00Z",
+        "priority": 10,
+        "connection_status": "Connected",
+        "response_time": 0.5,
+        "communication_mode": "Asynchronous",
+        "message_count": 0,
+        "network_latency": 0.1,
+        "message_priority": "Normal",
+        "communication_protocol": "TCP",
+        "message_type": "Text",
+        "message_status": "Pending",
+        "message_sender": "System",
+        "message_recipient": "User",
+        "message_timestamp": "2025-04-01T12:00:00Z",
+        "message_content": "Initial message",
+        "message_attachments": [
+            "file1.txt",
+            "file2.pdf"
+        ],
+        "message_metadata": "{}",
+        "agent_type": "Communicator",
+        "credentials": "secure_token_123",
+        "message_history": [
+            {
+                "timestamp": "2025-04-01T12:00:00Z",
+                "content": "Initial message"
+            }
+        ],
+        "authentication_token": "auth_token_456",
+        "error_logs": [
+            {
+                "timestamp": "2025-04-01T12:00:00Z",
+                "error": "Connection failed"
+            }
+        ],
+        "id": "9"
+    },
+    {
+        "name": "Communicator",
+        "role": "Diplomat",
+        "communication_channels": [
+            "SMS",
+            "Email"
+        ],
+        "status": "Active",
+        "messages": [
+            {
+                "content": "Initial message",
+                "timestamp": "2025-04-01T12:00:00Z"
+            }
+        ],
+        "communication_range": 115.6532705981291,
+        "last_active_time": "2025-04-01T12:00:00Z",
+        "priority": 1,
+        "connection_status": "Connected",
+        "response_time": 0.5,
+        "communication_mode": "Asynchronous",
+        "message_count": 0,
+        "network_latency": 0.1,
+        "message_priority": "Normal",
+        "communication_protocol": "TCP",
+        "message_type": "Text",
+        "message_status": "Pending",
+        "message_sender": "System",
+        "message_recipient": "User",
+        "message_timestamp": "2025-04-01T12:00:00Z",
+        "message_content": "Initial message",
+        "message_attachments": [
+            "file1.txt",
+            "file2.pdf"
+        ],
+        "message_metadata": "{}",
+        "agent_type": "Communicator",
+        "credentials": "secure_token_123",
+        "message_history": [
+            {
+                "timestamp": "2025-04-01T12:00:00Z",
+                "content": "Initial message"
+            }
+        ],
+        "authentication_token": "auth_token_456",
+        "error_logs": [
+            {
+                "timestamp": "2025-04-01T12:00:00Z",
+                "error": "Connection failed"
+            }
+        ],
+        "id": "10"
+    }
+]

@@ -1,0 +1,213 @@
+{
+  "name": {
+    "type": "str",
+    "default": "Communicator",
+    "private": false,
+    "sampling": "llm",
+    "description": "The agent's full name or identifier"
+  },
+  "role": {
+    "type": "str",
+    "default": "Diplomat",
+    "private": false,
+    "sampling": "llm",
+    "description": "The agent's role in the communication protocol"
+  },
+  "communication_channels": {
+    "type": "list",
+    "default": [
+      "Email",
+      "Chat",
+      "Phone"
+    ],
+    "private": false,
+    "sampling": "random",
+    "choices": [
+      "Email",
+      "Chat",
+      "Phone",
+      "SMS",
+      "API"
+    ],
+    "sample_size": 2
+  },
+  "status": {
+    "type": "str",
+    "default": "Active",
+    "private": false,
+    "sampling": "default"
+  },
+  "messages": {
+    "type": "list",
+    "default": [
+      {
+        "content": "Initial message",
+        "timestamp": "2025-04-01T12:00:00Z"
+      }
+    ],
+    "private": false,
+    "sampling": "default"
+  },
+  "communication_range": {
+    "type": "float",
+    "default": 100,
+    "private": false,
+    "sampling": "random",
+    "range": [
+      50,
+      200
+    ]
+  },
+  "last_active_time": {
+    "type": "str",
+    "default": "2025-04-01T12:00:00Z",
+    "private": false,
+    "sampling": "default"
+  },
+  "priority": {
+    "type": "int",
+    "default": 5,
+    "private": false,
+    "sampling": "random",
+    "range": [
+      1,
+      10
+    ]
+  },
+  "credentials": {
+    "type": "str",
+    "default": "secure_token_123",
+    "private": true,
+    "sampling": "llm",
+    "description": "Authentication credentials for communication"
+  },
+  "message_history": {
+    "type": "list",
+    "default": [
+      {
+        "timestamp": "2025-04-01T12:00:00Z",
+        "content": "Initial message"
+      }
+    ],
+    "private": true,
+    "sampling": "default"
+  },
+  "connection_status": {
+    "type": "str",
+    "default": "Connected",
+    "private": false,
+    "sampling": "default"
+  },
+  "response_time": {
+    "type": "float",
+    "default": 0.5,
+    "private": false,
+    "sampling": "default"
+  },
+  "authentication_token": {
+    "type": "str",
+    "default": "auth_token_456",
+    "private": true,
+    "sampling": "llm",
+    "description": "Token for secure communication"
+  },
+  "communication_mode": {
+    "type": "str",
+    "default": "Asynchronous",
+    "private": false,
+    "sampling": "default"
+  },
+  "message_count": {
+    "type": "int",
+    "default": 0,
+    "private": false,
+    "sampling": "default"
+  },
+  "error_logs": {
+    "type": "list",
+    "default": [
+      {
+        "timestamp": "2025-04-01T12:00:00Z",
+        "error": "Connection failed"
+      }
+    ],
+    "private": true,
+    "sampling": "default"
+  },
+  "network_latency": {
+    "type": "float",
+    "default": 0.1,
+    "private": false,
+    "sampling": "default"
+  },
+  "message_priority": {
+    "type": "str",
+    "default": "Normal",
+    "private": false,
+    "sampling": "default"
+  },
+  "communication_protocol": {
+    "type": "str",
+    "default": "TCP",
+    "private": false,
+    "sampling": "default"
+  },
+  "message_type": {
+    "type": "str",
+    "default": "Text",
+    "private": false,
+    "sampling": "default"
+  },
+  "message_status": {
+    "type": "str",
+    "default": "Pending",
+    "private": false,
+    "sampling": "default"
+  },
+  "message_sender": {
+    "type": "str",
+    "default": "System",
+    "private": false,
+    "sampling": "default"
+  },
+  "message_recipient": {
+    "type": "str",
+    "default": "User",
+    "private": false,
+    "sampling": "default"
+  },
+  "message_timestamp": {
+    "type": "str",
+    "default": "2025-04-01T12:00:00Z",
+    "private": false,
+    "sampling": "default"
+  },
+  "message_content": {
+    "type": "str",
+    "default": "Initial message",
+    "private": false,
+    "sampling": "default"
+  },
+  "message_attachments": {
+    "type": "list",
+    "default": [
+      "file1.txt",
+      "file2.pdf"
+    ],
+    "private": false,
+    "sampling": "default"
+  },
+  "message_metadata": {
+    "type": "str",
+    "default": "{}",
+    "private": false,
+    "sampling": "default"
+  },
+  "id": {
+    "type": "str",
+    "default": "0",
+    "private": true,
+    "sampling": "default",
+    "description": "Unique id of agent"
+  }
+}

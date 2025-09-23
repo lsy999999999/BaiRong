@@ -1,0 +1,91 @@
+{
+  "name": {
+    "type": "str",
+    "default": "DecisionMaker",
+    "private": false,
+    "sampling": "llm",
+    "description": "The agent's name"
+  },
+  "role": {
+    "type": "str",
+    "default": "Strategic Analyst",
+    "private": false,
+    "sampling": "llm",
+    "description": "The agent's role in the system"
+  },
+  "specialization": {
+    "type": "str",
+    "default": "Decision Optimization",
+    "private": false,
+    "sampling": "llm",
+    "description": "The agent's area of expertise"
+  },
+  "status": {
+    "type": "str",
+    "default": "ready",
+    "private": false,
+    "sampling": "default"
+  },
+  "response_data": {
+    "type": "str",
+    "default": "Awaiting input",
+    "private": false,
+    "sampling": "default"
+  },
+  "confidence_level": {
+    "type": "float",
+    "default": 0.5,
+    "private": false,
+    "sampling": "default"
+  },
+  "current_task": {
+    "type": "str",
+    "default": "none",
+    "private": false,
+    "sampling": "default"
+  },
+  "created_at": {
+    "type": "str",
+    "default": "2025-04-01T00:00:00Z",
+    "private": false,
+    "sampling": "llm",
+    "description": "Timestamp when the agent was created"
+  },
+  "version": {
+    "type": "str",
+    "default": "1.0",
+    "private": false,
+    "sampling": "llm",
+    "description": "The agent's version number"
+  },
+  "priority": {
+    "type": "int",
+    "default": 5,
+    "private": false,
+    "sampling": "random",
+    "range": [
+      1,
+      10
+    ]
+  },
+  "available": {
+    "type": "bool",
+    "default": true,
+    "private": false,
+    "sampling": "default"
+  },
+  "last_updated": {
+    "type": "str",
+    "default": "2025-04-01T00:00:00Z",
+    "private": false,
+    "sampling": "llm",
+    "description": "Timestamp of the last update"
+  },
+  "id": {
+    "type": "str",
+    "default": "0",
+    "private": true,
+    "sampling": "default",
+    "description": "Unique id of agent"
+  }
+}
