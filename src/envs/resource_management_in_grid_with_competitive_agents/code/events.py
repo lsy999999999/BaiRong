@@ -172,9 +172,14 @@ class RoundResolutionEvent(Event):
         executed_plan: Dict[str, Any],
         invalid_actions: Dict[str, Any],
         clipped_actions: Dict[str, Any],
+        stamina_breakdown: Optional[Dict[str, Any]],
         plots_owned_after: List[Any],
+        plots_owned_after_count: int,
+        plots_owned_before: List[Any],
+        plots_owned_before_count: int,
         plots_gained: List[Any],
         plots_lost: List[Any],
+        land_summary: Optional[Dict[str, Any]],
         mining_results: List[Dict[str, Any]],
         ownership_after: List[List[Optional[str]]],
         public_log_entry: List[Dict[str, Any]],
@@ -190,9 +195,14 @@ class RoundResolutionEvent(Event):
         self.executed_plan = executed_plan
         self.invalid_actions = invalid_actions
         self.clipped_actions = clipped_actions
+        self.stamina_breakdown = stamina_breakdown or {}
+        self.plots_owned_after_count = int(plots_owned_after_count)
         self.plots_owned_after = plots_owned_after
+        self.plots_owned_before = plots_owned_before
+        self.plots_owned_before_count = int(plots_owned_before_count)
         self.plots_gained = plots_gained
         self.plots_lost = plots_lost
+        self.land_summary = land_summary or {}
         self.mining_results = mining_results
         self.ownership_after = ownership_after
         self.public_log_entry = public_log_entry

@@ -135,10 +135,34 @@
         "description": "Actions or stamina removed due to exceeding the budget."
       },
       {
+        "name": "stamina_breakdown",
+        "type": "dict",
+        "default_value": {},
+        "description": "Category-level stamina usage including planned and actual mining spend."
+      },
+      {
         "name": "plots_owned_after",
         "type": "list",
         "default_value": [],
         "description": "List of plots owned by the miner after resolution."
+      },
+      {
+        "name": "plots_owned_after_count",
+        "type": "int",
+        "default_value": 0,
+        "description": "Number of plots owned after resolution."
+      },
+      {
+        "name": "plots_owned_before",
+        "type": "list",
+        "default_value": [],
+        "description": "List of plots owned before the round resolved."
+      },
+      {
+        "name": "plots_owned_before_count",
+        "type": "int",
+        "default_value": 0,
+        "description": "Number of plots owned before the round resolved."
       },
       {
         "name": "plots_gained",
@@ -151,6 +175,12 @@
         "type": "list",
         "default_value": [],
         "description": "Plots lost this round."
+      },
+      {
+        "name": "land_summary",
+        "type": "dict",
+        "default_value": {},
+        "description": "Aggregated land counts before and after resolution including gains and losses."
       },
       {
         "name": "mining_results",

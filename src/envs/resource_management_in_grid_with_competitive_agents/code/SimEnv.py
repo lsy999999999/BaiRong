@@ -213,39 +213,39 @@ class SimEnv(BasicSimEnv):
             serialized_store = round_cache.setdefault("serialized_submissions", {})
             submissions_store = self.data.setdefault("round_submissions", {}).setdefault(round_idx, {})
 
-            for agent_id, plan in submissions.items():
-                claims_list = plan.get("claims", [])
-                raids_list = plan.get("raids", [])
-                defend_map = plan.get("defend", {})
-                planned_cost = plan.get("planned_cost", plan.get("final_cost", 0))
+        for agent_id, plan in submissions.items():
+            claims_list = plan.get("claims", [])
+            raids_list = plan.get("raids", [])
+            defend_map = plan.get("defend", {})
+            planned_cost = plan.get("planned_cost", plan.get("final_cost", 0))
 
-                base_action_cost = len(claims_list) + len(raids_list) + sum(defend_map.values())
-                mining_spent = actual_mining_spent.get(agent_id, 0)
-                actual_cost = base_action_cost + mining_spent
+            base_action_cost = len(claims_list) + len(raids_list) + sum(defend_map.values())
+            mining_spent = actual_mining_spent.get(agent_id, 0)
+            actual_cost = base_action_cost + mining_spent
 
-                plan["planned_cost"] = planned_cost
-                plan["actual_mining_spent"] = mining_spent
-                plan["final_cost"] = actual_cost
+            plan["planned_cost"] = planned_cost
+            plan["actual_mining_spent"] = mining_spent
+            plan["final_cost"] = actual_cost
 
-                plan_serialized = self._serialize_plan_for_storage(plan)
-                serialized_store[agent_id] = deepcopy(plan_serialized)
-                submissions_store[agent_id] = deepcopy(plan_serialized)
+            plan_serialized = self._serialize_plan_for_storage(plan)
+            serialized_store[agent_id] = deepcopy(plan_serialized)
+            submissions_store[agent_id] = deepcopy(plan_serialized)
 
-                mined_amount = agent_gold.get(agent_id, 0)
-                cumulative_gold[agent_id] = cumulative_gold.get(agent_id, 0) + mined_amount
+            mined_amount = agent_gold.get(agent_id, 0)
+            cumulative_gold[agent_id] = cumulative_gold.get(agent_id, 0) + mined_amount
 
-                summary = self._build_agent_summary(
-                    agent_id=agent_id,
-                    plan=plan,
-                    plan_serialized=plan_serialized,
-                    mined_amount=mined_amount,
-                    cumulative_gold=cumulative_gold[agent_id],
-                    mining_results=mining_results.get(agent_id, {}),
-                    start_owned=start_owner_sets.get(agent_id, set()),
-                    end_owned=end_owner_sets.get(agent_id, set()),
-                    round_idx=round_idx,
-                    stamina_budget=stamina_budget,
-                )
+            summary = self._build_agent_summary(
+                agent_id=agent_id,
+                plan=plan,
+                plan_serialized=plan_serialized,
+                mined_amount=mined_amount,
+                cumulative_gold=cumulative_gold[agent_id],
+                mining_results=mining_results.get(agent_id, {}),
+                start_owned=start_owner_sets.get(agent_id, set()),
+                end_owned=end_owner_sets.get(agent_id, set()),
+                round_idx=round_idx,
+                stamina_budget=stamina_budget,
+            )
 
                 agent_summaries[agent_id] = summary
                 resources_exploited.append(mined_amount)
@@ -711,6 +711,17 @@ class SimEnv(BasicSimEnv):
         plots_gained = sorted(end_owned - start_owned)
         plots_lost = sorted(start_owned - end_owned)
 
+        stamina_breakdown = plan_serialized.get(
+            "stamina_breakdown", self._compute_stamina_breakdown(plan)
+        )
+        land_summary = {
+            "owned_before": len(start_owned),
+            "owned_after": len(end_owned),
+            "gained": len(plots_gained),
+            "lost": len(plots_lost),
+            "net_change": len(end_owned) - len(start_owned),
+        }
+
         summary = {
             "round_index": round_idx,
             "stamina_budget": stamina_budget,
@@ -723,9 +734,14 @@ class SimEnv(BasicSimEnv):
             "executed_plan": plan_serialized,
             "invalid_actions": self._serialize_invalid(plan["invalid"]),
             "clipped_actions": self._serialize_clipped(plan["clipped"]),
+            "stamina_breakdown": stamina_breakdown,
             "plots_owned_after": [list(coord) for coord in plots_owned_after],
+            "plots_owned_after_count": len(plots_owned_after),
+            "plots_owned_before": [list(coord) for coord in sorted(start_owned)],
+            "plots_owned_before_count": len(start_owned),
             "plots_gained": [list(coord) for coord in plots_gained],
             "plots_lost": [list(coord) for coord in plots_lost],
+            "land_summary": land_summary,
             "mining_results": [
                 {"cell": list(coord), "output": amount}
                 for coord, amount in mining_results.items()
@@ -754,9 +770,14 @@ class SimEnv(BasicSimEnv):
                 executed_plan=summary.get("executed_plan", {}),
                 invalid_actions=summary.get("invalid_actions", {}),
                 clipped_actions=summary.get("clipped_actions", {}),
+                stamina_breakdown=summary.get("stamina_breakdown", {}),
                 plots_owned_after=summary.get("plots_owned_after", []),
+                plots_owned_after_count=summary.get("plots_owned_after_count", 0),
+                plots_owned_before=summary.get("plots_owned_before", []),
+                plots_owned_before_count=summary.get("plots_owned_before_count", 0),
                 plots_gained=summary.get("plots_gained", []),
                 plots_lost=summary.get("plots_lost", []),
+                land_summary=summary.get("land_summary", {}),
                 mining_results=summary.get("mining_results", []),
                 ownership_after=ownership_after,
                 public_log_entry=public_log_entry,
@@ -782,6 +803,26 @@ class SimEnv(BasicSimEnv):
     def _coord_key(self, coord: Coordinate) -> str:
         return f"{coord[0]},{coord[1]}"
 
+    def _compute_stamina_breakdown(self, plan: Dict[str, Any]) -> Dict[str, int]:
+        claims_cost = len(plan.get("claims", []))
+        raids_cost = len(plan.get("raids", []))
+        defend_cost = sum(1 for commit in plan.get("defend", {}).values() if commit)
+        mining_allocations = plan.get("mining", {})
+        mining_planned = sum(int(value) for value in mining_allocations.values())
+        mining_actual = int(plan.get("actual_mining_spent", 0))
+
+        breakdown = {
+            "claims": claims_cost,
+            "raids": raids_cost,
+            "defend": defend_cost,
+            "mining_planned": mining_planned,
+            "mining_actual": mining_actual,
+        }
+        breakdown["non_mining_actions"] = claims_cost + raids_cost + defend_cost
+        breakdown["planned_total"] = breakdown["non_mining_actions"] + mining_planned
+        breakdown["actual_total"] = breakdown["non_mining_actions"] + mining_actual
+        return breakdown
+
     def _serialize_plan_for_storage(self, plan: Dict[str, Any]) -> Dict[str, Any]:
         return {
             "claims": [list(coord) for coord in plan["claims"]],
@@ -802,6 +843,7 @@ class SimEnv(BasicSimEnv):
             "planned_cost": plan.get("planned_cost", plan["final_cost"]),
             "final_cost": plan["final_cost"],
             "actual_mining_spent": plan.get("actual_mining_spent", 0),
+            "stamina_breakdown": self._compute_stamina_breakdown(plan),
             "invalid_actions": self._serialize_invalid(plan["invalid"]),
             "clipped_actions": self._serialize_clipped(plan["clipped"]),
         }
