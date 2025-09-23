@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import hashlib
+import inspect
 from collections import defaultdict
 from copy import deepcopy
 from typing import Any, Dict, List, Optional, Set, Tuple
@@ -165,7 +166,6 @@ class SimEnv(BasicSimEnv):
         final_ownership, cell_logs, agent_gold, mining_results = self._resolve_conflicts(
             submissions=submissions,
             ownership_start=ownership_start,
-            stamina_budget=stamina_budget,
             max_mining=max_mining,
             run_seed=run_seed,
             round_idx=round_idx,
@@ -186,7 +186,7 @@ class SimEnv(BasicSimEnv):
 
         for r in range(rows):
             for c in range(cols):
-                land_cells_owned.append(final_ownership.get((r, c)))
+                land_cells_owned.append(final_ownership.get((r, c), None))
 
         ownership_after_matrix = self._ownership_matrix(rows, cols, final_ownership)
         serialized_log = [self._serialize_cell_log(entry) for entry in cell_logs]
@@ -214,8 +214,12 @@ class SimEnv(BasicSimEnv):
             submissions_store = self.data.setdefault("round_submissions", {}).setdefault(round_idx, {})
 
             for agent_id, plan in submissions.items():
+                claims_list = plan.get("claims", [])
+                raids_list = plan.get("raids", [])
+                defend_map = plan.get("defend", {})
                 planned_cost = plan.get("planned_cost", plan.get("final_cost", 0))
-                base_action_cost = len(plan["claims"]) + len(plan["raids"]) + sum(plan["defend"].values())
+
+                base_action_cost = len(claims_list) + len(raids_list) + sum(defend_map.values())
                 mining_spent = actual_mining_spent.get(agent_id, 0)
                 actual_cost = base_action_cost + mining_spent
 
@@ -594,7 +598,6 @@ class SimEnv(BasicSimEnv):
         self,
         submissions: Dict[str, Dict[str, Any]],
         ownership_start: Dict[Coordinate, Optional[str]],
-        stamina_budget: int,
         max_mining: int,
         run_seed: str,
         round_idx: int,
@@ -759,7 +762,13 @@ class SimEnv(BasicSimEnv):
                 public_log_entry=public_log_entry,
             )
             await self.queue_event(event.to_dict())
-            await self.event_bus.dispatch_event(event)
+
+            if self.event_bus is not None:
+                dispatcher = getattr(self.event_bus, "dispatch_event", None)
+                if callable(dispatcher):
+                    result = dispatcher(event)
+                    if inspect.isawaitable(result):
+                        await result
 
     # ------------------------------------------------------------------
     # Utility helpers
@@ -812,6 +821,9 @@ class SimEnv(BasicSimEnv):
         return serialized
 
     def _serialize_clipped(self, clipped: Dict[str, Any]) -> Dict[str, Any]:
+        if not isinstance(clipped, dict):
+            clipped = {}
+
         serialized: Dict[str, Any] = {"claims": [], "raids": [], "defend": [], "mining": []}
         for category in ("claims", "raids", "defend"):
             serialized[category] = [
