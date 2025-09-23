@@ -247,10 +247,11 @@ class SimEnv(BasicSimEnv):
                 stamina_budget=stamina_budget,
             )
 
-                agent_summaries[agent_id] = summary
-                resources_exploited.append(mined_amount)
-                energy_spent.append(plan["final_cost"])
+            agent_summaries[agent_id] = summary
+            resources_exploited.append(mined_amount)
+            energy_spent.append(plan["final_cost"])
 
+        async with self._lock:
             round_cache["agent_summaries"] = deepcopy(agent_summaries)
             round_cache["resolved"] = True
             round_cache.pop("resolving", None)
