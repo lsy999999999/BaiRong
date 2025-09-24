@@ -17,8 +17,8 @@ Coordinate = Tuple[int, int]
 class SimEnv(BasicSimEnv):
     """Simulation environment for competitive miners on a shared grid."""
 
-    DEFAULT_ROWS = 10
-    DEFAULT_COLS = 10
+    DEFAULT_ROWS = 2
+    DEFAULT_COLS = 2
     DEFAULT_STAMINA = 10
     DEFAULT_S_MAX = 3
 

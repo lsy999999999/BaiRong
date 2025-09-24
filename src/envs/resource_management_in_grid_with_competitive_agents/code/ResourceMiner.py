@@ -99,11 +99,14 @@ class ResourceMiner(GeneralAgent):
         observation = json.dumps(observation_payload, ensure_ascii=False)
 
         instruction = (
-            "You are a miner competing for gold on a 10x10 grid.\n"
-            "Each round you have a stamina budget S = {stamina_budget}.\n"
-            "Valid actions are: CLAIM (cost 1) on currently unowned plots, RAID (cost 1) on plots owned by other agents, DEFEND (0 or 1) on plots you currently own, and MINE allocating integer stamina in [0, {max_mining}] on plots you currently own.\n"
-            "Illegal actions (out of bounds targets, claiming owned plots, raiding unowned plots, mining or defending plots you do not own, mining over the cap) will be removed before budgeting.\n"
-            "If the total stamina exceeds S, the simulator removes actions starting from the end of your declared priority order; if none provided the default removal order is Mining → Raids → Claims → Defense.\n"
+            "You are a miner competing for gold on a 2×2 grid. Each round, you have a fixed stamina budget S = {stamina_budget} (resets each round). Each plot can invest up to {max_mining} points of mining stamina in a single round. The output is linearly proportional to the investment and capped at {max_mining} gold.\n"
+            "Each round, you must allocate your stamina among four types of actions (the total cannot exceed S) and submit an action plan:\n"
+            "1. Claim: For currently unoccupied plots, each plot costs 1 stamina, instantly becoming the owner.\n"
+            "2. Raid: For plots currently occupied by others, each plot costs 1 stamina. If the original owner has not reserved defenses for the plot, one challenger is randomly selected to claim the plot. If the original owner has reserved defenses, all attempts to claim the plot that round fail.\n"
+            "3. Defend: Reserve 0 or 1 point of Stamina for each piece of land you own. Lands reserved for defense can block all attempts to capture them that round, but even if no one challenges them, this 1 point of Stamina is consumed\n"
+            "4. Mining: Invest 0–{max_mining} points of mining energy for each plot you occupy. The more energy you invest, the higher the gold yield for that plot this round. However, the total investment per plot must not exceed {max_mining}, and any excess will be automatically cut by the system.\n"
+            "The system settles in the following order: first, processing capture and defense, then allocating vacant plots, and finally, mining. Undefended plots are highly vulnerable to capture, resulting in loss of all mining gains. When multiple players simultaneously capture or occupy the same plot, the winner is determined by a random draw (with equal probability). \n"
+            "Your goal is to maximize your cumulative gold output over the long term and improve overall efficiency. Based on the currently observed grid occupation status, the actions and results of the previous round, your energy, and mining limit, formulate a strategy to strike a balance between expanding your territory and protecting existing territory.  \n"
             "Return a JSON object with this structure: \n"
             "{{\n"
             "  \"claims\": [[row, col], ...],\n"

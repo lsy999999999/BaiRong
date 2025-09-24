@@ -1,0 +1,42 @@
+[
+    {
+        "name": "EnvAgent",
+        "agent_type": "EnvAgent",
+        "id": "5",
+        "round_initialised": false,
+        "round_submissions": {},
+        "round_results": {}
+    },
+    {
+        "name": "EnvAgent",
+        "agent_type": "EnvAgent",
+        "id": "6",
+        "round_initialised": false,
+        "round_submissions": {},
+        "round_results": {}
+    },
+    {
+        "name": "EnvAgent",
+        "agent_type": "EnvAgent",
+        "id": "7",
+        "round_initialised": false,
+        "round_submissions": {},
+        "round_results": {}
+    },
+    {
+        "name": "EnvAgent",
+        "agent_type": "EnvAgent",
+        "id": "8",
+        "round_initialised": false,
+        "round_submissions": {},
+        "round_results": {}
+    },
+    {
+        "name": "EnvAgent",
+        "agent_type": "EnvAgent",
+        "id": "9",
+        "round_initialised": false,
+        "round_submissions": {},
+        "round_results": {}
+    }
+]

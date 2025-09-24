@@ -3,9 +3,9 @@
   "scene_name": "resource_management_in_grid_with_competitive_agents",
   "odd_protocol": {
     "overview": {
-      "system_goal": "Simulate decentralized property-rights formation on a homogeneous 10×10 gold field. Competitive miners maximise their own cumulative gold while the environment tracks stability, conflict, and efficiency outcomes in the absence of communication or authority.",
+      "system_goal": "Simulate decentralized property-rights formation on a homogeneous 2×2 gold field. Competitive miners maximise their own cumulative gold while the environment tracks stability, conflict, and efficiency outcomes in the absence of communication or authority.",
       "agent_types": "N homogeneous miner agents (e.g., 10–20) each receive a stamina budget that refreshes every round. They share identical capabilities and differ only through learned policies.",
-      "environment_description": "A 10×10 grid of 100 plots with non-depleting resources but a per-plot productivity cap. Ownership is purely institutional: it is created, defended, or overturned through stamina-based decisions with no exogenous enforcement.",
+      "environment_description": "A 2×2 grid of 4 plots with non-depleting resources but a per-plot productivity cap. Ownership is purely institutional: it is created, defended, or overturned through stamina-based decisions with no exogenous enforcement.",
       "grid_resource_mechanism": "Each plot can yield at most s_max units of gold per round (default 3). Mining returns are linear in committed stamina up to the cap and are forfeited when ownership is lost before extraction."
     },
     "design_concepts": {
@@ -18,7 +18,7 @@
     "details": {
       "agent_behaviors": "Agents balance expansion (claims), predation (raids), protection (defense), and extraction (mining) under uncertainty about rivals' choices. Observations each round include the ownership map, the prior public log, and their personal execution report (illegal actions removed, clipped actions, gold mined, plots gained/lost).",
       "decision_algorithms": "No particular algorithm is mandated. Agents may be heuristic, rule-based, or learning-driven as long as they output integer action bundles that respect legality and budgeting. Providing explicit priority ordering helps the deterministic clipping preserve their intended trade-offs.",
-      "specific_constraints": "Grid size 10×10; stamina budget S defaults to 10 per agent per round with no carry-over; per-plot mining cap s_max defaults to 3; ownership transfers occur before mining so only the post-conflict owner extracts; illegal actions are dropped at zero cost and reported in the public log."
+      "specific_constraints": "Grid size 2×2; stamina budget S defaults to 10 per agent per round with no carry-over; per-plot mining cap s_max defaults to 3; ownership transfers occur before mining so only the post-conflict owner extracts; illegal actions are dropped at zero cost and reported in the public log."
     }
   },
   "agent_types": {
