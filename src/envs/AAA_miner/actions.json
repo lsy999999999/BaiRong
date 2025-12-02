@@ -1,0 +1,147 @@
+{
+    "ResourceMiner": [
+        {
+            "id": 1,
+            "name": "observe_global_map",
+            "condition": null,
+            "description": "Observe the grid (2x2 debug, S=10, per-plot mining cap=3). CRITICAL: Only owned plots can be mined; if a plot is raided and not defended this round, ownership is lost. Settlement order: raids/defense -> claims -> mining. Return JSON with 'map_state' and set target_ids to [self] for the next event.",
+            "type": "OR",
+            "required_variables": [],
+            "output_updates": [
+                {
+                    "name": "map_state",
+                    "type": "list",
+                    "context": "agent",
+                    "description": "A representation of the current state of the grid map, including resource availability."
+                }
+            ],
+            "code": ""
+        },
+        {
+            "id": 2,
+            "name": "decide_action",
+            "condition": "Global map state observed",
+            "description": "Choose ONE: occupy(empty), maintain(defend owned), or compete(raid others). Costs: occupy=1, maintain=1, compete=1. Defend blocks ALL raids this round. Settlement order: raids/defense -> claims -> mining (only owned plots should be mined). Strict JSON: {action_type, energy_investment:int, cell_coordinates:'(row,col)', target_ids:[self]}.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "map_state",
+                    "type": "list",
+                    "context": "agent",
+                    "description": "Current observed state of the grid map to inform decision making."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "action_plan",
+                    "type": "dict",
+                    "context": "agent",
+                    "description": "One-step action plan among occupy|maintain|compete with strict keys; routed to self."
+                }
+            ],
+            "code": ""
+        },
+        {
+            "id": 3,
+            "name": "execute_occupy_or_maintain",
+            "condition": "Decision to occupy or maintain land ownership",
+            "description": "Execute occupy/maintain. Occupy succeeds on empty plots; maintain succeeds on owned plots and blocks ALL raids this round. Return {success, target_ids:[self]}.",
+            "type": "XOR",
+            "required_variables": [
+                {
+                    "name": "energy_investment",
+                    "type": "int",
+                    "context": "event",
+                    "description": "Energy the agent has decided to invest in occupying or maintaining land."
+                },
+                {
+                    "name": "cell_coordinates",
+                    "type": "tuple",
+                    "context": "event",
+                    "description": "Coordinates of the grid cell targeted for occupation or maintenance."
+                },
+                {
+                    "name": "previous_owner",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Identifier of the previous owner of the land, if applicable."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "new_land_status",
+                    "type": "dict",
+                    "context": "env",
+                    "description": "Updates the ownership status of the targeted cell in the environment."
+                }
+            ],
+            "code": ""
+        },
+        {
+            "id": 4,
+            "name": "execute_compete",
+            "condition": "Decision to compete for land ownership",
+            "description": "Execute compete (raid). If defender maintained, ALL raids fail; else one challenger wins uniformly. Return {competition_result:{result,new_owner}, target_ids:[self]}.",
+            "type": "XOR",
+            "required_variables": [
+                {
+                    "name": "energy_investment",
+                    "type": "int",
+                    "context": "event",
+                    "description": "Energy the agent has decided to invest in competing for land ownership."
+                },
+                {
+                    "name": "cell_coordinates",
+                    "type": "tuple",
+                    "context": "event",
+                    "description": "Coordinates of the grid cell targeted for competition."
+                },
+                {
+                    "name": "current_owner",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Identifier of the current owner of the land being competed for."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "competition_result",
+                    "type": "dict",
+                    "context": "env",
+                    "description": "Updates the environment with the result of the competition for the targeted cell."
+                }
+            ],
+            "code": ""
+        },
+        {
+            "id": 5,
+            "name": "exploit_resources",
+            "condition": "Land ownership secured",
+            "description": "Mine only owned (and ideally defended) plots; per-plot cap=3. LLM returns per-cell mining stamina as {stamina:int in [0,3], target_ids:[self]}. Environment enforces global budget/clipping.",
+            "type": "AND",
+            "required_variables": [
+                {
+                    "name": "new_owner",
+                    "type": "str",
+                    "context": "event",
+                    "description": "Identifier of the agent now owning the land."
+                },
+                {
+                    "name": "cell_coordinates",
+                    "type": "tuple",
+                    "context": "event",
+                    "description": "Coordinates of the grid cell being exploited for resources."
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "resource_count",
+                    "type": "int",
+                    "context": "agent",
+                    "description": "Number of resource units successfully extracted from the grid cell."
+                }
+            ],
+            "code": ""
+        }
+    ]
+}

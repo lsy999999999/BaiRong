@@ -1,0 +1,19 @@
+{
+  "total_rounds": 5,
+  "action_counts": {
+    "claims": 0,
+    "raids": 0,
+    "defend": 0
+  },
+  "mining_stamina_declared_sum": 0,
+  "mining_stamina_clipped_sum": 0,
+  "hot_cells": [],
+  "budget_per_round": [
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "budget_violations": 0
+}

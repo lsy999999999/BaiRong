@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir:*)",
+      "Bash(mkdir:*)",
+      "Bash(python 3_key_findings_visualization.py:*)",
+      "Bash(python:*)",
+      "Bash(where:*)",
+      "Bash(awk:*)",
+      "Bash(done)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

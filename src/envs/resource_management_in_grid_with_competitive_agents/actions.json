@@ -1,68 +1,208 @@
 {
-  "ResourceMiner": [
-    {
-      "id": 1,
-      "name": "observe_round_state",
-      "condition": null,
-      "description": "The miner receives the start-of-round briefing, records the public ownership map and prior round log, and prepares to compute a new action bundle.",
-      "type": "OR",
-      "required_variables": [],
-      "output_updates": [
+    "ResourceMiner": [
         {
-          "name": "round_context",
-          "type": "dict",
-          "context": "agent",
-          "description": "Snapshot of the current round including ownership map, stamina budget, mining cap, prior public log, and any personal summary."
-        }
-      ],
-      "code": ""
-    },
-    {
-      "id": 2,
-      "name": "decide_action_bundle",
-      "condition": "Round context observed",
-      "description": "Using the public information and personal history, the miner composes a claim/raid/defend/mine bundle that respects legality and stamina budgeting rules, optionally providing priority orders for deterministic clipping.",
-      "type": "OR",
-      "required_variables": [
-        {
-          "name": "round_context",
-          "type": "dict",
-          "context": "agent",
-          "description": "Current round information used to reason about the action bundle."
-        }
-      ],
-      "output_updates": [
-        {
-          "name": "proposed_action_bundle",
-          "type": "dict",
-          "context": "agent",
-          "description": "The action bundle submitted to the environment including claims, raids, defense commitments, mining allocations, and optional priority metadata."
-        }
-      ],
-      "code": ""
-    },
-    {
-      "id": 3,
-      "name": "handle_round_resolution",
-      "condition": "Environment publishes round resolution",
-      "description": "The miner records the executed plan, stamina spending, gold output, and ownership changes reported by the environment for learning in future rounds.",
-      "type": "AND",
-      "required_variables": [],
-      "output_updates": [
-        {
-          "name": "last_round_summary",
-          "type": "dict",
-          "context": "agent",
-          "description": "Detailed record of the environment's round summary for this agent."
+            "id": 1,
+            "name": "submit_action_bundle",
+            "condition": "Stamina budget available for action creation",
+            "description": "Agent prepares and submits an action bundle containing claims, raids, defense commitments, and mining allocations for the current round. This action is the initial step in the decision-making process, triggered by the system start event.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "agent_id",
+                    "type": "string",
+                    "context": "agent",
+                    "description": "Unique identifier of the agent submitting the action bundle"
+                },
+                {
+                    "name": "stamina_budget",
+                    "type": "integer",
+                    "context": "agent",
+                    "description": "Agent's stamina budget for the current round"
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "action_bundle",
+                    "type": "object",
+                    "context": "agent",
+                    "description": "JSON object containing claims, raids, defense commitments, and mining allocations"
+                }
+            ],
+            "code": ""
         },
         {
-          "name": "total_gold",
-          "type": "int",
-          "context": "agent",
-          "description": "Cumulative gold mined by the agent across rounds."
+            "id": 2,
+            "name": "validate_and_clip",
+            "condition": "Action bundle contains valid claim/raid/defense/mining components",
+            "description": "Validates the submitted action bundle against legality constraints and clips it to ensure it adheres to the agent's stamina budget. This action processes the bundle to remove illegal actions and prioritize valid ones according to the agent's specified order.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "action_bundle",
+                    "type": "object",
+                    "context": "event",
+                    "description": "Action bundle submitted by the agent for validation and clipping"
+                },
+                {
+                    "name": "stamina_budget",
+                    "type": "integer",
+                    "context": "agent",
+                    "description": "Agent's stamina budget for the current round"
+                },
+                {
+                    "name": "priority_order",
+                    "type": "array",
+                    "context": "agent",
+                    "description": "Agent-specified priority order for action clipping (e.g., Mining → Raids → Claims → Defense)"
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "validated_actions",
+                    "type": "object",
+                    "context": "agent",
+                    "description": "Action bundle after legality checks and budget clipping"
+                },
+                {
+                    "name": "stamina_used",
+                    "type": "integer",
+                    "context": "agent",
+                    "description": "Total stamina consumed by validated actions"
+                },
+                {
+                    "name": "illegal_actions",
+                    "type": "array",
+                    "context": "agent",
+                    "description": "List of illegal actions removed from the bundle"
+                }
+            ],
+            "code": ""
+        },
+        {
+            "id": 3,
+            "name": "resolve_claims",
+            "condition": "Unowned plots exist for claim resolution",
+            "description": "Resolves claims on unowned plots using deterministic hash-based tie-breaking. This action determines ownership transfers for unclaimed plots based on the submitted action bundle and the current ownership state.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "ownership_grid",
+                    "type": "array",
+                    "context": "env",
+                    "description": "Current state of plot ownership across the 2×2 grid"
+                },
+                {
+                    "name": "event_log",
+                    "type": "array",
+                    "context": "env",
+                    "description": "Previous round's event log for conflict resolution context"
+                },
+                {
+                    "name": "validated_actions",
+                    "type": "object",
+                    "context": "event",
+                    "description": "Action bundle after validation and clipping"
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "claimed_plots",
+                    "type": "array",
+                    "context": "env",
+                    "description": "List of unowned plots with resolved ownership"
+                },
+                {
+                    "name": "tie_breaker_hash",
+                    "type": "string",
+                    "context": "env",
+                    "description": "SHA-256 hash used for deterministic tie-breaking"
+                }
+            ],
+            "code": ""
+        },
+        {
+            "id": 4,
+            "name": "resolve_raids",
+            "condition": "Owned plots exist for raid resolution",
+            "description": "Resolves raid outcomes on owned plots by applying precommitted defense commitments and determining winners via hash-based tie-breaking. This action determines which agents retain or lose ownership of contested plots.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "ownership_grid",
+                    "type": "array",
+                    "context": "env",
+                    "description": "Current state of plot ownership after claim resolution"
+                },
+                {
+                    "name": "validated_actions",
+                    "type": "object",
+                    "context": "event",
+                    "description": "Action bundle after validation and clipping"
+                },
+                {
+                    "name": "defense_commitments",
+                    "type": "object",
+                    "context": "agent",
+                    "description": "Binary defense commitments on self-owned plots"
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "raided_plots",
+                    "type": "array",
+                    "context": "env",
+                    "description": "List of plots with raid outcomes and involved agents"
+                },
+                {
+                    "name": "stamina_used_raids",
+                    "type": "integer",
+                    "context": "env",
+                    "description": "Total stamina consumed by raid actions"
+                }
+            ],
+            "code": ""
+        },
+        {
+            "id": 5,
+            "name": "apply_mining",
+            "condition": "Post-conflict ownership grid established",
+            "description": "Applies mining output to plots based on post-conflict ownership and stamina allocations. This action calculates gold extraction for each plot, respecting the per-plot productivity cap and updating the agent's cumulative gold reserves.",
+            "type": "OR",
+            "required_variables": [
+                {
+                    "name": "ownership_grid",
+                    "type": "array",
+                    "context": "env",
+                    "description": "Final state of plot ownership after conflict resolution"
+                },
+                {
+                    "name": "validated_actions",
+                    "type": "object",
+                    "context": "event",
+                    "description": "Action bundle after validation and clipping"
+                },
+                {
+                    "name": "s_max",
+                    "type": "integer",
+                    "context": "env",
+                    "description": "Maximum gold yield per plot per round"
+                }
+            ],
+            "output_updates": [
+                {
+                    "name": "gold_mined",
+                    "type": "integer",
+                    "context": "agent",
+                    "description": "Gold extracted from the plot (min(stamina_allocated, s_max))"
+                },
+                {
+                    "name": "total_gold",
+                    "type": "integer",
+                    "context": "agent",
+                    "description": "Agent's cumulative gold reserves after mining"
+                }
+            ],
+            "code": ""
         }
-      ],
-      "code": ""
-    }
-  ]
+    ]
 }

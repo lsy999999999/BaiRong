@@ -1,0 +1,85 @@
+{
+  "domain": "Organization",
+  "scene_name": "resource_management_in_grid_with_competitive_agents",
+  "odd_protocol": {
+    "overview": {
+      "system_goal": "To manage resource allocation and land ownership among miners on a grid structure.",
+      "agent_types": "Miners who can maintain or contest land ownership and exploit resources.",
+      "environment_description": "A 10x10 grid where each cell has infinite resources but limited productivity per round.",
+      "grid_resource_mechanism": "Each grid cell has unlimited resources with a cap of 3 units visible to all miners per round."
+    },
+    "design_concepts": {
+      "interaction_patterns": "Miners contend for grid cells via energy investment and can subsequently exploit these cells for resources.",
+      "communication_protocols": "Resource availability and allocation are visible to all miners, allowing for strategic planning and interaction.",
+      "decision_mechanisms": "Energy investment determines contest outcomes; highest investment wins, ties resolved randomly. The landholder can maintain control by investing a minimum energy."
+    },
+    "details": {
+      "agent_behaviors": "Agents observe global map state, decide actions (occupy, maintain, or compete for land), and execute based on prior status and strategic goals.",
+      "decision_algorithms": "Energy investment decisions are strategic, with success in claiming a cell requiring waiting until the subsequent round to exploit resources.",
+      "specific_constraints": "Only the current landholder may exploit resources immediately following successful maintenance or acquisition of a cell."
+    }
+  },
+  "agent_types": {
+    "ResourceMiner": "Responsible for occupying grid cells, investing energy to maintain or contest ownership, and exploiting resources from controlled land."
+  },
+  "portrait": {
+    "ResourceMiner": 3
+  },
+  "metrics": [
+    {
+      "id": "Total_System_Resource_Count",
+      "name": "Total System Resource Count",
+      "description": "Total resources held by all ResourceMiner agents at a given point in time.",
+      "visualization_type": "line",
+      "update_interval": 5,
+      "variables": [
+        {
+          "name": "resource_count",
+          "source_type": "agent",
+          "agent_type": "ResourceMiner",
+          "path": "resource_count",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Aggregate the 'resource_count' variable across all ResourceMiner agents by ignoring any None values. Sum up the resource counts of agents where the value is not None. This provides the total resources held by all agents, represented over time in a line chart.",
+      "function_name": "Total_System_Resource_Count"
+    },
+    {
+      "id": "Land_Ownership_Contest_Dynamics",
+      "name": "Land Ownership Contest Dynamics",
+      "description": "Frequency of contests and success rate of land acquisition among miners.",
+      "visualization_type": "bar",
+      "update_interval": 10,
+      "variables": [
+        {
+          "name": "competition_result",
+          "source_type": "env",
+          "path": "competition_result",
+          "required": true
+        }
+      ],
+      "calculation_logic": "Check the 'competition_result' dictionary for the number of contests and successful contests. A contest is counted whenever this dictionary is not None, and the number of successful land acquisitions is counted where values in this dictionary indicate a win. Construct bar chart categories as 'Total Contests' and 'Successful Contests' with their respective counts.",
+      "function_name": "Land_Ownership_Contest_Dynamics"
+    },
+    {
+      "id": "Agent_Resource_Utilization_Efficiency",
+      "name": "Agent Resource Utilization Efficiency",
+      "description": "Average resources utilized per ResourceMiner agent based on their current land ownership.",
+      "visualization_type": "line",
+      "update_interval": 5,
+      "variables": [
+        {
+          "name": "resource_count",
+          "source_type": "agent",
+          "agent_type": "ResourceMiner",
+          "path": "resource_count",
+          "required": true,
+          "is_list": true
+        }
+      ],
+      "calculation_logic": "Calculate the average resources utilized per agent by filtering out None entries from the 'resource_count' list. Sum the available values and divide by the count of non-None entries, handling cases where all values are None by setting the average to 0. This metric visualized over time indicates the efficiency of miners in exploiting resources.",
+      "function_name": "Agent_Resource_Utilization_Efficiency"
+    }
+  ]
+}

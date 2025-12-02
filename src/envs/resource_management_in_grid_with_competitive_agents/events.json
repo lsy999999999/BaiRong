@@ -1,189 +1,181 @@
 {
-  "1": {
-    "id": 1,
-    "from_agent_type": "ResourceMiner",
-    "from_action_name": "observe_round_state",
-    "to_agent_type": "ResourceMiner",
-    "to_action_name": "decide_action_bundle",
-    "from_action_id": 1,
-    "to_action_id": 2,
-    "event_name": "MapObservedEvent",
-    "event_info": "Internal trigger after observing the public map; prompts the miner to compute an action bundle for the round.",
-    "fields": [
-      {
-        "name": "round_index",
-        "type": "int",
-        "default_value": 0,
-        "description": "Index of the current round."
-      }
-    ],
-    "code": ""
-  },
-  "2": {
-    "id": 2,
-    "from_agent_type": "ResourceMiner",
-    "from_action_name": "decide_action_bundle",
-    "to_agent_type": "EnvAgent",
-    "to_action_name": "handle_action_bundle",
-    "from_action_id": 2,
-    "to_action_id": -1,
-    "event_name": "ActionBundleEvent",
-    "event_info": "Action bundle submission including claims, raids, defense commitments, mining allocations, and optional priority orders.",
-    "fields": [
-      {
-        "name": "round_index",
-        "type": "int",
-        "default_value": 0,
-        "description": "Round for which the bundle applies."
-      },
-      {
-        "name": "claims",
-        "type": "list",
-        "default_value": [],
-        "description": "List of coordinates the miner attempts to claim."
-      },
-      {
-        "name": "raids",
-        "type": "list",
-        "default_value": [],
-        "description": "List of coordinates the miner attempts to raid from other owners."
-      },
-      {
-        "name": "defend",
-        "type": "list",
-        "default_value": [],
-        "description": "Defense commitments on currently owned plots with optional 0/1 commit values."
-      },
-      {
-        "name": "mining",
-        "type": "list",
-        "default_value": [],
-        "description": "Mining allocations expressed as per-plot stamina investments."
-      },
-      {
-        "name": "priority",
-        "type": "dict",
-        "default_value": {},
-        "description": "Optional priority metadata for deterministic clipping across categories and within-category order."
-      }
-    ],
-    "code": ""
-  },
-  "3": {
-    "id": 3,
-    "from_agent_type": "EnvAgent",
-    "from_action_name": "resolve_round",
-    "to_agent_type": "ResourceMiner",
-    "to_action_name": "handle_round_resolution",
-    "from_action_id": -1,
-    "to_action_id": 3,
-    "event_name": "RoundResolutionEvent",
-    "event_info": "Environment summary describing executed actions, stamina usage, mining output, and ownership changes for the miner.",
-    "fields": [
-      {
-        "name": "round_index",
-        "type": "int",
-        "default_value": 0,
-        "description": "Index of the resolved round."
-      },
-      {
-        "name": "stamina_budget",
-        "type": "int",
-        "default_value": 10,
-        "description": "Per-round stamina budget used for context."
-      },
-      {
-        "name": "stamina_spent",
-        "type": "int",
-        "default_value": 0,
-        "description": "Stamina actually spent after clipping."
-      },
-      {
-        "name": "stamina_submitted",
-        "type": "int",
-        "default_value": 0,
-        "description": "Stamina implied by the submitted bundle before clipping."
-      },
-      {
-        "name": "gold_mined",
-        "type": "int",
-        "default_value": 0,
-        "description": "Gold mined by the agent this round."
-      },
-      {
-        "name": "cumulative_gold",
-        "type": "int",
-        "default_value": 0,
-        "description": "Cumulative gold mined up to this round."
-      },
-      {
-        "name": "executed_plan",
-        "type": "dict",
-        "default_value": {},
-        "description": "Final executed plan after legality screening and clipping."
-      },
-      {
-        "name": "invalid_actions",
-        "type": "dict",
-        "default_value": {},
-        "description": "Actions removed during legality checks along with reasons."
-      },
-      {
-        "name": "clipped_actions",
-        "type": "dict",
-        "default_value": {},
-        "description": "Actions or stamina removed due to exceeding the budget."
-      },
-      {
-        "name": "plots_owned_after",
-        "type": "list",
-        "default_value": [],
-        "description": "List of plots owned by the miner after resolution."
-      },
-      {
-        "name": "plots_gained",
-        "type": "list",
-        "default_value": [],
-        "description": "Plots acquired this round."
-      },
-      {
-        "name": "plots_lost",
-        "type": "list",
-        "default_value": [],
-        "description": "Plots lost this round."
-      },
-      {
-        "name": "mining_results",
-        "type": "list",
-        "default_value": [],
-        "description": "Per-plot mining outputs for the miner."
-      },
-      {
-        "name": "ownership_after",
-        "type": "list",
-        "default_value": [],
-        "description": "Grid ownership map after resolution."
-      },
-      {
-        "name": "public_log_entry",
-        "type": "list",
-        "default_value": [],
-        "description": "Per-plot log published for this round."
-      }
-    ],
-    "code": ""
-  },
-  "-1": {
-    "id": -1,
-    "from_agent_type": "EnvAgent",
-    "from_action_name": "start",
-    "to_agent_type": "ResourceMiner",
-    "to_action_name": "observe_round_state",
-    "from_action_id": 0,
-    "to_action_id": 1,
-    "event_name": "StartEvent",
-    "event_info": "Initial trigger delivering the public map, last round log, stamina budget, and mining cap to each miner.",
-    "fields": [],
-    "code": ""
-  }
+    "-1": {
+        "id": -1,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "ResourceMiner",
+        "to_action_name": "submit_action_bundle",
+        "from_action_id": 0,
+        "to_action_id": 1,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for miner action submission",
+        "fields": [],
+        "code": ""
+    },
+    "1": {
+        "id": 1,
+        "from_agent_type": "ResourceMiner",
+        "from_action_name": "submit_action_bundle",
+        "to_agent_type": "ResourceMiner",
+        "to_action_name": "validate_and_clip",
+        "from_action_id": 1,
+        "to_action_id": 2,
+        "event_name": "ActionBundleSubmittedEvent",
+        "event_info": "Action bundle received for validation and budget clipping",
+        "fields": [
+            {
+                "name": "agent_id",
+                "type": "string",
+                "default_value": "",
+                "description": "Unique identifier of the agent submitting the action bundle"
+            },
+            {
+                "name": "action_bundle",
+                "type": "object",
+                "default_value": "{}",
+                "description": "JSON object containing claims, raids, defense commitments, and mining allocations"
+            },
+            {
+                "name": "stamina_budget",
+                "type": "integer",
+                "default_value": 10,
+                "description": "Agent's stamina budget for the current round"
+            }
+        ],
+        "code": ""
+    },
+    "2": {
+        "id": 2,
+        "from_agent_type": "ResourceMiner",
+        "from_action_name": "validate_and_clip",
+        "to_agent_type": "ResourceMiner",
+        "to_action_name": "resolve_claims",
+        "from_action_id": 2,
+        "to_action_id": 3,
+        "event_name": "ActionBundleValidatedEvent",
+        "event_info": "Action bundle passes legality checks and budget clipping",
+        "fields": [
+            {
+                "name": "agent_id",
+                "type": "string",
+                "default_value": "",
+                "description": "Unique identifier of the agent whose bundle was validated"
+            },
+            {
+                "name": "validated_actions",
+                "type": "object",
+                "default_value": "{}",
+                "description": "Action bundle after legality checks and budget clipping"
+            },
+            {
+                "name": "stamina_used",
+                "type": "integer",
+                "default_value": 0,
+                "description": "Total stamina consumed by validated actions"
+            },
+            {
+                "name": "illegal_actions",
+                "type": "array",
+                "default_value": "[]",
+                "description": "List of illegal actions removed from the bundle"
+            }
+        ],
+        "code": ""
+    },
+    "3": {
+        "id": 3,
+        "from_agent_type": "ResourceMiner",
+        "from_action_name": "resolve_claims",
+        "to_agent_type": "ResourceMiner",
+        "to_action_name": "resolve_raids",
+        "from_action_id": 3,
+        "to_action_id": 4,
+        "event_name": "ClaimsResolvedEvent",
+        "event_info": "Unowned plots have been claimed via deterministic hash-based tie-breaking",
+        "fields": [
+            {
+                "name": "claimed_plots",
+                "type": "array",
+                "default_value": "[]",
+                "description": "List of unowned plots with resolved ownership"
+            },
+            {
+                "name": "tie_breaker_hash",
+                "type": "string",
+                "default_value": "",
+                "description": "SHA-256 hash used for deterministic tie-breaking"
+            }
+        ],
+        "code": ""
+    },
+    "4": {
+        "id": 4,
+        "from_agent_type": "ResourceMiner",
+        "from_action_name": "resolve_raids",
+        "to_agent_type": "ResourceMiner",
+        "to_action_name": "apply_mining",
+        "from_action_id": 4,
+        "to_action_id": 5,
+        "event_name": "RaidResolutionCompleteEvent",
+        "event_info": "Raid outcomes determined with defense commitments applied",
+        "fields": [
+            {
+                "name": "raided_plots",
+                "type": "array",
+                "default_value": "[]",
+                "description": "List of plots with raid outcomes and involved agents"
+            },
+            {
+                "name": "stamina_used_raids",
+                "type": "integer",
+                "default_value": 0,
+                "description": "Total stamina consumed by raid actions"
+            }
+        ],
+        "code": ""
+    },
+    "5": {
+        "id": 5,
+        "from_agent_type": "ResourceMiner",
+        "from_action_name": "apply_mining",
+        "to_agent_type": "EnvAgent",
+        "to_action_name": "terminate",
+        "from_action_id": 5,
+        "to_action_id": -1,
+        "event_name": "MiningAppliedEvent",
+        "event_info": "Mining output calculated based on post-conflict ownership and stamina allocation",
+        "fields": [
+            {
+                "name": "plot_row",
+                "type": "integer",
+                "default_value": 0,
+                "description": "Row index of the plot being mined"
+            },
+            {
+                "name": "plot_col",
+                "type": "integer",
+                "default_value": 0,
+                "description": "Column index of the plot being mined"
+            },
+            {
+                "name": "owner_id",
+                "type": "string",
+                "default_value": "",
+                "description": "Agent ID of the post-conflict plot owner"
+            },
+            {
+                "name": "stamina_allocated",
+                "type": "integer",
+                "default_value": 0,
+                "description": "Stamina allocated to mining by the owner"
+            },
+            {
+                "name": "gold_mined",
+                "type": "integer",
+                "default_value": 0,
+                "description": "Gold extracted from the plot (min(stamina_allocated, s_max))"
+            }
+        ],
+        "code": ""
+    }
 }

@@ -1,0 +1,37 @@
+{
+    "environment": {
+        "variables": [
+            {
+                "name": "new_land_status",
+                "type": "dict",
+                "default_value": null
+            },
+            {
+                "name": "competition_result",
+                "type": "dict",
+                "default_value": null
+            }
+        ]
+    },
+    "agents": {
+        "ResourceMiner": {
+            "variables": [
+                {
+                    "name": "map_state",
+                    "type": "list",
+                    "default_value": null
+                },
+                {
+                    "name": "action_plan",
+                    "type": "dict",
+                    "default_value": null
+                },
+                {
+                    "name": "resource_count",
+                    "type": "int",
+                    "default_value": null
+                }
+            ]
+        }
+    }
+}

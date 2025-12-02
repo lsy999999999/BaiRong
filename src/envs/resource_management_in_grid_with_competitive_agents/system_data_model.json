@@ -7,8 +7,33 @@
                 "default_value": null
             },
             {
-                "name": "updated_ownership",
+                "name": "event_log",
                 "type": "array",
+                "default_value": null
+            },
+            {
+                "name": "claimed_plots",
+                "type": "array",
+                "default_value": null
+            },
+            {
+                "name": "tie_breaker_hash",
+                "type": "string",
+                "default_value": null
+            },
+            {
+                "name": "raided_plots",
+                "type": "array",
+                "default_value": null
+            },
+            {
+                "name": "stamina_used_raids",
+                "type": "integer",
+                "default_value": null
+            },
+            {
+                "name": "s_max",
+                "type": "integer",
                 "default_value": null
             }
         ]
@@ -16,6 +41,11 @@
     "agents": {
         "ResourceMiner": {
             "variables": [
+                {
+                    "name": "agent_id",
+                    "type": "string",
+                    "default_value": null
+                },
                 {
                     "name": "stamina_budget",
                     "type": "integer",
@@ -27,52 +57,37 @@
                     "default_value": null
                 },
                 {
-                    "name": "validated_actions",
-                    "type": "object",
-                    "default_value": null
-                },
-                {
-                    "name": "budget_used",
-                    "type": "integer",
-                    "default_value": null
-                },
-                {
-                    "name": "errors",
-                    "type": "array",
-                    "default_value": null
-                },
-                {
                     "name": "priority_order",
                     "type": "array",
                     "default_value": null
                 },
                 {
-                    "name": "clipped_actions",
+                    "name": "validated_actions",
                     "type": "object",
                     "default_value": null
                 },
                 {
-                    "name": "remaining_stamina",
+                    "name": "stamina_used",
                     "type": "integer",
                     "default_value": null
                 },
                 {
-                    "name": "resolved_claims",
+                    "name": "illegal_actions",
                     "type": "array",
                     "default_value": null
                 },
                 {
-                    "name": "tie_breaker_hash",
-                    "type": "string",
+                    "name": "defense_commitments",
+                    "type": "object",
                     "default_value": null
                 },
                 {
-                    "name": "raid_outcomes",
-                    "type": "array",
+                    "name": "gold_mined",
+                    "type": "integer",
                     "default_value": null
                 },
                 {
-                    "name": "mined_gold",
+                    "name": "total_gold",
                     "type": "integer",
                     "default_value": null
                 }
