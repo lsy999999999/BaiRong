@@ -1,69 +1,161 @@
 # -*- coding: utf-8 -*-
-"""Metric calculations for the competitive resource management environment."""
+"""
+自动生成的监控指标计算模块
+"""
 
-from typing import Any, Callable, Dict, Optional
-
+from typing import Dict, Any, List, Optional, Union, Callable
+import math
+from loguru import logger
 from onesim.monitor.utils import (
-    safe_avg,
-    safe_get,
-    safe_list,
-    safe_number,
-    safe_sum,
-    log_metric_error,
+    safe_get, safe_number, safe_list, safe_sum, 
+    safe_avg, safe_max, safe_min, safe_count, log_metric_error
 )
 
 
-def Total_Resource_Exploitation(data: Dict[str, Any]) -> Dict[str, float]:
-    """Sum mined gold across miners for the current round."""
+from typing import Dict, Any
+from onesim.monitor.utils import safe_get, safe_list, safe_sum, log_metric_error
+
+def Total_System_Resource_Count(data: Dict[str, Any]) -> Any:
+    """
+    计算指标: Total System Resource Count
+    描述: Total resources held by all ResourceMiner agents at a given point in time.
+    可视化类型: line
+    
+    Args:
+        data: 包含所有变量的数据字典，注意agent变量是列表形式
+        
+    Returns:
+        返回字典，键为系列名称，值为对应数值
+    """
     try:
-        raw_values = safe_list(safe_get(data, "resources_exploited", []))
-        numeric_values = [safe_number(value, default=0) for value in raw_values]
-        total = safe_sum(numeric_values)
-        return {"Total Resource Exploitation": total}
-    except Exception as exc:  # pragma: no cover - defensive
-        log_metric_error("Total Resource Exploitation", exc, {"data_keys": list(data.keys()) if isinstance(data, dict) else None})
-        return {"Total Resource Exploitation": 0.0}
+        if not data or not isinstance(data, dict):
+            log_metric_error("Total System Resource Count", ValueError("Invalid data input"), {"data": data})
+            return {"default": 0}
 
+        # Access the resource_count for ResourceMiner agents
+        resource_counts = safe_list(safe_get(data, 'resource_count', []))
 
-def Average_Energy_Investment(data: Dict[str, Any]) -> Dict[str, float]:
-    """Average stamina spent (after clipping) by miners in the current round."""
+        # Ensure all counts are numbers and ignore None values
+        valid_counts = [value for value in (safe_get(agent, None) for agent in resource_counts) if value is not None]
+        
+        # Sum the resource counts
+        total_resources = safe_sum(valid_counts)
+
+        # Prepare the result dictionary for line visualization
+        result = {"Total Resources": total_resources}
+        
+        return result
+    
+    except Exception as e:
+        log_metric_error("Total System Resource Count", e, {"data_keys": list(data.keys()) if isinstance(data, dict) else None})
+        return {"default": 0}
+
+from typing import Dict, Any
+from onesim.monitor.utils import safe_get, safe_count, log_metric_error
+
+def Land_Ownership_Contest_Dynamics(data: Dict[str, Any]) -> Dict[str, int]:
+    """
+    Calculate metric: Land Ownership Contest Dynamics
+    Description: Determines the frequency of contests and success rate of land acquisition among miners.
+    Visualization Type: bar
+
+    Args:
+        data: Dictionary containing all variables collected by the monitor. Agent variables are lists.
+
+    Returns:
+        A dictionary with categories 'Total Contests' and 'Successful Contests' as keys and their respective counts as values.
+
+    Notes:
+        The function handles various exceptional cases, including None values, empty lists, and type errors.
+    """
     try:
-        raw_values = safe_list(safe_get(data, "energy_investment", []))
-        numeric_values = [safe_number(value, default=None) for value in raw_values if value is not None]
-        if not numeric_values:
-            return {"Average Stamina Spending": 0.0}
-        return {"Average Stamina Spending": safe_avg(numeric_values, default=0.0)}
-    except Exception as exc:  # pragma: no cover - defensive
-        log_metric_error("Average Stamina Spending", exc, {"data_keys": list(data.keys()) if isinstance(data, dict) else None})
-        return {"Average Stamina Spending": 0.0}
+        # Accessing the 'competition_result' from the environment
+        competition_result = safe_get(data, 'competition_result')
 
+        # Initialize contest counters
+        total_contests = 0
+        successful_contests = 0
 
-def Land_Ownership_Distribution(data: Dict[str, Any]) -> Dict[str, float]:
-    """Compute ownership share per miner."""
-    try:
-        owners = safe_list(safe_get(data, "land_cells_owned", []))
-        counts: Dict[str, int] = {}
-        for owner in owners:
-            if owner in (None, "", "None"):
-                continue
-            owner_id = str(owner)
-            counts[owner_id] = counts.get(owner_id, 0) + 1
-        total_owned = safe_sum(list(counts.values()))
-        if total_owned == 0:
-            return {}
-        return {owner: count / total_owned for owner, count in counts.items()}
-    except Exception as exc:  # pragma: no cover - defensive
-        log_metric_error("Land Ownership Distribution", exc, {"data_keys": list(data.keys()) if isinstance(data, dict) else None})
+        # Validate competition_result
+        if competition_result and isinstance(competition_result, dict):
+            # Total contests is simply the number of entries in the competition_result dictionary
+            total_contests = len(competition_result)
+
+            # Successful contests are those where the value indicates a win (assuming a win means True or a specific value)
+            successful_contests = safe_count(competition_result.values(), lambda v: v is True or v == 'win')
+
+        # Return results for bar chart
+        return {
+            "Total Contests": total_contests,
+            "Successful Contests": successful_contests
+        }
+
+    except Exception as e:
+        log_metric_error("Land Ownership Contest Dynamics", e, {"data_keys": list(data.keys()) if isinstance(data, dict) else None})
         return {}
 
+from typing import Dict, Any
+from onesim.monitor.utils import (
+    safe_get,
+    safe_list,
+    safe_sum,
+    safe_count,
+    log_metric_error
+)
 
-METRIC_FUNCTIONS: Dict[str, Callable[[Dict[str, Any]], Dict[str, float]]] = {
-    "Total_Resource_Exploitation": Total_Resource_Exploitation,
-    "Average_Energy_Investment": Average_Energy_Investment,
-    "Land_Ownership_Distribution": Land_Ownership_Distribution,
+def Agent_Resource_Utilization_Efficiency(data: Dict[str, Any]) -> Dict[str, float]:
+    """
+    Compute the Agent Resource Utilization Efficiency metric.
+    Description: Average resources utilized per ResourceMiner agent based on their current land ownership.
+    Visualization Type: line
+    
+    Args:
+        data: Dictionary containing all the variables collected by the monitor.
+        
+    Returns:
+        A dictionary where each key represents a data series (e.g., 'average_utilization') for line visualization.
+    """
+    try:
+        # Safely retrieve the list of 'resource_count' values from the data
+        resource_count_list = safe_list(safe_get(data, 'resource_count', []))
+
+        # Filter out None values and convert all valid entries to numbers
+        valid_resource_counts = [safe_get({'value': val}, 'value') for val in resource_count_list if val is not None]
+        valid_resource_counts = [x for x in valid_resource_counts if isinstance(x, int)]
+        
+        # Calculate the sum of resources used and count of valid entries
+        total_resources = safe_sum(valid_resource_counts)
+        num_agents = safe_count(valid_resource_counts)
+        
+        # Calculate average, handling division by zero
+        average_utilization = total_resources / num_agents if num_agents > 0 else 0
+        
+        # Result suitable for line visualization
+        result = {'average_utilization': average_utilization}
+        return result
+
+    except Exception as e:
+        # Log any exception that occurs during processing
+        log_metric_error("Agent Resource Utilization Efficiency", e, {"data_keys": list(data.keys()) if isinstance(data, dict) else None})
+        # Return a default result for error robustness
+        return {'average_utilization': 0}
+
+# 指标函数字典，用于查找
+METRIC_FUNCTIONS = {
+    'Total_System_Resource_Count': Total_System_Resource_Count,
+    'Land_Ownership_Contest_Dynamics': Land_Ownership_Contest_Dynamics,
+    'Agent_Resource_Utilization_Efficiency': Agent_Resource_Utilization_Efficiency,
 }
 
 
-def get_metric_function(function_name: str) -> Optional[Callable[[Dict[str, Any]], Dict[str, float]]]:
-    """Retrieve a metric function by name."""
+def get_metric_function(function_name: str) -> Optional[Callable]:
+    """
+    根据函数名获取对应的指标计算函数
+    
+    Args:
+        function_name: 函数名
+        
+    Returns:
+        指标计算函数或None
+    """
     return METRIC_FUNCTIONS.get(function_name)

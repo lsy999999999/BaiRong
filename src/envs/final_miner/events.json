@@ -1,0 +1,176 @@
+{
+    "-1": {
+        "id": -1,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "ResourceMiner",
+        "to_action_name": "observe_global_map",
+        "from_action_id": 0,
+        "to_action_id": 1,
+        "event_name": "StartEvent",
+        "event_info": "Initial trigger for miners to observe the global map state",
+        "fields": [],
+        "code": ""
+    },
+    "1": {
+        "id": 1,
+        "from_agent_type": "ResourceMiner",
+        "from_action_name": "observe_global_map",
+        "to_agent_type": "ResourceMiner",
+        "to_action_name": "decide_action",
+        "from_action_id": 1,
+        "to_action_id": 2,
+        "event_name": "MapObservedEvent",
+        "event_info": "Event triggered after observing the map, leads to action decision",
+        "fields": [],
+        "code": ""
+    },
+    "2": {
+        "id": 2,
+        "from_agent_type": "ResourceMiner",
+        "from_action_name": "decide_action",
+        "to_agent_type": "ResourceMiner",
+        "to_action_name": "execute_occupy_or_maintain",
+        "from_action_id": 2,
+        "to_action_id": 3,
+        "event_name": "OccupyLandDecisionEvent",
+        "event_info": "Decision to occupy or maintain land ownership with energy investment",
+        "fields": [
+            {
+                "name": "energy_investment",
+                "type": "int",
+                "default_value": 0,
+                "description": "Amount of energy invested in occupying or maintaining land"
+            },
+            {
+                "name": "cell_coordinates",
+                "type": "tuple",
+                "default_value": "(0,0)",
+                "description": "Coordinates of the grid cell targeted for occupation or maintenance"
+            },
+            {
+                "name": "previous_owner",
+                "type": "str",
+                "default_value": "None",
+                "description": "Identifier of the previous owner of the land, if applicable"
+            }
+        ],
+        "code": ""
+    },
+    "3": {
+        "id": 3,
+        "from_agent_type": "ResourceMiner",
+        "from_action_name": "decide_action",
+        "to_agent_type": "ResourceMiner",
+        "to_action_name": "execute_compete",
+        "from_action_id": 2,
+        "to_action_id": 4,
+        "event_name": "CompeteLandDecisionEvent",
+        "event_info": "Decision to compete for land ownership with energy investment",
+        "fields": [
+            {
+                "name": "energy_investment",
+                "type": "int",
+                "default_value": 0,
+                "description": "Amount of energy invested in competing for land ownership"
+            },
+            {
+                "name": "cell_coordinates",
+                "type": "tuple",
+                "default_value": "(0,0)",
+                "description": "Coordinates of the grid cell targeted for competition"
+            },
+            {
+                "name": "current_owner",
+                "type": "str",
+                "default_value": "None",
+                "description": "Identifier of the current owner of the land being competed for"
+            }
+        ],
+        "code": ""
+    },
+    "4": {
+        "id": 4,
+        "from_agent_type": "ResourceMiner",
+        "from_action_name": "execute_occupy_or_maintain",
+        "to_agent_type": "ResourceMiner",
+        "to_action_name": "exploit_resources",
+        "from_action_id": 3,
+        "to_action_id": 5,
+        "event_name": "OccupyMaintainSuccessEvent",
+        "event_info": "Successful ownership; proceed to resource exploitation",
+        "fields": [
+            {
+                "name": "new_owner",
+                "type": "str",
+                "default_value": "None",
+                "description": "Identifier of the agent now owning the land"
+            },
+            {
+                "name": "cell_coordinates",
+                "type": "tuple",
+                "default_value": "(0,0)",
+                "description": "Coordinates of the grid cell successfully occupied or maintained"
+            }
+        ],
+        "code": ""
+    },
+    "5": {
+        "id": 5,
+        "from_agent_type": "ResourceMiner",
+        "from_action_name": "execute_compete",
+        "to_agent_type": "ResourceMiner",
+        "to_action_name": "exploit_resources",
+        "from_action_id": 4,
+        "to_action_id": 5,
+        "event_name": "CompeteSuccessEvent",
+        "event_info": "Successful competition; proceed to resource exploitation",
+        "fields": [
+            {
+                "name": "new_owner",
+                "type": "str",
+                "default_value": "None",
+                "description": "Identifier of the agent who won the competition for land"
+            },
+            {
+                "name": "cell_coordinates",
+                "type": "tuple",
+                "default_value": "(0,0)",
+                "description": "Coordinates of the grid cell successfully competed for"
+            }
+        ],
+        "code": ""
+    },
+    "6": {
+        "id": 6,
+        "from_agent_type": "ResourceMiner",
+        "from_action_name": "exploit_resources",
+        "to_agent_type": "EnvAgent",
+        "to_action_name": "terminate",
+        "from_action_id": 5,
+        "to_action_id": -1,
+        "event_name": "ResourceExploitedEvent",
+        "event_info": "Resources exploited, ending the workflow",
+        "fields": [
+            {
+                "name": "units_exploited",
+                "type": "int",
+                "default_value": 0,
+                "description": "Number of resource units exploited from the grid cell"
+            },
+            {
+                "name": "cell_coordinates",
+                "type": "tuple",
+                "default_value": "(0,0)",
+                "description": "Coordinates of the grid cell from which resources were exploited"
+            },
+            {
+                "name": "exploit_success",
+                "type": "bool",
+                "default_value": true,
+                "description": "Indicates whether resource exploitation was successful"
+            }
+        ],
+        "code": ""
+    }
+}

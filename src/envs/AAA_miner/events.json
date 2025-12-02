@@ -1,0 +1,184 @@
+{
+    "-1": {
+        "id": -1,
+        "from_agent_type": "EnvAgent",
+        "from_action_name": "start",
+        "to_agent_type": "ResourceMiner",
+        "to_action_name": "observe_global_map",
+        "from_action_id": 0,
+        "to_action_id": 1,
+        "event_name": "StartEvent",
+        "event_info": "EnvAgent.start -> ResourceMiner.observe_global_map; carries round_index, stamina_budget, max_mining_per_plot, ownership_map, previous_public_log, personal_summary, run_seed.",
+        "fields": [
+            { "name": "round_index", "type": "int" },
+            { "name": "stamina_budget", "type": "int" },
+            { "name": "max_mining_per_plot", "type": "int" },
+            { "name": "ownership_map", "type": "list" },
+            { "name": "previous_public_log", "type": "list" },
+            { "name": "personal_summary", "type": "dict" },
+            { "name": "run_seed", "type": "str" }
+        ],
+        "code": ""
+    },
+    "1": {
+        "id": 1,
+        "from_agent_type": "ResourceMiner",
+        "from_action_name": "observe_global_map",
+        "to_agent_type": "ResourceMiner",
+        "to_action_name": "decide_action",
+        "from_action_id": 1,
+        "to_action_id": 2,
+        "event_name": "MapObservedEvent",
+        "event_info": "Observation complete -> decision. target_ids should be the same agent (self).",
+        "fields": [],
+        "code": ""
+    },
+    "2": {
+        "id": 2,
+        "from_agent_type": "ResourceMiner",
+        "from_action_name": "decide_action",
+        "to_agent_type": "ResourceMiner",
+        "to_action_name": "execute_occupy_or_maintain",
+        "from_action_id": 2,
+        "to_action_id": 3,
+        "event_name": "OccupyLandDecisionEvent",
+        "event_info": "Decision: occupy/maintain -> execution. Costs=1. Maintain blocks all raids this round.",
+        "fields": [
+            {
+                "name": "energy_investment",
+                "type": "int",
+                "default_value": 0,
+                "description": "Integer cost (1)."
+            },
+            {
+                "name": "cell_coordinates",
+                "type": "tuple",
+                "default_value": "(0,0)",
+                "description": "String coordinate '(row,col)' with 0-based indices."
+            },
+            {
+                "name": "previous_owner",
+                "type": "str",
+                "default_value": "None",
+                "description": "Previous owner id or 'None' for empty."
+            }
+        ],
+        "code": ""
+    },
+    "3": {
+        "id": 3,
+        "from_agent_type": "ResourceMiner",
+        "from_action_name": "decide_action",
+        "to_agent_type": "ResourceMiner",
+        "to_action_name": "execute_compete",
+        "from_action_id": 2,
+        "to_action_id": 4,
+        "event_name": "CompeteLandDecisionEvent",
+        "event_info": "Decision: compete -> execution. If defender maintained, all raids fail; else one challenger wins uniformly.",
+        "fields": [
+            {
+                "name": "energy_investment",
+                "type": "int",
+                "default_value": 0,
+                "description": "Integer cost (1)."
+            },
+            {
+                "name": "cell_coordinates",
+                "type": "tuple",
+                "default_value": "(0,0)",
+                "description": "String coordinate '(row,col)' with 0-based indices."
+            },
+            {
+                "name": "current_owner",
+                "type": "str",
+                "default_value": "None",
+                "description": "Current owner id (target of the raid)."
+            }
+        ],
+        "code": ""
+    },
+    "4": {
+        "id": 4,
+        "from_agent_type": "ResourceMiner",
+        "from_action_name": "execute_occupy_or_maintain",
+        "to_agent_type": "ResourceMiner",
+        "to_action_name": "exploit_resources",
+        "from_action_id": 3,
+        "to_action_id": 5,
+        "event_name": "OccupyMaintainSuccessEvent",
+        "event_info": "Occupy/Maintain success -> eligible to mine this cell this round.",
+        "fields": [
+            {
+                "name": "new_owner",
+                "type": "str",
+                "default_value": "None",
+                "description": "The agent id who now owns the cell (usually self)."
+            },
+            {
+                "name": "cell_coordinates",
+                "type": "tuple",
+                "default_value": "(0,0)",
+                "description": "String '(row,col)'."
+            }
+        ],
+        "code": ""
+    },
+    "5": {
+        "id": 5,
+        "from_agent_type": "ResourceMiner",
+        "from_action_name": "execute_compete",
+        "to_agent_type": "ResourceMiner",
+        "to_action_name": "exploit_resources",
+        "from_action_id": 4,
+        "to_action_id": 5,
+        "event_name": "CompeteSuccessEvent",
+        "event_info": "Compete success -> eligible to mine this cell this round.",
+        "fields": [
+            {
+                "name": "new_owner",
+                "type": "str",
+                "default_value": "None",
+                "description": "Winner id."
+            },
+            {
+                "name": "cell_coordinates",
+                "type": "tuple",
+                "default_value": "(0,0)",
+                "description": "String '(row,col)'."
+            }
+        ],
+        "code": ""
+    },
+    "6": {
+        "id": 6,
+        "from_agent_type": "ResourceMiner",
+        "from_action_name": "exploit_resources",
+        "to_agent_type": "EnvAgent",
+        "to_action_name": "terminate",
+        "from_action_id": 5,
+        "to_action_id": -1,
+        "event_name": "ResourceExploitedEvent",
+        "event_info": "Resource exploited; send to EnvAgent for logging/termination.",
+        "fields": [
+            {
+                "name": "units_exploited",
+                "type": "int",
+                "default_value": 0,
+                "description": "Integer mined units for the cell (<=3)."
+            },
+            {
+                "name": "cell_coordinates",
+                "type": "tuple",
+                "default_value": "(0,0)",
+                "description": "String '(row,col)'."
+            },
+            {
+                "name": "exploit_success",
+                "type": "bool",
+                "default_value": true,
+                "description": "Boolean result of exploitation."
+            }
+        ],
+        "code": ""
+    }
+}

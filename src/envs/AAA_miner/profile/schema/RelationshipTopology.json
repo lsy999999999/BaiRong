@@ -1,0 +1,10 @@
+{
+    "topology": "grid",
+    "params": {
+        "dimensions": [
+            10,
+            10
+        ],
+        "boundary_type": "wrap_around"
+    }
+}
